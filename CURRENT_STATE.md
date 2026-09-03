@@ -2,9 +2,9 @@
 
 > Last updated: 2026-09-03
 
-## Project Status: 🟡 Pre-Development
+## Project Status: 🟢 Development
 
-The project is in the **brand foundation and documentation phase**.
+The project is currently in the **core features implementation phase**.
 
 ---
 
@@ -19,20 +19,21 @@ The project is in the **brand foundation and documentation phase**.
 - [x] Vite + React 19 + TypeScript project initialized
 - [x] TailwindCSS v4 + shadcn/ui configured
 - [x] Basic layout implemented (simplified single-column MVP)
-- [ ] Dexie.js database schema defined
-- [ ] Zustand stores scaffolded
+- [x] Dexie.js database schema defined and Repository Pattern implemented
+- [x] Zustand stores scaffolded (Bookmark and Confirmation stores)
+- [x] Link CRUD (Create, Read, Update, Delete) integrated with Dexie
 - [ ] PWA configured
 
 ---
 
-## Current Phase: Setup
+## Current Phase: Core Development
 
 ### Next Steps
 
-1. Set up Dexie.js with initial schema (links)
-2. Connect the simplified UI to Dexie.js for saving, reading, and deleting links.
-3. Implement folder CRUD (post-MVP)
-4. Implement link tags and search
+1. Implement folder CRUD (post-MVP)
+2. Implement link tags, categories, search, and filter capabilities.
+3. Hook up Import/Export JSON functionality.
+4. Finalize overall UI polish for mobile responsiveness.
 
 ---
 
@@ -47,7 +48,7 @@ The project is in the **brand foundation and documentation phase**.
 │  └────┬──────┘  └───────┬────────┘  │
 │       │                 │           │
 │  ┌────▼─────────────────▼────────┐  │
-│  │         Dexie.js              │  │
+│  │      Dexie Repository         │  │
 │  │      (Data Layer)             │  │
 │  └────────────┬──────────────────┘  │
 │               │                     │
@@ -62,16 +63,16 @@ The project is in the **brand foundation and documentation phase**.
 
 ### Phase 1 — Core (Current)
 
-- Folder CRUD (tree structure)
-- Link CRUD (save, edit, delete)
-- Drag-and-drop organization
-- Open / Copy link buttons
-- Search, sort, filter, pagination
-- Bookmark type, tags, categories
-- Favicon fetching
-- Import/Export JSON
-- Responsive/mobile UI
-- PWA/offline support
+- [ ] Folder CRUD (tree structure)
+- [x] Link CRUD (save, edit, delete)
+- [ ] Drag-and-drop organization
+- [x] Open / Copy link buttons
+- [ ] Search, sort, filter, pagination
+- [ ] Bookmark type, tags, categories
+- [x] Favicon fetching
+- [ ] Import/Export JSON
+- [ ] Responsive/mobile UI
+- [ ] PWA/offline support
 
 ### Phase 2 — Browser Extension
 

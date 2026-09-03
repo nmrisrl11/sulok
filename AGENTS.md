@@ -70,9 +70,11 @@ sulok/
 ## Conventions
 
 - Use shadcn/ui components. Run `npx shadcn@latest add <component>` to add new ones.
+- **Component Folder Rule:** App-specific global components go in `src/components/`. The `src/components/ui/` folder is strictly dedicated to external UI library components (like shadcn/ui). Do not put internal/custom logic components in `components/ui`.
 - Use `cn()` utility for conditional class merging.
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
-- Dexie operations are in `src/db/` — never call IndexedDB directly.
+- **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `BookmarkRepository`). Never call IndexedDB or `db` directly from a component or store.
+- **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
 - Favicon fetching: `https://www.google.com/s2/favicons?domain=[domain]&sz=64`
 
 ## What NOT To Do
