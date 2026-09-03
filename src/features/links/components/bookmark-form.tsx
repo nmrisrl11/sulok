@@ -1,17 +1,18 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { bookmarkSchema, type BookmarkFormValues } from "../schemas/bookmark.schema";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { DialogFooter } from "@/components/ui/dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { bookmarkSchema, type BookmarkFormValues } from "../schemas/bookmark.schema";
 
 interface BookmarkFormProps {
 	defaultValues?: Partial<BookmarkFormValues>;
 	onSubmit: (data: BookmarkFormValues) => void;
 	onCancel: () => void;
 	isSubmitting?: boolean;
+	submitError?: string | null;
 }
 
 export function BookmarkForm({
@@ -19,6 +20,7 @@ export function BookmarkForm({
 	onSubmit,
 	onCancel,
 	isSubmitting,
+	submitError,
 }: BookmarkFormProps) {
 	const {
 		register,
@@ -71,6 +73,12 @@ export function BookmarkForm({
 					<p className="text-sm font-medium text-destructive">{errors.description.message}</p>
 				)}
 			</div>
+
+			{submitError && (
+				<div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+					{submitError}
+				</div>
+			)}
 
 			<DialogFooter>
 				<Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>

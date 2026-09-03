@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -6,17 +5,20 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { BookmarkForm } from "./bookmark-form";
 import { useBookmarkStore } from "@/stores/bookmark-store";
+import { useState } from "react";
 import type { BookmarkFormValues } from "../schemas/bookmark.schema";
+import { BookmarkForm } from "./bookmark-form";
 
 export function BookmarkDialog() {
 	const { isDialogOpen, setDialogOpen, editingBookmark, addBookmark, updateBookmark } =
 		useBookmarkStore();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
 
 	const handleSubmit = async (data: BookmarkFormValues) => {
 		setIsSubmitting(true);
+		setSubmitError(null);
 		try {
 			if (editingBookmark) {
 				await updateBookmark(editingBookmark.id, data);
@@ -26,6 +28,7 @@ export function BookmarkDialog() {
 			setDialogOpen(false);
 		} catch (error) {
 			console.error("Failed to save bookmark", error);
+			setSubmitError(error instanceof Error ? error.message : "Failed to save bookmark.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -48,6 +51,7 @@ export function BookmarkDialog() {
 					onSubmit={handleSubmit}
 					onCancel={() => setDialogOpen(false)}
 					isSubmitting={isSubmitting}
+					submitError={submitError}
 				/>
 			</DialogContent>
 		</Dialog>

@@ -11,6 +11,14 @@ interface SiteFaviconProps {
 export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 	const [error, setError] = useState(false);
 
+	const [prevUrl, setPrevUrl] = useState(url);
+
+	// Reset error when URL changes (derived state instead of effect)
+	if (url !== prevUrl) {
+		setPrevUrl(url);
+		setError(false);
+	}
+
 	// Extract domain for the favicon service
 	let domain = "";
 	try {

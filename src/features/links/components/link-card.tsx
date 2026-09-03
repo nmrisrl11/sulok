@@ -49,7 +49,7 @@ export function LinkCard({ bookmark }: { bookmark: Bookmark }) {
 					size="icon"
 					className="h-8 w-8"
 					title="Open Link"
-					onClick={() => window.open(bookmark.url, "_blank")}
+					onClick={() => window.open(bookmark.url, "_blank", "noopener")}
 				>
 					<ExternalLinkIcon className="text-muted-foreground h-4 w-4" />
 				</Button>

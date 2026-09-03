@@ -1,3 +1,4 @@
+import { bookmarkSchema } from "@/features/links/schemas/bookmark.schema";
 import { db, type Bookmark } from "../db";
 
 export const BookmarkRepository = {
@@ -18,10 +19,11 @@ export const BookmarkRepository = {
 	},
 
 	async save(bookmark: Omit<Bookmark, "id" | "createdAt" | "updatedAt">): Promise<void> {
+		const parsedData = bookmarkSchema.parse(bookmark);
 		const now = Date.now();
 		const record: Bookmark = {
 			id: crypto.randomUUID(),
-			...bookmark,
+			...parsedData,
 			createdAt: now,
 			updatedAt: now,
 		};
@@ -29,8 +31,14 @@ export const BookmarkRepository = {
 	},
 
 	async update(id: string, updates: Partial<Bookmark>): Promise<void> {
+		const parsedData = bookmarkSchema.partial().parse(updates);
+		// Ensure system fields cannot be overwritten
+		delete (parsedData as any).id;
+		delete (parsedData as any).createdAt;
+		delete (parsedData as any).updatedAt;
+
 		const updateRecord = {
-			...updates,
+			...parsedData,
 			updatedAt: Date.now(),
 		};
 		await db.bookmarks.update(id, updateRecord);
