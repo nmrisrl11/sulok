@@ -1,4 +1,5 @@
 import { itemSchema } from "@/schemas/item.schema";
+import { setHasDataHint } from "@/lib/storage";
 import { db, type Item } from "../db";
 
 export const ItemRepository = {
@@ -28,6 +29,7 @@ export const ItemRepository = {
 			updatedAt: now,
 		};
 		await db.items.put(record);
+		setHasDataHint(true);
 	},
 
 	async update(id: string, updates: Partial<Item>): Promise<void> {
@@ -50,9 +52,14 @@ export const ItemRepository = {
 
 	async delete(id: string): Promise<void> {
 		await db.items.delete(id);
+		const count = await db.items.count();
+		if (count === 0) {
+			setHasDataHint(false);
+		}
 	},
 
 	async deleteAll(): Promise<void> {
 		await db.items.clear();
+		setHasDataHint(false);
 	},
 };

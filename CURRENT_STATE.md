@@ -25,6 +25,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Item CRUD (Create, Read, Update, Delete) integrated with Dexie
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
+- [x] Initial performance optimizations (route and dialog code-splitting)
 - [ ] PWA configured
 
 ---

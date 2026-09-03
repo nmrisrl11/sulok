@@ -10,6 +10,7 @@ import React from "react";
 
 import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton";
 import { ItemEmptyState } from "@/features/items/components/item-empty-state";
+import { getHasDataHint } from "@/lib/storage";
 
 class ErrorBoundary extends React.Component<
 	{ children: React.ReactNode },
@@ -40,15 +41,19 @@ class ErrorBoundary extends React.Component<
 
 function HomePageInner() {
 	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
+	const hasDataHint = getHasDataHint();
 
 	if (items === undefined) {
-		return (
-			<div className="flex flex-col gap-2">
-				<ItemCardSkeleton />
-				<ItemCardSkeleton />
-				<ItemCardSkeleton />
-			</div>
-		);
+		if (hasDataHint) {
+			return (
+				<div className="flex flex-col gap-2">
+					<ItemCardSkeleton />
+					<ItemCardSkeleton />
+					<ItemCardSkeleton />
+				</div>
+			);
+		}
+		return <ItemEmptyState />;
 	}
 
 	if (items.length === 0) {
