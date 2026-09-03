@@ -8,12 +8,12 @@ export function Header() {
 				Sulok
 			</div>
 			<nav className="text-muted-foreground flex items-center gap-6 text-sm font-medium">
-				<a href="#" className="hover:text-foreground transition-colors">
+				<button type="button" className="hover:text-foreground transition-colors cursor-pointer">
 					About
-				</a>
-				<a href="#" className="hover:text-foreground transition-colors">
+				</button>
+				<button type="button" className="hover:text-foreground transition-colors cursor-pointer">
 					What's new
-				</a>
+				</button>
 			</nav>
 		</header>
 	);

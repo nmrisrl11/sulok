@@ -34,11 +34,23 @@ export function MainContent({ className }: { className?: string }) {
 								<span className="text-foreground truncate text-sm font-medium">{link.url}</span>
 							</div>
 
-							<div className="flex items-center opacity-0 transition-opacity group-hover:opacity-100 shrink-0">
-								<Button variant="ghost" size="icon" className="h-8 w-8" title="Copy URL">
+							<div className="flex items-center opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 shrink-0">
+								<Button
+									variant="ghost"
+									size="icon"
+									className="h-8 w-8"
+									title="Copy URL"
+									onClick={() => navigator.clipboard.writeText(link.url)}
+								>
 									<Copy className="text-muted-foreground h-4 w-4" />
 								</Button>
-								<Button variant="ghost" size="icon" className="h-8 w-8" title="Open Link">
+								<Button
+									variant="ghost"
+									size="icon"
+									className="h-8 w-8"
+									title="Open Link"
+									onClick={() => window.open(link.url, "_blank")}
+								>
 									<ExternalLink className="text-muted-foreground h-4 w-4" />
 								</Button>
 								<Button
@@ -46,6 +58,7 @@ export function MainContent({ className }: { className?: string }) {
 									size="icon"
 									className="h-8 w-8 hover:text-destructive"
 									title="Delete"
+									onClick={() => console.log("Delete clicked for", link.id)}
 								>
 									<Trash2 className="h-4 w-4" />
 								</Button>
