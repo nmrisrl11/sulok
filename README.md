@@ -11,6 +11,7 @@ A personal web library for saving, organizing, and rediscovering things you find
 - **Vite**
 - **TailwindCSS v4**
 - **shadcn/ui**
+- **React Router DOM v7** (Routing)
 - **Zustand** (State Management)
 - **Dexie.js** (IndexedDB Storage)
 

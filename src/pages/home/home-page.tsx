@@ -38,7 +38,7 @@ class ErrorBoundary extends React.Component<
 	}
 }
 
-function MainContentInner() {
+function HomePageInner() {
 	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
 
 	if (items === undefined) {
@@ -64,14 +64,14 @@ function MainContentInner() {
 	);
 }
 
-export function MainContent({ className }: { className?: string }) {
+export function HomePage({ className }: { className?: string }) {
 	const { openCreateDialog } = useItemStore();
 
 	return (
 		<main className={cn("flex flex-col gap-10", className)}>
 			{/* Action Buttons */}
 			<div className="flex items-center gap-3">
-				<Button onClick={openCreateDialog} className="gap-2">
+				<Button onClick={openCreateDialog} className="gap-2 cursor-pointer">
 					<PlusIcon className="h-4 w-4" />
 					{`Add to ${APP_INFO.name}`}
 				</Button>
@@ -89,7 +89,7 @@ export function MainContent({ className }: { className?: string }) {
 
 				<div className="flex flex-col gap-2">
 					<ErrorBoundary>
-						<MainContentInner />
+						<HomePageInner />
 					</ErrorBoundary>
 				</div>
 			</div>
