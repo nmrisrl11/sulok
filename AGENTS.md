@@ -38,7 +38,7 @@ Sulok is intentionally simple. Do not add AI-powered features (auto-tagging, sum
 
 ### Single Page App
 
-The app is a single-page React application. No routing library unless explicitly approved. Use URL query params (via nuqs) for search/filter state.
+The app is a single-page React application. Uses `react-router-dom` for application routing (`/`, `/about`, etc). Use URL query params (via nuqs) for search/filter state.
 
 ## File Structure
 
@@ -47,11 +47,16 @@ sulok/
 ├── public/
 ├── src/
 │   ├── components/
+│   │   ├── layout/      # App layout, header, footer
 │   │   └── ui/          # shadcn/ui components
 │   ├── features/
 │   │   ├── folders/     # Folder CRUD, tree, drag-drop
 │   │   ├── items/       # Item CRUD, cards, list (formerly links)
 │   │   └── search/      # Search, filter, sort
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── about/
+│   │   └── not-found/
 │   ├── hooks/
 │   ├── lib/
 │   ├── schemas/         # Zod schemas (domain)
@@ -91,5 +96,4 @@ sulok/
 - Do not change the color palette or fonts without approval.
 - Do not add a sidebar layout. The app uses a header + content layout.
 - Do not add AI/ML features unless explicitly requested.
-- Do not introduce routing unless explicitly approved.
 - Do not use `localStorage` for structured data — use Dexie.js.

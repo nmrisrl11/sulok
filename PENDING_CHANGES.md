@@ -9,6 +9,9 @@
 
 ### ✨ Added
 
+- Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
+- Integrated React Router DOM v7 to establish a scalable routing architecture and layout separation.
+- Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
 - Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `microlink.io`.
 - Enforced strict `@typescript-eslint/no-explicit-any` rule to ensure robust type safety across the repository.
 - Replaced generic "Bookmark/Link" terminology with "Item" and "Sulok" to align with the core brand identity.

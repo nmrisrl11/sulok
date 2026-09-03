@@ -23,6 +23,8 @@ The project is currently in the **core features implementation phase**.
 - [x] Domain schema centralized in `src/schemas/`
 - [x] Zustand stores scaffolded (Item and Confirmation stores)
 - [x] Item CRUD (Create, Read, Update, Delete) integrated with Dexie
+- [x] React Router DOM v7 integrated for application routing
+- [x] About page established with product branding
 - [ ] PWA configured
 
 ---
@@ -94,12 +96,12 @@ The project is currently in the **core features implementation phase**.
 
 ## Known Decisions
 
-| Decision         | Choice                         | Rationale                                                      |
-| ---------------- | ------------------------------ | -------------------------------------------------------------- |
-| Data storage     | IndexedDB + Dexie.js           | Local-first, offline-capable, no backend                       |
-| State management | Zustand                        | Minimal, performant, TypeScript-friendly                       |
-| UI framework     | shadcn/ui                      | Composable, accessible, customizable                           |
-| Styling          | TailwindCSS v4                 | Utility-first, fast iteration, modern CSS variables via @theme |
-| Routing          | None (SPA, nuqs for URL state) | Simplicity — single page is sufficient                         |
-| Auth             | None                           | Personal-use app, no accounts                                  |
-| Backend          | None                           | Local-first architecture                                       |
+| Decision         | Choice               | Rationale                                                      |
+| ---------------- | -------------------- | -------------------------------------------------------------- |
+| Data storage     | IndexedDB + Dexie.js | Local-first, offline-capable, no backend                       |
+| State management | Zustand              | Minimal, performant, TypeScript-friendly                       |
+| UI framework     | shadcn/ui            | Composable, accessible, customizable                           |
+| Styling          | TailwindCSS v4       | Utility-first, fast iteration, modern CSS variables via @theme |
+| Routing          | React Router DOM v7  | Standard routing for pages (Home, About), simplified App.tsx   |
+| Auth             | None                 | Personal-use app, no accounts                                  |
+| Backend          | None                 | Local-first architecture                                       |

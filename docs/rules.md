@@ -10,6 +10,7 @@
 2. **Stay local-first.** All data lives in IndexedDB via Dexie.js. Never introduce server dependencies for core functionality.
 3. **Ship small.** Prefer small, testable changes over large refactors.
 4. **Match the system.** Follow existing patterns. Don't introduce new libraries, patterns, or abstractions without explicit approval.
+5. **Reference vs Copying.** When provided with reference code (like DayBook), use it for architectural patterns and ideas, but do not blindly copy its complexity if Sulok can achieve the same result more simply. Always prefer "Simple now, scalable later."
 
 ---
 
@@ -20,8 +21,9 @@
 - **Framework:** React 19 + Vite + TypeScript. No Next.js, no Remix, no SSR.
 - **Styling:** TailwindCSS v4 + shadcn/ui only. No CSS modules, no styled-components, no tailwind.config.js (use index.css @theme).
 - **State:** Zustand for app state.
+- **Routing:** React Router DOM v7. Keep routing simple (`BrowserRouter` in `App.tsx`); do not over-engineer or over-abstract routing registries.
 - **Forms:** React Hook Form + Zod for validation.
-- **URL State:** nuqs for URL query parameters.
+- **URL State:** nuqs for URL query parameters within pages.
 - **Data:** IndexedDB via Dexie.js. No localStorage for structured data. No SQLite.
 - **PWA:** Vite PWA plugin. Service worker for offline support.
 
