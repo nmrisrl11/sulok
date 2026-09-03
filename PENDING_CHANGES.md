@@ -9,10 +9,18 @@
 
 ### ✨ Added
 
+- Fully functional Bookmark CRUD operations (Create, Read, Update, Delete) integrated with Dexie.js local database.
+- Implemented Repository Pattern (`BookmarkRepository`) for scalable IndexedDB operations.
+- Centralized form schema validation using Zod in repositories to prevent corrupted saves/updates.
+- Global Confirmation Modal architecture to avoid DOM bloat when confirming destructive actions on lists.
+- Added graceful error handling and `ErrorBoundary` fallback states for Dexie.js queries and mutations.
 - Basic simplified single-column layout for the MVP list view.
 - Integrated Google Favicon API for fetching domain favicons.
-- Added mock data structure (`src/lib/mock-data.ts`) for testing the UI.
 - Implemented full variable axes for Fraunces font to allow fine-tuning styling.
+
+### 🗑️ Removed
+
+- Mock data layer (`src/lib/mock-data.ts`) was removed in favor of live IndexedDB data.
 
 ### 🔧 Changed
 

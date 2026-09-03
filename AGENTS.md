@@ -70,9 +70,13 @@ sulok/
 ## Conventions
 
 - Use shadcn/ui components. Run `npx shadcn@latest add <component>` to add new ones.
+- **Component Folder Rule:** App-specific global components go in `src/components/`. The `src/components/ui/` folder is strictly dedicated to external UI library components (like shadcn/ui). Do not put internal/custom logic components in `components/ui`.
 - Use `cn()` utility for conditional class merging.
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
-- Dexie operations are in `src/db/` — never call IndexedDB directly.
+- **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `BookmarkRepository`). Never call IndexedDB or `db` directly from a component or store.
+- **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
+- **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
+- **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components. Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
 - Favicon fetching: `https://www.google.com/s2/favicons?domain=[domain]&sz=64`
 
 ## What NOT To Do
