@@ -3,9 +3,29 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="%APP_NAME%" />
+		<meta name="theme-color" content="%APP_THEME_COLOR%" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Sulok — Your corner of the web</title>
+		<title>%APP_TITLE%</title>
+
+		<!-- SEO Meta Tags -->
+		<meta name="author" content="%APP_AUTHOR%" />
+		<meta name="keywords" content="%APP_KEYWORDS%" />
+		<meta name="description" content="%APP_DESCRIPTION%" />
+
+		<!-- Open Graph / Social -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="%APP_TITLE%" />
+		<meta property="og:description" content="%APP_DESCRIPTION%" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="%APP_TITLE%" />
+		<meta name="twitter:description" content="%APP_DESCRIPTION%" />
 	</head>
+
 	<body>
 		<div id="root"></div>
 		<script type="module" src="/src/main.tsx"></script>

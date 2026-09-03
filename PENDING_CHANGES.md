@@ -7,6 +7,20 @@
 
 ## Unreleased
 
+### ✨ Added
+
+- Basic simplified single-column layout for the MVP list view.
+- Integrated Google Favicon API for fetching domain favicons.
+- Added mock data structure (`src/lib/mock-data.ts`) for testing the UI.
+- Implemented full variable axes for Fraunces font to allow fine-tuning styling.
+
+### 🔧 Changed
+
+- Switched from the planned complex two-pane layout to a simplified centered layout to expedite core MVP development.
+- Mapped Tailwind CSS variables in `index.css` to accurately use custom Sulok brand color tokens (Amber, Linen, Cream, Charcoal, Stone).
+
+---
+
 ### 🎉 Initial Release (Planned)
 
 **Core Features**

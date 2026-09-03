@@ -1,12 +1,7 @@
-import { Button } from "./components/ui/button";
+import { AppLayout } from "./components/layout/app-layout";
 
 function App() {
-	return (
-		<div>
-			<h1>Hello World</h1>
-			<Button>Hello There</Button>
-		</div>
-	);
+	return <AppLayout />;
 }
 
 export default App;
