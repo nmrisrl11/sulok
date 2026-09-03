@@ -72,13 +72,14 @@ src/
 │   └── ui/           # Strictly for external UI libraries like shadcn/ui and its registries. Never create internal/app-specific UI here.
 ├── constants/        # Centralized app metadata and global constants
 ├── features/         # Feature modules
-│   └── [feature]/    # e.g., folders, links, search
+│   └── [feature]/    # e.g., folders, items, search
 │       ├── components/
 │       ├── actions/
 │       ├── hooks/
 │       └── utils/
 ├── hooks/            # Global custom React hooks
 ├── lib/              # Global utilities, helpers, constants
+├── schemas/          # Zod schemas defining core domain entities (shared between UI and DB)
 ├── stores/           # Zustand stores
 ├── db/               # Dexie.js database schema, repositories, and operations
 ├── types/            # Global TypeScript type definitions
@@ -88,21 +89,25 @@ src/
 ### Centralized App Data
 
 - All application metadata (name, shortName, tagline, description, themeColor, keywords, author, etc.) MUST be centralized in `src/constants/app-info.ts`.
-- Do not hardcode app metadata in `index.html` or `vite.config.ts`. Instead, use Vite plugins or template interpolation to inject data from this centralized file across the application.
+- **Do not hardcode app metadata (like the app name "Sulok") in UI components (headers, dialogs, buttons, empty states).** Always import `APP_INFO` from `src/constants/app-info.ts` and use `APP_INFO.name` or other relevant properties.
+- Do not hardcode app metadata in `index.html` or `vite.config.ts`. Instead, use Vite plugins or template interpolation to inject data from this centralized file.
 
 ### Naming Conventions
 
-- **Files:** kebab-case (`link-card.tsx`, `use-folders.ts`)
-- **Components:** PascalCase (`LinkCard`, `FolderTree`)
-- **Hooks:** camelCase with `use` prefix (`useFolders`, `useLinks`)
-- **Stores:** camelCase with `Store` suffix (`useFolderStore`, `useLinkStore`)
-- **Types:** PascalCase (`Folder`, `Link`, `BookmarkType`)
+- **Files:** kebab-case (`item-card.tsx`, `use-folders.ts`)
+- **Components:** PascalCase (`ItemCard`, `FolderTree`)
+- **Hooks:** camelCase with `use` prefix (`useFolders`, `useItems`)
+- **Stores:** camelCase with `Store` suffix (`useFolderStore`, `useItemStore`)
+- **Types:** PascalCase (`Folder`, `Item`, `ItemType`)
 - **Constants:** SCREAMING_SNAKE_CASE (`DEFAULT_FOLDER_NAME`, `MAX_TAGS`)
 - **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
 
 ### TypeScript
 
-- Strict mode enabled. No `any` types.
+- **Strict mode enabled. NEVER use `any`.**
+  - This rule is strict and heavily enforced by ESLint (`@typescript-eslint/no-explicit-any`).
+  - Do not use `any`, `any[]`, `Record<string, any>`, or bypass types with `as any`.
+  - Use `unknown` for unpredictable structures, then type guard or narrow them.
 - Use Zod schemas as the source of truth for types where possible.
 - Export types from their feature module, not from a global types file.
 
@@ -111,7 +116,7 @@ src/
 - Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
 - The `@` symbol maps to the `src` directory (configured in both `tsconfig.app.json` and `vite.config.ts`).
 - Example: Use `import { Button } from "@/components/ui/button";` instead of `import { Button } from "../../../components/ui/button";`.
-- Relative imports should only be used for files within the same feature or deeply nested local folders (e.g., `./bookmark-form` from `./bookmark-dialog.tsx`).
+- Relative imports should only be used for files within the same feature or deeply nested local folders (e.g., `./item-form` from `./item-dialog.tsx`).
 
 ### Component Patterns
 
@@ -119,7 +124,9 @@ src/
 - Extract logic into custom hooks when a component exceeds ~100 lines.
 - Co-locate component, hook, and types in the same feature folder.
 - Use `React.memo` only when profiling shows a performance need.
-- **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components (e.g., placing an `AlertDialog` inside a `LinkCard` mapping over 1000 items creates 1000 hidden dialogs in the DOM). Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
+- **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components (e.g., placing an `AlertDialog` inside a `ItemCard` mapping over 1000 items creates 1000 hidden dialogs in the DOM). Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
+- **Empty States:** Empty states should be designed beautifully using dedicated components (e.g., `ItemEmptyState`) with illustrations/icons, clear messaging, and an actionable primary button to guide the user. Do not use plain text for empty states.
+- **Skeletons (Loading States):** Do not scatter generic `<Skeleton />` components in layout files. Always co-locate loading skeletons to their parent feature, page, or component (e.g., `ItemCardSkeleton` alongside `ItemCard`).
 
 ---
 
@@ -129,20 +136,20 @@ src/
 
 - All entities must have `id` (string, nanoid), `createdAt`, and `updatedAt` timestamps.
 - Folders have a `parentId` for tree structure (null = root).
-- Links belong to a folder via `folderId`.
-- Tags are stored as string arrays on the link entity.
+- Items belong to a folder via `folderId`.
+- Tags are stored as string arrays on the item entity.
 - Sort order is maintained via an `order` field (number).
 
 ### Repository Pattern
 
-- Abstract all database operations into a centralized repository object (e.g., `BookmarkRepository`, `FolderRepository`).
+- Abstract all database operations into a centralized repository object (e.g., `ItemRepository`, `FolderRepository`).
 - A repository acts as the single source of truth for interacting with Dexie.js for a specific entity.
 - Do NOT make direct Dexie.js (`db.bookmarks.put(...)`) calls inside React components, hooks, or Zustand stores.
 - Repositories should handle:
   - Basic CRUD operations (`getAll`, `getById`, `save`, `update`, `delete`).
   - Bulk operations (`bulkSave`, `bulkDelete`).
   - Mapping or parsing incoming models into database records if they differ (e.g., extracting domain from a URL).
-  - Executing internal transactions when multiple collections are affected (e.g., deleting a folder and cascading deletes to its links).
+  - Executing internal transactions when multiple collections are affected (e.g., deleting a folder and cascading deletes to its items).
   - Calling storage hint functions (e.g., setting `localStorage` flags for app initialization).
 
 ### Operations

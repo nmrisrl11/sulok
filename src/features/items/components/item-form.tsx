@@ -3,31 +3,39 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { APP_INFO } from "@/constants/app-info";
+import { useDebounce } from "@/hooks/use-debounce";
+import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { bookmarkSchema, type BookmarkFormValues } from "../schemas/bookmark.schema";
+import { useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useMetadata } from "../hooks/use-metadata";
+import { ItemPreview } from "./item-preview";
 
-interface BookmarkFormProps {
-	defaultValues?: Partial<BookmarkFormValues>;
-	onSubmit: (data: BookmarkFormValues) => void;
+interface ItemFormProps {
+	defaultValues?: Partial<ItemFormValues>;
+	onSubmit: (data: ItemFormValues) => void;
 	onCancel: () => void;
 	isSubmitting?: boolean;
 	submitError?: string | null;
 }
 
-export function BookmarkForm({
+export function ItemForm({
 	defaultValues,
 	onSubmit,
 	onCancel,
 	isSubmitting,
 	submitError,
-}: BookmarkFormProps) {
+}: ItemFormProps) {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-	} = useForm<BookmarkFormValues>({
-		resolver: zodResolver(bookmarkSchema),
+		setValue,
+		control,
+		getValues,
+		formState: { errors, dirtyFields },
+	} = useForm<ItemFormValues>({
+		resolver: zodResolver(itemSchema),
 		defaultValues: {
 			url: defaultValues?.url || "",
 			title: defaultValues?.title || "",
@@ -35,11 +43,33 @@ export function BookmarkForm({
 		},
 	});
 
+	const rawUrl = useWatch({ control, name: "url" });
+	const debouncedUrl = useDebounce(rawUrl, 500);
+
+	// Fetch metadata only if it's a new item
+	const shouldFetch = !defaultValues && debouncedUrl.length > 5;
+	const { data: metadata, loading, error } = useMetadata(debouncedUrl, shouldFetch);
+
+	// Auto-populate form fields when metadata is successfully fetched
+	useEffect(() => {
+		if (metadata) {
+			const currentValues = getValues();
+			if (metadata.title && !currentValues.title && !dirtyFields.title) {
+				setValue("title", metadata.title, { shouldDirty: true });
+			}
+			if (metadata.description && !currentValues.description && !dirtyFields.description) {
+				setValue("description", metadata.description, { shouldDirty: true });
+			}
+		}
+	}, [metadata, setValue, getValues, dirtyFields]);
+
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
 			className="flex flex-1 flex-col gap-4 overflow-y-auto p-4"
 		>
+			<ItemPreview metadata={metadata} loading={loading} error={error} url={debouncedUrl} />
+
 			<div className="space-y-2">
 				<Label htmlFor="url">URL *</Label>
 				<Input
@@ -64,7 +94,7 @@ export function BookmarkForm({
 				<Label htmlFor="description">Description (Optional)</Label>
 				<Textarea
 					id="description"
-					placeholder="A brief note about this bookmark"
+					placeholder="A brief note about this item"
 					{...register("description")}
 					maxLength={500}
 					className="field-sizing-content min-h-15 resize-none w-full max-w-full wrap-break-word"
@@ -85,7 +115,7 @@ export function BookmarkForm({
 					Cancel
 				</Button>
 				<Button type="submit" disabled={isSubmitting}>
-					{isSubmitting ? "Saving..." : "Save Bookmark"}
+					{isSubmitting ? "Saving..." : `Save to ${APP_INFO.name}`}
 				</Button>
 			</DialogFooter>
 		</form>

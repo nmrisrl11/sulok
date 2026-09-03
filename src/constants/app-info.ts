@@ -9,4 +9,5 @@ export const APP_INFO = {
 	backgroundColor: "#F7F5F0",
 	keywords: "bookmark manager, web library, save links, local-first bookmarking, sulok",
 	author: "Sulok",
+	appUrl: "sulok-app.vercel.app",
 };

@@ -138,7 +138,7 @@ Minimal shadows. Prefer border/background differentiation.
 ### Empty States
 
 - Centered text with Fraunces heading.
-- Optional Sulo mascot illustration.
+- Meaningful generic icon (e.g., from lucide-react) or Sulo mascot illustration.
 - Clear call-to-action button.
 
 ---

@@ -20,8 +20,9 @@ The project is currently in the **core features implementation phase**.
 - [x] TailwindCSS v4 + shadcn/ui configured
 - [x] Basic layout implemented (simplified single-column MVP)
 - [x] Dexie.js database schema defined and Repository Pattern implemented
-- [x] Zustand stores scaffolded (Bookmark and Confirmation stores)
-- [x] Link CRUD (Create, Read, Update, Delete) integrated with Dexie
+- [x] Domain schema centralized in `src/schemas/`
+- [x] Zustand stores scaffolded (Item and Confirmation stores)
+- [x] Item CRUD (Create, Read, Update, Delete) integrated with Dexie
 - [ ] PWA configured
 
 ---
@@ -31,7 +32,7 @@ The project is currently in the **core features implementation phase**.
 ### Next Steps
 
 1. Implement folder CRUD (post-MVP)
-2. Implement link tags, categories, search, and filter capabilities.
+2. Implement item tags, categories, search, and filter capabilities.
 3. Hook up Import/Export JSON functionality.
 4. Finalize overall UI polish for mobile responsiveness.
 
@@ -63,13 +64,16 @@ The project is currently in the **core features implementation phase**.
 
 ### Phase 1 — Core (Current)
 
-- [ ] Folder CRUD (tree structure)
-- [x] Link CRUD (save, edit, delete)
+- [x] Folder CRUD (tree structure)
+- [x] Item CRUD (save, edit, delete)
+- [x] Enhanced Empty State UI design
+- [x] Co-located feature-level loading Skeletons
 - [ ] Drag-and-drop organization
 - [x] Open / Copy link buttons
 - [ ] Search, sort, filter, pagination
-- [ ] Bookmark type, tags, categories
+- [ ] Item tags and categorization
 - [x] Favicon fetching
+- [x] Metadata preview on Add (microlink.io)
 - [ ] Import/Export JSON
 - [ ] Responsive/mobile UI
 - [ ] PWA/offline support
