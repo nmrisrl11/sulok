@@ -127,6 +127,8 @@ src/
 - Co-locate component, hook, and types in the same feature folder.
 - Use `React.memo` only when profiling shows a performance need.
 - **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components (e.g., placing an `AlertDialog` inside a `ItemCard` mapping over 1000 items creates 1000 hidden dialogs in the DOM). Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
+- **Lazy Loading Dialogs:** When lazy loading Radix UI dialogs to reduce bundle size, do not conditionally render the component directly inside `Suspense` based on its `isOpen` state, as this immediately unmounts it on close and breaks exit animations. Instead, use a derived `hasLoaded` state flag to defer the initial download until the dialog is opened for the first time, and keep it mounted afterward so Radix can handle the exit transition.
+- **Error Boundaries:** Wrap top-level routes and lazy-loaded chunks (like dialogs) with a global `ErrorBoundary` to gracefully handle chunk loading failures and render crashes, providing a recovery UI (like a reload button) for the user. Do not rely solely on component-level boundaries for chunk failures.
 - **Empty States:** Empty states should be designed beautifully using dedicated components (e.g., `ItemEmptyState`) with illustrations/icons, clear messaging, and an actionable primary button to guide the user. Do not use plain text for empty states.
 - **Skeletons (Loading States):** Do not scatter generic `<Skeleton />` components in layout files. Always co-locate loading skeletons to their parent feature, page, or component (e.g., `ItemCardSkeleton` alongside `ItemCard`).
 

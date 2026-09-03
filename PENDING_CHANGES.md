@@ -9,6 +9,7 @@
 
 ### ✨ Added
 
+- Implemented performance optimizations (React.lazy and Suspense) for route-level and dialog code splitting, reducing the initial bundle size below 500kB.
 - Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
 - Integrated React Router DOM v7 to establish a scalable routing architecture and layout separation.
 - Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
