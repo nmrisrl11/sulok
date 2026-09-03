@@ -18,9 +18,19 @@ db.version(1).stores({
 	bookmarks: "id, url, title, createdAt, updatedAt",
 });
 
-db.version(2).stores({
+db.version(2)
+	.stores({
+		items: "id, url, title, createdAt, updatedAt",
+	})
+	.upgrade((trans) => {
+		// Migrate old bookmarks to the new items table
+		return trans.table("bookmarks").each((bookmark) => {
+			trans.table("items").put(bookmark);
+		});
+	});
+
+db.version(3).stores({
 	bookmarks: null, // drop legacy table
-	items: "id, url, title, createdAt, updatedAt", // Primary key and indexed props
 });
 
 export { db };

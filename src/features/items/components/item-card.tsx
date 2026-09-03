@@ -28,13 +28,7 @@ export function ItemCard({ item }: { item: Item }) {
 	};
 
 	const handleOpenLink = () => {
-		try {
-			const urlObj = new URL(item.url);
-			urlObj.searchParams.set("ref", APP_INFO.appUrl);
-			window.open(urlObj.toString(), "_blank", "noopener,noreferrer");
-		} catch {
-			window.open(item.url, "_blank", "noopener,noreferrer");
-		}
+		window.open(item.url, "_blank", "noopener,noreferrer");
 	};
 
 	return (

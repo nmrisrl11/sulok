@@ -3,14 +3,14 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { APP_INFO } from "@/constants/app-info";
 import { useDebounce } from "@/hooks/use-debounce";
+import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
 import { useMetadata } from "../hooks/use-metadata";
 import { ItemPreview } from "./item-preview";
-import { APP_INFO } from "@/constants/app-info";
 
 interface ItemFormProps {
 	defaultValues?: Partial<ItemFormValues>;
@@ -32,7 +32,8 @@ export function ItemForm({
 		handleSubmit,
 		setValue,
 		control,
-		formState: { errors },
+		getValues,
+		formState: { errors, dirtyFields },
 	} = useForm<ItemFormValues>({
 		resolver: zodResolver(itemSchema),
 		defaultValues: {
@@ -45,21 +46,22 @@ export function ItemForm({
 	const rawUrl = useWatch({ control, name: "url" });
 	const debouncedUrl = useDebounce(rawUrl, 500);
 
-	// Fetch metadata only if it's a new item (no default title provided initially)
-	const shouldFetch = !defaultValues?.title && debouncedUrl.length > 5;
+	// Fetch metadata only if it's a new item
+	const shouldFetch = !defaultValues && debouncedUrl.length > 5;
 	const { data: metadata, loading, error } = useMetadata(debouncedUrl, shouldFetch);
 
 	// Auto-populate form fields when metadata is successfully fetched
 	useEffect(() => {
 		if (metadata) {
-			if (metadata.title) {
+			const currentValues = getValues();
+			if (metadata.title && !currentValues.title && !dirtyFields.title) {
 				setValue("title", metadata.title, { shouldDirty: true });
 			}
-			if (metadata.description) {
+			if (metadata.description && !currentValues.description && !dirtyFields.description) {
 				setValue("description", metadata.description, { shouldDirty: true });
 			}
 		}
-	}, [metadata, setValue]);
+	}, [metadata, setValue, getValues, dirtyFields]);
 
 	return (
 		<form

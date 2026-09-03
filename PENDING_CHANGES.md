@@ -32,20 +32,20 @@
 
 **Core Features**
 
-- Save, edit, and delete bookmarks/links
+- Save, edit, and delete items
 - Create, rename, and delete folders
-- Organize links into folders with drag and drop
-- File tree view for folder/link hierarchy
-- Open links in a new tab
+- Organize items into folders with drag and drop
+- File tree view for folder/item hierarchy
+- Open item links in a new tab
 - Copy link URL to clipboard
-- Search bookmarks by title, URL, or tags
+- Search items by title, URL, or tags
 - Sort by name, date added, or manual order
-- Filter by folder, tag, or bookmark type
+- Filter by folder, tag, or item type
 - Pagination for large collections
-- Assign tags and categories to bookmarks
+- Assign tags and categories to items
 - Automatic favicon fetching for saved sites
-- Import bookmarks from JSON
-- Export bookmarks to JSON
+- Import items from JSON
+- Export items to JSON
 - Responsive layout for mobile devices
 - PWA support — install as app, works offline
 
