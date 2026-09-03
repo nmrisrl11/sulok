@@ -125,11 +125,12 @@ Only include sections that contain actual changes.
 ### 4. Generalized Titles
 
 For each group, provide a concise generalized title that could be used as a commit title.
+The generalized title MUST start with a Conventional Commit type prefix (e.g., "feat:", "fix:", "chore:").
 
 For example:
 
 Feats
-**Add celebrant photocard customization**
+**feat: add celebrant photocard customization**
 
 - Add photocard customization dialog
 - Support configurable greeting content
@@ -188,27 +189,27 @@ Return ONLY the grouped commit summary.
 Example:
 
 Chores
-**Update project tooling and configuration**
+**chore: update project tooling and configuration**
 
 - Update build configuration for the current application architecture
 - Adjust project dependencies and development tooling
 
 Feats
-**Add celebrant photocard customization**
+**feat: add celebrant photocard customization**
 
 - Add a dedicated photocard customization workflow
 - Support configurable greeting, celebrant identity, avatar, and visual presentation
 - Integrate the photocard workflow with existing celebrant data
 
 Refactors
-**Modernize shared React component patterns**
+**refactor: modernize shared React component patterns**
 
 - Remove legacy component patterns
 - Align components with current React conventions
 - Simplify component implementation and improve maintainability
 
 Docs
-**Synchronize project documentation with the current implementation**
+**docs: synchronize project documentation with the current implementation**
 
 - Update current-state documentation with recently completed features
 - Remove completed items from pending changes

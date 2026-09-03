@@ -35,6 +35,7 @@ Look for and review:
 - `CURRENT_STATE.md`
 - `PENDING_CHANGES.md`
 - `README.md`
+- `docs/rules.md`
 - `docs/markdowns/**`
 
 For `docs/markdowns`, inspect relevant files recursively based on the requested task.
@@ -79,6 +80,7 @@ Pay close attention to:
 
 - `AGENTS.md` development rules
 - `DESIGN.md` design and UX rules
+- `docs/rules.md` implementation rules and constraints
 - Relevant `.agents/skills/**` instructions
 - Existing architectural patterns
 - Naming conventions

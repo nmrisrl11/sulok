@@ -15,6 +15,7 @@ Review:
 - CURRENT_STATE.md
 - PENDING_CHANGES.md
 - README.md
+- docs/rules.md
 - docs/markdowns/**
 
 Also inspect relevant source code, configuration, dependencies, project structure, and Git changes when needed.
@@ -190,6 +191,7 @@ Check for contradictions between:
 - CURRENT_STATE.md
 - PENDING_CHANGES.md
 - README.md
+- docs/rules.md
 - docs/markdowns/**
 
 Use the appropriate document for each type of information:
@@ -199,6 +201,7 @@ Use the appropriate document for each type of information:
 - `CURRENT_STATE.md` → current implementation
 - `PENDING_CHANGES.md` → pending work
 - `README.md` → user/contributor overview
+- `docs/rules.md` → implementation rules and constraints
 - `docs/markdowns/**` → detailed technical/feature documentation
 
 ---

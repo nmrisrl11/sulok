@@ -2,6 +2,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useConfirmationStore } from "@/stores/confirmation-store";
 import { useItemStore } from "@/stores/item-store";
 import React, { lazy, Suspense, useState } from "react";
+import { ErrorBoundary } from "../error-boundary";
 import { Header } from "./header";
 
 const ItemDialog = lazy(() =>
@@ -37,14 +38,18 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 					<div className="py-6 pt-12 md:px-6">{children}</div>
 				</div>
 				{hasLoadedItemDialog && (
-					<Suspense fallback={null}>
-						<ItemDialog />
-					</Suspense>
+					<ErrorBoundary>
+						<Suspense fallback={null}>
+							<ItemDialog />
+						</Suspense>
+					</ErrorBoundary>
 				)}
 				{hasLoadedConfirmationDialog && (
-					<Suspense fallback={null}>
-						<ConfirmationDialog />
-					</Suspense>
+					<ErrorBoundary>
+						<Suspense fallback={null}>
+							<ConfirmationDialog />
+						</Suspense>
+					</ErrorBoundary>
 				)}
 			</div>
 		</TooltipProvider>

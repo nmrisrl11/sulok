@@ -5,46 +5,20 @@ import { ItemCard } from "@/features/items/components/item-card";
 import { cn } from "@/lib/utils";
 import { useItemStore } from "@/stores/item-store";
 import { useLiveQuery } from "dexie-react-hooks";
-import { AlertCircle, PlusIcon } from "lucide-react";
-import React from "react";
+import { PlusIcon } from "lucide-react";
 
 import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton";
 import { ItemEmptyState } from "@/features/items/components/item-empty-state";
 import { getHasDataHint } from "@/lib/storage";
 
-class ErrorBoundary extends React.Component<
-	{ children: React.ReactNode },
-	{ hasError: boolean; error: Error | null }
-> {
-	constructor(props: { children: React.ReactNode }) {
-		super(props);
-		this.state = { hasError: false, error: null };
-	}
-
-	static getDerivedStateFromError(error: Error) {
-		return { hasError: true, error };
-	}
-
-	render() {
-		if (this.state.hasError) {
-			return (
-				<div className="py-8 text-center text-destructive border-dashed border-2 border-destructive/50 rounded-md flex flex-col items-center gap-2">
-					<AlertCircle className="h-8 w-8 mb-2 opacity-80" />
-					<p className="font-medium">Failed to load items</p>
-					<p className="text-sm opacity-80">{this.state.error?.message}</p>
-				</div>
-			);
-		}
-		return this.props.children;
-	}
-}
+import { ErrorBoundary } from "@/components/error-boundary";
 
 function HomePageInner() {
 	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
 	const hasDataHint = getHasDataHint();
 
 	if (items === undefined) {
-		if (hasDataHint) {
+		if (hasDataHint !== false) {
 			return (
 				<div className="flex flex-col gap-2">
 					<ItemCardSkeleton />
