@@ -18,9 +18,9 @@ The project is in the **brand foundation and documentation phase**.
 - [x] Repository created
 - [x] Vite + React 19 + TypeScript project initialized
 - [x] TailwindCSS v4 + shadcn/ui configured
+- [x] Basic layout implemented (simplified single-column MVP)
 - [ ] Dexie.js database schema defined
 - [ ] Zustand stores scaffolded
-- [ ] Basic layout implemented
 - [ ] PWA configured
 
 ---
@@ -29,11 +29,10 @@ The project is in the **brand foundation and documentation phase**.
 
 ### Next Steps
 
-1. Set up Dexie.js with initial schema (folders, links)
-2. Implement basic layout (header, toolbar, content area)
-3. Implement folder CRUD
-4. Implement link CRUD
-5. Implement file tree view
+1. Set up Dexie.js with initial schema (links)
+2. Connect the simplified UI to Dexie.js for saving, reading, and deleting links.
+3. Implement folder CRUD (post-MVP)
+4. Implement link tags and search
 
 ---
 

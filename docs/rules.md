@@ -70,6 +70,7 @@
 src/
 ├── components/       # Reusable UI components
 │   └── ui/           # shadcn/ui primitives
+├── constants/        # Centralized app metadata and global constants
 ├── features/         # Feature modules (folders, links, search)
 ├── hooks/            # Custom React hooks
 ├── lib/              # Utilities, helpers, constants
@@ -78,6 +79,11 @@ src/
 ├── types/            # TypeScript type definitions
 └── App.tsx           # Root component
 ```
+
+### Centralized App Data
+
+- All application metadata (name, shortName, tagline, description, themeColor, keywords, author, etc.) MUST be centralized in `src/constants/app-info.ts`.
+- Do not hardcode app metadata in `index.html` or `vite.config.ts`. Instead, use Vite plugins or template interpolation to inject data from this centralized file across the application.
 
 ### Naming Conventions
 
