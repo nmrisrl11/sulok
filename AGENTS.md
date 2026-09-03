@@ -50,10 +50,11 @@ sulok/
 │   │   └── ui/          # shadcn/ui components
 │   ├── features/
 │   │   ├── folders/     # Folder CRUD, tree, drag-drop
-│   │   ├── links/       # Link CRUD, cards, list
+│   │   ├── items/       # Item CRUD, cards, list (formerly links)
 │   │   └── search/      # Search, filter, sort
 │   ├── hooks/
 │   ├── lib/
+│   ├── schemas/         # Zod schemas (domain)
 │   ├── stores/
 │   ├── db/
 │   ├── types/
@@ -73,11 +74,15 @@ sulok/
 - **Component Folder Rule:** App-specific global components go in `src/components/`. The `src/components/ui/` folder is strictly dedicated to external UI library components (like shadcn/ui). Do not put internal/custom logic components in `components/ui`.
 - Use `cn()` utility for conditional class merging.
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
-- **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `BookmarkRepository`). Never call IndexedDB or `db` directly from a component or store.
+- **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
+- **Strict TypeScript:** The project strictly enforces `@typescript-eslint/no-explicit-any`. NEVER use `any`. Use `unknown` and type guard it if necessary.
 - **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
 - **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
 - **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components. Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
+- **Centralized Metadata:** Do not hardcode app names or URLs in UI components. Always use `APP_INFO` from `src/constants/app-info.ts` (e.g. `APP_INFO.name`, `APP_INFO.appUrl`).
+- **Skeletons & Empty States:** Co-locate loading skeletons with their respective components. Use dedicated beautifully designed components for empty states rather than plain text.
 - Favicon fetching: `https://www.google.com/s2/favicons?domain=[domain]&sz=64`
+- Metadata fetching: Uses `microlink.io` for robust open-graph metadata preview.
 
 ## What NOT To Do
 

@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
 
-export interface Bookmark {
+export interface Item {
 	id: string; // UUID
 	url: string;
 	title?: string;
@@ -10,12 +10,17 @@ export interface Bookmark {
 }
 
 const db = new Dexie("SulokDB") as Dexie & {
-	bookmarks: EntityTable<Bookmark, "id">;
+	items: EntityTable<Item, "id">;
 };
 
 // Schema declaration
 db.version(1).stores({
-	bookmarks: "id, url, title, createdAt, updatedAt", // Primary key and indexed props
+	bookmarks: "id, url, title, createdAt, updatedAt",
+});
+
+db.version(2).stores({
+	bookmarks: null, // drop legacy table
+	items: "id, url, title, createdAt, updatedAt", // Primary key and indexed props
 });
 
 export { db };

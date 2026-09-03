@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const bookmarkSchema = z.object({
+export const itemSchema = z.object({
 	url: z
 		.string()
 		.url({ message: "Please enter a valid URL" })
@@ -14,4 +14,4 @@ export const bookmarkSchema = z.object({
 		.optional(),
 });
 
-export type BookmarkFormValues = z.infer<typeof bookmarkSchema>;
+export type ItemFormValues = z.infer<typeof itemSchema>;
