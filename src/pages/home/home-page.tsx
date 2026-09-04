@@ -61,12 +61,12 @@ export function HomePage({ className }: { className?: string }) {
 					<PlusIcon className="h-4 w-4" />
 					{`Add to ${APP_INFO.name}`}
 				</Button>
-				<Button variant="outline" disabled title="Coming soon">
+				{/* <Button variant="outline" disabled title="Coming soon">
 					Import (Coming soon)
 				</Button>
 				<Button variant="outline" disabled title="Coming soon">
 					Export (Coming soon)
-				</Button>
+				</Button> */}
 			</div>
 
 			{/* Item List Section */}

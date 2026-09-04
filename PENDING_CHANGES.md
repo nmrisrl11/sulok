@@ -9,6 +9,8 @@
 
 ### ✨ Added
 
+- Implemented custom scrollbar styling globally for a refined and consistent UI experience.
+- Added interactive Sulo mascot reaction (excited state) when hovering over the Empty State call-to-action button.
 - Implemented an interactive Sulo mascot and Sulok logo with flawless SVG path morphing using `framer-motion` and `flubber`.
 - Integrated a global `useLogoStore` to manage Sulo's emotional expressions (e.g., `sleepy`, `shy`, `confused`) which react to user hover events across the app.
 - Configured Vite `manualChunks` in Rollup options to split heavy third-party dependencies (React, Framer Motion, Flubber) from the main app bundle, eliminating chunk size warnings and optimizing load times.
@@ -33,6 +35,8 @@
 
 ### 🐛 Fixed
 
+- Fixed flexbox layout squishing and sharp edges on the URL metadata preview card within the scrollable Item Form dialog by enforcing `shrink-0` and `overflow-hidden`.
+- Enforced a fixed Dialog Header and Footer pattern in the Add/Edit Item dialog to ensure consistent content scrolling without expanding beyond the viewport (`max-h-[90vh]`).
 - Fixed a Flash of Unstyled Content (FOUC) causing a brief bright flicker on page load when Dark mode was active by injecting a synchronous theme initialization script into `index.html`.
 - Fixed an organic blinking memory leak in the Mascot component where orphaned inner timeout chains could persist after unmounting by implementing an `isActive` unmount flag.
 - Fixed an accessibility interaction where the disabled "What's new" button blocked mouse hover events, preventing Sulo from reacting.

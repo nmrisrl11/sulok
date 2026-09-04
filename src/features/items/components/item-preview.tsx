@@ -12,7 +12,7 @@ interface ItemPreviewProps {
 export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps) {
 	if (!url && !loading && !error && !metadata) {
 		return (
-			<div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed p-8 text-center bg-muted/20 text-muted-foreground">
+			<div className="flex flex-col items-center justify-center gap-2 border border-dashed p-8 text-center bg-muted/20 text-muted-foreground rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle">
 				<GlobeIcon className="h-8 w-8 opacity-20" />
 				<div className="flex flex-col gap-1">
 					<p className="text-sm font-medium">No preview available</p>
@@ -57,7 +57,7 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 	})();
 
 	return (
-		<div className="flex flex-col overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle border bg-card text-card-foreground shadow-sm">
+		<div className="flex flex-col shrink-0 overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle border bg-card text-card-foreground shadow-sm">
 			<div className="flex flex-col gap-1 p-3 pb-2">
 				<div className="flex items-center gap-2 text-xs text-muted-foreground">
 					{metadata.logo ? (
