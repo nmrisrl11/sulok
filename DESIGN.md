@@ -152,6 +152,12 @@ Minimal shadows. Prefer border/background differentiation.
 - Meaningful generic icon (e.g., from lucide-react) or Sulo mascot illustration.
 - Clear call-to-action button.
 
+### Notifications
+
+- Use `goey-toast` for all app notifications via `src/lib/notify.ts`.
+- Positioned at the `bottom-center` with no timestamps.
+- Use friendly, branded copywriting (e.g., "Added to your corner", "Changes saved") instead of generic system terms (e.g., "Item saved", "Success").
+
 ---
 
 ## Favicon Fetching

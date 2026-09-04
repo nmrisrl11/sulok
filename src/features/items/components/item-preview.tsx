@@ -1,3 +1,4 @@
+import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GlobeIcon, ImageIcon } from "lucide-react";
 import type { URLMetadata } from "../hooks/use-metadata";
@@ -37,9 +38,19 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 
 	if (error && !metadata) {
 		return (
-			<div className="flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
-				<GlobeIcon className="h-4 w-4 shrink-0" />
-				<span className="truncate">Could not load preview for this URL.</span>
+			<div
+				role="alert"
+				className="relative flex items-start gap-3 rounded-md border p-3 text-muted-foreground bg-muted/10 overflow-hidden"
+			>
+				<GlobeIcon className="h-4 w-4 mt-0.5 shrink-0 opacity-50 relative z-10" />
+				<div className="flex flex-col gap-0.5 leading-tight relative z-10 pr-8">
+					<span className="text-sm font-medium text-foreground">Preview unavailable</span>
+					<span className="text-xs opacity-80">You can still save this URL to your corner.</span>
+				</div>
+				<SuloMascot
+					expression="confused"
+					className="absolute -bottom-5 -right-3 w-16 h-16 -rotate-12 pointer-events-none"
+				/>
 			</div>
 		);
 	}

@@ -88,8 +88,10 @@ sulok/
 - **Centralized Metadata:** Do not hardcode app names or URLs in UI components. Always use `APP_INFO` from `src/constants/app-info.ts` (e.g. `APP_INFO.name`, `APP_INFO.appUrl`).
 - **Skeletons & Empty States:** Co-locate loading skeletons with their respective components. Use dedicated beautifully designed components for empty states rather than plain text. Use route-specific fallbacks (e.g., `HomeRouteFallback`, `AboutSkeleton`) wrapped in `<Suspense>` per route, rather than generic loading labels. Avoid layout flashes by handling loading states centrally at the route component level.
 - **Scrollbars:** Always use the `.custom-scrollbar` class on any scrollable container (e.g., `overflow-y-auto`) to ensure a consistent, branded scrollbar styling across the application.
+- **Notifications:** Do not use `sonner` or shadcn's `useToast` directly. Always use the `notify` utility from `src/lib/notify.ts` which wraps `goey-toast` for fluid, animated notifications.
 - Favicon fetching: `https://www.google.com/s2/favicons?domain=[origin]&sz=64` (use the full origin, e.g. `https://domain.com`, to ensure it resolves modern PaaS deployments properly).
 - Metadata fetching: Uses `microlink.io` for robust open-graph metadata preview.
+- **Vite Chunking:** Always use `rollupOptions.output.manualChunks` as a function in `vite.config.ts` to logically group dependencies into domain-specific chunks (e.g., `vendor-react`, `vendor-db`) to prevent massive bundle sizes.
 
 ## What NOT To Do
 

@@ -9,6 +9,8 @@
 
 ### ✨ Added
 
+- Integrated `goey-toast` as the global notification system (`src/lib/notify.ts`), replacing standard toasts, and enhancing UX copywriting to align with the brand (e.g., "Added to your corner" instead of "Item saved").
+- Added a neutral, layout-compact error state with a subtle "confused" Sulo mascot when URL metadata preview fails (e.g., hitting rate limits).
 - Redesigned the application header with a responsive layout, including dynamic logo scaling on mobile devices.
 - Refined the header navigation into a high-contrast iOS-style segmented control pill to improve active state visibility in light mode.
 - Refactored `HomePage` internal data fetching to directly return `<HomeRouteFallback />` when loading, gracefully handling state without duplicating layout logic and avoiding layout flashes for new users.
@@ -20,7 +22,7 @@
 - Added interactive Sulo mascot reaction (excited state) when hovering over the Empty State call-to-action button.
 - Implemented an interactive Sulo mascot and Sulok logo with flawless SVG path morphing using `framer-motion` and `flubber`.
 - Integrated a global `useLogoStore` to manage Sulo's emotional expressions (e.g., `sleepy`, `shy`, `confused`) which react to user hover events across the app.
-- Configured Vite `manualChunks` in Rollup options to split heavy third-party dependencies (React, Framer Motion, Flubber) from the main app bundle, eliminating chunk size warnings and optimizing load times.
+- Configured Vite `manualChunks` in Rollup options as a function to accurately categorize and split heavy third-party dependencies (React, DB, UI, Animation) into separate domain chunks, fully resolving Vite's >500kB chunk size warnings and optimizing load times.
 - Implemented dark and light mode theme switching, including a ThemeProvider and a ModeToggle switch in the header.
 - Implemented performance optimizations (React.lazy and Suspense) for route-level and dialog code splitting, reducing the initial bundle size below 500kB.
 - Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
@@ -33,6 +35,7 @@
 
 ### 🔧 Changed
 
+- Enhanced the interactive morphing logo with a 2-second debounce on `MouseLeave` for a smoother, sticky morphing experience that avoids rapid jitter.
 - Optimized SVG path morphing computations by deferring execution to the background (via `setTimeout`), preventing the animation logic from blocking the main thread during the initial page load.
 
 - Redesigned `ItemForm` UI to strictly auto-populate and display Site Name and Description as read-only metadata fields, rather than editable inputs.
@@ -42,6 +45,10 @@
 
 ### 🐛 Fixed
 
+- Fixed a timeout memory leak in the Mascot logo component by properly clearing and resetting `hoverTimeoutRef.current` upon component unmount and timeout execution.
+- Added `role="alert"` to the URL metadata preview error state to ensure asynchronous fetch failures are properly announced by screen readers.
+- Fixed TypeScript type constraints in the global `notify` utility by making the `id` option optional and accepting both `string` and `number`, ensuring full compatibility with the underlying `goey-toast` API.
+- Fixed an issue on mobile where tapping and holding the logo would trigger the browser's default text selection menu by applying `select-none` and `[-webkit-touch-callout:none]`.
 - Resolved a React hook lint warning in `useIsMobile` by initializing state directly during render (via `window.innerWidth`) rather than updating it synchronously within `useEffect`, preventing cascading renders.
 - Fixed flexbox layout squishing and sharp edges on the URL metadata preview card within the scrollable Item Form dialog by enforcing `shrink-0` and `overflow-hidden`.
 - Enforced a fixed Dialog Header and Footer pattern in the Add/Edit Item dialog to ensure consistent content scrolling without expanding beyond the viewport (`max-h-[90vh]`).
