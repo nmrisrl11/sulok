@@ -33,7 +33,7 @@ Peer deps (must exist in the host app):
 ### shadcn/ui projects
 
 ```bash
-npx shadcn@latest add https://goey-toast.vercel.app/r/goey-toaster.json
+npx shadcn@2.1.8 add ./registry/goey-toaster.json
 ```
 
 Installs a wrapper at `components/ui/goey-toaster.tsx` and auto-installs deps.

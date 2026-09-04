@@ -23,7 +23,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, and custom scrollbars.
 - **🌓 Theme Support**: Seamless switching between Dark and Light modes.
 - **⚡ Local-First**: Lightning-fast operations powered by IndexedDB.
-- **🌐 Offline Capable**: Designed to work entirely offline (PWA support coming soon).
+- **🌐 Offline Capable**: Designed to work offline for local data and existing items (metadata fetching requires network access; PWA support coming soon).
 - **🎉 Sulo Mascot**: A responsive, interactive brand mascot that reacts to your actions throughout the app.
 
 ---
@@ -34,8 +34,8 @@ Sulok is built on a **local-first architecture**.
 
 - **No Accounts:** You don't need to sign up or log in.
 - **No Cloud Database:** We don't store your bookmarks on our servers. In fact, we don't have servers.
-- **Browser Storage:** All of your folders, items, and settings are saved locally on your device using your browser's IndexedDB.
-- **External Requests:** The only network requests made by the app are to fetch link metadata (via `microlink.io`) and favicons (via Google's Favicon API) when you add a new item.
+- **Browser Storage:** Folders and items are saved locally on your device using IndexedDB, while theme and settings use localStorage.
+- **External Requests:** The app fetches link metadata (via `microlink.io`) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
 
 _Note: Device synchronization and Import/Export capabilities are planned for future releases to help you securely move your data between devices._
 
@@ -110,7 +110,7 @@ Before modifying code, read:
 - `docs/rules.md` (Strict implementation constraints)
 - `DESIGN.md` (Brand, colors, and UI conventions)
 - `CURRENT_STATE.md` (What is currently built)
-- `PENDING_CHANGES.md` (The changelog of recent work)
+- `PENDING_CHANGES.md` (Work queued or planned for the next release)
 
 ---
 

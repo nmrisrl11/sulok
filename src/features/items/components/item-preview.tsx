@@ -38,7 +38,10 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 
 	if (error && !metadata) {
 		return (
-			<div className="relative flex items-start gap-3 rounded-md border p-3 text-muted-foreground bg-muted/10 overflow-hidden">
+			<div
+				role="alert"
+				className="relative flex items-start gap-3 rounded-md border p-3 text-muted-foreground bg-muted/10 overflow-hidden"
+			>
 				<GlobeIcon className="h-4 w-4 mt-0.5 shrink-0 opacity-50 relative z-10" />
 				<div className="flex flex-col gap-0.5 leading-tight relative z-10 pr-8">
 					<span className="text-sm font-medium text-foreground">Preview unavailable</span>

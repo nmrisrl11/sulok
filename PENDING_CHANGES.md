@@ -45,6 +45,9 @@
 
 ### 🐛 Fixed
 
+- Fixed a timeout memory leak in the Mascot logo component by properly clearing and resetting `hoverTimeoutRef.current` upon component unmount and timeout execution.
+- Added `role="alert"` to the URL metadata preview error state to ensure asynchronous fetch failures are properly announced by screen readers.
+- Fixed TypeScript type constraints in the global `notify` utility by making the `id` option optional and accepting both `string` and `number`, ensuring full compatibility with the underlying `goey-toast` API.
 - Fixed an issue on mobile where tapping and holding the logo would trigger the browser's default text selection menu by applying `select-none` and `[-webkit-touch-callout:none]`.
 - Resolved a React hook lint warning in `useIsMobile` by initializing state directly during render (via `window.innerWidth`) rather than updating it synchronously within `useEffect`, preventing cascading renders.
 - Fixed flexbox layout squishing and sharp edges on the URL metadata preview card within the scrollable Item Form dialog by enforcing `shrink-0` and `overflow-hidden`.

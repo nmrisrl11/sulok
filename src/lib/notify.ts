@@ -1,7 +1,7 @@
 import { gooeyToast } from "goey-toast";
 
 type ToastOptions = {
-	id: string;
+	id?: string | number;
 	description?: string;
 	duration?: number;
 	action?: {

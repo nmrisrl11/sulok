@@ -95,6 +95,14 @@ export function SulokLogo({ className }: { className?: string }) {
 	}, []);
 
 	useEffect(() => {
+		return () => {
+			if (hoverTimeoutRef.current) {
+				clearTimeout(hoverTimeoutRef.current);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
 		// Target progress: 1 (Sulo) when morphed and NOT hovered
 		// 0 (Sulok) when hovered, or if not morphed yet.
 		const target = isMorphed && !isHovered ? 1 : 0;
@@ -117,6 +125,7 @@ export function SulokLogo({ className }: { className?: string }) {
 	const handleMouseLeave = () => {
 		hoverTimeoutRef.current = setTimeout(() => {
 			setIsHovered(false);
+			hoverTimeoutRef.current = null;
 		}, 2000); // 2 second delay before morphing back
 	};
 
