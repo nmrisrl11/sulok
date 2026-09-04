@@ -7,6 +7,7 @@ import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore } from "@/stores/confirmation-store";
 import { useItemStore } from "@/stores/item-store";
+import { useLogoStore } from "@/stores/logo-store";
 import { CheckIcon, CopyIcon, Edit2Icon, ExternalLinkIcon, Trash2Icon } from "lucide-react";
 
 export function ItemCard({ item }: { item: Item }) {
@@ -23,6 +24,7 @@ export function ItemCard({ item }: { item: Item }) {
 			confirmText: "Delete",
 			onConfirm: async () => {
 				await deleteItem(item.id);
+				useLogoStore.getState().setTemporaryExpression("unimpressed");
 			},
 		});
 	};

@@ -4,6 +4,7 @@ import { ItemRepository } from "@/db/repositories/item-repository";
 import { ItemCard } from "@/features/items/components/item-card";
 import { cn } from "@/lib/utils";
 import { useItemStore } from "@/stores/item-store";
+import { useLogoStore } from "@/stores/logo-store";
 import { useLiveQuery } from "dexie-react-hooks";
 import { PlusIcon } from "lucide-react";
 
@@ -45,12 +46,18 @@ function HomePageInner() {
 
 export function HomePage({ className }: { className?: string }) {
 	const { openCreateDialog } = useItemStore();
+	const { setTemporaryExpression, clearTemporaryExpression } = useLogoStore();
 
 	return (
 		<main className={cn("flex flex-col gap-10", className)}>
 			{/* Action Buttons */}
 			<div className="flex items-center gap-3">
-				<Button onClick={openCreateDialog} className="gap-2 cursor-pointer">
+				<Button
+					onClick={openCreateDialog}
+					onMouseEnter={() => setTemporaryExpression("excited", 99999)}
+					onMouseLeave={clearTemporaryExpression}
+					className="gap-2 cursor-pointer"
+				>
 					<PlusIcon className="h-4 w-4" />
 					{`Add to ${APP_INFO.name}`}
 				</Button>

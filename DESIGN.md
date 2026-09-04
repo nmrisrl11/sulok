@@ -9,6 +9,7 @@
 - **Name:** Sulok
 - **Pronunciation:** /suː.lok/ (SOO-lok)
 - **Tagline:** Your corner of the web.
+- **Mascot:** Sulo. A subtle, flat 2D character that serves as the brand's playful identity. Sulo is responsive and expressive (e.g., sleepy, shy, confused) depending on app context and user interaction.
 - **Description:** A personal web library for saving, organizing, and rediscovering things you find on the internet.
 
 ---

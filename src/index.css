@@ -18,6 +18,17 @@
 	--color-amber: oklch(0.715 0.079 68.54); /* #c49a6c */
 	--color-stone: oklch(0.567 0.012 58.08); /* #7c7570 */
 	--color-linen: oklch(0.92 0.009 78.28); /* #e8e4de */
+
+	--animate-sulo-float: sulo-float 4s ease-in-out infinite alternate;
+
+	@keyframes sulo-float {
+		0% {
+			transform: translateY(2%);
+		}
+		100% {
+			transform: translateY(-2%);
+		}
+	}
 }
 
 @theme inline {

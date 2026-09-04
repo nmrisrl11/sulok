@@ -9,6 +9,9 @@
 
 ### ✨ Added
 
+- Implemented an interactive Sulo mascot and Sulok logo with flawless SVG path morphing using `framer-motion` and `flubber`.
+- Integrated a global `useLogoStore` to manage Sulo's emotional expressions (e.g., `sleepy`, `shy`, `confused`) which react to user hover events across the app.
+- Configured Vite `manualChunks` in Rollup options to split heavy third-party dependencies (React, Framer Motion, Flubber) from the main app bundle, eliminating chunk size warnings and optimizing load times.
 - Implemented dark and light mode theme switching, including a ThemeProvider and a ModeToggle switch in the header.
 - Implemented performance optimizations (React.lazy and Suspense) for route-level and dialog code splitting, reducing the initial bundle size below 500kB.
 - Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
@@ -21,12 +24,19 @@
 
 ### 🔧 Changed
 
+- Optimized SVG path morphing computations by deferring execution to the background (via `setTimeout`), preventing the animation logic from blocking the main thread during the initial page load.
+
 - Redesigned `ItemForm` UI to strictly auto-populate and display Site Name and Description as read-only metadata fields, rather than editable inputs.
 - Enforced strict URL domain validation (requiring a valid TLD or localhost) before permitting saves to prevent corrupt data entry.
 - Updated Item URL metadata fetching to safely redact sensitive URL components (e.g. username, password) and restricted automatic fetching exclusively to changed URLs to prevent unnecessary external requests.
 - Updated the URL schema refinement to be case-insensitive for `http://` and `https://`.
 
 ### 🐛 Fixed
+
+- Fixed a Flash of Unstyled Content (FOUC) causing a brief bright flicker on page load when Dark mode was active by injecting a synchronous theme initialization script into `index.html`.
+- Fixed an organic blinking memory leak in the Mascot component where orphaned inner timeout chains could persist after unmounting by implementing an `isActive` unmount flag.
+- Fixed an accessibility interaction where the disabled "What's new" button blocked mouse hover events, preventing Sulo from reacting.
+- Refined Vite `manualChunks` splitting to parse absolute package names accurately, preventing false positive matches across deep `node_modules` file paths.
 
 - Fixed a bug where the metadata preview was not showing when editing an existing item.
 - Fixed a bug causing the edit form preview to flash and overwrite state during the dialog's close animation by deriving `activeItem` state during render instead of using `useEffect`.
