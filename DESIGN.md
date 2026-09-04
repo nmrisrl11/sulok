@@ -146,7 +146,9 @@ Minimal shadows. Prefer border/background differentiation.
 ## Favicon Fetching
 
 ```
-https://www.google.com/s2/favicons?domain={domain}&sz=64
+https://www.google.com/s2/favicons?domain={origin}&sz=64
 ```
+
+_Note: Always pass the full origin (e.g. `https://example.com`) rather than just the hostname. This ensures Google's bot correctly requests the HTTPS version, which is required by many modern hosting providers (Vercel, Netlify, etc)._
 
 Display at 32×32 in link cards. Cache via service worker for offline access.

@@ -22,8 +22,8 @@ export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 	// Extract domain for the favicon service
 	let domain = "";
 	try {
-		domain = new URL(url).hostname;
-	} catch (e) {
+		domain = new URL(url).origin;
+	} catch {
 		// invalid url, we'll just fall back
 		if (!error) setError(true);
 	}

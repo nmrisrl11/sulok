@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { APP_INFO } from "@/constants/app-info";
 import { useDebounce } from "@/hooks/use-debounce";
+import { formatUrl } from "@/lib/utils";
 import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -32,8 +32,7 @@ export function ItemForm({
 		handleSubmit,
 		setValue,
 		control,
-		getValues,
-		formState: { errors, dirtyFields },
+		formState: { errors },
 	} = useForm<ItemFormValues>({
 		resolver: zodResolver(itemSchema),
 		defaultValues: {
@@ -43,32 +42,63 @@ export function ItemForm({
 		},
 	});
 
-	const rawUrl = useWatch({ control, name: "url" });
+	const rawUrl = useWatch({ control, name: "url" }) || "";
 	const debouncedUrl = useDebounce(rawUrl, 500);
+	const formattedUrl = formatUrl(debouncedUrl);
 
-	// Fetch metadata only if it's a new item
-	const shouldFetch = !defaultValues && debouncedUrl.length > 5;
-	const { data: metadata, loading, error } = useMetadata(debouncedUrl, shouldFetch);
+	const isUrlChanged = defaultValues?.url ? formattedUrl !== formatUrl(defaultValues.url) : true;
+
+	let fetchUrl = formattedUrl;
+	try {
+		const parsed = new URL(formattedUrl);
+		parsed.username = "";
+		parsed.password = "";
+		fetchUrl = parsed.toString();
+	} catch {
+		// ignore invalid URLs for redaction
+	}
+
+	// Fetch metadata if we have a URL to preview and it has changed
+	const shouldFetch = fetchUrl.length > 3 && isUrlChanged;
+	const { data: metadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
 
 	// Auto-populate form fields when metadata is successfully fetched
 	useEffect(() => {
-		if (metadata) {
-			const currentValues = getValues();
-			if (metadata.title && !currentValues.title && !dirtyFields.title) {
-				setValue("title", metadata.title, { shouldDirty: true });
-			}
-			if (metadata.description && !currentValues.description && !dirtyFields.description) {
-				setValue("description", metadata.description, { shouldDirty: true });
-			}
+		const currentIsUrlChanged = defaultValues?.url
+			? formatUrl(rawUrl) !== formatUrl(defaultValues.url)
+			: true;
+
+		if (rawUrl.trim() === "") {
+			setValue("title", "");
+			setValue("description", "");
+		} else if (!currentIsUrlChanged) {
+			setValue("title", defaultValues?.title || "");
+			setValue("description", defaultValues?.description || "");
+		} else if (metadata) {
+			setValue("title", metadata.title || "");
+			setValue("description", metadata.description || "");
+		} else if (error) {
+			setValue("title", "");
+			setValue("description", "");
 		}
-	}, [metadata, setValue, getValues, dirtyFields]);
+	}, [metadata, rawUrl, error, defaultValues, setValue]);
+
+	const currentTitle = useWatch({ control, name: "title" });
+	const currentDescription = useWatch({ control, name: "description" });
+
+	const isPending = rawUrl !== debouncedUrl || loading;
+
+	const handleFormSubmit = (data: ItemFormValues) => {
+		if (isPending) return;
+		onSubmit(data);
+	};
 
 	return (
 		<form
-			onSubmit={handleSubmit(onSubmit)}
+			onSubmit={handleSubmit(handleFormSubmit)}
 			className="flex flex-1 flex-col gap-4 overflow-y-auto p-4"
 		>
-			<ItemPreview metadata={metadata} loading={loading} error={error} url={debouncedUrl} />
+			<ItemPreview metadata={metadata} loading={loading} error={error} url={formattedUrl} />
 
 			<div className="space-y-2">
 				<Label htmlFor="url">URL *</Label>
@@ -82,27 +112,22 @@ export function ItemForm({
 				{errors.url && <p className="text-sm font-medium text-destructive">{errors.url.message}</p>}
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="title">Site Name (Optional)</Label>
-				<Input id="title" placeholder="Example Site" {...register("title")} autoComplete="off" />
-				{errors.title && (
-					<p className="text-sm font-medium text-destructive">{errors.title.message}</p>
-				)}
-			</div>
-
-			<div className="space-y-2">
-				<Label htmlFor="description">Description (Optional)</Label>
-				<Textarea
-					id="description"
-					placeholder="A brief note about this item"
-					{...register("description")}
-					maxLength={500}
-					className="field-sizing-content min-h-15 resize-none w-full max-w-full wrap-break-word"
-				/>
-				{errors.description && (
-					<p className="text-sm font-medium text-destructive">{errors.description.message}</p>
-				)}
-			</div>
+			{(currentTitle || currentDescription) && (
+				<div className="flex flex-col gap-3 rounded-md bg-muted/30 p-3 border text-sm">
+					{currentTitle && (
+						<div className="flex flex-col gap-1">
+							<span className="text-xs font-medium text-muted-foreground">Site Name</span>
+							<span className="font-medium leading-snug text-foreground">{currentTitle}</span>
+						</div>
+					)}
+					{currentDescription && (
+						<div className="flex flex-col gap-1">
+							<span className="text-xs font-medium text-muted-foreground">Description</span>
+							<span className="text-muted-foreground leading-snug">{currentDescription}</span>
+						</div>
+					)}
+				</div>
+			)}
 
 			{submitError && (
 				<div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
@@ -114,8 +139,12 @@ export function ItemForm({
 				<Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
 					Cancel
 				</Button>
-				<Button type="submit" disabled={isSubmitting}>
-					{isSubmitting ? "Saving..." : `Save to ${APP_INFO.name}`}
+				<Button type="submit" disabled={isSubmitting || isPending}>
+					{isSubmitting
+						? "Saving..."
+						: isPending
+							? "Loading preview..."
+							: `Save to ${APP_INFO.name}`}
 				</Button>
 			</DialogFooter>
 		</form>
