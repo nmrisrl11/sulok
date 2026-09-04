@@ -11,7 +11,7 @@ export function Header() {
 	return (
 		<header className="flex items-center justify-between p-4 md:py-6">
 			<SulokLogo />
-			<nav className="flex items-center gap-3 sm:gap-6">
+			<nav className="flex items-center gap-2 sm:gap-6">
 				<div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 rounded-full p-1 shadow-inner">
 					<NavLink
 						to="/about"
@@ -19,7 +19,7 @@ export function Header() {
 						onMouseLeave={clearTemporaryExpression}
 						className={({ isActive }) =>
 							cn(
-								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-3 py-1.5 text-sm font-medium",
+								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium",
 								isActive
 									? "bg-background text-foreground shadow-sm"
 									: "text-muted-foreground hover:text-foreground",
@@ -35,7 +35,7 @@ export function Header() {
 					>
 						<button
 							type="button"
-							className="text-muted-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full px-3 py-1.5 text-sm font-medium pointer-events-none"
+							className="text-muted-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium pointer-events-none"
 							disabled
 							title="Coming soon"
 						>
