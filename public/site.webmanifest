@@ -1,21 +1,21 @@
 {
-  "name": "Sulok",
-  "short_name": "Sulok",
-  "icons": [
-    {
-      "src": "/web-app-manifest-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/web-app-manifest-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "theme_color": "#f7f5f0",
-  "background_color": "#f7f5f0",
-  "display": "standalone"
+	"name": "Sulok",
+	"short_name": "Sulok",
+	"icons": [
+		{
+			"src": "/web-app-manifest-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/web-app-manifest-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"theme_color": "#1e1b18",
+	"background_color": "#f7f5f0",
+	"display": "standalone"
 }
