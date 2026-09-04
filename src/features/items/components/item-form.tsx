@@ -46,8 +46,6 @@ export function ItemForm({
 	const debouncedUrl = useDebounce(rawUrl, 500);
 	const formattedUrl = formatUrl(debouncedUrl);
 
-	const isUrlChanged = defaultValues?.url ? formattedUrl !== formatUrl(defaultValues.url) : true;
-
 	let fetchUrl = formattedUrl;
 	try {
 		const parsed = new URL(formattedUrl);
@@ -58,8 +56,8 @@ export function ItemForm({
 		// ignore invalid URLs for redaction
 	}
 
-	// Fetch metadata if we have a URL to preview and it has changed
-	const shouldFetch = fetchUrl.length > 3 && isUrlChanged;
+	// Fetch metadata if we have a URL to preview
+	const shouldFetch = fetchUrl.length > 3;
 	const { data: metadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
 
 	// Auto-populate form fields when metadata is successfully fetched

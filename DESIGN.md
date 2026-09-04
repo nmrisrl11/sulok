@@ -118,7 +118,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Linen background on Cream page.
 - Border: 1px solid `--border`.
 - Compact padding (12px).
-- Favicon (32×32) on the left.
+- Favicon (24×24 rounded box) on the left.
 - Title + URL stacked on the right.
 - Action buttons (open, copy, more) visible on hover.
 
@@ -151,4 +151,4 @@ https://www.google.com/s2/favicons?domain={origin}&sz=64
 
 _Note: Always pass the full origin (e.g. `https://example.com`) rather than just the hostname. This ensures Google's bot correctly requests the HTTPS version, which is required by many modern hosting providers (Vercel, Netlify, etc)._
 
-Display at 32×32 in link cards. Cache via service worker for offline access.
+Display in a 24×24 (`h-6 w-6`) bounded box with a rounded border, scaling the inner icon to 75% to ensure uniformity across different native favicon sizes. Cache via service worker for offline access.
