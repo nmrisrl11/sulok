@@ -81,6 +81,7 @@ sulok/
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
 - **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
 - **Strict TypeScript:** The project strictly enforces `@typescript-eslint/no-explicit-any`. NEVER use `any`. Use `unknown` and type guard it if necessary.
+- **React Imports:** Always use named imports for React hooks (e.g., `import { useState, useEffect } from "react";`) rather than namespace imports (`React.useState`). This ensures consistency across the codebase.
 - **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
 - **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
 - **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components. Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.

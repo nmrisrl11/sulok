@@ -32,10 +32,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
 	return (
 		<TooltipProvider>
-			<div className="bg-background min-h-screen flex flex-col">
-				<div className="mx-auto w-full max-w-4xl flex flex-col px-4 md:px-0">
+			<div className="bg-background min-h-dvh flex flex-col">
+				<div className="mx-auto w-full max-w-4xl flex flex-col">
 					<Header />
-					<div className="py-6 pt-12 md:px-6">{children}</div>
+
+					<main className="flex flex-col flex-1 gap-12 p-4 md:gap-16 md:py-6">{children}</main>
 				</div>
 				{hasLoadedItemDialog && (
 					<ErrorBoundary>

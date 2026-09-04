@@ -1,10 +1,11 @@
 import { APP_INFO } from "@/constants/app-info";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { combine } from "flubber";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BASE_BODY_PATH, SuloMascot } from "./sulo-mascot";
 
 // The paths of "Sulok" from the text logo, split into independent subpaths for flawless morphing
@@ -35,6 +36,10 @@ export function SulokLogo({ className }: { className?: string }) {
 	const [isMorphed, setIsMorphed] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 
+	const isMobile = useIsMobile();
+	const location = useLocation();
+	const isHome = location.pathname === "/";
+
 	// Hold the heavy interpolator function in state
 	const [interpolator, setInterpolator] = useState<((t: number) => string) | null>(null);
 
@@ -57,7 +62,9 @@ export function SulokLogo({ className }: { className?: string }) {
 	// Morph visual container width so aspect ratio stays proportional.
 	// The Mascot is now 48x48. For Sulok text to keep its 3.73 aspect ratio with height 48,
 	// the width needs to be roughly 180 (48 * 3.73 = 179).
-	const width = useTransform(progress, [0, 1], [180, 48]);
+	// On mobile, we scale down: height 36, max width ~135 (36 * 3.73 = 134.28 -> 135)
+	const width = useTransform(progress, [0, 1], isMobile ? [135, 36] : [180, 48]);
+	const targetHeight = isMobile ? 36 : 48;
 
 	// Original text SVG paths need a Y translation offset of -7.87. We scale that out during morph
 	const yTransform = useTransform(progress, [0, 1], [-7.87, 0]);
@@ -98,45 +105,75 @@ export function SulokLogo({ className }: { className?: string }) {
 		});
 	}, [isMorphed, isHovered, progress]);
 
+	const handleInteract = () => {
+		if (isHome) {
+			// Fun mobile interaction: unmorph briefly then morph back
+			setIsHovered(true);
+			setTimeout(() => setIsHovered(false), 1200);
+		}
+	};
+
+	const classNameValue = cn(
+		"group relative flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm cursor-pointer",
+		isMobile ? "h-9" : "h-12",
+		className,
+	);
+
+	const content = (
+		<motion.div
+			style={{ width, height: targetHeight }}
+			className="relative flex items-center justify-start overflow-visible"
+		>
+			<motion.svg
+				viewBox={viewBox}
+				className="absolute w-full h-full fill-foreground overflow-visible"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<motion.g style={{ y: yTransform }}>
+					<motion.path d={pathData} />
+					{/* O inner hole rendered separately so it can fade out and simulate a cutout */}
+					<motion.path
+						d={O_INNER_PATH}
+						className="fill-background"
+						style={{ opacity: holeOpacity }}
+					/>
+				</motion.g>
+			</motion.svg>
+
+			<motion.div
+				className="absolute w-full h-full pointer-events-none"
+				style={{ opacity: eyesOpacity }}
+			>
+				{/* Render full SuloMascot - its body perfectly overlaps the morphed path */}
+				<SuloMascot expression={currentExpression} className={isMobile ? "w-9 h-9" : "w-12 h-12"} />
+			</motion.div>
+		</motion.div>
+	);
+
+	if (isHome) {
+		return (
+			<button
+				type="button"
+				onClick={handleInteract}
+				className={classNameValue}
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
+				aria-label={`${APP_INFO.name} Home`}
+			>
+				{content}
+			</button>
+		);
+	}
+
 	return (
 		<Link
 			to="/"
-			className={cn(
-				"group relative flex items-center h-12 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm cursor-pointer",
-				className,
-			)}
+			className={classNameValue}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 			aria-label={`${APP_INFO.name} Home`}
 		>
-			<motion.div
-				style={{ width, height: 48 }}
-				className="relative flex items-center justify-start overflow-visible"
-			>
-				<motion.svg
-					viewBox={viewBox}
-					className="absolute w-full h-full fill-foreground overflow-visible"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<motion.g style={{ y: yTransform }}>
-						<motion.path d={pathData} />
-						{/* O inner hole rendered separately so it can fade out and simulate a cutout */}
-						<motion.path
-							d={O_INNER_PATH}
-							className="fill-background"
-							style={{ opacity: holeOpacity }}
-						/>
-					</motion.g>
-				</motion.svg>
-
-				<motion.div
-					className="absolute w-full h-full pointer-events-none"
-					style={{ opacity: eyesOpacity }}
-				>
-					{/* Render full SuloMascot - its body perfectly overlaps the morphed path */}
-					<SuloMascot expression={currentExpression} className="w-[48px] h-[48px]" />
-				</motion.div>
-			</motion.div>
+			{content}
 		</Link>
 	);
 }
