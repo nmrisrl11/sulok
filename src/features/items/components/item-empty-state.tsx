@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useItemStore } from "@/stores/item-store";
 import { useLogoStore } from "@/stores/logo-store";
 import { BoxIcon, PlusIcon } from "lucide-react";
 
-export function ItemEmptyState() {
+export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
 	const { openCreateDialog } = useItemStore();
 	const { setTemporaryExpression, clearTemporaryExpression } = useLogoStore();
 
 	return (
-		<div className="flex flex-col items-center justify-center p-8 text-center animate-in fade-in-50 rounded-xl border border-dashed py-12">
+		<div
+			className={cn(
+				"flex flex-col items-center justify-center p-8 text-center animate-in fade-in-50 rounded-xl border border-dashed py-12",
+				disabled && "pointer-events-none opacity-50",
+			)}
+		>
 			<div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted/50 mb-4">
 				<BoxIcon className="h-10 w-10 text-muted-foreground/50" />
 			</div>
@@ -20,6 +26,7 @@ export function ItemEmptyState() {
 			<Button
 				onClick={openCreateDialog}
 				className="gap-2"
+				disabled={disabled}
 				onMouseEnter={() => setTemporaryExpression("excited")}
 				onMouseLeave={() => clearTemporaryExpression()}
 			>
