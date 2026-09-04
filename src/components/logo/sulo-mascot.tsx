@@ -1,0 +1,155 @@
+import { cn } from "@/lib/utils";
+import type { SuloExpression } from "@/stores/logo-store";
+import { useEffect, useState } from "react";
+
+const EXPRESSION_DATA: Record<
+	SuloExpression,
+	{
+		left: { d: string; transform: string };
+		right: { d: string; transform: string };
+	}
+> = {
+	sleepy: {
+		left: {
+			d: "M-10 -11A10 10 0 0 1 0 -21L0 -21A10 10 0 0 1 10 -11L10 11A10 10 0 0 1 0 21L0 21A10 10 0 0 1 -10 11Z",
+			transform: "matrix(0.99, -0.01, 0.03, 0.45, -15.93, 7.44)",
+		},
+		right: {
+			d: "M-10 -11A10 10 0 0 1 0 -21L0 -21A10 10 0 0 1 10 -11L10 11A10 10 0 0 1 0 21L0 21A10 10 0 0 1 -10 11Z",
+			transform: "matrix(0.91, -0.04, 0.03, 0.45, 37.21, 7.04)",
+		},
+	},
+	excited: {
+		left: {
+			d: "M-20 -8A20 20 0 0 1 0 -28L0 -28A20 20 0 0 1 20 -8L20 8A20 20 0 0 1 0 28L0 28A20 20 0 0 1 -20 8Z",
+			transform: "matrix(0.97, -0.1, 0.14, 0.98, -25.49, -1.8)",
+		},
+		right: {
+			d: "M-20 -8A20 20 0 0 1 0 -28L0 -28A20 20 0 0 1 20 -8L20 8A20 20 0 0 1 0 28L0 28A20 20 0 0 1 -20 8Z",
+			transform: "matrix(0.86, 0.1, -0.18, 0.98, 36.71, 1.3)",
+		},
+	},
+	suspicious: {
+		left: {
+			d: "M-10.5 -9.5A10.5 10.5 0 0 1 0 -20L0 -20A10.5 10.5 0 0 1 10.5 -9.5L10.5 9.5A10.5 10.5 0 0 1 0 20L0 20A10.5 10.5 0 0 1 -10.5 9.5Z",
+			transform: "matrix(0.99, -0.14, 0.14, 0.98, -9.87, -1.15)",
+		},
+		right: {
+			d: "M-11 0A7.5 7.5 0 0 1 -3.5 -7.5L3.5 -7.5A7.5 7.5 0 0 1 11 0L11 0A7.5 7.5 0 0 1 3.5 7.5L-3.5 7.5A7.5 7.5 0 0 1 -11 0Z",
+			transform: "matrix(0.85, -0.06, 0.14, 0.98, 42.56, -10.96)",
+		},
+	},
+	confused: {
+		left: {
+			d: "M-10 -12A10 10 0 0 1 0 -22L0 -22A10 10 0 0 1 10 -12L10 12A10 10 0 0 1 0 22L0 22A10 10 0 0 1 -10 12Z",
+			transform: "matrix(0.88, -0.2, 0.13, 0.97, -42.94, -12.35)",
+		},
+		right: {
+			d: "M-14 0A8.5 8.5 0 0 1 -5.5 -8.5L5.5 -8.5A8.5 8.5 0 0 1 14 0L14 0A8.5 8.5 0 0 1 5.5 8.5L-5.5 8.5A8.5 8.5 0 0 1 -14 0Z",
+			transform: "matrix(0.92, 0.39, -0.39, 0.92, 12.52, -4.17)",
+		},
+	},
+	curious: {
+		left: {
+			d: "M-12 -11A12 12 0 0 1 0 -23L0 -23A12 12 0 0 1 12 -11L12 11A12 12 0 0 1 0 23L0 23A12 12 0 0 1 -12 11Z",
+			transform: "matrix(0.94, -0.34, 0.34, 0.92, -2.42, 9.04)",
+		},
+		right: {
+			d: "M-10 -9A10 10 0 0 1 0 -19L0 -19A10 10 0 0 1 10 -9L10 9A10 10 0 0 1 0 19L0 19A10 10 0 0 1 -10 9Z",
+			transform: "matrix(0.76, -0.41, 0.32, 0.91, 53.91, 1.3)",
+		},
+	},
+	unimpressed: {
+		left: {
+			d: "M-15 0A6 6 0 0 1 -9 -6L9 -6A6 6 0 0 1 15 0L15 0A6 6 0 0 1 9 6L-9 6A6 6 0 0 1 -15 0Z",
+			transform: "matrix(0.82, -0.02, -0.02, 1, -58.86, -6.82)",
+		},
+		right: {
+			d: "M-15 0A6 6 0 0 1 -9 -6L9 -6A6 6 0 0 1 15 0L15 0A6 6 0 0 1 9 6L-9 6A6 6 0 0 1 -15 0Z",
+			transform: "matrix(1, 0.02, -0.02, 1, -3.57, -4.94)",
+		},
+	},
+	shy: {
+		left: {
+			d: "M-8.5 -6.5A8.5 8.5 0 0 1 0 -15L0 -15A8.5 8.5 0 0 1 8.5 -6.5L8.5 6.5A8.5 8.5 0 0 1 0 15L0 15A8.5 8.5 0 0 1 -8.5 6.5Z",
+			transform: "matrix(0.85, -0.06, 0.2, 0.96, -34.9, 20.36)",
+		},
+		right: {
+			d: "M-8.5 -6.5A8.5 8.5 0 0 1 0 -15L0 -15A8.5 8.5 0 0 1 8.5 -6.5L8.5 6.5A8.5 8.5 0 0 1 0 15L0 15A8.5 8.5 0 0 1 -8.5 6.5Z",
+			transform: "matrix(0.98, -0.19, 0.2, 0.96, 9.17, 7.36)",
+		},
+	},
+};
+
+export const BASE_BODY_PATH =
+	"M104.19 0.33C104.19 3.71 103.87 7.15 103.32 10.49C102.76 13.82 101.95 17.16 100.86 20.35C99.77 23.55 98.37 26.68 96.79 29.63C95.2 32.59 93.38 35.45 91.36 38.09C89.33 40.73 87.04 43.21 84.64 45.47C82.24 47.73 79.66 49.81 76.97 51.64C74.29 53.46 71.42 55.06 68.54 56.42C65.65 57.78 62.64 58.9 59.65 59.79C56.66 60.68 53.6 61.32 50.59 61.75C47.59 62.17 44.49 62.23 41.61 62.33C38.74 62.43 35.95 62.33 33.33 62.33C30.7 62.33 28.26 62.33 25.87 62.33C23.48 62.33 21.22 62.33 18.99 62.33C16.77 62.33 14.64 62.33 12.52 62.33C10.4 62.33 8.35 62.33 6.29 62.33C4.24 62.33 2.22 62.33 0.19 62.33C-1.85 62.33 -3.86 62.33 -5.92 62.33C-7.97 62.33 -10.03 62.33 -12.15 62.33C-14.26 62.33 -16.4 62.33 -18.62 62.33C-20.84 62.33 -23.11 62.33 -25.49 62.33C-27.88 62.33 -30.33 62.33 -32.95 62.33C-35.58 62.33 -38.36 62.43 -41.24 62.33C-44.12 62.23 -47.21 62.17 -50.22 61.75C-53.22 61.32 -56.28 60.68 -59.27 59.79C-62.26 58.9 -65.27 57.78 -68.16 56.42C-71.05 55.06 -73.91 53.46 -76.6 51.64C-79.28 49.81 -81.87 47.73 -84.27 45.47C-86.66 43.21 -88.96 40.73 -90.98 38.09C-93.01 35.45 -94.83 32.59 -96.41 29.63C-98 26.68 -99.4 23.55 -100.49 20.35C-101.57 17.16 -102.39 13.82 -102.94 10.49C-103.5 7.15 -103.81 3.71 -103.81 0.33C-103.81 -3.06 -103.5 -6.49 -102.94 -9.83C-102.39 -13.17 -101.57 -16.51 -100.49 -19.7C-99.4 -22.89 -98 -26.02 -96.41 -28.97C-94.83 -31.93 -93.01 -34.8 -90.98 -37.44C-88.96 -40.07 -86.66 -42.55 -84.27 -44.81C-81.87 -47.07 -79.28 -49.15 -76.6 -50.98C-73.91 -52.8 -71.05 -54.4 -68.16 -55.76C-65.27 -57.12 -62.26 -58.24 -59.27 -59.13C-56.28 -60.02 -53.22 -60.67 -50.22 -61.09C-47.21 -61.51 -44.12 -61.57 -41.24 -61.67C-38.36 -61.77 -35.58 -61.67 -32.95 -61.67C-30.33 -61.67 -27.88 -61.67 -25.49 -61.67C-23.11 -61.67 -20.84 -61.67 -18.62 -61.67C-16.4 -61.67 -14.26 -61.67 -12.15 -61.67C-10.03 -61.67 -7.97 -61.67 -5.92 -61.67C-3.86 -61.67 -1.85 -61.67 0.19 -61.67C2.22 -61.67 4.24 -61.67 6.29 -61.67C8.35 -61.67 10.4 -61.67 12.52 -61.67C14.64 -61.67 16.77 -61.67 18.99 -61.67C21.22 -61.67 23.48 -61.67 25.87 -61.67C28.26 -61.67 30.7 -61.67 33.33 -61.67C35.95 -61.67 38.74 -61.77 41.61 -61.67C44.49 -61.57 47.59 -61.51 50.59 -61.09C53.6 -60.67 56.66 -60.02 59.65 -59.13C62.64 -58.24 65.65 -57.12 68.54 -55.76C71.42 -54.4 74.29 -52.8 76.97 -50.98C79.66 -49.15 82.24 -47.07 84.64 -44.81C87.04 -42.55 89.33 -40.07 91.36 -37.44C93.38 -34.8 95.2 -31.93 96.79 -28.97C98.37 -26.02 99.77 -22.89 100.86 -19.7C101.95 -16.51 102.76 -13.17 103.32 -9.83C103.87 -6.49 104.19 -3.06 104.19 0.33Z";
+
+interface SuloMascotProps {
+	expression?: SuloExpression;
+	className?: string;
+}
+
+export function SuloMascot({ expression = "sleepy", className }: SuloMascotProps) {
+	const [isBlinking, setIsBlinking] = useState(false);
+
+	// Organic blinking logic
+	useEffect(() => {
+		let timeoutId: ReturnType<typeof setTimeout>;
+
+		const scheduleNextBlink = () => {
+			// Random interval between 3s and 8s
+			const nextBlinkDelay = Math.random() * 5000 + 3000;
+			timeoutId = setTimeout(() => {
+				setIsBlinking(true);
+				// Blink duration (100ms - 150ms)
+				setTimeout(() => {
+					setIsBlinking(false);
+					scheduleNextBlink();
+				}, 150);
+			}, nextBlinkDelay);
+		};
+
+		scheduleNextBlink();
+
+		return () => clearTimeout(timeoutId);
+	}, []);
+
+	const currentExpression = EXPRESSION_DATA[expression];
+
+	return (
+		<svg
+			viewBox="-125 -125 250 250"
+			role="img"
+			aria-label={`Sulo mascot (${expression})`}
+			xmlns="http://www.w3.org/2000/svg"
+			className={cn("w-full h-full", className)}
+		>
+			<g>
+				{/* Sulo Body: Inverts themes. Background in light mode is dark, vice versa. */}
+				<path d={BASE_BODY_PATH} className="fill-foreground transition-colors duration-300" />
+			</g>
+			{/* Eyes container floating animation */}
+			<g className="animate-sulo-float motion-reduce:animate-none">
+				<g
+					style={{
+						transform: isBlinking ? "scaleY(0.1)" : "scaleY(1)",
+						transformOrigin: "center",
+						transformBox: "fill-box",
+						transition: "transform 100ms cubic-bezier(0.4, 0, 0.2, 1)",
+					}}
+				>
+					<path
+						d={currentExpression.left.d}
+						style={{ transform: currentExpression.left.transform }}
+						className="fill-background transition-all duration-500 ease-out"
+					/>
+					<path
+						d={currentExpression.right.d}
+						style={{ transform: currentExpression.right.transform }}
+						className="fill-background transition-all duration-500 ease-out"
+					/>
+				</g>
+			</g>
+		</svg>
+	);
+}

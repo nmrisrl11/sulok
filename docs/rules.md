@@ -133,6 +133,7 @@ src/
 - **Empty States:** Empty states should be designed beautifully using dedicated components (e.g., `ItemEmptyState`) with illustrations/icons, clear messaging, and an actionable primary button to guide the user. Do not use plain text for empty states.
 - **Skeletons (Loading States):** Do not scatter generic `<Skeleton />` components in layout files. Always co-locate loading skeletons to their parent feature, page, or component (e.g., `ItemCardSkeleton` alongside `ItemCard`).
 - **Progressive Enhancement (Squircles):** We use `@toolwind/corner-shape` to implement premium iOS-style squircles. Because the native CSS `corner-shape` property is an emerging standard with limited support, ALWAYS provide a graceful fallback. Combine a standard Tailwind border-radius (e.g., `rounded-md`) with a `supports-[]` variant for the squircle radius (e.g., `supports-[corner-shape:squircle]:rounded-xl corner-squircle`). This ensures unsupported browsers get a standard rounded rectangle instead of an unintended circle.
+- **Performance / Animations:** When using heavy path interpolation libraries (like `flubber`), ensure the `maxSegmentLength` or interpolation density is optimized to prevent blocking the main thread synchronously on page load.
 
 ---
 

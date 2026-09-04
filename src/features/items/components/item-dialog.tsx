@@ -5,11 +5,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { useItemStore } from "@/stores/item-store";
-import { useState } from "react";
-import type { ItemFormValues } from "@/schemas/item.schema";
-import { ItemForm } from "./item-form";
 import { APP_INFO } from "@/constants/app-info";
+import type { ItemFormValues } from "@/schemas/item.schema";
+import { useItemStore } from "@/stores/item-store";
+import { useLogoStore } from "@/stores/logo-store";
+import { useState } from "react";
+import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
 	const { isDialogOpen, setDialogOpen, editingItem, addItem, updateItem } = useItemStore();
@@ -38,6 +39,7 @@ export function ItemDialog() {
 				});
 			}
 			setDialogOpen(false);
+			useLogoStore.getState().setTemporaryExpression("curious");
 		} catch (error) {
 			console.error("Failed to save item", error);
 			setSubmitError(error instanceof Error ? error.message : "Failed to save item.");

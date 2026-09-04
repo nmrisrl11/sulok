@@ -146,3 +146,16 @@
 		cursor: pointer;
 	}
 }
+
+@keyframes sulo-float {
+	0% {
+		transform: translateY(2%);
+	}
+	100% {
+		transform: translateY(-2%);
+	}
+}
+
+.animate-sulo-float {
+	animation: sulo-float 4s ease-in-out infinite alternate;
+}

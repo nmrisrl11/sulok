@@ -9,6 +9,9 @@
 
 ### ✨ Added
 
+- Implemented an interactive Sulo mascot and Sulok logo with flawless SVG path morphing using `framer-motion` and `flubber`.
+- Integrated a global `useLogoStore` to manage Sulo's emotional expressions (e.g., `sleepy`, `shy`, `confused`) which react to user hover events across the app.
+- Configured Vite `manualChunks` in Rollup options to split heavy third-party dependencies (React, Framer Motion, Flubber) from the main app bundle, eliminating chunk size warnings and optimizing load times.
 - Implemented dark and light mode theme switching, including a ThemeProvider and a ModeToggle switch in the header.
 - Implemented performance optimizations (React.lazy and Suspense) for route-level and dialog code splitting, reducing the initial bundle size below 500kB.
 - Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
