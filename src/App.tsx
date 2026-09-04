@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
+import { ThemeProvider } from "./components/theme-provider";
 import { HomePage } from "./pages/home/home-page";
 
 const AboutPage = lazy(() =>
@@ -13,21 +14,23 @@ const NotFoundPage = lazy(() =>
 
 function App() {
 	return (
-		<BrowserRouter>
-			<AppLayout>
-				<ErrorBoundary>
-					<Suspense
-						fallback={<div className="p-8 text-center text-muted-foreground">Loading...</div>}
-					>
-						<Routes>
-							<Route path="/" element={<HomePage />} />
-							<Route path="/about" element={<AboutPage />} />
-							<Route path="*" element={<NotFoundPage />} />
-						</Routes>
-					</Suspense>
-				</ErrorBoundary>
-			</AppLayout>
-		</BrowserRouter>
+		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
+			<BrowserRouter>
+				<AppLayout>
+					<ErrorBoundary>
+						<Suspense
+							fallback={<div className="p-8 text-center text-muted-foreground">Loading...</div>}
+						>
+							<Routes>
+								<Route path="/" element={<HomePage />} />
+								<Route path="/about" element={<AboutPage />} />
+								<Route path="*" element={<NotFoundPage />} />
+							</Routes>
+						</Suspense>
+					</ErrorBoundary>
+				</AppLayout>
+			</BrowserRouter>
+		</ThemeProvider>
 	);
 }
 
