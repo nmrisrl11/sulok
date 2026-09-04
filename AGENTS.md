@@ -86,7 +86,7 @@ sulok/
 - **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components. Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.
 - **Centralized Metadata:** Do not hardcode app names or URLs in UI components. Always use `APP_INFO` from `src/constants/app-info.ts` (e.g. `APP_INFO.name`, `APP_INFO.appUrl`).
 - **Skeletons & Empty States:** Co-locate loading skeletons with their respective components. Use dedicated beautifully designed components for empty states rather than plain text.
-- Favicon fetching: `https://www.google.com/s2/favicons?domain=[domain]&sz=64`
+- Favicon fetching: `https://www.google.com/s2/favicons?domain=[origin]&sz=64` (use the full origin, e.g. `https://domain.com`, to ensure it resolves modern PaaS deployments properly).
 - Metadata fetching: Uses `microlink.io` for robust open-graph metadata preview.
 
 ## What NOT To Do

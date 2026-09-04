@@ -10,8 +10,16 @@ interface ItemPreviewProps {
 }
 
 export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps) {
-	if (!url && !loading) {
-		return null;
+	if (!url && !loading && !error && !metadata) {
+		return (
+			<div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed p-8 text-center bg-muted/20 text-muted-foreground">
+				<GlobeIcon className="h-8 w-8 opacity-20" />
+				<div className="flex flex-col gap-1">
+					<p className="text-sm font-medium">No preview available</p>
+					<p className="text-xs">Enter a URL to see how it will look</p>
+				</div>
+			</div>
+		);
 	}
 
 	if (loading) {

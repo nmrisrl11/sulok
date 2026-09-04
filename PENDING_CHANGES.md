@@ -14,6 +14,17 @@
 - Integrated React Router DOM v7 to establish a scalable routing architecture and layout separation.
 - Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
 - Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `microlink.io`.
+
+### 🔧 Changed
+
+- Redesigned `ItemForm` UI to strictly auto-populate and display Site Name and Description as read-only metadata fields, rather than editable inputs.
+- Enforced strict URL domain validation (requiring a valid TLD or localhost) before permitting saves to prevent corrupt data entry.
+
+### 🐛 Fixed
+
+- Fixed a bug where favicons for modern apps hosted on PaaS (like Vercel) failed to load by fetching the full origin (`https://...`) instead of just the hostname.
+- Fixed a race condition in the Add Item form that allowed saving empty metadata if submitted while the preview was fetching.
+- Fixed a bug where the form retained old metadata if a subsequent URL failed to fetch.
 - Enforced strict `@typescript-eslint/no-explicit-any` rule to ensure robust type safety across the repository.
 - Replaced generic "Bookmark/Link" terminology with "Item" and "Sulok" to align with the core brand identity.
 - Fully functional Item CRUD operations (Create, Read, Update, Delete) integrated with Dexie.js local database.
