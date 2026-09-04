@@ -7,7 +7,16 @@ export type SuloExpression =
 	| "confused"
 	| "curious"
 	| "shy"
-	| "unimpressed";
+	| "unimpressed"
+	| "angry"
+	| "attentive"
+	| "happy"
+	| "laughing"
+	| "neutral"
+	| "proud"
+	| "sad"
+	| "scared"
+	| "surprised";
 
 interface LogoStore {
 	temporaryExpression: SuloExpression | null;
