@@ -91,6 +91,16 @@ Use a 4px base grid. TailwindCSS spacing scale.
 | `rounded-md` | 6px   | Cards, buttons        |
 | `rounded-lg` | 8px   | Modal dialogs, sheets |
 
+### Squircles (Progressive Enhancement)
+
+We use `@toolwind/corner-shape` (`corner-squircle`) for a premium iOS-like corner smoothing.
+Because CSS `corner-shape` is not universally supported, we enforce a strict progressive enhancement pattern:
+
+- **Fallback:** Always include a baseline `rounded-*` class (e.g., `rounded-md` / 6px) for Safari/Firefox/Mobile.
+- **Enhanced:** Use `supports-[corner-shape:squircle]:rounded-*` to apply the larger radius required for a deep squircle (e.g., `rounded-xl` or `rounded-2xl`) only on supported browsers.
+
+Example: `className="rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle"`
+
 ---
 
 ## Shadows

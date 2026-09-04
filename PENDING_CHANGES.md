@@ -16,6 +16,8 @@
 - Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
 - Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `microlink.io`.
 - Enforced a uniform and standard size for all favicons using a bounded rounded box to ensure visual consistency regardless of native icon paddings.
+- Integrated `@toolwind/corner-shape` to provide premium iOS-style squircle corners across the UI (Buttons, Cards, Favicons).
+- Implemented a graceful fallback architecture using Tailwind CSS `@supports` feature queries to ensure unsupported browsers correctly degrade to standard rounded rectangles rather than rendering unintended circles.
 
 ### 🔧 Changed
 
