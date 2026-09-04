@@ -9,6 +9,8 @@
 
 ### ✨ Added
 
+- Integrated `react-error-boundary` to provide robust, localized error recovery without requiring full-page reloads.
+- Redesigned the global Error Boundary fallback UI to natively match the brand's aesthetic (similar to the Not Found page), featuring the Sulo mascot (sad expression) and playful, non-technical copywriting to soften unexpected failure states.
 - Expanded Sulo mascot expressions to include angry, attentive, happy, laughing, neutral, proud, sad, scared, and surprised states.
 - Implemented custom scrollbar styling globally for a refined and consistent UI experience.
 - Added interactive Sulo mascot reaction (excited state) when hovering over the Empty State call-to-action button.
