@@ -30,18 +30,28 @@ export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 
 	if (error || !domain) {
 		return (
-			<div className={cn("bg-muted flex items-center justify-center overflow-hidden", className)}>
+			<div
+				className={cn(
+					"bg-muted flex items-center justify-center overflow-hidden rounded-md border",
+					className,
+				)}
+			>
 				<GlobeIcon className="h-1/2 w-1/2 text-muted-foreground opacity-50" />
 			</div>
 		);
 	}
 
 	return (
-		<div className={cn("bg-white flex items-center justify-center overflow-hidden", className)}>
+		<div
+			className={cn(
+				"bg-white flex items-center justify-center overflow-hidden rounded-md border shadow-sm",
+				className,
+			)}
+		>
 			<img
 				src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
 				alt="favicon"
-				className="h-full w-full object-contain"
+				className="h-3/4 w-3/4 object-contain"
 				onError={() => setError(true)}
 			/>
 		</div>

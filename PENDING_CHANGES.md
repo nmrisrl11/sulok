@@ -15,6 +15,7 @@
 - Integrated React Router DOM v7 to establish a scalable routing architecture and layout separation.
 - Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
 - Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `microlink.io`.
+- Enforced a uniform and standard size for all favicons using a bounded rounded box to ensure visual consistency regardless of native icon paddings.
 
 ### 🔧 Changed
 
@@ -25,6 +26,9 @@
 
 ### 🐛 Fixed
 
+- Fixed a bug where the metadata preview was not showing when editing an existing item.
+- Fixed a bug causing the edit form preview to flash and overwrite state during the dialog's close animation by deriving `activeItem` state during render instead of using `useEffect`.
+- Resolved TypeScript strictness error in `addItem` mutation when inferring from Zod schemas.
 - Fixed a bug where favicons for modern apps hosted on PaaS (like Vercel) failed to load by fetching the full origin (`https://...`) instead of just the hostname.
 - Fixed a race condition in the Add Item form that allowed saving empty metadata if submitted while the preview was fetching.
 - Fixed a bug where the form retained old metadata if a subsequent URL failed to fetch.

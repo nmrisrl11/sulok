@@ -16,6 +16,15 @@ export function ItemDialog() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 
+	// Keep a stable reference to the item being edited while the dialog is open
+	// to prevent the form from resetting or flashing while animating out.
+	const [activeItem, setActiveItem] = useState(editingItem);
+
+	// Derive state during render to avoid cascading renders from useEffect
+	if (isDialogOpen && activeItem !== editingItem) {
+		setActiveItem(editingItem);
+	}
+
 	const handleSubmit = async (data: ItemFormValues) => {
 		setIsSubmitting(true);
 		setSubmitError(null);
@@ -23,7 +32,10 @@ export function ItemDialog() {
 			if (editingItem) {
 				await updateItem(editingItem.id, data);
 			} else {
-				await addItem(data);
+				await addItem({
+					...data,
+					url: data.url as string, // Zod validation guarantees url is present
+				});
 			}
 			setDialogOpen(false);
 		} catch (error) {
@@ -47,7 +59,7 @@ export function ItemDialog() {
 				</DialogHeader>
 
 				<ItemForm
-					defaultValues={editingItem || undefined}
+					defaultValues={activeItem || undefined}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialogOpen(false)}
 					isSubmitting={isSubmitting}
