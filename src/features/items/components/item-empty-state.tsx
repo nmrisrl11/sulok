@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useItemStore } from "@/stores/item-store";
+import { useLogoStore } from "@/stores/logo-store";
 import { BoxIcon, PlusIcon } from "lucide-react";
 
 export function ItemEmptyState() {
 	const { openCreateDialog } = useItemStore();
+	const { setTemporaryExpression, clearTemporaryExpression } = useLogoStore();
 
 	return (
 		<div className="flex flex-col items-center justify-center p-8 text-center animate-in fade-in-50 rounded-xl border border-dashed py-12">
@@ -15,7 +17,12 @@ export function ItemEmptyState() {
 				Start saving links, articles, and resources you find across the web to build your personal
 				library.
 			</p>
-			<Button onClick={openCreateDialog} className="gap-2">
+			<Button
+				onClick={openCreateDialog}
+				className="gap-2"
+				onMouseEnter={() => setTemporaryExpression("excited")}
+				onMouseLeave={() => clearTemporaryExpression()}
+			>
 				<PlusIcon className="h-4 w-4" />
 				Save your first item
 			</Button>
