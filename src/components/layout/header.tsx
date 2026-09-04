@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import { APP_INFO } from "@/constants/app-info";
 import { cn } from "@/lib/utils";
 import { Link, NavLink } from "react-router-dom";
@@ -32,6 +33,7 @@ export function Header() {
 				>
 					What's new
 				</button>
+				<ModeToggle />
 			</nav>
 		</header>
 	);

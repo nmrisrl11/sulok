@@ -26,6 +26,7 @@ The project is currently in the **core features implementation phase**.
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
 - [x] Initial performance optimizations (route and dialog code-splitting)
+- [x] Theme system implemented (Dark/Light mode switch)
 - [ ] PWA configured
 
 ---
