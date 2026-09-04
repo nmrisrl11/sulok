@@ -57,7 +57,7 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 	})();
 
 	return (
-		<div className="flex flex-col overflow-hidden rounded-md border bg-card text-card-foreground shadow-sm">
+		<div className="flex flex-col overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle border bg-card text-card-foreground shadow-sm">
 			<div className="flex flex-col gap-1 p-3 pb-2">
 				<div className="flex items-center gap-2 text-xs text-muted-foreground">
 					{metadata.logo ? (

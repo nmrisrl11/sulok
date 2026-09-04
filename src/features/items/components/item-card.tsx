@@ -32,7 +32,7 @@ export function ItemCard({ item }: { item: Item }) {
 	};
 
 	return (
-		<div className="group hover:bg-card/50 flex items-center justify-between gap-3 rounded-md px-2 py-2 transition-colors">
+		<div className="group hover:bg-card/50 flex items-center justify-between gap-3 rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle px-2 py-2 transition-colors">
 			<div className="flex items-center gap-3 min-w-0">
 				<SiteFavicon url={item.url} className="h-6 w-6 shrink-0" />
 				<div className="flex flex-col overflow-hidden">
