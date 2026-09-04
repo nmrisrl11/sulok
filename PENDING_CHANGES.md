@@ -9,6 +9,7 @@
 
 ### ✨ Added
 
+- Expanded Sulo mascot expressions to include angry, attentive, happy, laughing, neutral, proud, sad, scared, and surprised states.
 - Implemented custom scrollbar styling globally for a refined and consistent UI experience.
 - Added interactive Sulo mascot reaction (excited state) when hovering over the Empty State call-to-action button.
 - Implemented an interactive Sulo mascot and Sulok logo with flawless SVG path morphing using `framer-motion` and `flubber`.
