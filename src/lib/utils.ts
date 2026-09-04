@@ -13,8 +13,13 @@ export function formatUrl(url: string): string {
 		formatted = `https://${formatted}`;
 	}
 
-	if (formatted.endsWith("/")) {
-		formatted = formatted.slice(0, -1);
+	try {
+		const parsed = new URL(formatted);
+		if (formatted === `${parsed.origin}/`) {
+			formatted = parsed.origin;
+		}
+	} catch {
+		// Ignore
 	}
 
 	return formatted;

@@ -25,6 +25,7 @@ export const ItemRepository = {
 		const record: Item = {
 			id: crypto.randomUUID(),
 			...parsedData,
+			url: parsedData.url as string,
 			createdAt: now,
 			updatedAt: now,
 		};

@@ -9,9 +9,13 @@ export const itemSchema = z.object({
 			z
 				.string()
 				.url({ message: "Please enter a valid URL" })
-				.refine((val) => val.startsWith("http://") || val.startsWith("https://"), {
-					message: "Please enter a valid HTTP/HTTPS URL",
-				})
+				.refine(
+					(val) =>
+						val.toLowerCase().startsWith("http://") || val.toLowerCase().startsWith("https://"),
+					{
+						message: "Please enter a valid HTTP/HTTPS URL",
+					},
+				)
 				.refine(
 					(val) => {
 						try {

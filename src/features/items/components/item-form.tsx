@@ -46,27 +46,40 @@ export function ItemForm({
 	const debouncedUrl = useDebounce(rawUrl, 500);
 	const formattedUrl = formatUrl(debouncedUrl);
 
-	// Fetch metadata if we have a URL to preview
-	const shouldFetch = formattedUrl.length > 3;
-	const { data: metadata, loading, error } = useMetadata(formattedUrl, shouldFetch);
+	const isUrlChanged = defaultValues?.url ? formattedUrl !== formatUrl(defaultValues.url) : true;
+
+	let fetchUrl = formattedUrl;
+	try {
+		const parsed = new URL(formattedUrl);
+		parsed.username = "";
+		parsed.password = "";
+		fetchUrl = parsed.toString();
+	} catch {
+		// ignore invalid URLs for redaction
+	}
+
+	// Fetch metadata if we have a URL to preview and it has changed
+	const shouldFetch = fetchUrl.length > 3 && isUrlChanged;
+	const { data: metadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
 
 	// Auto-populate form fields when metadata is successfully fetched
 	useEffect(() => {
+		const currentIsUrlChanged = defaultValues?.url
+			? formatUrl(rawUrl) !== formatUrl(defaultValues.url)
+			: true;
+
 		if (rawUrl.trim() === "") {
 			setValue("title", "");
 			setValue("description", "");
+		} else if (!currentIsUrlChanged) {
+			setValue("title", defaultValues?.title || "");
+			setValue("description", defaultValues?.description || "");
 		} else if (metadata) {
 			setValue("title", metadata.title || "");
 			setValue("description", metadata.description || "");
 		} else if (error) {
-			const isUrlChanged = defaultValues ? rawUrl !== defaultValues.url : true;
-			if (isUrlChanged) {
-				setValue("title", "");
-				setValue("description", "");
-			} else {
-				setValue("title", defaultValues?.title || "");
-				setValue("description", defaultValues?.description || "");
-			}
+			setValue("title", "");
+			setValue("description", "");
 		}
 	}, [metadata, rawUrl, error, defaultValues, setValue]);
 
