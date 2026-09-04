@@ -24,6 +24,23 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="%APP_TITLE%" />
 		<meta name="twitter:description" content="%APP_DESCRIPTION%" />
+
+		<!-- Prevent FOUC (Theme Flicker) -->
+		<script>
+			(function () {
+				try {
+					var theme = localStorage.getItem("sulok-ui-theme") || "system";
+					if (
+						theme === "dark" ||
+						(theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+					) {
+						document.documentElement.classList.add("dark");
+					} else {
+						document.documentElement.classList.remove("dark");
+					}
+				} catch (e) {}
+			})();
+		</script>
 	</head>
 
 	<body>

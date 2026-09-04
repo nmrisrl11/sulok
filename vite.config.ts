@@ -31,10 +31,21 @@ export default defineConfig({
 			output: {
 				manualChunks(id) {
 					if (id.includes("node_modules")) {
-						if (id.includes("framer-motion") || id.includes("flubber")) {
+						const segments = id.split("node_modules/");
+						const lastSegment = segments[segments.length - 1];
+						const packageName = lastSegment.startsWith("@")
+							? lastSegment.split("/").slice(0, 2).join("/")
+							: lastSegment.split("/")[0];
+
+						if (packageName === "framer-motion" || packageName === "flubber") {
 							return "vendor-animation";
 						}
-						if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
+						if (
+							packageName === "react" ||
+							packageName === "react-dom" ||
+							packageName === "react-router" ||
+							packageName === "react-router-dom"
+						) {
 							return "vendor-react";
 						}
 						return "vendor";

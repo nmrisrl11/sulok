@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { combine } from "flubber";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BASE_BODY_PATH, SuloMascot } from "./sulo-mascot";
 
@@ -20,12 +20,11 @@ const SULOK_PATHS = [
 const O_INNER_PATH =
 	"M209.7,84.66a6.3,6.3,0,0,0,3.25-.29,8.28,8.28,0,0,0,3.07-2.1,19.24,19.24,0,0,0,2.88-3.91,34.76,34.76,0,0,0,2.59-5.8q1.2-3.42,2.3-7.79a64.34,64.34,0,0,0,1.78-11.67,16,16,0,0,0-1.07-7.3,4.91,4.91,0,0,0-3.76-3,6,6,0,0,0-3.22.32,8.91,8.91,0,0,0-3.05,2.1,18,18,0,0,0-2.84,3.91A38.31,38.31,0,0,0,209.07,55q-1.2,3.42-2.3,7.79A62.71,62.71,0,0,0,205,74.4a16.34,16.34,0,0,0,1,7.3A4.83,4.83,0,0,0,209.7,84.66Z";
 
-// Provide maxSegmentLength so flubber has enough points for a smooth transition without causing lag on load.
-// The default is 10, setting it to 5 provides a good balance between performance and smoothness.
+// The default maxSegmentLength is 10, which provides a good balance between performance and smoothness.
+// Since we defer the calculation to a setTimeout, it won't block the main thread.
 const getInterpolator = () => {
 	return combine(SULOK_PATHS, BASE_BODY_PATH, {
 		single: true,
-		maxSegmentLength: 5,
 	});
 };
 
@@ -36,16 +35,19 @@ export function SulokLogo({ className }: { className?: string }) {
 	const [isMorphed, setIsMorphed] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 
+	// Hold the heavy interpolator function in state
+	const [interpolator, setInterpolator] = useState<((t: number) => string) | null>(null);
+
 	// Create motion value.
 	// progress 0 = Sulok text
 	// progress 1 = Sulo mascot
 	const progress = useMotionValue(0);
 
-	// Because interpolator creation is slightly heavy, do it once per component lifecycle
-	const interpolator = useMemo(() => getInterpolator(), []);
-
-	// Morph path string
-	const pathData = useTransform(progress, (v) => interpolator(v));
+	// Morph path string. If interpolator isn't ready, just render the static merged path.
+	const pathData = useTransform(progress, (v) => {
+		if (interpolator) return interpolator(v);
+		return SULOK_PATHS.join(" ");
+	});
 
 	// Morph viewBox coordinates simultaneously:
 	// Sulok wordmark originally fits well in "0 0 315 84"
@@ -69,12 +71,20 @@ export function SulokLogo({ className }: { className?: string }) {
 	const eyesOpacity = useTransform(progress, [0.5, 1], [0, 1]);
 
 	useEffect(() => {
+		// Defer the heavy flubber calculation to avoid blocking the main thread during initial page load/render
+		const calcTimer = setTimeout(() => {
+			setInterpolator(() => getInterpolator());
+		}, 100);
+
 		// Delay morph on page load
 		const loadTimer = setTimeout(() => {
 			setIsMorphed(true);
 		}, 2000);
 
-		return () => clearTimeout(loadTimer);
+		return () => {
+			clearTimeout(calcTimer);
+			clearTimeout(loadTimer);
+		};
 	}, []);
 
 	useEffect(() => {

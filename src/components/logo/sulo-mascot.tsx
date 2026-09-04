@@ -94,15 +94,20 @@ export function SuloMascot({ expression = "sleepy", className }: SuloMascotProps
 
 	// Organic blinking logic
 	useEffect(() => {
-		let timeoutId: ReturnType<typeof setTimeout>;
+		let isActive = true;
+		let outerTimeoutId: ReturnType<typeof setTimeout>;
+		let innerTimeoutId: ReturnType<typeof setTimeout>;
 
 		const scheduleNextBlink = () => {
+			if (!isActive) return;
 			// Random interval between 3s and 8s
 			const nextBlinkDelay = Math.random() * 5000 + 3000;
-			timeoutId = setTimeout(() => {
+			outerTimeoutId = setTimeout(() => {
+				if (!isActive) return;
 				setIsBlinking(true);
 				// Blink duration (100ms - 150ms)
-				setTimeout(() => {
+				innerTimeoutId = setTimeout(() => {
+					if (!isActive) return;
 					setIsBlinking(false);
 					scheduleNextBlink();
 				}, 150);
@@ -111,7 +116,11 @@ export function SuloMascot({ expression = "sleepy", className }: SuloMascotProps
 
 		scheduleNextBlink();
 
-		return () => clearTimeout(timeoutId);
+		return () => {
+			isActive = false;
+			clearTimeout(outerTimeoutId);
+			clearTimeout(innerTimeoutId);
+		};
 	}, []);
 
 	const currentExpression = EXPRESSION_DATA[expression];

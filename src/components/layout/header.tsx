@@ -25,16 +25,20 @@ export function Header() {
 				>
 					About
 				</NavLink>
-				<button
-					type="button"
+				<span
 					onMouseEnter={() => setTemporaryExpression("shy", 10000)}
 					onMouseLeave={clearTemporaryExpression}
-					className="hover:text-foreground transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1 py-0.5"
-					disabled
-					title="Coming soon"
+					className="cursor-not-allowed inline-flex"
 				>
-					What's new
-				</button>
+					<button
+						type="button"
+						className="hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1 py-0.5 pointer-events-none"
+						disabled
+						title="Coming soon"
+					>
+						What's new
+					</button>
+				</span>
 				<ModeToggle />
 			</nav>
 		</header>
