@@ -27,6 +27,7 @@ export default defineConfig({
 		},
 	},
 	build: {
+		chunkSizeWarningLimit: 600,
 		rollupOptions: {
 			output: {
 				manualChunks(id) {
@@ -37,18 +38,27 @@ export default defineConfig({
 							? lastSegment.split("/").slice(0, 2).join("/")
 							: lastSegment.split("/")[0];
 
-						if (packageName === "framer-motion" || packageName === "flubber") {
+						if (["react", "react-dom", "react-router", "react-router-dom"].includes(packageName)) {
+							return "vendor-react";
+						}
+						if (["framer-motion", "flubber"].includes(packageName)) {
 							return "vendor-animation";
 						}
 						if (
-							packageName === "react" ||
-							packageName === "react-dom" ||
-							packageName === "react-router" ||
-							packageName === "react-router-dom"
+							["lucide-react", "@radix-ui", "clsx", "tailwind-merge"].includes(packageName) ||
+							packageName.startsWith("@radix-ui/")
 						) {
-							return "vendor-react";
+							return "vendor-ui";
 						}
-						return "vendor";
+						if (
+							["dexie", "dexie-react-hooks", "zod", "react-hook-form", "@hookform"].includes(
+								packageName,
+							) ||
+							packageName.startsWith("@hookform/")
+						) {
+							return "vendor-db";
+						}
+						return "vendor-core";
 					}
 				},
 			},

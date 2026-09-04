@@ -81,6 +81,7 @@ The project is currently in the **core features implementation phase**.
 - [ ] Item tags and categorization
 - [x] Favicon fetching
 - [x] Metadata preview on Add (microlink.io)
+- [x] Global notification system using `goey-toast`
 - [ ] Import/Export JSON
 - [x] Responsive/mobile UI
 - [ ] PWA/offline support

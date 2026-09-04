@@ -19,6 +19,12 @@
 			"skillPath": "skills/frontend-dev-guidelines/SKILL.md",
 			"computedHash": "ef9d92373884a4682bc968b45eb0006f719be4cdff7e567bad7b6c894bd7e29c"
 		},
+		"goey-toast": {
+			"source": "anl331/goey-toast",
+			"sourceType": "github",
+			"skillPath": "skills/goey-toast/SKILL.md",
+			"computedHash": "ef55e1239a77ece0bf67b641d672593fcc43172aeefe2a20ee895c12552c8c33"
+		},
 		"pwa-development": {
 			"source": "alinaqi/maggy",
 			"sourceType": "github",

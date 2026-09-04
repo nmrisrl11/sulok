@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { APP_INFO } from "@/constants/app-info";
+import { notify } from "@/lib/notify";
 import type { ItemFormValues } from "@/schemas/item.schema";
 import { useItemStore } from "@/stores/item-store";
 import { useLogoStore } from "@/stores/logo-store";
@@ -32,17 +33,20 @@ export function ItemDialog() {
 		try {
 			if (editingItem) {
 				await updateItem(editingItem.id, data);
+				notify.success("Changes saved", { id: "item-updated" });
 			} else {
 				await addItem({
 					...data,
 					url: data.url as string, // Zod validation guarantees url is present
 				});
+				notify.success("Added to your corner", { id: "item-saved" });
 			}
 			setDialogOpen(false);
 			useLogoStore.getState().setTemporaryExpression("curious");
 		} catch (error) {
 			console.error("Failed to save item", error);
 			setSubmitError(error instanceof Error ? error.message : "Failed to save item.");
+			notify.error("Unable to save changes", { id: "item-save-fail" });
 		} finally {
 			setIsSubmitting(false);
 		}

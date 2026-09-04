@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { combine } from "flubber";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BASE_BODY_PATH, SuloMascot } from "./sulo-mascot";
 
@@ -105,16 +105,30 @@ export function SulokLogo({ className }: { className?: string }) {
 		});
 	}, [isMorphed, isHovered, progress]);
 
+	const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const handleMouseEnter = () => {
+		if (hoverTimeoutRef.current) {
+			clearTimeout(hoverTimeoutRef.current);
+		}
+		setIsHovered(true);
+	};
+
+	const handleMouseLeave = () => {
+		hoverTimeoutRef.current = setTimeout(() => {
+			setIsHovered(false);
+		}, 2000); // 2 second delay before morphing back
+	};
+
 	const handleInteract = () => {
 		if (isHome) {
-			// Fun mobile interaction: unmorph briefly then morph back
-			setIsHovered(true);
-			setTimeout(() => setIsHovered(false), 1200);
+			handleMouseEnter();
+			handleMouseLeave();
 		}
 	};
 
 	const classNameValue = cn(
-		"group relative flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm cursor-pointer",
+		"group relative flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm cursor-pointer select-none [-webkit-touch-callout:none]",
 		isMobile ? "h-9" : "h-12",
 		className,
 	);
@@ -156,8 +170,8 @@ export function SulokLogo({ className }: { className?: string }) {
 				type="button"
 				onClick={handleInteract}
 				className={classNameValue}
-				onMouseEnter={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
 				aria-label={`${APP_INFO.name} Home`}
 			>
 				{content}
@@ -169,8 +183,8 @@ export function SulokLogo({ className }: { className?: string }) {
 		<Link
 			to="/"
 			className={classNameValue}
-			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
 			aria-label={`${APP_INFO.name} Home`}
 		>
 			{content}

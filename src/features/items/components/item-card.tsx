@@ -4,6 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { APP_INFO } from "@/constants/app-info";
 import type { Item } from "@/db/db";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore } from "@/stores/confirmation-store";
 import { useItemStore } from "@/stores/item-store";
@@ -23,8 +24,14 @@ export function ItemCard({ item }: { item: Item }) {
 			description: `Are you sure you want to delete this item from your ${APP_INFO.name}? This action cannot be undone.`,
 			confirmText: "Delete",
 			onConfirm: async () => {
-				await deleteItem(item.id);
-				useLogoStore.getState().setTemporaryExpression("unimpressed");
+				try {
+					await deleteItem(item.id);
+					useLogoStore.getState().setTemporaryExpression("unimpressed");
+					notify.success("Removed from your corner", { id: "item-deleted" });
+				} catch (error) {
+					console.error("Failed to delete item", error);
+					notify.error("Unable to remove link", { id: "item-delete-fail" });
+				}
 			},
 		});
 	};
