@@ -74,6 +74,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Item CRUD (save, edit, delete)
 - [x] Enhanced Empty State UI design
 - [x] Co-located feature-level loading Skeletons
+- [x] Route-specific loading architecture (Suspense fallbacks)
 - [ ] Drag-and-drop organization
 - [x] Open / Copy link buttons
 - [ ] Search, sort, filter, pagination

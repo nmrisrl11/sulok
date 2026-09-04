@@ -1,52 +1,24 @@
+import { ErrorBoundary } from "@/components/error-boundary";
 import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { ItemCard } from "@/features/items/components/item-card";
+import { ItemEmptyState } from "@/features/items/components/item-empty-state";
 import { cn } from "@/lib/utils";
 import { useItemStore } from "@/stores/item-store";
 import { useLogoStore } from "@/stores/logo-store";
 import { useLiveQuery } from "dexie-react-hooks";
 import { PlusIcon } from "lucide-react";
-
-import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton";
-import { ItemEmptyState } from "@/features/items/components/item-empty-state";
-import { getHasDataHint } from "@/lib/storage";
-
-import { ErrorBoundary } from "@/components/error-boundary";
-
-function HomePageInner() {
-	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
-	const hasDataHint = getHasDataHint();
-
-	if (items === undefined) {
-		if (hasDataHint !== false) {
-			return (
-				<div className="flex flex-col gap-2">
-					<ItemCardSkeleton />
-					<ItemCardSkeleton />
-					<ItemCardSkeleton />
-				</div>
-			);
-		}
-		return <ItemEmptyState />;
-	}
-
-	if (items.length === 0) {
-		return <ItemEmptyState />;
-	}
-
-	return (
-		<>
-			{items.map((item) => (
-				<ItemCard key={item.id} item={item} />
-			))}
-		</>
-	);
-}
+import { HomeRouteFallback } from "./home-route-fallback";
 
 export function HomePage({ className }: { className?: string }) {
+	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
 	const { openCreateDialog } = useItemStore();
 	const { setTemporaryExpression, clearTemporaryExpression } = useLogoStore();
+
+	if (items === undefined) {
+		return <HomeRouteFallback />;
+	}
 
 	return (
 		<main className={cn("flex flex-col gap-10", className)}>
@@ -61,12 +33,6 @@ export function HomePage({ className }: { className?: string }) {
 					<PlusIcon className="h-4 w-4" />
 					{`Add to ${APP_INFO.name}`}
 				</Button>
-				{/* <Button variant="outline" disabled title="Coming soon">
-					Import (Coming soon)
-				</Button>
-				<Button variant="outline" disabled title="Coming soon">
-					Export (Coming soon)
-				</Button> */}
 			</div>
 
 			{/* Item List Section */}
@@ -75,7 +41,11 @@ export function HomePage({ className }: { className?: string }) {
 
 				<div className="flex flex-col gap-2">
 					<ErrorBoundary>
-						<HomePageInner />
+						{items.length === 0 ? (
+							<ItemEmptyState />
+						) : (
+							items.map((item) => <ItemCard key={item.id} item={item} />)
+						)}
 					</ErrorBoundary>
 				</div>
 			</div>

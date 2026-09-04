@@ -3,8 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
-import { HomePage } from "./pages/home/home-page";
+import { AboutSkeleton } from "./pages/about/about-skeleton";
+import { HomeRouteFallback } from "./pages/home/home-route-fallback";
 
+const HomePage = lazy(() =>
+	import("./pages/home/home-page").then((m) => ({ default: m.HomePage })),
+);
 const AboutPage = lazy(() =>
 	import("./pages/about/about-page").then((m) => ({ default: m.AboutPage })),
 );
@@ -18,15 +22,32 @@ function App() {
 			<BrowserRouter>
 				<AppLayout>
 					<ErrorBoundary>
-						<Suspense
-							fallback={<div className="p-8 text-center text-muted-foreground">Loading...</div>}
-						>
-							<Routes>
-								<Route path="/" element={<HomePage />} />
-								<Route path="/about" element={<AboutPage />} />
-								<Route path="*" element={<NotFoundPage />} />
-							</Routes>
-						</Suspense>
+						<Routes>
+							<Route
+								path="/"
+								element={
+									<Suspense fallback={<HomeRouteFallback />}>
+										<HomePage />
+									</Suspense>
+								}
+							/>
+							<Route
+								path="/about"
+								element={
+									<Suspense fallback={<AboutSkeleton />}>
+										<AboutPage />
+									</Suspense>
+								}
+							/>
+							<Route
+								path="*"
+								element={
+									<Suspense fallback={null}>
+										<NotFoundPage />
+									</Suspense>
+								}
+							/>
+						</Routes>
 					</ErrorBoundary>
 				</AppLayout>
 			</BrowserRouter>
