@@ -9,7 +9,8 @@
 
 ### ✨ Added
 
-- Implemented page-specific skeleton loading architecture (e.g. `HomeRouteFallback`, `AboutSkeleton`) wrapped in `Suspense` per route, eliminating the generic `Loading...` placeholder.
+- Redesigned the application header with a responsive layout, including dynamic logo scaling on mobile devices.
+- Refined the header navigation into a high-contrast iOS-style segmented control pill to improve active state visibility in light mode.
 - Refactored `HomePage` internal data fetching to directly return `<HomeRouteFallback />` when loading, gracefully handling state without duplicating layout logic and avoiding layout flashes for new users.
 - Added a `disabled` state to `ItemEmptyState` (rendering it semi-transparent and unclickable) to allow safe use during route-level background loading states.
 - Integrated `react-error-boundary` to provide robust, localized error recovery without requiring full-page reloads.
@@ -41,6 +42,7 @@
 
 ### 🐛 Fixed
 
+- Resolved a React hook lint warning in `useIsMobile` by initializing state directly during render (via `window.innerWidth`) rather than updating it synchronously within `useEffect`, preventing cascading renders.
 - Fixed flexbox layout squishing and sharp edges on the URL metadata preview card within the scrollable Item Form dialog by enforcing `shrink-0` and `overflow-hidden`.
 - Enforced a fixed Dialog Header and Footer pattern in the Add/Edit Item dialog to ensure consistent content scrolling without expanding beyond the viewport (`max-h-[90vh]`).
 - Fixed a Flash of Unstyled Content (FOUC) causing a brief bright flicker on page load when Dark mode was active by injecting a synchronous theme initialization script into `index.html`.

@@ -9,36 +9,40 @@ export function Header() {
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
 
 	return (
-		<header className="flex items-center justify-between py-10 px-6 sm:px-0">
+		<header className="flex items-center justify-between p-4 md:py-6">
 			<SulokLogo />
-			<nav className="text-muted-foreground flex items-center gap-6 text-sm font-medium">
-				<NavLink
-					to="/about"
-					onMouseEnter={() => setTemporaryExpression("shy", 10000)}
-					onMouseLeave={clearTemporaryExpression}
-					className={({ isActive }) =>
-						cn(
-							"transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1 py-0.5",
-							isActive ? "text-primary" : "hover:text-foreground",
-						)
-					}
-				>
-					About
-				</NavLink>
-				<span
-					onMouseEnter={() => setTemporaryExpression("shy", 10000)}
-					onMouseLeave={clearTemporaryExpression}
-					className="cursor-not-allowed inline-flex"
-				>
-					<button
-						type="button"
-						className="hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1 py-0.5 pointer-events-none"
-						disabled
-						title="Coming soon"
+			<nav className="flex items-center gap-3 sm:gap-6">
+				<div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 rounded-full p-1 shadow-inner">
+					<NavLink
+						to="/about"
+						onMouseEnter={() => setTemporaryExpression("shy", 10000)}
+						onMouseLeave={clearTemporaryExpression}
+						className={({ isActive }) =>
+							cn(
+								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-3 py-1.5 text-sm font-medium",
+								isActive
+									? "bg-background text-foreground shadow-sm"
+									: "text-muted-foreground hover:text-foreground",
+							)
+						}
 					>
-						What's new
-					</button>
-				</span>
+						About
+					</NavLink>
+					<span
+						onMouseEnter={() => setTemporaryExpression("shy", 10000)}
+						onMouseLeave={clearTemporaryExpression}
+						className="cursor-not-allowed inline-flex"
+					>
+						<button
+							type="button"
+							className="text-muted-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full px-3 py-1.5 text-sm font-medium pointer-events-none"
+							disabled
+							title="Coming soon"
+						>
+							Updates
+						</button>
+					</span>
+				</div>
 				<ModeToggle />
 			</nav>
 		</header>

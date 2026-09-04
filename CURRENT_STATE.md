@@ -82,7 +82,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Favicon fetching
 - [x] Metadata preview on Add (microlink.io)
 - [ ] Import/Export JSON
-- [ ] Responsive/mobile UI
+- [x] Responsive/mobile UI
 - [ ] PWA/offline support
 
 ### Phase 2 — Browser Extension
