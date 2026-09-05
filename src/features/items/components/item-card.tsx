@@ -165,7 +165,7 @@ export function ItemCard({ item }: { item: Item }) {
 				<div className="flex md:hidden">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+							<Button variant="ghost" size="icon" className="h-11 w-11 text-muted-foreground">
 								<MoreVerticalIcon className="h-4 w-4" />
 								<span className="sr-only">Actions</span>
 							</Button>
