@@ -78,7 +78,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [ ] Drag-and-drop organization
 - [x] Open / Copy link buttons
-- [ ] Search, sort, filter, pagination
+- [x] Search and Sort controls (Filters pending tag implementation; Pagination intentionally omitted for local-first scroll)
 - [ ] Item tags and categorization
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)

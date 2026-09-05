@@ -7,7 +7,8 @@
 
 ## Unreleased
 
-- No unreleased changes yet.
+- ✨ Added Action Bar with Search and Sort controls to the Home page.
+- 🔧 Replaced native WebKit search cancel button with a custom branded clear button.
 
 ---
 

@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
@@ -24,44 +25,46 @@ function App() {
 	return (
 		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
 			<BrowserRouter>
-				<AppLayout>
-					<ErrorBoundary>
-						<Routes>
-							<Route
-								path="/"
-								element={
-									<Suspense fallback={<HomeRouteFallback />}>
-										<HomePage />
-									</Suspense>
-								}
-							/>
-							<Route
-								path="/about"
-								element={
-									<Suspense fallback={<AboutSkeleton />}>
-										<AboutPage />
-									</Suspense>
-								}
-							/>
-							<Route
-								path="/updates"
-								element={
-									<Suspense fallback={<UpdatesSkeleton />}>
-										<UpdatesPage />
-									</Suspense>
-								}
-							/>
-							<Route
-								path="*"
-								element={
-									<Suspense fallback={null}>
-										<NotFoundPage />
-									</Suspense>
-								}
-							/>
-						</Routes>
-					</ErrorBoundary>
-				</AppLayout>
+				<NuqsAdapter>
+					<AppLayout>
+						<ErrorBoundary>
+							<Routes>
+								<Route
+									path="/"
+									element={
+										<Suspense fallback={<HomeRouteFallback />}>
+											<HomePage />
+										</Suspense>
+									}
+								/>
+								<Route
+									path="/about"
+									element={
+										<Suspense fallback={<AboutSkeleton />}>
+											<AboutPage />
+										</Suspense>
+									}
+								/>
+								<Route
+									path="/updates"
+									element={
+										<Suspense fallback={<UpdatesSkeleton />}>
+											<UpdatesPage />
+										</Suspense>
+									}
+								/>
+								<Route
+									path="*"
+									element={
+										<Suspense fallback={null}>
+											<NotFoundPage />
+										</Suspense>
+									}
+								/>
+							</Routes>
+						</ErrorBoundary>
+					</AppLayout>
+				</NuqsAdapter>
 			</BrowserRouter>
 		</ThemeProvider>
 	);

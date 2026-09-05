@@ -7,6 +7,43 @@ export const ItemRepository = {
 		return await db.items.orderBy("createdAt").reverse().toArray();
 	},
 
+	async query(params: { q?: string; sort?: string; dir?: string }): Promise<Item[]> {
+		const { q = "", sort = "createdAt", dir = "desc" } = params;
+
+		let results = await db.items.toArray();
+
+		if (q.trim()) {
+			const query = q.toLowerCase().trim();
+			results = results.filter(
+				(item) =>
+					item.title?.toLowerCase().includes(query) ||
+					item.url.toLowerCase().includes(query) ||
+					item.description?.toLowerCase().includes(query),
+			);
+		}
+
+		results.sort((a, b) => {
+			let valA = a[sort as keyof Item];
+			let valB = b[sort as keyof Item];
+
+			// Handle undefined values
+			if (valA === undefined) valA = "";
+			if (valB === undefined) valB = "";
+
+			if (typeof valA === "string" && typeof valB === "string") {
+				return dir === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+			}
+
+			if (typeof valA === "number" && typeof valB === "number") {
+				return dir === "asc" ? valA - valB : valB - valA;
+			}
+
+			return 0;
+		});
+
+		return results;
+	},
+
 	queryAllSorted(): Promise<Item[]> {
 		return db.items.orderBy("createdAt").reverse().toArray();
 	},

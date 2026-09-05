@@ -106,6 +106,7 @@ sulok/
 - Metadata fetching: Uses `api.ogfetch.com` for robust open-graph metadata preview.
 - **Vite Chunking:** Always use `rollupOptions.output.manualChunks` as a function in `vite.config.ts` to logically group dependencies into domain-specific chunks (e.g., `vendor-react`, `vendor-db`) to prevent massive bundle sizes.
 - **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) to ensure the hit area is large enough for comfortable tapping, even if internal icons/text are styled compactly.
+- **Pagination:** Avoid traditional table pagination. Since the app is local-first (Dexie), rely on native page scrolling for lists, and upgrade to virtualization only when rendering performance degrades.
 
 ## What NOT To Do
 
