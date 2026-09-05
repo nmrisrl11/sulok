@@ -28,6 +28,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Initial performance optimizations (route and dialog code-splitting)
 - [x] Theme system implemented (Dark/Light mode switch)
 - [x] Brand mascot (Sulo) & interactive morphing logo implemented
+- [x] Sulo mascot contextual whisper feedback on header
 - [x] Vite Rollup code splitting (manualChunks) optimizations
 - [ ] PWA configured
 

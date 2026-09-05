@@ -1,3 +1,5 @@
+import { getRandomWhisper } from "@/constants/whispers";
+import { useLogoStore } from "@/stores/logo-store";
 import { gooeyToast } from "goey-toast";
 
 type ToastOptions = {
@@ -24,15 +26,19 @@ type PromiseOptions<T> = {
  */
 export const notify = {
 	success: (message: string, options?: ToastOptions) => {
+		useLogoStore.getState().setReaction("happy", getRandomWhisper("positive"));
 		return gooeyToast.success(message, { ...options, showTimestamp: false });
 	},
 	error: (message: string, options?: ToastOptions) => {
+		useLogoStore.getState().setReaction("sad", getRandomWhisper("negative"));
 		return gooeyToast.error(message, { ...options, showTimestamp: false });
 	},
 	warning: (message: string, options?: ToastOptions) => {
+		useLogoStore.getState().setReaction("surprised", getRandomWhisper("warning"));
 		return gooeyToast.warning(message, { ...options, showTimestamp: false });
 	},
 	info: (message: string, options?: ToastOptions) => {
+		useLogoStore.getState().setReaction("curious", getRandomWhisper("info"));
 		return gooeyToast.info(message, { ...options, showTimestamp: false });
 	},
 	promise: <T>(promise: Promise<T>, options: PromiseOptions<T>) => {

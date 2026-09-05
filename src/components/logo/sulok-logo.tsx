@@ -3,8 +3,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { combine } from "flubber";
-import { animate, motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { animate, AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BASE_BODY_PATH, SuloMascot } from "./sulo-mascot";
 
@@ -94,6 +94,8 @@ export function SulokLogo({ className }: { className?: string }) {
 		};
 	}, []);
 
+	const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 	useEffect(() => {
 		return () => {
 			if (hoverTimeoutRef.current) {
@@ -112,8 +114,6 @@ export function SulokLogo({ className }: { className?: string }) {
 			ease: [0.25, 1, 0.5, 1],
 		});
 	}, [isMorphed, isHovered, progress]);
-
-	const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const handleMouseEnter = () => {
 		if (hoverTimeoutRef.current) {
@@ -142,7 +142,9 @@ export function SulokLogo({ className }: { className?: string }) {
 		className,
 	);
 
-	const content = (
+	const whisperText = useLogoStore((state) => state.whisperText);
+
+	const logoElement = (
 		<motion.div
 			style={{ width, height: targetHeight }}
 			className="relative flex items-center justify-start overflow-visible"
@@ -173,30 +175,53 @@ export function SulokLogo({ className }: { className?: string }) {
 		</motion.div>
 	);
 
+	const whisperElement = (
+		<AnimatePresence>
+			{whisperText && (
+				<motion.div
+					initial={{ opacity: 0, x: -10, scale: 0.95 }}
+					animate={{ opacity: 1, x: 0, scale: 1 }}
+					exit={{ opacity: 0, scale: 0.95 }}
+					className="relative bg-foreground text-background font-mono text-[11px] px-3 py-1 rounded-full shadow-md corner-squircle whitespace-nowrap pointer-events-none tracking-tight"
+				>
+					{/* Small tail for the speech bubble effect pointing to Sulo */}
+					<div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-foreground rotate-45 rounded-sm" />
+					<span className="relative z-10">{whisperText}</span>
+				</motion.div>
+			)}
+		</AnimatePresence>
+	);
+
 	if (isHome) {
 		return (
-			<button
-				type="button"
-				onClick={handleInteract}
+			<div className="flex items-center gap-3">
+				<button
+					type="button"
+					onClick={handleInteract}
+					className={classNameValue}
+					onMouseEnter={handleMouseEnter}
+					onMouseLeave={handleMouseLeave}
+					aria-label={`${APP_INFO.name} Home`}
+				>
+					{logoElement}
+				</button>
+				{whisperElement}
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex items-center gap-3">
+			<Link
+				to="/"
 				className={classNameValue}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				aria-label={`${APP_INFO.name} Home`}
 			>
-				{content}
-			</button>
-		);
-	}
-
-	return (
-		<Link
-			to="/"
-			className={classNameValue}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			aria-label={`${APP_INFO.name} Home`}
-		>
-			{content}
-		</Link>
+				{logoElement}
+			</Link>
+			{whisperElement}
+		</div>
 	);
 }

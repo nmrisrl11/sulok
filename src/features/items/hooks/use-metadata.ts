@@ -79,25 +79,30 @@ export function useMetadata(url: string, enabled: boolean = true) {
 
 				const payload: unknown = await response.json();
 
-				if (isMounted) {
-					const parsed = ogFetchResponseSchema.safeParse(payload);
+				const parsed = ogFetchResponseSchema.safeParse(payload);
 
-					if (parsed.success) {
-						const resultData = parsed.data;
-						const parsedMetadata: URLMetadata = {
-							title: resultData.title || undefined,
-							description: resultData.description || undefined,
-							image: resultData.image || undefined,
-							logo: resultData.favicon || undefined,
-							url: resultData.url || undefined,
-						};
+				if (parsed.success) {
+					const resultData = parsed.data;
+					const parsedMetadata: URLMetadata = {
+						title: resultData.title || undefined,
+						description: resultData.description || undefined,
+						image: resultData.image || undefined,
+						logo: resultData.favicon || undefined,
+						url: resultData.url || undefined,
+					};
 
-						// Save to cache
-						metadataCache.set(url, parsedMetadata);
-						setData(parsedMetadata);
-					} else {
-						throw new Error("Failed to parse metadata");
+					// Save to cache and enforce max limit of 50 to prevent memory leaks
+					metadataCache.set(url, parsedMetadata);
+					if (metadataCache.size > 50) {
+						const oldestKey = metadataCache.keys().next().value;
+						if (oldestKey) metadataCache.delete(oldestKey);
 					}
+
+					if (isMounted) {
+						setData(parsedMetadata);
+					}
+				} else {
+					throw new Error("Failed to parse metadata");
 				}
 			} catch (err) {
 				if (isMounted) {

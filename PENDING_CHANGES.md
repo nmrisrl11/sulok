@@ -9,6 +9,9 @@
 
 ### ✨ Added
 
+- Added localized whisper feedback UI on the header, separated from the Sulok logo click area, utilizing `goey-toast` state alongside `logo-store.ts`.
+- Abstracted whisper phrases into `constants/whispers.ts` for randomized context-aware feedback (positive, negative, warning, info).
+- Refined the whisper bubble styling to use `font-mono` and high-contrast `bg-foreground text-background` mapping for visibility in light mode.
 - Integrated `goey-toast` as the global notification system (`src/lib/notify.ts`), replacing standard toasts, and enhancing UX copywriting to align with the brand (e.g., "Added to your corner" instead of "Item saved").
 - Added a neutral, layout-compact error state with a subtle "confused" Sulo mascot when URL metadata preview fails (e.g., hitting rate limits).
 - Redesigned the application header with a responsive layout, including dynamic logo scaling on mobile devices.
@@ -46,6 +49,9 @@
 
 ### 🐛 Fixed
 
+- Fixed `use-metadata.ts` to execute schema parsing and cache population outside of the `isMounted` boundary to ensure fetched data is successfully cached even if the component unmounts mid-request.
+- Added bounded size cache eviction (max 50 entries) to the URL metadata cache in `use-metadata.ts` to prevent memory leaks over the tab's lifetime.
+- Resolved a React Compiler hook dependency mutability warning in `sulok-logo.tsx` by reordering the `hoverTimeoutRef` declaration above its use inside effect cleanups.
 - Fixed a timeout memory leak in the Mascot logo component by properly clearing and resetting `hoverTimeoutRef.current` upon component unmount and timeout execution.
 - Added `role="alert"` to the URL metadata preview error state to ensure asynchronous fetch failures are properly announced by screen readers.
 - Fixed TypeScript type constraints in the global `notify` utility by making the `id` option optional and accepting both `string` and `number`, ensuring full compatibility with the underlying `goey-toast` API.
