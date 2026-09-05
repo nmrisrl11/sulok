@@ -44,7 +44,7 @@
 - Use Fraunces for display fonts and Geist for UI.
 - Components must use shadcn/ui primitives where available.
 - Custom components should follow shadcn/ui conventions (cn utility, cva variants).
-- No decorative elements, illustrations, or gradients in the UI (mascot is for marketing only).
+- No decorative elements, illustrations, or gradients in the general UI (the Sulo mascot is an exception, used for contextual feedback, empty states, and error boundaries).
 
 ### Layout
 
