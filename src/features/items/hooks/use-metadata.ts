@@ -9,19 +9,16 @@ export interface URLMetadata {
 	url?: string;
 }
 
-const microlinkResponseSchema = z.object({
-	status: z.string(),
-	data: z
-		.object({
-			title: z.string().optional().nullable(),
-			description: z.string().optional().nullable(),
-			image: z.object({ url: z.string() }).optional().nullable(),
-			logo: z.object({ url: z.string() }).optional().nullable(),
-			url: z.string().optional().nullable(),
-		})
-		.optional()
-		.nullable(),
+const ogFetchResponseSchema = z.object({
+	title: z.string().optional().nullable(),
+	description: z.string().optional().nullable(),
+	image: z.string().optional().nullable(),
+	favicon: z.string().optional().nullable(),
+	url: z.string().optional().nullable(),
 });
+
+// Simple in-memory cache to prevent exhausting the per-day API limit
+const metadataCache = new Map<string, URLMetadata>();
 
 export function useMetadata(url: string, enabled: boolean = true) {
 	const [data, setData] = useState<URLMetadata | null>(null);
@@ -38,6 +35,16 @@ export function useMetadata(url: string, enabled: boolean = true) {
 			if (!url || !enabled) {
 				if (isMounted) {
 					setData(null);
+					setError(null);
+					setLoading(false);
+				}
+				return;
+			}
+
+			// Check cache first
+			if (metadataCache.has(url)) {
+				if (isMounted) {
+					setData(metadataCache.get(url)!);
 					setError(null);
 					setLoading(false);
 				}
@@ -61,8 +68,10 @@ export function useMetadata(url: string, enabled: boolean = true) {
 				setError(null);
 			}
 			try {
-				// Using microlink.io API as a CORS-friendly way to fetch metadata
-				const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(url)}`);
+				// Using OG Fetch as a simple, boundary-isolated metadata provider
+				const response = await fetch(
+					`https://api.ogfetch.com/preview?url=${encodeURIComponent(url)}`,
+				);
 
 				if (!response.ok) {
 					throw new Error("Failed to fetch metadata");
@@ -71,17 +80,21 @@ export function useMetadata(url: string, enabled: boolean = true) {
 				const payload: unknown = await response.json();
 
 				if (isMounted) {
-					const parsed = microlinkResponseSchema.safeParse(payload);
+					const parsed = ogFetchResponseSchema.safeParse(payload);
 
-					if (parsed.success && parsed.data.status === "success" && parsed.data.data) {
-						const resultData = parsed.data.data;
-						setData({
+					if (parsed.success) {
+						const resultData = parsed.data;
+						const parsedMetadata: URLMetadata = {
 							title: resultData.title || undefined,
 							description: resultData.description || undefined,
-							image: resultData.image?.url || undefined,
-							logo: resultData.logo?.url || undefined,
+							image: resultData.image || undefined,
+							logo: resultData.favicon || undefined,
 							url: resultData.url || undefined,
-						});
+						};
+
+						// Save to cache
+						metadataCache.set(url, parsedMetadata);
+						setData(parsedMetadata);
 					} else {
 						throw new Error("Failed to parse metadata");
 					}

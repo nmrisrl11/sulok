@@ -28,7 +28,7 @@
 - Implemented a beautiful and concise About Page (`/about`) that communicates the Sulok brand, tagline, and meaning.
 - Integrated React Router DOM v7 to establish a scalable routing architecture and layout separation.
 - Updated application metadata inside `app-info.ts` for centralized management of app version, meaning, and description.
-- Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `microlink.io`.
+- Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `api.ogfetch.com` with in-memory caching to prevent rate limits.
 - Enforced a uniform and standard size for all favicons using a bounded rounded box to ensure visual consistency regardless of native icon paddings.
 - Integrated `@toolwind/corner-shape` to provide premium iOS-style squircle corners across the UI (Buttons, Cards, Favicons).
 - Implemented a graceful fallback architecture using Tailwind CSS `@supports` feature queries to ensure unsupported browsers correctly degrade to standard rounded rectangles rather than rendering unintended circles.
@@ -38,7 +38,8 @@
 - Enhanced the interactive morphing logo with a 2-second debounce on `MouseLeave` for a smoother, sticky morphing experience that avoids rapid jitter.
 - Optimized SVG path morphing computations by deferring execution to the background (via `setTimeout`), preventing the animation logic from blocking the main thread during the initial page load.
 
-- Redesigned `ItemForm` UI to strictly auto-populate and display Site Name and Description as read-only metadata fields, rather than editable inputs.
+- Redesigned `ItemForm` hierarchy to place the URL input first and simplified the presentation by removing redundant metadata fields.
+- Improved the `ItemPreview` card layout to standard rich-link styling (image top, text bottom).
 - Enforced strict URL domain validation (requiring a valid TLD or localhost) before permitting saves to prevent corrupt data entry.
 - Updated Item URL metadata fetching to safely redact sensitive URL components (e.g. username, password) and restricted automatic fetching exclusively to changed URLs to prevent unnecessary external requests.
 - Updated the URL schema refinement to be case-insensitive for `http://` and `https://`.
