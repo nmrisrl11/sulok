@@ -9,6 +9,8 @@
 
 ### ✨ Added
 
+- Implemented responsive action affordances on `ItemCard`: touch devices now use an explicit "More" (`⋮`) dropdown menu, while desktop retains clean, hover-based inline actions.
+- Made the primary content of item cards (favicon, title, and URL) a fully clickable area to drastically improve the mobile UX for opening links.
 - Implemented a persistent `QuickLinkActionBar` anchored to the bottom for rapid URL entry and inline preview validation.
 - Implemented a coordinated `BottomActionSystem` to dynamically swap between the `QuickLinkActionBar` and `BulkActionBar` (with React.lazy loading) depending on the selection state.
 - Integrated the Sulo mascot into the Quick Link Action Bar, featuring contextual emotional reactions (sleepy, curious, attentive, confused) based on input focus and URL validation state.
@@ -49,6 +51,8 @@
 
 ### 🔧 Changed
 
+- Improved item title typography by using `line-clamp-2` instead of single-line truncation, allowing titles to wrap naturally when space permits.
+- Optimized mobile dropdown menu touch targets ("fat finger rule") with comfortable `py-2.5` padding while maintaining a refined aesthetic with smaller, lower-opacity icons.
 - Enhanced the interactive morphing logo with a 2-second debounce on `MouseLeave` for a smoother, sticky morphing experience that avoids rapid jitter.
 - Optimized SVG path morphing computations by deferring execution to the background (via `setTimeout`), preventing the animation logic from blocking the main thread during the initial page load.
 
@@ -61,6 +65,7 @@
 
 ### 🐛 Fixed
 
+- Fixed a layout collapse bug on the About Page and its Skeleton loader by explicitly defining `w-full` on the root container, ensuring `mx-auto` centers content correctly across the full viewport width instead of shrinking to fit narrow skeleton elements.
 - Fixed `use-metadata.ts` to execute schema parsing and cache population outside of the `isMounted` boundary to ensure fetched data is successfully cached even if the component unmounts mid-request.
 - Added bounded size cache eviction (max 50 entries) to the URL metadata cache in `use-metadata.ts` to prevent memory leaks over the tab's lifetime.
 - Resolved a React Compiler hook dependency mutability warning in `sulok-logo.tsx` by reordering the `hoverTimeoutRef` declaration above its use inside effect cleanups.

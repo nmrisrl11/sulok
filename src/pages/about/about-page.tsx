@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export function AboutPage() {
 	return (
-		<div className="flex flex-col gap-10 max-w-2xl mx-auto py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-			<section className="flex flex-col gap-4 text-center sm:text-left">
+		<div className="flex flex-col gap-10 w-full max-w-2xl mx-auto py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+			<section className="flex flex-col gap-4 text-center sm:text-left w-full">
 				<h1
 					className="font-sans text-4xl font-extrabold italic"
 					style={{ fontVariationSettings: "'WONK' 0, 'SOFT' 0" }}

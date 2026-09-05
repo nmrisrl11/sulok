@@ -49,6 +49,7 @@ export function QuickLinkActionBar() {
 				<SuloMascot expression={getExpression()} className="w-6 h-6" />
 			</div>
 			<input
+				id="quick-link-input"
 				type="text"
 				autoComplete="off"
 				value={url}
@@ -59,7 +60,7 @@ export function QuickLinkActionBar() {
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 				placeholder="Drop a link to your corner..."
-				className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground min-w-0"
+				className="flex-1 bg-transparent border-none outline-none text-base md:text-sm placeholder:text-muted-foreground min-w-0"
 				aria-label="Paste a link to preview"
 			/>
 			<Button

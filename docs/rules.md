@@ -139,6 +139,7 @@ src/
 - **Recursive Timeouts:** When scheduling recursive asynchronous timeouts (e.g., organic blinking animations), always use an `isActive` boolean flag and clear all associated inner/outer timeout handles on unmount to prevent memory leaks and orphaned timer chains.
 - **Vite Chunking:** When configuring `vite.config.ts`, always use `rollupOptions.output.manualChunks` as a function to logically group `node_modules` into domain-specific chunks (e.g., `vendor-react`, `vendor-db`, `vendor-ui`, `vendor-animation`) to prevent bundle size warnings (>500kB). Do not rely on a single monolithic `vendor` chunk.
 - **Accessibility (ARIA):** Always use `role="alert"` for dynamically rendered error states or asynchronous fallbacks (e.g., metadata fetch failures) to ensure screen readers immediately announce them without requiring user focus.
+- **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) so the hit area remains large enough for comfortable tapping, even if the internal icons or text are styled compactly.
 
 ---
 
