@@ -159,6 +159,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
 - Uses a glassmorphic background (`bg-card/80 backdrop-blur-md`), elevated with shadow and border.
 - Minimal input field focused on quickly pasting and previewing URLs.
+- Features a subtle `<kbd>` shortcut badge (Ctrl/Cmd V) for discoverability of global paste functionality.
 - Integrates the Sulo mascot to provide interactive contextual feedback (e.g., sleeping, attentive, confused).
 
 ### Empty States

@@ -9,6 +9,7 @@
 
 ### ✨ Added
 
+- Implemented Smart Clipboard URL detection: automatically captures and populates valid URLs into the Quick Link Action Bar when the user pastes (Ctrl+V / Cmd+V) globally, without hijacking normal input field behavior or spamming preview API requests.
 - Implemented responsive action affordances on `ItemCard`: touch devices now use an explicit "More" (`⋮`) dropdown menu, while desktop retains clean, hover-based inline actions.
 - Made the primary content of item cards (favicon, title, and URL) a fully clickable area to drastically improve the mobile UX for opening links.
 - Implemented a persistent `QuickLinkActionBar` anchored to the bottom for rapid URL entry and inline preview validation.

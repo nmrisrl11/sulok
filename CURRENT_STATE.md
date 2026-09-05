@@ -83,6 +83,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
 - [x] Persistent Quick Link Action Bar at the bottom
+- [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`
 - [ ] Import/Export JSON
 - [x] Responsive/mobile UI
