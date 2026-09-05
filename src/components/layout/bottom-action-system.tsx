@@ -29,7 +29,7 @@ export function BottomActionSystem() {
 	return (
 		<div
 			ref={containerRef}
-			className="fixed bottom-6 left-0 right-0 z-50 pointer-events-none flex flex-col items-center px-4 w-full"
+			className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:bottom-6 left-0 right-0 z-50 pointer-events-none flex flex-col items-center px-4 w-full"
 		>
 			<div className="pointer-events-auto w-full max-w-md flex justify-center">
 				{isSelectionMode ? (
