@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { NuqsAdapter } from "nuqs/adapters/react";
+import { NuqsAdapter } from "nuqs/adapters/react-router";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";

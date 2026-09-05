@@ -88,6 +88,7 @@ export function ItemControls() {
 					size="sm"
 					className="h-9 gap-1 rounded-full corner-squircle text-muted-foreground opacity-50 cursor-not-allowed"
 					title="Filters coming soon"
+					disabled
 				>
 					<FilterIcon className="h-4 w-4" />
 					Filter

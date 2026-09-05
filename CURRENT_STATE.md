@@ -39,7 +39,7 @@ The project is currently in the **core features implementation phase**.
 ### Next Steps
 
 1. Implement folder CRUD (post-MVP)
-2. Implement item tags, categories, search, and filter capabilities.
+2. Implement item tags, categories, and filter capabilities.
 3. Hook up Import/Export JSON functionality.
 4. Finalize overall UI polish for mobile responsiveness.
 

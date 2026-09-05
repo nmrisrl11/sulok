@@ -34,7 +34,7 @@ export function HomePage({ className }: { className?: string }) {
 	}
 
 	const hasItems = items.length > 0;
-	const isAllSelected = hasItems && selectedIds.length === items.length;
+	const isAllSelected = hasItems && items.every((item) => selectedIds.includes(item.id));
 
 	const handleSelectAllChange = (checked: boolean | string) => {
 		if (checked === true) {

@@ -6,7 +6,18 @@ export function HomeSkeleton() {
 		<main className="flex flex-col gap-10">
 			{/* Item List Section */}
 			<div className="flex flex-col gap-4">
-				<h2 className="text-foreground font-sans text-2xl font-bold tracking-tight">Your Corner</h2>
+				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2 sm:px-0">
+					<h2 className="text-foreground font-sans text-2xl font-bold tracking-tight">
+						Your Corner
+					</h2>
+					<div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+						<Skeleton className="h-9 w-full sm:w-64 rounded-full" />
+						<div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+							<Skeleton className="h-9 w-20 rounded-full" />
+							<Skeleton className="h-9 w-20 rounded-full" />
+						</div>
+					</div>
+				</div>
 
 				<div className="flex items-center justify-between px-2 mt-1">
 					<div className="flex items-center gap-3">
