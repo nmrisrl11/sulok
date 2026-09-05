@@ -2,8 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function AboutSkeleton() {
 	return (
-		<div className="flex flex-col gap-10 max-w-2xl mx-auto py-8">
-			<section className="flex flex-col gap-4 text-center sm:text-left items-center sm:items-start">
+		<div className="flex flex-col gap-10 w-full max-w-2xl mx-auto py-8">
+			<section className="flex flex-col gap-4 text-center sm:text-left items-center sm:items-start w-full">
 				<Skeleton className="h-10 w-32" />
 				<Skeleton className="h-7 w-64" />
 			</section>

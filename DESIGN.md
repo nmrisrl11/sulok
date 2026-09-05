@@ -131,7 +131,8 @@ Minimal shadows. Prefer border/background differentiation.
 - Compact padding (12px).
 - Favicon (24×24 rounded box) on the left.
 - Title + URL stacked on the right.
-- Action buttons (open, copy, more) visible on hover.
+- Action buttons (open, copy, edit, delete) visible on hover for desktop, or accessible via a 'More' dropdown menu on mobile.
+- Primary content (favicon and text) acts as a clickable link.
 
 ### Folder Tree
 
