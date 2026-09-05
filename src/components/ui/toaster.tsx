@@ -6,11 +6,19 @@ export function Toaster() {
 	const { theme } = useTheme();
 
 	return (
-		<GooeyToaster
-			theme={theme === "system" ? undefined : theme}
-			position="bottom-center"
-			closeOnEscape={false}
-			showTimestamp={false}
-		/>
+		<>
+			<style>{`
+				[data-sonner-toaster] {
+					--mobile-offset-bottom: calc(var(--bottom-action-height, 0px) + 40px) !important;
+				}
+			`}</style>
+			<GooeyToaster
+				theme={theme === "system" ? undefined : theme}
+				position="bottom-center"
+				closeOnEscape={false}
+				showTimestamp={false}
+				offset="calc(var(--bottom-action-height, 0px) + 40px)"
+			/>
+		</>
 	);
 }

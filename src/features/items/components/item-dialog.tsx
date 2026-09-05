@@ -14,17 +14,22 @@ import { useState } from "react";
 import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
-	const { isDialogOpen, setDialogOpen, editingItem, addItem, updateItem } = useItemStore();
+	const { isDialogOpen, setDialogOpen, editingItem, initialUrl, addItem, updateItem } =
+		useItemStore();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 
 	// Keep a stable reference to the item being edited while the dialog is open
 	// to prevent the form from resetting or flashing while animating out.
 	const [activeItem, setActiveItem] = useState(editingItem);
+	const [activeUrl, setActiveUrl] = useState(initialUrl);
 
 	// Derive state during render to avoid cascading renders from useEffect
 	if (isDialogOpen && activeItem !== editingItem) {
 		setActiveItem(editingItem);
+	}
+	if (isDialogOpen && activeUrl !== initialUrl) {
+		setActiveUrl(initialUrl);
 	}
 
 	const handleSubmit = async (data: ItemFormValues) => {
@@ -65,7 +70,7 @@ export function ItemDialog() {
 				</DialogHeader>
 
 				<ItemForm
-					defaultValues={activeItem || undefined}
+					defaultValues={activeItem || (activeUrl ? { url: activeUrl } : undefined)}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialogOpen(false)}
 					isSubmitting={isSubmitting}

@@ -44,7 +44,7 @@
 - Use Fraunces for display fonts and Geist for UI.
 - Components must use shadcn/ui primitives where available.
 - Custom components should follow shadcn/ui conventions (cn utility, cva variants).
-- No decorative elements, illustrations, or gradients in the UI (mascot is for marketing only).
+- No decorative elements, illustrations, or gradients in the general UI (the Sulo mascot is an exception, used for contextual feedback, empty states, and error boundaries).
 
 ### Layout
 
@@ -61,6 +61,7 @@
 - Undo support for destructive actions (delete, move).
 - No confirmation modals for non-destructive actions.
 - Toast notifications for feedback, not alert dialogs. Always use `notify` from `src/lib/notify.ts` (powered by `goey-toast`), and never standard `sonner`.
+- When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 
 ---
 

@@ -9,6 +9,9 @@
 
 ### ✨ Added
 
+- Implemented a persistent `QuickLinkActionBar` anchored to the bottom for rapid URL entry and inline preview validation.
+- Implemented a coordinated `BottomActionSystem` to dynamically swap between the `QuickLinkActionBar` and `BulkActionBar` (with React.lazy loading) depending on the selection state.
+- Integrated the Sulo mascot into the Quick Link Action Bar, featuring contextual emotional reactions (sleepy, curious, attentive, confused) based on input focus and URL validation state.
 - Implemented Bulk Delete functionality for items, featuring an animated floating Bulk Action Bar.
 - Added "Select All" capability and individual selection checkboxes to the home page item list.
 - Added `Checkbox` component from shadcn/ui to support item selection.
@@ -40,6 +43,10 @@
 - Integrated `@toolwind/corner-shape` to provide premium iOS-style squircle corners across the UI (Buttons, Cards, Favicons).
 - Implemented a graceful fallback architecture using Tailwind CSS `@supports` feature queries to ensure unsupported browsers correctly degrade to standard rounded rectangles rather than rendering unintended circles.
 
+### 🗑️ Removed
+
+- Removed the "Add to Sulok" button from the top of the Home page layout to consolidate item creation through the new `QuickLinkActionBar`.
+
 ### 🔧 Changed
 
 - Enhanced the interactive morphing logo with a 2-second debounce on `MouseLeave` for a smoother, sticky morphing experience that avoids rapid jitter.
@@ -48,6 +55,7 @@
 - Redesigned `ItemForm` hierarchy to place the URL input first and simplified the presentation by removing redundant metadata fields.
 - Improved the `ItemPreview` card layout to standard rich-link styling (image top, text bottom).
 - Enforced strict URL domain validation (requiring a valid TLD or localhost) before permitting saves to prevent corrupt data entry.
+- Overrode `goey-toast` / `sonner` mobile offset constraints with dynamic CSS variables measured via `ResizeObserver`, preventing toast notifications from overlapping the bottom action bars on mobile viewports.
 - Updated Item URL metadata fetching to safely redact sensitive URL components (e.g. username, password) and restricted automatic fetching exclusively to changed URLs to prevent unnecessary external requests.
 - Updated the URL schema refinement to be case-insensitive for `http://` and `https://`.
 
