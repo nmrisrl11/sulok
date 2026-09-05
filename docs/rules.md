@@ -92,6 +92,7 @@ src/
 ### Centralized App Data
 
 - All application metadata (name, shortName, tagline, description, themeColor, keywords, author, etc.) MUST be centralized in `src/constants/app-info.ts`.
+- **Version Numbering:** The active UI version is driven dynamically by `src/data/changelog.ts` (`CHANGELOG_DATA[0].version`). Do not store the version property in `app-info.ts` or hardcode it in components.
 - **Do not hardcode app metadata (like the app name "Sulok") in UI components (headers, dialogs, buttons, empty states).** Always import `APP_INFO` from `src/constants/app-info.ts` and use `APP_INFO.name` or other relevant properties.
 - Do not hardcode app metadata in `index.html` or `vite.config.ts`. Instead, use Vite plugins or template interpolation to inject data from this centralized file.
 
@@ -186,3 +187,4 @@ src/
 - Keep PRs small and focused.
 - Update `CURRENT_STATE.md` after completing a feature.
 - Update `PENDING_CHANGES.md` for user-facing changes.
+- **Changelog Workflow**: When releasing a new version, extract user-facing changes from `PENDING_CHANGES.md`, translate them into friendly copywriting, add them to `src/data/changelog.ts`, and then clear the `Unreleased` section in `PENDING_CHANGES.md`.

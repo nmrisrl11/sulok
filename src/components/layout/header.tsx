@@ -28,20 +28,21 @@ export function Header() {
 					>
 						About
 					</NavLink>
-					<span
+					<NavLink
+						to="/updates"
 						onMouseEnter={() => setTemporaryExpression("shy", 10000)}
 						onMouseLeave={clearTemporaryExpression}
-						className="cursor-not-allowed inline-flex"
+						className={({ isActive }) =>
+							cn(
+								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium",
+								isActive
+									? "bg-background text-foreground shadow-sm"
+									: "text-muted-foreground hover:text-foreground",
+							)
+						}
 					>
-						<button
-							type="button"
-							className="text-muted-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium pointer-events-none"
-							disabled
-							title="Coming soon"
-						>
-							Updates
-						</button>
-					</span>
+						Updates
+					</NavLink>
 				</div>
 				<ModeToggle />
 			</nav>

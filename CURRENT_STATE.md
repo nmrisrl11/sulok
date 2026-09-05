@@ -85,6 +85,9 @@ The project is currently in the **core features implementation phase**.
 - [x] Persistent Quick Link Action Bar at the bottom
 - [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`
+- [x] Responsive item action menus (desktop hover vs mobile dropdown)
+- [x] Updates page (Changelog integration)
+- [x] Dynamic app versioning driven by changelog data
 - [ ] Import/Export JSON
 - [x] Responsive/mobile UI
 - [ ] PWA/offline support
