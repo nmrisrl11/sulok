@@ -90,7 +90,7 @@ sulok/
 - **Scrollbars:** Always use the `.custom-scrollbar` class on any scrollable container (e.g., `overflow-y-auto`) to ensure a consistent, branded scrollbar styling across the application.
 - **Notifications:** Do not use `sonner` or shadcn's `useToast` directly. Always use the `notify` utility from `src/lib/notify.ts` which wraps `goey-toast` for fluid, animated notifications.
 - Favicon fetching: `https://www.google.com/s2/favicons?domain=[origin]&sz=64` (use the full origin, e.g. `https://domain.com`, to ensure it resolves modern PaaS deployments properly).
-- Metadata fetching: Uses `microlink.io` for robust open-graph metadata preview.
+- Metadata fetching: Uses `api.ogfetch.com` for robust open-graph metadata preview.
 - **Vite Chunking:** Always use `rollupOptions.output.manualChunks` as a function in `vite.config.ts` to logically group dependencies into domain-specific chunks (e.g., `vendor-react`, `vendor-db`) to prevent massive bundle sizes.
 
 ## What NOT To Do

@@ -81,9 +81,6 @@ export function ItemForm({
 		}
 	}, [metadata, rawUrl, error, defaultValues, setValue]);
 
-	const currentTitle = useWatch({ control, name: "title" });
-	const currentDescription = useWatch({ control, name: "description" });
-
 	const isPending = rawUrl !== debouncedUrl || loading;
 
 	const handleFormSubmit = (data: ItemFormValues) => {
@@ -96,10 +93,8 @@ export function ItemForm({
 			<form
 				id="item-form"
 				onSubmit={handleSubmit(handleFormSubmit)}
-				className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 custom-scrollbar"
+				className="flex flex-1 flex-col gap-5 overflow-y-auto p-4 custom-scrollbar"
 			>
-				<ItemPreview metadata={metadata} loading={loading} error={error} url={formattedUrl} />
-
 				<div className="space-y-2">
 					<Label htmlFor="url">URL *</Label>
 					<Input
@@ -108,28 +103,17 @@ export function ItemForm({
 						placeholder="https://example.com"
 						{...register("url")}
 						className={errors.url ? "border-destructive" : ""}
+						autoFocus
 					/>
 					{errors.url && (
 						<p className="text-sm font-medium text-destructive">{errors.url.message}</p>
 					)}
 				</div>
 
-				{(currentTitle || currentDescription) && (
-					<div className="flex flex-col gap-3 rounded-md bg-muted/30 p-3 border text-sm">
-						{currentTitle && (
-							<div className="flex flex-col gap-1">
-								<span className="text-xs font-medium text-muted-foreground">Site Name</span>
-								<span className="font-medium leading-snug text-foreground">{currentTitle}</span>
-							</div>
-						)}
-						{currentDescription && (
-							<div className="flex flex-col gap-1">
-								<span className="text-xs font-medium text-muted-foreground">Description</span>
-								<span className="text-muted-foreground leading-snug">{currentDescription}</span>
-							</div>
-						)}
-					</div>
-				)}
+				<div className="flex flex-col gap-2">
+					<Label className="text-muted-foreground">Preview</Label>
+					<ItemPreview metadata={metadata} loading={loading} error={error} url={formattedUrl} />
+				</div>
 
 				{submitError && (
 					<div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">

@@ -69,7 +69,16 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 
 	return (
 		<div className="flex flex-col shrink-0 overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle border bg-card text-card-foreground shadow-sm">
-			<div className="flex flex-col gap-1 p-3 pb-2">
+			{metadata.image ? (
+				<div className="relative aspect-video w-full overflow-hidden bg-muted border-b">
+					<img src={metadata.image} alt="Preview" className="object-cover w-full h-full" />
+				</div>
+			) : (
+				<div className="flex items-center justify-center aspect-3/1 w-full bg-muted border-b text-muted-foreground">
+					<ImageIcon className="h-8 w-8 opacity-20" />
+				</div>
+			)}
+			<div className="flex flex-col gap-1 p-3 pt-2">
 				<div className="flex items-center gap-2 text-xs text-muted-foreground">
 					{metadata.logo ? (
 						<img src={metadata.logo} alt="" className="h-3.5 w-3.5 rounded-sm object-cover" />
@@ -87,15 +96,6 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 					</p>
 				)}
 			</div>
-			{metadata.image ? (
-				<div className="relative aspect-video w-full overflow-hidden bg-muted border-t">
-					<img src={metadata.image} alt="Preview" className="object-cover w-full h-full" />
-				</div>
-			) : (
-				<div className="flex items-center justify-center aspect-3/1 w-full bg-muted border-t text-muted-foreground">
-					<ImageIcon className="h-8 w-8 opacity-20" />
-				</div>
-			)}
 		</div>
 	);
 }

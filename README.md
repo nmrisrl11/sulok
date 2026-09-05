@@ -35,7 +35,7 @@ Sulok is built on a **local-first architecture**.
 - **No Accounts:** You don't need to sign up or log in.
 - **No Cloud Database:** We don't store your bookmarks on our servers. In fact, we don't have servers.
 - **Browser Storage:** Folders and items are saved locally on your device using IndexedDB, while theme and settings use localStorage.
-- **External Requests:** The app fetches link metadata (via `microlink.io`) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
+- **External Requests:** The app fetches link metadata (via `api.ogfetch.com`) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
 
 _Note: Device synchronization and Import/Export capabilities are planned for future releases to help you securely move your data between devices._
 
