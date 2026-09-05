@@ -5,15 +5,46 @@ import { itemSchema } from "@/schemas/item.schema";
 import { useItemStore } from "@/stores/item-store";
 import type { SuloExpression } from "@/stores/logo-store";
 import { ArrowUpIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const isMac =
+		typeof navigator !== "undefined" && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+	const modifierKey = isMac ? "⌘" : "Ctrl";
 
 	const urlSchema = itemSchema.shape.url;
+
+	useEffect(() => {
+		const handleGlobalPaste = (e: ClipboardEvent) => {
+			const target = e.target as HTMLElement;
+			// Ignore if user is already focused on an input or textarea
+			if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+				return;
+			}
+
+			const text = e.clipboardData?.getData("text")?.trim();
+			if (!text) return;
+
+			const result = urlSchema.safeParse(text);
+			if (result.success) {
+				e.preventDefault();
+				setUrl(text);
+				if (error) setError(null);
+				inputRef.current?.focus();
+			}
+		};
+
+		document.addEventListener("paste", handleGlobalPaste);
+		return () => {
+			document.removeEventListener("paste", handleGlobalPaste);
+		};
+	}, [error, urlSchema]);
 
 	const getExpression = (): SuloExpression => {
 		if (error) return "confused";
@@ -49,6 +80,7 @@ export function QuickLinkActionBar() {
 				<SuloMascot expression={getExpression()} className="w-6 h-6" />
 			</div>
 			<input
+				ref={inputRef}
 				id="quick-link-input"
 				type="text"
 				autoComplete="off"
@@ -63,6 +95,11 @@ export function QuickLinkActionBar() {
 				className="flex-1 bg-transparent border-none outline-none text-base md:text-sm placeholder:text-muted-foreground min-w-0"
 				aria-label="Paste a link to preview"
 			/>
+			{!url && !isFocused && (
+				<kbd className="hidden md:inline-flex h-5 items-center gap-1 rounded border border-border/50 bg-muted/30 px-1.5 font-mono text-[10px] font-medium text-muted-foreground shrink-0 select-none pointer-events-none transition-opacity">
+					{modifierKey} V
+				</kbd>
+			)}
 			<Button
 				type="submit"
 				size="icon"
