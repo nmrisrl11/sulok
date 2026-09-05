@@ -146,6 +146,13 @@ Minimal shadows. Prefer border/background differentiation.
 - Filter dropdowns (tags, type) inline or in a popover.
 - Sort toggle (name, date, manual).
 
+### Bulk Action Bar
+
+- Floating pill-shaped bar positioned at `bottom-center`.
+- Elevated with shadow and border.
+- Displays selected count and multi-select actions (e.g., Delete Selected, Clear).
+- Animated slide-in from bottom when items are selected.
+
 ### Empty States
 
 - Centered text with Fraunces heading.

@@ -9,6 +9,10 @@
 
 ### ✨ Added
 
+- Implemented Bulk Delete functionality for items, featuring an animated floating Bulk Action Bar.
+- Added "Select All" capability and individual selection checkboxes to the home page item list.
+- Added `Checkbox` component from shadcn/ui to support item selection.
+- Extended `ItemRepository` with `deleteMany` for efficient bulk deletions via Dexie's `bulkDelete`.
 - Added localized whisper feedback UI on the header, separated from the Sulok logo click area, utilizing `goey-toast` state alongside `logo-store.ts`.
 - Abstracted whisper phrases into `constants/whispers.ts` for randomized context-aware feedback (positive, negative, warning, info).
 - Refined the whisper bubble styling to use `font-mono` and high-contrast `bg-foreground text-background` mapping for visibility in light mode.
