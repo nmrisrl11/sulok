@@ -24,7 +24,7 @@ export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
 				library.
 			</p>
 			<Button
-				onClick={openCreateDialog}
+				onClick={() => openCreateDialog()}
 				className="gap-2"
 				disabled={disabled}
 				onMouseEnter={() => setTemporaryExpression("excited")}

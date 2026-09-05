@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { APP_INFO } from "@/constants/app-info";
+import { notify } from "@/lib/notify";
 import { useConfirmationStore } from "@/stores/confirmation-store";
 import { useItemStore } from "@/stores/item-store";
-import { APP_INFO } from "@/constants/app-info";
 import { useLogoStore } from "@/stores/logo-store";
-import { notify } from "@/lib/notify";
 import { Trash2Icon } from "lucide-react";
 
 export function BulkActionBar() {
@@ -33,31 +33,29 @@ export function BulkActionBar() {
 	};
 
 	return (
-		<div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10 fade-in duration-300">
-			<div className="bg-card text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle px-4 py-2 flex items-center gap-4">
-				<span className="text-sm font-medium whitespace-nowrap px-2">
-					{selectedIds.length} selected
-				</span>
-				<div className="w-px h-6 bg-border" />
-				<div className="flex items-center gap-1">
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={handleDeleteSelected}
-						className="h-8 gap-2 hover:bg-destructive/10 hover:text-destructive rounded-full!"
-					>
-						<Trash2Icon className="h-4 w-4" />
-						Delete Selected
-					</Button>
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={clearSelection}
-						className="h-8 rounded-full! text-muted-foreground"
-					>
-						Clear
-					</Button>
-				</div>
+		<div className="bg-card text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle px-4 py-2 flex items-center gap-4 mx-auto w-fit animate-in slide-in-from-bottom-10 fade-in duration-300">
+			<span className="text-sm font-medium whitespace-nowrap px-2">
+				{selectedIds.length} selected
+			</span>
+			<div className="w-px h-6 bg-border" />
+			<div className="flex items-center gap-1">
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={handleDeleteSelected}
+					className="h-8 gap-2 hover:bg-destructive/10 hover:text-destructive rounded-full!"
+				>
+					<Trash2Icon className="h-4 w-4" />
+					Delete Selected
+				</Button>
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={clearSelection}
+					className="h-8 rounded-full! text-muted-foreground"
+				>
+					Clear
+				</Button>
 			</div>
 		</div>
 	);

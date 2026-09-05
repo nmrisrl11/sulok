@@ -148,10 +148,16 @@ Minimal shadows. Prefer border/background differentiation.
 
 ### Bulk Action Bar
 
-- Floating pill-shaped bar positioned at `bottom-center`.
+- Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
 - Elevated with shadow and border.
 - Displays selected count and multi-select actions (e.g., Delete Selected, Clear).
 - Animated slide-in from bottom when items are selected.
+
+### Quick Link Action Bar
+
+- Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
+- Minimal input field focused on quickly pasting and previewing URLs.
+- Integrates the Sulo mascot to provide interactive contextual feedback (e.g., sleeping, attentive, confused).
 
 ### Empty States
 
