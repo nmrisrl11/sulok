@@ -4,7 +4,7 @@ import { notify } from "@/lib/notify";
 import { itemSchema } from "@/schemas/item.schema";
 import { useItemStore } from "@/stores/item-store";
 import type { SuloExpression } from "@/stores/logo-store";
-import { ArrowUpIcon } from "lucide-react";
+import { CornerDownLeftIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
@@ -108,7 +108,7 @@ export function QuickLinkActionBar() {
 				className="h-8 w-8 rounded-full shrink-0 transition-all duration-300"
 				aria-label="Preview link"
 			>
-				<ArrowUpIcon className="h-4 w-4" />
+				<CornerDownLeftIcon className="h-4 w-4" />
 			</Button>
 		</form>
 	);

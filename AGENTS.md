@@ -18,6 +18,14 @@
 3. Read `docs/rules.md` for implementation rules and constraints.
 4. Read `PENDING_CHANGES.md` for what's queued for the next release.
 
+## Source of Truth Hierarchy
+
+- **Codebase**: Source of truth for actual implementation.
+- **`PENDING_CHANGES.md`**: Source of truth for _unreleased_ user-facing changes.
+- **`src/data/changelog.ts`**: Source of truth for _released_ user-facing changes AND the active UI version.
+- **`CURRENT_STATE.md`**: Source of truth for current product/architecture state.
+- **`package.json`**: Source of truth for the npm/build version.
+
 ## Key Architecture Decisions
 
 ### Tailwind v4

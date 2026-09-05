@@ -1,4 +1,5 @@
 import { APP_INFO } from "@/constants/app-info";
+import { CHANGELOG_DATA } from "@/data/changelog";
 import { Link } from "react-router-dom";
 
 export function AboutPage() {
@@ -43,13 +44,19 @@ export function AboutPage() {
 			</section>
 
 			<section className="flex flex-col items-center sm:items-start gap-4 mt-8 pt-8 border-t border-border">
-				<p className="text-sm text-muted-foreground">Version {APP_INFO.version}</p>
+				<p className="text-sm text-muted-foreground">Version {CHANGELOG_DATA[0].version}</p>
 				<div className="flex gap-4">
 					<Link
 						to="/"
 						className="text-primary hover:underline underline-offset-4 text-sm font-medium"
 					>
 						Go to your corner &rarr;
+					</Link>
+					<Link
+						to="/updates"
+						className="text-primary hover:underline underline-offset-4 text-sm font-medium"
+					>
+						See what's new &rarr;
 					</Link>
 				</div>
 			</section>

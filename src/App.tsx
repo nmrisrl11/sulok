@@ -5,12 +5,16 @@ import { AppLayout } from "./components/layout/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
 import { AboutSkeleton } from "./pages/about/about-skeleton";
 import { HomeRouteFallback } from "./pages/home/home-route-fallback";
+import { UpdatesSkeleton } from "./pages/updates/updates-skeleton";
 
 const HomePage = lazy(() =>
 	import("./pages/home/home-page").then((m) => ({ default: m.HomePage })),
 );
 const AboutPage = lazy(() =>
 	import("./pages/about/about-page").then((m) => ({ default: m.AboutPage })),
+);
+const UpdatesPage = lazy(() =>
+	import("./pages/updates/updates-page").then((m) => ({ default: m.UpdatesPage })),
 );
 const NotFoundPage = lazy(() =>
 	import("./pages/not-found/not-found-page").then((m) => ({ default: m.NotFoundPage })),
@@ -36,6 +40,14 @@ function App() {
 								element={
 									<Suspense fallback={<AboutSkeleton />}>
 										<AboutPage />
+									</Suspense>
+								}
+							/>
+							<Route
+								path="/updates"
+								element={
+									<Suspense fallback={<UpdatesSkeleton />}>
+										<UpdatesPage />
 									</Suspense>
 								}
 							/>
