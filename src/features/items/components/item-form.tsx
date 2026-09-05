@@ -111,7 +111,7 @@ export function ItemForm({
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<Label className="text-muted-foreground">Preview</Label>
+					<h3 className="text-muted-foreground font-medium text-sm leading-none">Preview</h3>
 					<ItemPreview metadata={metadata} loading={loading} error={error} url={formattedUrl} />
 				</div>
 

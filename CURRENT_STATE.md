@@ -39,7 +39,7 @@ The project is currently in the **core features implementation phase**.
 ### Next Steps
 
 1. Implement folder CRUD (post-MVP)
-2. Implement item tags, categories, search, and filter capabilities.
+2. Implement item tags, categories, and filter capabilities.
 3. Hook up Import/Export JSON functionality.
 4. Finalize overall UI polish for mobile responsiveness.
 
@@ -78,7 +78,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [ ] Drag-and-drop organization
 - [x] Open / Copy link buttons
-- [ ] Search, sort, filter, pagination
+- [x] Search and Sort controls (Filters pending tag implementation; Pagination intentionally omitted for local-first scroll)
 - [ ] Item tags and categorization
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
