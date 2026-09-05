@@ -33,7 +33,7 @@ export function BulkActionBar() {
 	};
 
 	return (
-		<div className="bg-card text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle px-4 py-2 flex items-center gap-4 mx-auto w-fit animate-in slide-in-from-bottom-10 fade-in duration-300">
+		<div className="bg-card/80 backdrop-blur-md text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle px-4 py-2 flex items-center gap-4 mx-auto w-fit animate-in slide-in-from-bottom-10 fade-in duration-300">
 			<span className="text-sm font-medium whitespace-nowrap px-2">
 				{selectedIds.length} selected
 			</span>

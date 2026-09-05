@@ -43,7 +43,7 @@ export function QuickLinkActionBar() {
 		<form
 			onSubmit={handleSubmit}
 			noValidate
-			className="bg-card text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-1.5 pr-2 flex items-center gap-3 w-full max-w-md mx-auto transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background animate-in slide-in-from-bottom-10 fade-in duration-300"
+			className="bg-card/80 backdrop-blur-md text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-1.5 pr-2 flex items-center gap-3 w-full max-w-md mx-auto transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background animate-in slide-in-from-bottom-10 fade-in duration-300"
 		>
 			<div className="w-10 h-10 shrink-0 bg-muted/30 rounded-full flex items-center justify-center relative overflow-hidden transition-colors">
 				<SuloMascot expression={getExpression()} className="w-6 h-6" />

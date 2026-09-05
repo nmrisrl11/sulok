@@ -6,11 +6,19 @@ import { ItemEmptyState } from "@/features/items/components/item-empty-state";
 import { cn } from "@/lib/utils";
 import { useItemStore } from "@/stores/item-store";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useEffect } from "react";
 import { HomeRouteFallback } from "./home-route-fallback";
 
 export function HomePage({ className }: { className?: string }) {
 	const items = useLiveQuery(() => ItemRepository.queryAllSorted());
 	const { selectedIds, selectAll, clearSelection } = useItemStore();
+
+	// Clear selection when navigating away from home page
+	useEffect(() => {
+		return () => {
+			clearSelection();
+		};
+	}, [clearSelection]);
 
 	if (items === undefined) {
 		return <HomeRouteFallback />;

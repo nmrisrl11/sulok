@@ -130,10 +130,8 @@ export function SulokLogo({ className }: { className?: string }) {
 	};
 
 	const handleInteract = () => {
-		if (isHome) {
-			handleMouseEnter();
-			handleMouseLeave();
-		}
+		handleMouseEnter();
+		handleMouseLeave();
 	};
 
 	const classNameValue = cn(
@@ -215,6 +213,7 @@ export function SulokLogo({ className }: { className?: string }) {
 			<Link
 				to="/"
 				className={classNameValue}
+				onClick={handleInteract}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				aria-label={`${APP_INFO.name} Home`}

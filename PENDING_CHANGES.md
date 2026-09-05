@@ -43,7 +43,8 @@
 - Implemented a metadata preview component in the "Add to Sulok" form that automatically fetches Title, Description, and Image from URLs using `api.ogfetch.com` with in-memory caching to prevent rate limits.
 - Enforced a uniform and standard size for all favicons using a bounded rounded box to ensure visual consistency regardless of native icon paddings.
 - Integrated `@toolwind/corner-shape` to provide premium iOS-style squircle corners across the UI (Buttons, Cards, Favicons).
-- Implemented a graceful fallback architecture using Tailwind CSS `@supports` feature queries to ensure unsupported browsers correctly degrade to standard rounded rectangles rather than rendering unintended circles.
+- Applied a glassmorphism effect (`bg-card/80 backdrop-blur-md`) to both the Quick Link Action Bar and Bulk Action Bar for a premium scrolling experience.
+- Enforced a graceful fallback architecture using Tailwind CSS `@supports` feature queries to ensure unsupported browsers correctly degrade to standard rounded rectangles rather than rendering unintended circles.
 
 ### 🗑️ Removed
 
@@ -65,6 +66,9 @@
 
 ### 🐛 Fixed
 
+- Fixed a UX issue where the Bulk Action Bar remained erroneously visible when navigating away from the Home page by clearing item selection state on component unmount.
+- Fixed a bug on touch devices where tapping the logo to navigate would leave the mascot stuck in the morphed "Sulok" (hovered) state by explicitly triggering and clearing interaction states on click.
+- Fixed mobile layout overlap issues by incorporating `env(safe-area-inset-bottom)` into the main container's padding and bottom action bar positions, ensuring content is never obscured by the home indicator.
 - Fixed a layout collapse bug on the About Page and its Skeleton loader by explicitly defining `w-full` on the root container, ensuring `mx-auto` centers content correctly across the full viewport width instead of shrinking to fit narrow skeleton elements.
 - Fixed `use-metadata.ts` to execute schema parsing and cache population outside of the `isMounted` boundary to ensure fetched data is successfully cached even if the component unmounts mid-request.
 - Added bounded size cache eviction (max 50 entries) to the URL metadata cache in `use-metadata.ts` to prevent memory leaks over the tab's lifetime.
