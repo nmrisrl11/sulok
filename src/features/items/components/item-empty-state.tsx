@@ -11,7 +11,7 @@ export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
 	return (
 		<div
 			className={cn(
-				"flex flex-col items-center justify-center p-8 text-center animate-in fade-in-50 rounded-xl border border-dashed py-12",
+				"flex flex-col items-center justify-center p-8 text-center rounded-xl border border-dashed py-12",
 				disabled && "pointer-events-none opacity-50",
 			)}
 		>

@@ -52,7 +52,7 @@ export function HomePage({ className }: { className?: string }) {
 					<h2 className="text-foreground font-sans text-2xl font-bold tracking-tight">
 						Your Corner
 					</h2>
-					<ItemControls />
+					{(hasItems || q) && <ItemControls />}
 				</div>
 
 				{hasItems && (
