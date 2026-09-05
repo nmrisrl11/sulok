@@ -1,5 +1,5 @@
-import { itemSchema } from "@/schemas/item.schema";
 import { setHasDataHint } from "@/lib/storage";
+import { itemSchema } from "@/schemas/item.schema";
 import { db, type Item } from "../db";
 
 export const ItemRepository = {
@@ -62,5 +62,13 @@ export const ItemRepository = {
 	async deleteAll(): Promise<void> {
 		await db.items.clear();
 		setHasDataHint(false);
+	},
+
+	async deleteMany(ids: string[]): Promise<void> {
+		await db.items.bulkDelete(ids);
+		const count = await db.items.count();
+		if (count === 0) {
+			setHasDataHint(false);
+		}
 	},
 };

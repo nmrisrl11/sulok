@@ -22,7 +22,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Dexie.js database schema defined and Repository Pattern implemented
 - [x] Domain schema centralized in `src/schemas/`
 - [x] Zustand stores scaffolded (Item and Confirmation stores)
-- [x] Item CRUD (Create, Read, Update, Delete) integrated with Dexie
+- [x] Item CRUD (Create, Read, Update, Delete, Bulk Delete) integrated with Dexie
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
 - [x] Initial performance optimizations (route and dialog code-splitting)
@@ -72,7 +72,7 @@ The project is currently in the **core features implementation phase**.
 ### Phase 1 — Core (Current)
 
 - [x] Folder CRUD (tree structure)
-- [x] Item CRUD (save, edit, delete)
+- [x] Item CRUD (save, edit, delete, bulk delete)
 - [x] Enhanced Empty State UI design
 - [x] Co-located feature-level loading Skeletons
 - [x] Route-specific loading architecture (Suspense fallbacks)

@@ -1,5 +1,6 @@
 import { SiteFavicon } from "@/components/site-favicon";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { APP_INFO } from "@/constants/app-info";
 import type { Item } from "@/db/db";
@@ -12,9 +13,11 @@ import { useLogoStore } from "@/stores/logo-store";
 import { CheckIcon, CopyIcon, Edit2Icon, ExternalLinkIcon, Trash2Icon } from "lucide-react";
 
 export function ItemCard({ item }: { item: Item }) {
-	const { deleteItem, openEditDialog } = useItemStore();
+	const { deleteItem, openEditDialog, selectedIds, toggleSelection } = useItemStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const { isCopied, copyToClipboard } = useCopyToClipboard();
+
+	const isSelected = selectedIds.includes(item.id);
 
 	const titleToDisplay = item.title || item.url;
 
@@ -41,8 +44,18 @@ export function ItemCard({ item }: { item: Item }) {
 	};
 
 	return (
-		<div className="group hover:bg-card/50 flex items-center justify-between gap-3 rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle px-2 py-2 transition-colors">
+		<div
+			className={cn(
+				"group hover:bg-card/50 flex items-center justify-between gap-3 rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle px-2 py-2 transition-colors",
+				isSelected && "bg-card/50 ring-1 ring-border shadow-sm",
+			)}
+		>
 			<div className="flex items-center gap-3 min-w-0">
+				<Checkbox
+					checked={isSelected}
+					onCheckedChange={() => toggleSelection(item.id)}
+					className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+				/>
 				<SiteFavicon url={item.url} className="h-6 w-6 shrink-0" />
 				<div className="flex flex-col overflow-hidden">
 					<span className="text-foreground truncate text-sm font-medium">{titleToDisplay}</span>
