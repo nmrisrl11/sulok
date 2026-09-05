@@ -1,0 +1,16 @@
+# Sulok
+
+> Your corner of the web.
+
+Sulok is a personal web library — a local-first app for saving, organizing, and rediscovering bookmarks/links from the web.
+
+## AI Agent Guidelines
+
+This site allows AI agents and LLMs to crawl its public routes (like the landing page or about page) for indexing and understanding the product. 
+
+However, Sulok is a **local-first** application. All user data is stored locally in the browser via IndexedDB. There is no backend, and user data is never exposed to the web or accessible to crawlers.
+
+## Features
+- Save and organize web links.
+- Local-first storage (offline capable).
+- Folder structures and categories.
