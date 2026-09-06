@@ -60,7 +60,7 @@ export const ItemRepository = {
 			try {
 				const parsed = new URL(u);
 				return (
-					parsed.hostname.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search
+					parsed.host.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search
 				);
 			} catch {
 				return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
@@ -78,15 +78,25 @@ export const ItemRepository = {
 
 	async save(item: Omit<Item, "id" | "createdAt" | "updatedAt">): Promise<void> {
 		const parsedData = itemSchema.parse(item);
+		const url = parsedData.url as string;
 		const now = Date.now();
-		const record: Item = {
-			id: crypto.randomUUID(),
-			...parsedData,
-			url: parsedData.url as string,
-			createdAt: now,
-			updatedAt: now,
-		};
-		await db.items.put(record);
+
+		await db.transaction("rw", db.items, async () => {
+			const existing = await ItemRepository.findByUrl(url);
+			if (existing) {
+				throw new Error("This link is already in your corner.");
+			}
+
+			const record: Item = {
+				id: crypto.randomUUID(),
+				...parsedData,
+				url,
+				createdAt: now,
+				updatedAt: now,
+			};
+			await db.items.put(record);
+		});
+
 		setHasDataHint(true);
 	},
 
@@ -101,11 +111,20 @@ export const ItemRepository = {
 			...safeUpdates
 		} = parsedData as Partial<Item>;
 
-		const updateRecord = {
-			...safeUpdates,
-			updatedAt: Date.now(),
-		};
-		await db.items.update(id, updateRecord);
+		await db.transaction("rw", db.items, async () => {
+			if (safeUpdates.url) {
+				const existing = await ItemRepository.findByUrl(safeUpdates.url);
+				if (existing && existing.id !== id) {
+					throw new Error("This link is already in your corner.");
+				}
+			}
+
+			const updateRecord = {
+				...safeUpdates,
+				updatedAt: Date.now(),
+			};
+			await db.items.update(id, updateRecord);
+		});
 	},
 
 	async delete(id: string): Promise<void> {

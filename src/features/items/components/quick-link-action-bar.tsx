@@ -99,8 +99,18 @@ export function QuickLinkActionBar() {
 		<form
 			onSubmit={handleSubmit}
 			noValidate
+			role={!isExpanded ? "button" : undefined}
+			tabIndex={!isExpanded ? 0 : undefined}
+			aria-label={!isExpanded ? "Expand quick link bar" : undefined}
 			onClick={() => {
 				if (!isExpanded) {
+					setIsExpanded(true);
+					setTimeout(() => inputRef.current?.focus(), 50);
+				}
+			}}
+			onKeyDown={(e) => {
+				if (!isExpanded && (e.key === "Enter" || e.key === " ")) {
+					e.preventDefault();
 					setIsExpanded(true);
 					setTimeout(() => inputRef.current?.focus(), 50);
 				}
@@ -109,7 +119,7 @@ export function QuickLinkActionBar() {
 				"bg-card/80 backdrop-blur-md text-card-foreground shadow-lg border border-border flex items-center gap-3 mx-auto transition-all duration-300 animate-in slide-in-from-bottom-10 fade-in",
 				isExpanded
 					? "rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-1.5 pr-2 w-full max-w-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background"
-					: "rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-2 w-13 cursor-pointer hover:bg-card/90 hover:scale-105",
+					: "rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-2 w-13 cursor-pointer hover:bg-card/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
 			)}
 		>
 			<div className="w-9 h-9 shrink-0 bg-muted/30 rounded-full flex items-center justify-center relative overflow-hidden transition-colors">

@@ -21,7 +21,10 @@
 - 🐛 Fixed Sulo incorrectly cheering when deleting items by introducing a `hideReaction` toast option.
 - 🐛 Improved duplicate link detection by fuzzy-matching URLs to ignore `www.` prefixes and trailing slashes.
 - 🐛 Fixed a bug where the site title and description were not correctly saved for new items.
+- 🐛 Fixed `ItemRepository` to preserve custom ports when normalizing URLs for duplicate detection, and enforced uniqueness atomically during database transactions.
+- 🐛 Fixed an issue in `ItemForm` where explicitly clearing the title or description would incorrectly revert to the original metadata upon save.
 - 💄 Updated item cards to use a sleek monospace font for URLs.
+- ♿ Improved keyboard accessibility for the collapsed Quick Link Action Bar (FAB) to support focus and Enter/Space activation.
 
 ---
 

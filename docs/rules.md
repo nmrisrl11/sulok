@@ -171,6 +171,7 @@ src/
 
 - All CRUD operations go through Dexie.js via the aforementioned Repositories.
 - Wrap multi-step operations in Dexie transactions inside the repository methods.
+- **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.
 - Validate all input with Zod before writing to the database.
 
 ### Import/Export

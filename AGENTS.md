@@ -88,6 +88,7 @@ sulok/
 - Use `cn()` utility for conditional class merging.
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
 - **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
+- **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.
 - **Strict TypeScript:** The project strictly enforces `@typescript-eslint/no-explicit-any`. NEVER use `any`. Use `unknown` and type guard it if necessary.
 - **React Imports:** Always use named imports for React hooks (e.g., `import { useState, useEffect } from "react";`) rather than namespace imports (`React.useState`). This ensures consistency across the codebase.
 - **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).

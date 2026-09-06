@@ -88,8 +88,8 @@ export function ItemForm({
 		if (isPending) return;
 		onSubmit({
 			...data,
-			title: getValues("title") || metadata?.title || "",
-			description: getValues("description") || metadata?.description || "",
+			title: getValues("title") ?? metadata?.title ?? "",
+			description: getValues("description") ?? metadata?.description ?? "",
 		});
 	};
 
