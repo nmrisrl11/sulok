@@ -7,8 +7,11 @@
 
 ## Unreleased
 
+- ✨ Added Data Import/Export functionality with JSON, CSV, and TXT support (including human-readable dates).
+- ✨ Added a global Settings Configuration Sheet.
 - ✨ Switched UI font to Manrope for improved optical alignment and cleaner metrics.
 - ✨ Added Action Bar with Search and Sort controls to the Home page.
+- 🔧 Replaced "links" terminology with "items" across the application to consistently reflect the product's branding.
 - 🔧 Replaced native WebKit search cancel button with a custom branded clear button.
 - 🐛 Fixed "Select All" checkbox to accurately select only the currently visible items when search filters are active.
 - ⚡ Optimized initial load performance (LCP) and fixed layout shifts.

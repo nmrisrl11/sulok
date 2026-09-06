@@ -40,8 +40,8 @@ The project is currently in the **core features implementation phase**.
 
 1. Implement folder CRUD (post-MVP)
 2. Implement item tags, categories, and filter capabilities.
-3. Hook up Import/Export JSON functionality.
-4. Finalize overall UI polish for mobile responsiveness.
+3. Finalize overall UI polish for mobile responsiveness.
+4. Implement remaining Personalization settings (Sulo expressions and Sound FX).
 
 ---
 
@@ -89,7 +89,8 @@ The project is currently in the **core features implementation phase**.
 - [x] Responsive item action menus (desktop hover vs mobile dropdown)
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
-- [ ] Import/Export JSON
+- [x] Global Settings Sheet (Configuration)
+- [x] Import/Export Data (JSON, CSV, TXT)
 - [x] Responsive/mobile UI
 - [ ] PWA/offline support
 

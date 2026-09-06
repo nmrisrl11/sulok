@@ -1,7 +1,10 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { SettingsSheet } from "@/features/settings/components/settings-sheet";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
+import { SettingsIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export function Header() {
@@ -11,7 +14,7 @@ export function Header() {
 	return (
 		<header className="flex items-center justify-between p-4 md:py-6">
 			<SulokLogo />
-			<nav className="flex items-center gap-2 sm:gap-6">
+			<nav className="flex items-center gap-2 sm:gap-4">
 				<div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 rounded-full p-1 shadow-inner">
 					<NavLink
 						to="/about"
@@ -44,7 +47,15 @@ export function Header() {
 						Updates
 					</NavLink>
 				</div>
-				<ModeToggle />
+				<div className="flex items-center gap-1">
+					<ModeToggle />
+					<SettingsSheet>
+						<Button variant="ghost" size="icon" className="rounded-full">
+							<SettingsIcon className="w-5 h-5" />
+							<span className="sr-only">Settings</span>
+						</Button>
+					</SettingsSheet>
+				</div>
 			</nav>
 		</header>
 	);

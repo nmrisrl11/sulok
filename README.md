@@ -38,7 +38,7 @@ Sulok is built on a **local-first architecture**.
 - **Browser Storage:** Folders and items are saved locally on your device using IndexedDB, while theme and settings use localStorage.
 - **External Requests:** The app fetches link metadata (via `api.ogfetch.com`) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
 
-_Note: Device synchronization and Import/Export capabilities are planned for future releases to help you securely move your data between devices._
+_Note: Device synchronization is planned for future releases to help you securely move your data between devices._
 
 ---
 
@@ -159,7 +159,6 @@ We are currently focused on completing Phase 1 of our roadmap. Future plans incl
 
 - Drag-and-drop folder organization
 - Advanced search, sorting, and tag filtering
-- Import/Export functionality via JSON
 - Full Progressive Web App (PWA) installation support
 - Chrome Extension for quick-saving
 - Peer-to-peer (WebRTC) device synchronization without a backend
