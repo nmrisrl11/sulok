@@ -153,10 +153,10 @@ Minimal shadows. Prefer border/background differentiation.
 
 ### Quick Link Action Bar
 
-- Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
-- Uses a glassmorphic background (`bg-card/80 backdrop-blur-md`), elevated with shadow and border.
-- Minimal input field focused on quickly pasting and previewing URLs.
-- Features a subtle `<kbd>` shortcut badge (Ctrl/Cmd V) for discoverability of global paste functionality.
+- Renders by default as a compact, floating circular button (FAB) at the `bottom-center` showing only the Sulo mascot, minimizing visual clutter.
+- Expands into a full glassmorphic pill-shaped input bar (`bg-card/80 backdrop-blur-md`) when clicked, on shortcut (`Ctrl+K`), or on global paste (`Ctrl+V`).
+- Collapses back into a button when focus is lost and the input is empty.
+- Features a subtle `<kbd>` shortcut badge for discoverability.
 - Integrates the Sulo mascot to provide interactive contextual feedback (e.g., sleeping, attentive, confused).
 
 ### Empty States

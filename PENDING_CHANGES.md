@@ -7,6 +7,7 @@
 
 ## Unreleased
 
+- ✨ Made the Quick Link Action Bar an expandable Floating Action Button (FAB) to reduce visual clutter. Expands via click, `Ctrl+K`, or `Ctrl+V`.
 - ✨ Added Data Import/Export functionality with JSON, CSV, and TXT support (including human-readable dates).
 - ✨ Added a global Settings Configuration Sheet.
 - ✨ Switched UI font to Manrope for improved optical alignment and cleaner metrics.
@@ -17,6 +18,10 @@
 - ⚡ Optimized initial load performance (LCP) and fixed layout shifts.
 - 🔧 Improved UX by hiding search and sort controls when the library is completely empty.
 - 🌐 Added SEO and Agentic Browsing foundations (`robots.txt`, `sitemap.xml`, and `llms.txt`).
+- 🐛 Fixed Sulo incorrectly cheering when deleting items by introducing a `hideReaction` toast option.
+- 🐛 Improved duplicate link detection by fuzzy-matching URLs to ignore `www.` prefixes and trailing slashes.
+- 🐛 Fixed a bug where the site title and description were not correctly saved for new items.
+- 💄 Updated item cards to use a sleek monospace font for URLs.
 
 ---
 

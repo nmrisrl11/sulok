@@ -43,7 +43,7 @@ export function ItemCard({ item }: { item: Item }) {
 				try {
 					await deleteItem(item.id);
 					useLogoStore.getState().setTemporaryExpression("unimpressed");
-					notify.success("Removed from your corner", { id: "item-deleted" });
+					notify.success("Removed from your corner", { id: "item-deleted", hideReaction: true });
 				} catch (error) {
 					console.error("Failed to delete item", error);
 					notify.error("Unable to remove link", { id: "item-delete-fail" });
@@ -81,7 +81,9 @@ export function ItemCard({ item }: { item: Item }) {
 							{titleToDisplay}
 						</span>
 						{item.title && item.title !== item.url && (
-							<span className="text-muted-foreground truncate text-xs">{item.url}</span>
+							<span className="text-muted-foreground truncate text-[11px] font-mono tracking-tight">
+								{item.url}
+							</span>
 						)}
 					</div>
 				</a>

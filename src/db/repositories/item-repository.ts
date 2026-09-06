@@ -52,6 +52,26 @@ export const ItemRepository = {
 		return await db.items.get(id);
 	},
 
+	async findByUrl(url: string): Promise<Item | undefined> {
+		const exactMatch = await db.items.where("url").equals(url).first();
+		if (exactMatch) return exactMatch;
+
+		const normalize = (u: string) => {
+			try {
+				const parsed = new URL(u);
+				return (
+					parsed.hostname.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search
+				);
+			} catch {
+				return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+			}
+		};
+
+		const target = normalize(url);
+		const allItems = await db.items.toArray();
+		return allItems.find((item) => normalize(item.url) === target);
+	},
+
 	async count(): Promise<number> {
 		return await db.items.count();
 	},

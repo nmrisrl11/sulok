@@ -23,6 +23,7 @@ export function BulkActionBar() {
 					useLogoStore.getState().setTemporaryExpression("unimpressed");
 					notify.success(`Removed ${selectedIds.length} items from your corner`, {
 						id: "items-bulk-deleted",
+						hideReaction: true,
 					});
 				} catch (error) {
 					console.error("Failed to delete items", error);

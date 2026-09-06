@@ -16,7 +16,7 @@ import type { ParsedImportData } from "../utils/import-utils";
 
 interface ImportPreviewDialogProps {
 	isOpen: boolean;
-	onClose: () => void;
+	onClose: (success?: boolean) => void;
 	data: ParsedImportData;
 }
 
@@ -47,10 +47,10 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 
 			if (failCount === 0) {
 				notify.success(`Successfully imported ${successCount} items`);
-				onClose();
+				onClose(true);
 			} else if (successCount > 0) {
 				notify.warning(`Imported ${successCount} items, but ${failCount} failed.`);
-				onClose();
+				onClose(true);
 			} else {
 				notify.error(`Failed to import all ${failCount} items.`);
 			}
@@ -161,7 +161,7 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 				</div>
 
 				<DialogFooter className="p-4 border-t m-0">
-					<Button variant="ghost" onClick={onClose} disabled={isImporting}>
+					<Button variant="ghost" onClick={() => onClose()} disabled={isImporting}>
 						Cancel
 					</Button>
 					<Button onClick={handleConfirm} disabled={isImporting || itemsToImport.length === 0}>
