@@ -13,7 +13,7 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 				<SuloMascot expression="sad" />
 			</div>
 			<div className="flex flex-col gap-2">
-				<h1 className="font-sans text-3xl font-bold">Uh oh, Sulo tripped!</h1>
+				<h1 className="font-heading text-3xl font-bold">Uh oh, Sulo tripped!</h1>
 				<p className="text-muted-foreground max-w-sm mx-auto">
 					{isDev && (error as Error)?.message
 						? (error as Error).message

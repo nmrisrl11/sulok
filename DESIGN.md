@@ -46,26 +46,23 @@ Five colors only. No additions without explicit approval.
 | --------------- | ---------- | ------- | ------- | -------- |
 | Display         | Fraunces   | 500–700 | 24–32px | -0.02em  |
 | Heading (H1)    | Fraunces   | 600     | 20–24px | -0.01em  |
-| Heading (H2)    | Geist Sans | 600     | 16–18px | -0.01em  |
-| Body            | Geist Sans | 400     | 14px    | 0        |
-| Small / Caption | Geist Sans | 400     | 12px    | 0.01em   |
+| Heading (H2)    | Manrope    | 600     | 16–18px | -0.01em  |
+| Body            | Manrope    | 400     | 14px    | 0        |
+| Small / Caption | Manrope    | 400     | 12px    | 0.01em   |
 | Monospace / URL | Geist Mono | 400     | 13px    | 0        |
+
+### Font Strategy
+
+- **`--font-sans` (Manrope):** The global body/UI font applied to `html`. A modern, clean geometric sans-serif that ensures flawless optical alignment in UI components while maintaining enough warmth to pair beautifully with Fraunces. Used for all body text, labels, buttons, inputs, and general interface copy.
+- **`--font-heading` (Fraunces):** Reserved for display headings, brand marks, and page titles. Applied via the `font-heading` utility class.
+- **`--font-mono` (Geist Mono):** Used for URLs, code, and version strings.
 
 ### Font Loading
 
 ```css
-/* Geist Sans & Mono — self-hosted from Vercel */
-@font-face {
-	font-family: "Geist Sans";
-	src: url("/fonts/geist-sans.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Geist Mono";
-	src: url("/fonts/geist-mono.woff2") format("woff2");
-}
-
-/* Fraunces — Google Fonts / @fontsource-variable/fraunces */
+/* Manrope — @fontsource-variable/manrope */
+/* Fraunces — @fontsource-variable/fraunces */
+/* All self-hosted via fontsource for offline/PWA support */
 ```
 
 ---

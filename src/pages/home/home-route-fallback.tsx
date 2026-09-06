@@ -11,7 +11,7 @@ export function HomeRouteFallback() {
 		<main className="flex flex-col gap-10">
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2 sm:px-0">
-					<h2 className="text-foreground font-sans text-2xl font-bold tracking-tight">
+					<h2 className="text-foreground font-heading text-2xl font-bold tracking-tight">
 						Your Corner
 					</h2>
 				</div>

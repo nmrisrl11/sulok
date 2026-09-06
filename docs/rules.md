@@ -41,7 +41,7 @@
 ### Visual
 
 - Follow the color palette defined in `DESIGN.md` (via `index.css`).
-- Use Fraunces for display fonts and Geist for UI.
+- Use Fraunces for display fonts and Manrope for UI.
 - Components must use shadcn/ui primitives where available.
 - Custom components should follow shadcn/ui conventions (cn utility, cva variants).
 - No decorative elements, illustrations, or gradients in the general UI (the Sulo mascot is an exception, used for contextual feedback, empty states, and error boundaries).
