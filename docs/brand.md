@@ -104,7 +104,7 @@ Not:
 ### Typography
 
 - **Display / Branding:** Fraunces (Google Fonts) — warm modern serif
-- **UI / Body:** Geist Sans — clean interface font
+- **UI / Body:** Manrope — modern geometric sans, clean UI metrics
 - **Monospace:** Geist Mono — URLs, code
 
 ### Logo

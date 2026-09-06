@@ -7,7 +7,7 @@ export function UpdatesPage() {
 			{/* Header Section */}
 			<section className="flex flex-col gap-3 text-center sm:text-left w-full items-center sm:items-start">
 				<h1
-					className="font-sans text-4xl sm:text-5xl font-extrabold italic"
+					className="font-heading text-4xl sm:text-5xl font-extrabold italic"
 					style={{ fontVariationSettings: "'WONK' 0, 'SOFT' 0" }}
 				>
 					Updates
@@ -34,7 +34,9 @@ export function UpdatesPage() {
 
 						{/* Right Column: Changes */}
 						<div className="md:w-3/4 flex flex-col gap-10">
-							{release.title && <h3 className="text-2xl font-bold font-sans">{release.title}</h3>}
+							{release.title && (
+								<h3 className="text-2xl font-bold font-heading">{release.title}</h3>
+							)}
 
 							<div className="flex flex-col gap-10">
 								{release.changes.map((changeGroup) => (

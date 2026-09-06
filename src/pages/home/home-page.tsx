@@ -20,6 +20,7 @@ export function HomePage({ className }: { className?: string }) {
 	const [dir] = useQueryState("dir", parseAsStringEnum(["asc", "desc"]).withDefault("desc"));
 
 	const items = useLiveQuery(() => ItemRepository.query({ q, sort, dir }), [q, sort, dir]);
+	const totalItems = useLiveQuery(() => ItemRepository.count(), []);
 	const { selectedIds, selectAll, clearSelection } = useItemStore();
 
 	// Clear selection when navigating away from home page
@@ -29,11 +30,13 @@ export function HomePage({ className }: { className?: string }) {
 		};
 	}, [clearSelection]);
 
-	if (items === undefined) {
+	if (items === undefined || totalItems === undefined) {
 		return <HomeRouteFallback />;
 	}
 
 	const hasItems = items.length > 0;
+	// When clearing search, q becomes "" instantly but items might still be [] for a split second.
+	const isTransitioning = !hasItems && !q && totalItems > 0;
 	const isAllSelected = hasItems && items.every((item) => selectedIds.includes(item.id));
 
 	const handleSelectAllChange = (checked: boolean | string) => {
@@ -49,7 +52,7 @@ export function HomePage({ className }: { className?: string }) {
 			{/* Item List Section */}
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2 sm:px-0">
-					<h2 className="text-foreground font-sans text-2xl font-bold tracking-tight">
+					<h2 className="text-foreground font-heading text-2xl font-bold tracking-tight">
 						Your Corner
 					</h2>
 					{(hasItems || q) && <ItemControls />}
@@ -79,8 +82,16 @@ export function HomePage({ className }: { className?: string }) {
 
 				<div className="flex flex-col gap-2">
 					<ErrorBoundary>
-						{!hasItems ? (
-							<ItemEmptyState />
+						{isTransitioning ? null : !hasItems ? (
+							totalItems === 0 ? (
+								<ItemEmptyState />
+							) : (
+								<div className="py-12 text-center">
+									<p className="text-sm text-muted-foreground italic">
+										No items found matching your criteria.
+									</p>
+								</div>
+							)
 						) : (
 							items.map((item) => <ItemCard key={item.id} item={item} />)
 						)}

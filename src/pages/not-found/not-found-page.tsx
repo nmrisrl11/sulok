@@ -9,7 +9,7 @@ export function NotFoundPage() {
 				<SuloMascot expression="confused" />
 			</div>
 			<div className="flex flex-col gap-2">
-				<h1 className="font-sans text-3xl font-bold">That corner doesn't exist.</h1>
+				<h1 className="font-heading text-3xl font-bold">That corner doesn't exist.</h1>
 				<p className="text-muted-foreground max-w-sm mx-auto">
 					The page you're looking for isn't here or might have been moved.
 				</p>

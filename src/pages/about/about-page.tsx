@@ -7,7 +7,7 @@ export function AboutPage() {
 		<div className="flex flex-col gap-10 w-full max-w-2xl mx-auto py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
 			<section className="flex flex-col gap-4 text-center sm:text-left w-full">
 				<h1
-					className="font-sans text-4xl font-extrabold italic"
+					className="font-heading text-4xl font-extrabold italic"
 					style={{ fontVariationSettings: "'WONK' 0, 'SOFT' 0" }}
 				>
 					{APP_INFO.name}
@@ -19,7 +19,7 @@ export function AboutPage() {
 
 			<section className="flex flex-col gap-8">
 				<div className="flex flex-col gap-3">
-					<h2 className="text-lg font-bold font-sans">What does "Sulok" mean?</h2>
+					<h2 className="text-lg font-bold font-heading">What does "Sulok" mean?</h2>
 					<div className="bg-card border border-border p-5 rounded-lg flex flex-col gap-2">
 						<p className="text-foreground">
 							<strong>{APP_INFO.name}</strong>{" "}
@@ -33,7 +33,7 @@ export function AboutPage() {
 				</div>
 
 				<div className="flex flex-col gap-3">
-					<h2 className="text-lg font-bold font-sans">About the product</h2>
+					<h2 className="text-lg font-bold font-heading">About the product</h2>
 					<p className="text-muted-foreground leading-relaxed">{APP_INFO.shortDescription}</p>
 					<p className="text-muted-foreground leading-relaxed">
 						It's designed to be a quiet, local-first space where you can safely store references,
