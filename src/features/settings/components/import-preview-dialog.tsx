@@ -40,10 +40,20 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 					description: item.description,
 				}),
 			);
-			await Promise.all(importPromises);
+			const results = await Promise.allSettled(importPromises);
 
-			notify.success(`Successfully imported ${itemsToImport.length} items`);
-			onClose();
+			const successCount = results.filter((r) => r.status === "fulfilled").length;
+			const failCount = results.length - successCount;
+
+			if (failCount === 0) {
+				notify.success(`Successfully imported ${successCount} items`);
+				onClose();
+			} else if (successCount > 0) {
+				notify.warning(`Imported ${successCount} items, but ${failCount} failed.`);
+				onClose();
+			} else {
+				notify.error(`Failed to import all ${failCount} items.`);
+			}
 		} catch {
 			notify.error("An error occurred during import.");
 		} finally {

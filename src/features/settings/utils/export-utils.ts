@@ -59,8 +59,12 @@ export async function exportData(format: "json" | "csv" | "txt") {
 					if (header === "createdAt" || header === "updatedAt") {
 						val = val ? formatDate(val as number) || "" : "";
 					}
-					// Escape quotes and handle undefined/null
-					const strVal = val === undefined || val === null ? "" : String(val).replace(/"/g, '""');
+					// Escape quotes, handle undefined/null, and protect against CSV injection
+					let strVal = val === undefined || val === null ? "" : String(val);
+					if (/^\s*[=+\-@]/.test(strVal)) {
+						strVal = "'" + strVal;
+					}
+					strVal = strVal.replace(/"/g, '""');
 					return `"${strVal}"`;
 				})
 				.join(",");

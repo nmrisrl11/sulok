@@ -47,6 +47,8 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 
 						if (isDuplicate) {
 							duplicateCount++;
+						} else {
+							existingUrls.add(urlLower);
 						}
 
 						validItems.push({
@@ -69,24 +71,89 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 }
 
 function parseCSV(content: string): unknown[] {
-	const lines = content
-		.split("\n")
-		.map((l) => l.trim())
-		.filter(Boolean);
-	if (lines.length < 2) return [];
+	const result: Record<string, unknown>[] = [];
 
-	const headers = lines[0].split(",").map((h) => h.replace(/^"|"$/g, "").trim());
-	const result = [];
+	let pos = 0;
 
-	for (let i = 1; i < lines.length; i++) {
+	const nextToken = (): { value: string; isEndOfRow: boolean; isEOF: boolean } => {
+		if (pos >= content.length) return { value: "", isEndOfRow: true, isEOF: true };
+
+		let value = "";
+		let inQuotes = false;
+
+		while (pos < content.length) {
+			const char = content[pos];
+
+			if (inQuotes) {
+				if (char === '"') {
+					if (pos + 1 < content.length && content[pos + 1] === '"') {
+						value += '"';
+						pos += 2;
+					} else {
+						inQuotes = false;
+						pos++;
+					}
+				} else {
+					value += char;
+					pos++;
+				}
+			} else {
+				if (char === '"') {
+					inQuotes = true;
+					pos++;
+				} else if (char === ",") {
+					pos++;
+					return { value, isEndOfRow: false, isEOF: false };
+				} else if (char === "\n") {
+					pos++;
+					return { value, isEndOfRow: true, isEOF: false };
+				} else if (char === "\r") {
+					pos++;
+					if (pos < content.length && content[pos] === "\n") {
+						pos++;
+					}
+					return { value, isEndOfRow: true, isEOF: false };
+				} else {
+					value += char;
+					pos++;
+				}
+			}
+		}
+
+		return { value, isEndOfRow: true, isEOF: true };
+	};
+
+	let row: string[] = [];
+	let eof = false;
+	const rows: string[][] = [];
+
+	while (!eof) {
+		const token = nextToken();
+		row.push(token.value);
+		if (token.isEndOfRow) {
+			if (!(token.isEOF && row.length === 1 && row[0] === "")) {
+				rows.push(row);
+			}
+			row = [];
+		}
+		eof = token.isEOF;
+	}
+
+	if (rows.length < 2) return [];
+
+	const headers = rows[0].map((h) => h.trim());
+
+	for (let i = 1; i < rows.length; i++) {
 		const obj: Record<string, unknown> = {};
-		// Regex to handle CSV splitting respecting quotes
-		const matchResult = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-		const row = matchResult || [];
+		const currentRow = rows[i];
 
 		headers.forEach((header, index) => {
-			let val = row[index] || "";
-			val = val.replace(/^"|"$/g, "").replace(/""/g, '"').trim();
+			let val = currentRow[index] || "";
+			val = val.trim();
+
+			if (/^'[=+\-@]/.test(val)) {
+				val = val.substring(1);
+			}
 
 			if (header === "createdAt" || header === "updatedAt") {
 				if (val !== "") {
