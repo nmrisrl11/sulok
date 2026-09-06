@@ -46,7 +46,7 @@ Five colors only. No additions without explicit approval.
 | --------------- | ---------- | ------- | ------- | -------- |
 | Display         | Fraunces   | 500–700 | 24–32px | -0.02em  |
 | Heading (H1)    | Fraunces   | 600     | 20–24px | -0.01em  |
-| Heading (H2)    | Manrope    | 600     | 16–18px | -0.01em  |
+| Heading (H2)    | Fraunces   | 600     | 16–18px | -0.01em  |
 | Body            | Manrope    | 400     | 14px    | 0        |
 | Small / Caption | Manrope    | 400     | 12px    | 0.01em   |
 | Monospace / URL | Geist Mono | 400     | 13px    | 0        |
