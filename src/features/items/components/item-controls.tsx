@@ -36,6 +36,7 @@ export function ItemControls() {
 			<div className="relative w-full sm:w-64 flex-1">
 				<SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 				<Input
+					id="search-item"
 					type="search"
 					placeholder="Search..."
 					className="pl-9 pr-9 h-9 rounded-full bg-card corner-squircle"
