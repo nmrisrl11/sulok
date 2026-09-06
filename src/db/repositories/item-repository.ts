@@ -52,21 +52,51 @@ export const ItemRepository = {
 		return await db.items.get(id);
 	},
 
+	async findByUrl(url: string): Promise<Item | undefined> {
+		const exactMatch = await db.items.where("url").equals(url).first();
+		if (exactMatch) return exactMatch;
+
+		const normalize = (u: string) => {
+			try {
+				const parsed = new URL(u);
+				return (
+					parsed.host.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search
+				);
+			} catch {
+				return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+			}
+		};
+
+		const target = normalize(url);
+		const allItems = await db.items.toArray();
+		return allItems.find((item) => normalize(item.url) === target);
+	},
+
 	async count(): Promise<number> {
 		return await db.items.count();
 	},
 
 	async save(item: Omit<Item, "id" | "createdAt" | "updatedAt">): Promise<void> {
 		const parsedData = itemSchema.parse(item);
+		const url = parsedData.url as string;
 		const now = Date.now();
-		const record: Item = {
-			id: crypto.randomUUID(),
-			...parsedData,
-			url: parsedData.url as string,
-			createdAt: now,
-			updatedAt: now,
-		};
-		await db.items.put(record);
+
+		await db.transaction("rw", db.items, async () => {
+			const existing = await ItemRepository.findByUrl(url);
+			if (existing) {
+				throw new Error("This link is already in your corner.");
+			}
+
+			const record: Item = {
+				id: crypto.randomUUID(),
+				...parsedData,
+				url,
+				createdAt: now,
+				updatedAt: now,
+			};
+			await db.items.put(record);
+		});
+
 		setHasDataHint(true);
 	},
 
@@ -81,11 +111,20 @@ export const ItemRepository = {
 			...safeUpdates
 		} = parsedData as Partial<Item>;
 
-		const updateRecord = {
-			...safeUpdates,
-			updatedAt: Date.now(),
-		};
-		await db.items.update(id, updateRecord);
+		await db.transaction("rw", db.items, async () => {
+			if (safeUpdates.url) {
+				const existing = await ItemRepository.findByUrl(safeUpdates.url);
+				if (existing && existing.id !== id) {
+					throw new Error("This link is already in your corner.");
+				}
+			}
+
+			const updateRecord = {
+				...safeUpdates,
+				updatedAt: Date.now(),
+			};
+			await db.items.update(id, updateRecord);
+		});
 	},
 
 	async delete(id: string): Promise<void> {

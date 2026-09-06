@@ -42,6 +42,7 @@ export function ItemControls() {
 					className="pl-9 pr-9 h-9 rounded-full bg-card corner-squircle"
 					value={q}
 					onChange={(e) => setQ(e.target.value || null)}
+					autoComplete="off"
 				/>
 				{q && (
 					<button

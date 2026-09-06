@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { APP_INFO } from "@/constants/app-info";
+import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
 import type { ItemFormValues } from "@/schemas/item.schema";
 import { useItemStore } from "@/stores/item-store";
@@ -36,6 +37,14 @@ export function ItemDialog() {
 		setIsSubmitting(true);
 		setSubmitError(null);
 		try {
+			// Check for duplicates
+			const existingItem = await ItemRepository.findByUrl(data.url);
+			if (existingItem && (!editingItem || existingItem.id !== editingItem.id)) {
+				setSubmitError("This link is already in your corner.");
+				setIsSubmitting(false);
+				return; // Stop submission
+			}
+
 			if (editingItem) {
 				await updateItem(editingItem.id, data);
 				notify.success("Changes saved", { id: "item-updated" });

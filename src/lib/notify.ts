@@ -10,6 +10,7 @@ type ToastOptions = {
 		label: string;
 		onClick: () => void;
 	};
+	hideReaction?: boolean;
 };
 
 type PromiseOptions<T> = {
@@ -26,19 +27,27 @@ type PromiseOptions<T> = {
  */
 export const notify = {
 	success: (message: string, options?: ToastOptions) => {
-		useLogoStore.getState().setReaction("happy", getRandomWhisper("positive"));
+		if (!options?.hideReaction) {
+			useLogoStore.getState().setReaction("happy", getRandomWhisper("positive"));
+		}
 		return gooeyToast.success(message, { ...options, showTimestamp: false });
 	},
 	error: (message: string, options?: ToastOptions) => {
-		useLogoStore.getState().setReaction("sad", getRandomWhisper("negative"));
+		if (!options?.hideReaction) {
+			useLogoStore.getState().setReaction("sad", getRandomWhisper("negative"));
+		}
 		return gooeyToast.error(message, { ...options, showTimestamp: false });
 	},
 	warning: (message: string, options?: ToastOptions) => {
-		useLogoStore.getState().setReaction("surprised", getRandomWhisper("warning"));
+		if (!options?.hideReaction) {
+			useLogoStore.getState().setReaction("surprised", getRandomWhisper("warning"));
+		}
 		return gooeyToast.warning(message, { ...options, showTimestamp: false });
 	},
 	info: (message: string, options?: ToastOptions) => {
-		useLogoStore.getState().setReaction("curious", getRandomWhisper("info"));
+		if (!options?.hideReaction) {
+			useLogoStore.getState().setReaction("curious", getRandomWhisper("info"));
+		}
 		return gooeyToast.info(message, { ...options, showTimestamp: false });
 	},
 	promise: <T>(promise: Promise<T>, options: PromiseOptions<T>) => {

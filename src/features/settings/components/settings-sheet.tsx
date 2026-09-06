@@ -183,8 +183,11 @@ export function SettingsSheet({ children }: { children: React.ReactNode }) {
 			{parsedData && (
 				<ImportPreviewDialog
 					isOpen={isImportPreviewOpen}
-					onClose={() => {
+					onClose={(success) => {
 						setIsImportPreviewOpen(false);
+						if (success) {
+							setIsOpen(false);
+						}
 						setTimeout(() => setParsedData(null), 300);
 					}}
 					data={parsedData}

@@ -31,6 +31,7 @@ export function ItemForm({
 		register,
 		handleSubmit,
 		setValue,
+		getValues,
 		control,
 		formState: { errors },
 	} = useForm<ItemFormValues>({
@@ -85,7 +86,11 @@ export function ItemForm({
 
 	const handleFormSubmit = (data: ItemFormValues) => {
 		if (isPending) return;
-		onSubmit(data);
+		onSubmit({
+			...data,
+			title: getValues("title") ?? metadata?.title ?? "",
+			description: getValues("description") ?? metadata?.description ?? "",
+		});
 	};
 
 	return (
@@ -109,6 +114,9 @@ export function ItemForm({
 						<p className="text-sm font-medium text-destructive">{errors.url.message}</p>
 					)}
 				</div>
+
+				<input type="hidden" {...register("title")} />
+				<input type="hidden" {...register("description")} />
 
 				<div className="flex flex-col gap-2">
 					<h3 className="text-muted-foreground font-medium text-sm leading-none">Preview</h3>
