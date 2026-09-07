@@ -83,11 +83,33 @@ export function useMetadata(url: string, enabled: boolean = true) {
 
 				if (parsed.success) {
 					const resultData = parsed.data;
+
+					// Normalize relative URLs
+					const sourceUrl = new URL(url);
+					sourceUrl.username = "";
+					sourceUrl.password = "";
+					const baseUrl = sourceUrl.toString();
+
+					const normalizeUrl = (u?: string | null) => {
+						if (!u) return undefined;
+						if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("data:")) {
+							return u;
+						}
+						if (u.startsWith("//")) {
+							return `https:${u}`;
+						}
+						try {
+							return new URL(u, baseUrl).toString();
+						} catch {
+							return u;
+						}
+					};
+
 					const parsedMetadata: URLMetadata = {
 						title: resultData.title || undefined,
 						description: resultData.description || undefined,
-						image: resultData.image || undefined,
-						logo: resultData.favicon || undefined,
+						image: normalizeUrl(resultData.image),
+						logo: normalizeUrl(resultData.favicon),
 						url: resultData.url || undefined,
 					};
 

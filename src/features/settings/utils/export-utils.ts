@@ -51,7 +51,16 @@ export async function exportData(format: "json" | "csv" | "txt") {
 		content = JSON.stringify(formattedItems, null, 2);
 		mimeType = "application/json";
 	} else if (format === "csv") {
-		const headers = ["id", "url", "title", "description", "createdAt", "updatedAt"];
+		const headers = [
+			"id",
+			"url",
+			"title",
+			"description",
+			"image",
+			"logo",
+			"createdAt",
+			"updatedAt",
+		];
 		const rows = items.map((item) => {
 			return headers
 				.map((header) => {
@@ -77,6 +86,8 @@ export async function exportData(format: "json" | "csv" | "txt") {
 				let block = `ID: ${item.id}\nURL: ${item.url}`;
 				if (item.title) block += `\nTitle: ${item.title}`;
 				if (item.description) block += `\nDescription: ${item.description}`;
+				if (item.image) block += `\nImage: ${item.image}`;
+				if (item.logo) block += `\nLogo: ${item.logo}`;
 				if (item.createdAt) block += `\nCreatedAt: ${formatDate(item.createdAt)}`;
 				if (item.updatedAt) block += `\nUpdatedAt: ${formatDate(item.updatedAt)}`;
 				return block;

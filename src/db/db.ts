@@ -5,6 +5,8 @@ export interface Item {
 	url: string;
 	title?: string;
 	description?: string;
+	image?: string;
+	logo?: string;
 	createdAt: number;
 	updatedAt: number;
 }

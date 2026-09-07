@@ -194,6 +194,10 @@ function parseTXT(content: string): unknown[] {
 				obj.title = line.substring(7).trim();
 			} else if (lowerLine.startsWith("description: ")) {
 				obj.description = line.substring(13).trim();
+			} else if (lowerLine.startsWith("image: ")) {
+				obj.image = line.substring(7).trim();
+			} else if (lowerLine.startsWith("logo: ")) {
+				obj.logo = line.substring(6).trim();
 			} else if (lowerLine.startsWith("createdat: ")) {
 				obj.createdAt = line.substring(11).trim();
 			} else if (lowerLine.startsWith("updatedat: ")) {

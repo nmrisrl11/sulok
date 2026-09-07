@@ -18,6 +18,7 @@ interface ItemFormProps {
 	onCancel: () => void;
 	isSubmitting?: boolean;
 	submitError?: string | null;
+	isEditing?: boolean;
 }
 
 export function ItemForm({
@@ -26,6 +27,7 @@ export function ItemForm({
 	onCancel,
 	isSubmitting,
 	submitError,
+	isEditing = false,
 }: ItemFormProps) {
 	const {
 		register,
@@ -40,6 +42,8 @@ export function ItemForm({
 			url: defaultValues?.url || "",
 			title: defaultValues?.title || "",
 			description: defaultValues?.description || "",
+			image: defaultValues?.image || "",
+			logo: defaultValues?.logo || "",
 		},
 	});
 
@@ -57,30 +61,51 @@ export function ItemForm({
 		// ignore invalid URLs for redaction
 	}
 
-	// Fetch metadata if we have a URL to preview
-	const shouldFetch = fetchUrl.length > 3;
-	const { data: metadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
+	const currentIsUrlChanged = defaultValues?.url
+		? formatUrl(rawUrl) !== formatUrl(defaultValues.url)
+		: true;
+
+	const shouldSkipFetch = isEditing && !currentIsUrlChanged;
+
+	// Fetch metadata if we have a URL to preview AND it's a new or changed URL
+	const shouldFetch = fetchUrl.length > 3 && !shouldSkipFetch;
+	const { data: fetchedMetadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
+
+	// Use fetched metadata if URL changed or new item, otherwise use the existing data for preview
+	const metadata = !shouldSkipFetch
+		? fetchedMetadata
+		: {
+				title: defaultValues?.title,
+				description: defaultValues?.description,
+				image: defaultValues?.image,
+				logo: defaultValues?.logo,
+				url: defaultValues?.url,
+			};
 
 	// Auto-populate form fields when metadata is successfully fetched
 	useEffect(() => {
-		const currentIsUrlChanged = defaultValues?.url
-			? formatUrl(rawUrl) !== formatUrl(defaultValues.url)
-			: true;
-
 		if (rawUrl.trim() === "") {
 			setValue("title", "");
 			setValue("description", "");
-		} else if (!currentIsUrlChanged) {
+			setValue("image", "");
+			setValue("logo", "");
+		} else if (shouldSkipFetch) {
 			setValue("title", defaultValues?.title || "");
 			setValue("description", defaultValues?.description || "");
-		} else if (metadata) {
-			setValue("title", metadata.title || "");
-			setValue("description", metadata.description || "");
+			setValue("image", defaultValues?.image || "");
+			setValue("logo", defaultValues?.logo || "");
+		} else if (fetchedMetadata) {
+			setValue("title", fetchedMetadata.title || "");
+			setValue("description", fetchedMetadata.description || "");
+			setValue("image", fetchedMetadata.image || "");
+			setValue("logo", fetchedMetadata.logo || "");
 		} else if (error) {
 			setValue("title", "");
 			setValue("description", "");
+			setValue("image", "");
+			setValue("logo", "");
 		}
-	}, [metadata, rawUrl, error, defaultValues, setValue]);
+	}, [fetchedMetadata, rawUrl, error, defaultValues, setValue, shouldSkipFetch]);
 
 	const isPending = rawUrl !== debouncedUrl || loading;
 
@@ -88,8 +113,10 @@ export function ItemForm({
 		if (isPending) return;
 		onSubmit({
 			...data,
-			title: getValues("title") ?? metadata?.title ?? "",
-			description: getValues("description") ?? metadata?.description ?? "",
+			title: getValues("title") || metadata?.title || "",
+			description: getValues("description") || metadata?.description || "",
+			image: getValues("image") || metadata?.image || undefined,
+			logo: getValues("logo") || metadata?.logo || undefined,
 		});
 	};
 
@@ -117,6 +144,8 @@ export function ItemForm({
 
 				<input type="hidden" {...register("title")} />
 				<input type="hidden" {...register("description")} />
+				<input type="hidden" {...register("image")} />
+				<input type="hidden" {...register("logo")} />
 
 				<div className="flex flex-col gap-2">
 					<h3 className="text-muted-foreground font-medium text-sm leading-none">Preview</h3>

@@ -33,6 +33,8 @@ export const itemSchema = z.object({
 		.string()
 		.max(500, { message: "Description must be 500 characters or less" })
 		.optional(),
+	image: z.string().optional(),
+	logo: z.string().optional(),
 });
 
 export type ItemFormValues = z.infer<typeof itemSchema>;

@@ -80,6 +80,7 @@ export function ItemDialog() {
 
 				<ItemForm
 					defaultValues={activeItem || (activeUrl ? { url: activeUrl } : undefined)}
+					isEditing={!!activeItem}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialogOpen(false)}
 					isSubmitting={isSubmitting}

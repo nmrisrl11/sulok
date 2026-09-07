@@ -13,6 +13,7 @@
 - 💄 Redesigned the Data & Backup section with modern, premium cards for Export and Restore functionality.
 - ✨ Made the Quick Link Action Bar an expandable Floating Action Button (FAB) to reduce visual clutter. Expands via click, `Ctrl+K`, or `Ctrl+V`.
 - ✨ Added Data Import/Export functionality with JSON, CSV, and TXT support (including human-readable dates).
+- 🐛 Fixed Data Import/Export for CSV and TXT formats to correctly include, validate, and parse `image` and `logo` metadata.
 - ✨ Switched UI font to Manrope for improved optical alignment and cleaner metrics.
 - ✨ Added Action Bar with Search and Sort controls to the Home page.
 - 🔧 Replaced "links" terminology with "items" across the application to consistently reflect the product's branding.
@@ -22,6 +23,13 @@
 - 🔧 Improved UX by hiding search and sort controls when the library is completely empty.
 - 🌐 Added SEO and Agentic Browsing foundations (`robots.txt`, `sitemap.xml`, and `llms.txt`).
 - 🐛 Fixed Sulo incorrectly cheering when deleting items by introducing a `hideReaction` toast option.
+- ⚡ Optimized metadata fetching to use local cached data when editing existing items without URL changes, conserving API limits.
+- 🐛 Fixed a bug where new pre-filled links would falsely skip metadata fetching and display an "Unknown Title" preview.
+- 🐛 Fixed relative URL resolution in metadata fetcher to properly use the full source page URL as the base, preserving the source directory structure for paths like /images/cover.png.
+- 🐛 Fixed a bug where a newly provided logo would fail to render if a previous logo triggered an error state.
+- 🐛 Fixed missing/broken OG Image previews by normalizing relative URLs from the metadata fetcher.
+- ✨ Added support for storing favicon/logo and OG image metadata into the database for immediate rendering without waiting for Google S2 caching.
+- 🐛 Fixed `SiteFavicon` to gracefully fall back to Google's S2 service if the saved logo fails to load.
 - 🐛 Improved duplicate link detection by fuzzy-matching URLs to ignore `www.` prefixes and trailing slashes.
 - 🐛 Fixed a bug where the site title and description were not correctly saved for new items.
 - 🐛 Fixed `ItemRepository` to preserve custom ports when normalizing URLs for duplicate detection, and enforced uniqueness atomically during database transactions.
