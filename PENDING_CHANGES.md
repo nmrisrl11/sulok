@@ -7,9 +7,11 @@
 
 ## Unreleased
 
+- ✨ Added a dedicated Settings page with a tabbed layout, replacing the old Settings Sheet.
+- ✨ Added interactive UI sound effects (powered by cuelume), configurable in the Sound FX settings.
+- 💄 Redesigned the Data & Backup section with modern, premium cards for Export and Restore functionality.
 - ✨ Made the Quick Link Action Bar an expandable Floating Action Button (FAB) to reduce visual clutter. Expands via click, `Ctrl+K`, or `Ctrl+V`.
 - ✨ Added Data Import/Export functionality with JSON, CSV, and TXT support (including human-readable dates).
-- ✨ Added a global Settings Configuration Sheet.
 - ✨ Switched UI font to Manrope for improved optical alignment and cleaner metrics.
 - ✨ Added Action Bar with Search and Sort controls to the Home page.
 - 🔧 Replaced "links" terminology with "items" across the application to consistently reflect the product's branding.
@@ -25,6 +27,10 @@
 - 🐛 Fixed an issue in `ItemForm` where explicitly clearing the title or description would incorrectly revert to the original metadata upon save.
 - 💄 Updated item cards to use a sleek monospace font for URLs.
 - ♿ Improved keyboard accessibility for the collapsed Quick Link Action Bar (FAB) to support focus and Enter/Space activation.
+- 🐛 Fixed race condition in Data Backup import preview where rapid file selections could result in incorrect data rendering.
+- 🐛 Fixed Radix UI style selectors (`slider`, `switch`, `select`) in Tailwind v4 to properly target state data attributes (`data-[state=...]`).
+- 🐛 Fixed header navigation active state styling by properly using `useLocation` with `Button asChild`.
+- 🧹 Cleaned up unused `shadcn/ui` components (`alert`, `card`, `sheet`, `textarea`), legacy scripts, and unused dependencies.
 
 ---
 

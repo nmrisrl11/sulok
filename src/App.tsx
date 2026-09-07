@@ -1,11 +1,13 @@
-import { lazy, Suspense } from "react";
 import { NuqsAdapter } from "nuqs/adapters/react-router";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
+import { useGlobalSoundInteractions } from "./hooks/use-global-sound-interactions";
 import { AboutSkeleton } from "./pages/about/about-skeleton";
 import { HomeRouteFallback } from "./pages/home/home-route-fallback";
+import { SettingsSkeleton } from "./pages/settings/settings-skeleton";
 import { UpdatesSkeleton } from "./pages/updates/updates-skeleton";
 
 const HomePage = lazy(() =>
@@ -20,10 +22,19 @@ const UpdatesPage = lazy(() =>
 const NotFoundPage = lazy(() =>
 	import("./pages/not-found/not-found-page").then((m) => ({ default: m.NotFoundPage })),
 );
+const SettingsPage = lazy(() =>
+	import("./pages/settings/settings-page").then((m) => ({ default: m.SettingsPage })),
+);
+
+function GlobalSoundInteractions() {
+	useGlobalSoundInteractions();
+	return null;
+}
 
 function App() {
 	return (
 		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
+			<GlobalSoundInteractions />
 			<BrowserRouter>
 				<NuqsAdapter>
 					<AppLayout>
@@ -50,6 +61,14 @@ function App() {
 									element={
 										<Suspense fallback={<UpdatesSkeleton />}>
 											<UpdatesPage />
+										</Suspense>
+									}
+								/>
+								<Route
+									path="/settings"
+									element={
+										<Suspense fallback={<SettingsSkeleton />}>
+											<SettingsPage />
 										</Suspense>
 									}
 								/>

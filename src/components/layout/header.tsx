@@ -1,15 +1,15 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { SettingsSheet } from "@/features/settings/components/settings-sheet";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { SettingsIcon } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export function Header() {
 	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
+	const location = useLocation();
 
 	return (
 		<header className="flex items-center justify-between p-4 md:py-6">
@@ -49,12 +49,20 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-1">
 					<ModeToggle />
-					<SettingsSheet>
-						<Button variant="ghost" size="icon" className="rounded-full">
+					<Button
+						variant="ghost"
+						size="icon"
+						asChild
+						className={cn(
+							"rounded-full transition-colors",
+							location.pathname === "/settings" && "bg-accent",
+						)}
+					>
+						<NavLink to="/settings">
 							<SettingsIcon className="w-5 h-5" />
 							<span className="sr-only">Settings</span>
-						</Button>
-					</SettingsSheet>
+						</NavLink>
+					</Button>
 				</div>
 			</nav>
 		</header>

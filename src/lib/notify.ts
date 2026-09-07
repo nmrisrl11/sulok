@@ -1,6 +1,15 @@
 import { getRandomWhisper } from "@/constants/whispers";
 import { useLogoStore } from "@/stores/logo-store";
+import { useSettingsStore } from "@/stores/settings-store";
+import { play } from "cuelume";
 import { gooeyToast } from "goey-toast";
+
+const playNotifySound = (type: "success" | "error") => {
+	const { soundSettings } = useSettingsStore.getState().settings;
+	if (soundSettings.enabled) {
+		play(soundSettings.mappings[type], { volume: soundSettings.volume });
+	}
+};
 
 type ToastOptions = {
 	id?: string | number;
@@ -30,18 +39,21 @@ export const notify = {
 		if (!options?.hideReaction) {
 			useLogoStore.getState().setReaction("happy", getRandomWhisper("positive"));
 		}
+		playNotifySound("success");
 		return gooeyToast.success(message, { ...options, showTimestamp: false });
 	},
 	error: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
 			useLogoStore.getState().setReaction("sad", getRandomWhisper("negative"));
 		}
+		playNotifySound("error");
 		return gooeyToast.error(message, { ...options, showTimestamp: false });
 	},
 	warning: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
 			useLogoStore.getState().setReaction("surprised", getRandomWhisper("warning"));
 		}
+		playNotifySound("error"); // Fallback to error for warning
 		return gooeyToast.warning(message, { ...options, showTimestamp: false });
 	},
 	info: (message: string, options?: ToastOptions) => {

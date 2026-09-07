@@ -19,7 +19,7 @@ export function AboutPage() {
 
 			<section className="flex flex-col gap-8">
 				<div className="flex flex-col gap-3">
-					<h2 className="text-lg font-bold font-heading">What does "Sulok" mean?</h2>
+					<h2 className="text-lg font-bold font-heading">What does "{APP_INFO.name}" mean?</h2>
 					<div className="bg-card border border-border p-5 rounded-lg flex flex-col gap-2">
 						<p className="text-foreground">
 							<strong>{APP_INFO.name}</strong>{" "}

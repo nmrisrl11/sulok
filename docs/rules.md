@@ -61,6 +61,7 @@
 - Undo support for destructive actions (delete, move).
 - No confirmation modals for non-destructive actions.
 - Toast notifications for feedback, not alert dialogs. Always use `notify` from `src/lib/notify.ts` (powered by `goey-toast`), and never standard `sonner`.
+- **Interactive Sounds**: Use `cuelume` for UI sound effects. Global interactions are handled automatically via `useGlobalSoundInteractions.ts`. To opt a specific element (and its children) out of hover/click sounds, add the `data-no-sound="true"` attribute to the element.
 - When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 
 ---
@@ -74,14 +75,16 @@ src/
 ├── components/       # Reusable UI components (App-specific global components go here)
 │   └── ui/           # Strictly for external UI libraries like shadcn/ui and its registries. Never create internal/app-specific UI here.
 ├── constants/        # Centralized app metadata and global constants
+├── data/             # Static data (e.g. changelog)
 ├── features/         # Feature modules
-│   └── [feature]/    # e.g., folders, items, search
+│   └── [feature]/    # e.g., items, settings
 │       ├── components/
 │       ├── actions/
 │       ├── hooks/
 │       └── utils/
 ├── hooks/            # Global custom React hooks
 ├── lib/              # Global utilities, helpers, constants
+├── pages/            # Routable page components (Home, About, Settings, Updates)
 ├── schemas/          # Zod schemas defining core domain entities (shared between UI and DB)
 ├── stores/           # Zustand stores
 ├── db/               # Dexie.js database schema, repositories, and operations

@@ -34,4 +34,3 @@ db.version(3).stores({
 });
 
 export { db };
-export default db;

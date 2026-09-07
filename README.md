@@ -22,6 +22,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **📝 Item Management**: Save, edit, delete, and bulk-manage links with auto-fetched metadata (titles, descriptions, and images).
 - **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar.
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, and custom scrollbars.
+- **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
 - **🌓 Theme Support**: Seamless switching between Dark and Light modes.
 - **🚀 Local-First**: Lightning-fast operations powered by IndexedDB.
 - **🌐 Offline Capable**: Designed to work offline for local data and existing items (metadata fetching requires network access; PWA support coming soon).
@@ -83,11 +84,15 @@ src/
 ├── components/       # Global App UI (layout, branding, mascots)
 │   └── ui/           # Generic shadcn/ui primitive components
 ├── constants/        # Centralized app configuration (APP_INFO)
+├── data/             # Static data (e.g. changelog)
 ├── db/               # Dexie.js setup and Repository pattern (Data Layer)
-├── features/         # Domain-specific modules (items, folders, search)
-├── pages/            # Routable page components (Home, About)
+├── features/         # Domain-specific modules (items, settings)
+├── hooks/            # Global custom React hooks
+├── lib/              # Global utilities, helpers, constants
+├── pages/            # Routable page components (Home, About, Settings, Updates)
 ├── schemas/          # Zod validation schemas for core entities
 ├── stores/           # Zustand global state
+├── types/            # Global TypeScript type definitions
 └── App.tsx           # Router and Theme Provider root
 ```
 
