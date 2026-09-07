@@ -17,51 +17,131 @@ import { sounds, type SoundName } from "cuelume";
 import { RotateCcwIcon } from "lucide-react";
 import { useState } from "react";
 
-export function SoundSettingsSection() {
-	const { settings, updateSettings } = useSettingsStore();
-	const soundSettings = settings.soundSettings;
+function VolumeControl() {
+	const volume = useSettingsStore((state) => state.settings.soundSettings.volume);
+	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const pressMapping = useSettingsStore((state) => state.settings.soundSettings.mappings.press);
 	const { playSound } = useSoundEffects();
 
-	const [localVolume, setLocalVolume] = useState(soundSettings.volume);
-	const [prevStoreVolume, setPrevStoreVolume] = useState(soundSettings.volume);
+	const [localVolume, setLocalVolume] = useState(volume);
+	const [prevStoreVolume, setPrevStoreVolume] = useState(volume);
 
-	if (soundSettings.volume !== prevStoreVolume) {
-		setLocalVolume(soundSettings.volume);
-		setPrevStoreVolume(soundSettings.volume);
+	if (volume !== prevStoreVolume) {
+		setLocalVolume(volume);
+		setPrevStoreVolume(volume);
 	}
-
-	const handleRestore = () => {
-		updateSettings({ soundSettings: defaultSettings.soundSettings });
-	};
-
-	const handleEnabledChange = (enabled: boolean) => {
-		updateSettings({ soundSettings: { ...soundSettings, enabled } });
-	};
 
 	const handleVolumeChange = (value: number[]) => {
 		setLocalVolume(value[0]);
 	};
 
 	const handleVolumeCommit = (value: number[]) => {
-		updateSettings({ soundSettings: { ...soundSettings, volume: value[0] } });
-		if (soundSettings.enabled) {
-			playSound(soundSettings.mappings.press);
+		const currentSettings = useSettingsStore.getState().settings.soundSettings;
+		updateSettings({ soundSettings: { ...currentSettings, volume: value[0] } });
+		if (enabled) {
+			playSound(pressMapping);
 		}
 	};
 
-	const handleMappingChange = (type: keyof typeof soundSettings.mappings, sound: SoundName) => {
+	return (
+		<div className="space-y-4 pb-8 border-b border-border/50">
+			<div className="flex items-center justify-between">
+				<h3 className="text-sm font-semibold">Volume</h3>
+				<span className="text-muted-foreground text-sm">{Math.round(localVolume * 100)}%</span>
+			</div>
+			<Slider
+				id="master-volume"
+				min={0}
+				max={1}
+				step={0.01}
+				value={[localVolume]}
+				onValueChange={handleVolumeChange}
+				onValueCommit={handleVolumeCommit}
+				disabled={!enabled}
+				aria-label="Master volume"
+				className="py-2"
+			/>
+		</div>
+	);
+}
+
+function AudioSignatureSelect({
+	id,
+	label,
+}: {
+	id: keyof typeof defaultSettings.soundSettings.mappings;
+	label: string;
+}) {
+	const value = useSettingsStore((state) => state.settings.soundSettings.mappings[id]);
+	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const { playSound } = useSoundEffects();
+
+	const handleMappingChange = (val: SoundName) => {
+		const currentSettings = useSettingsStore.getState().settings.soundSettings;
 		updateSettings({
 			soundSettings: {
-				...soundSettings,
-				mappings: { ...soundSettings.mappings, [type]: sound },
+				...currentSettings,
+				mappings: { ...currentSettings.mappings, [id]: val },
 			},
 		});
 	};
 
 	const handlePreviewSound = (sound: SoundName) => {
-		if (soundSettings.enabled) {
+		if (enabled) {
 			playSound(sound);
 		}
+	};
+
+	return (
+		<div className="space-y-2">
+			<Label htmlFor={`sound-${id}`} className="text-sm">
+				{label}
+			</Label>
+			<Select value={value} onValueChange={(val: string) => handleMappingChange(val as SoundName)}>
+				<SelectTrigger
+					id={`sound-${id}`}
+					className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				>
+					<SelectValue placeholder="Select sound" />
+				</SelectTrigger>
+				<SelectContent position="popper" className="max-h-75" data-no-sound="true">
+					{sounds.map((sound) => {
+						const Icon = SOUND_ICONS[sound];
+						return (
+							<SelectItem
+								key={sound}
+								value={sound}
+								onPointerEnter={() => handlePreviewSound(sound)}
+								className="py-2.5 px-3 rounded-md"
+							>
+								<div className="flex items-center gap-3">
+									<div className="w-5 flex justify-center items-center shrink-0">
+										<Icon className="w-4 h-4 text-muted-foreground" />
+									</div>
+									<span className="capitalize">{sound}</span>
+								</div>
+							</SelectItem>
+						);
+					})}
+				</SelectContent>
+			</Select>
+		</div>
+	);
+}
+
+export function SoundSettingsSection() {
+	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+
+	const handleRestore = () => {
+		updateSettings({ soundSettings: defaultSettings.soundSettings });
+	};
+
+	const handleEnabledChange = (enabledValue: boolean) => {
+		const currentSettings = useSettingsStore.getState().settings.soundSettings;
+		updateSettings({ soundSettings: { ...currentSettings, enabled: enabledValue } });
 	};
 
 	return (
@@ -90,39 +170,16 @@ export function SoundSettingsSection() {
 						<Label className="text-sm font-semibold" htmlFor="enable-sound">
 							Play Interaction Sounds
 						</Label>
-						<Switch
-							id="enable-sound"
-							checked={soundSettings.enabled}
-							onCheckedChange={handleEnabledChange}
-						/>
+						<Switch id="enable-sound" checked={enabled} onCheckedChange={handleEnabledChange} />
 					</div>
 					<p className="text-muted-foreground text-sm max-w-md">
 						Play audio feedback for interactions like navigating or saving items.
 					</p>
 				</div>
 
-				{soundSettings.enabled && (
+				{enabled && (
 					<>
-						<div className="space-y-4 pb-8 border-b border-border/50">
-							<div className="flex items-center justify-between">
-								<h3 className="text-sm font-semibold">Volume</h3>
-								<span className="text-muted-foreground text-sm">
-									{Math.round(localVolume * 100)}%
-								</span>
-							</div>
-							<Slider
-								id="master-volume"
-								min={0}
-								max={1}
-								step={0.01}
-								value={[localVolume]}
-								onValueChange={handleVolumeChange}
-								onValueCommit={handleVolumeCommit}
-								disabled={!soundSettings.enabled}
-								aria-label="Master volume"
-								className="py-2"
-							/>
-						</div>
+						<VolumeControl />
 
 						<div className="space-y-4 pb-8 border-b border-border/50">
 							<div>
@@ -134,42 +191,7 @@ export function SoundSettingsSection() {
 
 							<div className="grid gap-4 sm:grid-cols-2">
 								{INTERACTION_TYPES.map(({ id, label }) => (
-									<div key={id} className="space-y-2">
-										<Label htmlFor={`sound-${id}`} className="text-sm">
-											{label}
-										</Label>
-										<Select
-											value={soundSettings.mappings[id]}
-											onValueChange={(val: string) => handleMappingChange(id, val as SoundName)}
-										>
-											<SelectTrigger
-												id={`sound-${id}`}
-												className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
-											>
-												<SelectValue placeholder="Select sound" />
-											</SelectTrigger>
-											<SelectContent position="popper" className="max-h-75" data-no-sound="true">
-												{sounds.map((sound) => {
-													const Icon = SOUND_ICONS[sound];
-													return (
-														<SelectItem
-															key={sound}
-															value={sound}
-															onPointerEnter={() => handlePreviewSound(sound)}
-															className="py-2.5 px-3 rounded-md"
-														>
-															<div className="flex items-center gap-3">
-																<div className="w-5 flex justify-center items-center shrink-0">
-																	<Icon className="w-4 h-4 text-muted-foreground" />
-																</div>
-																<span className="capitalize">{sound}</span>
-															</div>
-														</SelectItem>
-													);
-												})}
-											</SelectContent>
-										</Select>
-									</div>
+									<AudioSignatureSelect key={id} id={id} label={label} />
 								))}
 							</div>
 						</div>

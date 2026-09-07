@@ -25,7 +25,7 @@ const TABS = [
 export function SettingsPage() {
 	const [activeTab, setActiveTab] = useQueryState(
 		"tab",
-		parseAsString.withDefault("data").withOptions({ shallow: false }),
+		parseAsString.withDefault("data").withOptions({ shallow: true }),
 	);
 
 	const renderContent = () => {

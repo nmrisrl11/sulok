@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useItemStore } from "@/stores/item-store";
 import { useLogoStore } from "@/stores/logo-store";
 import { BoxIcon, PlusIcon } from "lucide-react";
 
 export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
-	const { openCreateDialog } = useItemStore();
-	const { setTemporaryExpression, clearTemporaryExpression } = useLogoStore();
+	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
+	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
 
 	return (
 		<div
@@ -24,7 +23,7 @@ export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
 				library.
 			</p>
 			<Button
-				onClick={() => openCreateDialog()}
+				onClick={() => document.dispatchEvent(new CustomEvent("open-quick-link"))}
 				className="gap-2"
 				disabled={disabled}
 				onMouseEnter={() => setTemporaryExpression("excited")}

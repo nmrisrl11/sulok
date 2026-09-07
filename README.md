@@ -24,7 +24,8 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, and custom scrollbars.
 - **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
 - **🌓 Theme Support**: Seamless switching between Dark and Light modes.
-- **🚀 Local-First**: Lightning-fast operations powered by IndexedDB.
+- **🚀 Local-First Performance**: Lightning-fast operations powered by IndexedDB, heavily optimized React state isolation, and zero-latency UI responses.
+- **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
 - **🌐 Offline Capable**: Designed to work offline for local data and existing items (metadata fetching requires network access; PWA support coming soon).
 - **🎉 Sulo Mascot**: A responsive, interactive brand mascot that reacts to your actions and inputs throughout the app.
 

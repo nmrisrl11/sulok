@@ -89,6 +89,8 @@ sulok/
 - Use shadcn/ui components. Run `npx shadcn@latest add <component>` to add new ones.
 - **Component Folder Rule:** App-specific global components go in `src/components/`. The `src/components/ui/` folder is strictly dedicated to external UI library components (like shadcn/ui). Do not put internal/custom logic components in `components/ui`.
 - Use `cn()` utility for conditional class merging.
+- **Zustand Performance & Selectors:** NEVER destructure the entire state object from a store (e.g., `const { selectedIds } = useStore()`). This subscribes the component to every state change in the store, causing massive performance drops and unnecessary re-renders. ALWAYS use explicit atomic selectors (e.g., `const selectedIds = useStore((state) => state.selectedIds)`).
+- **Component State Isolation:** If a component subscribes to global state but its wrapper doesn't need to, extract the state-dependent UI into its own smaller component. This ensures that state changes only trigger re-renders exactly where the data is displayed, isolating layout shifts and preventing parent component cascades.
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
 - **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
 - **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.

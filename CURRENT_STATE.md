@@ -25,7 +25,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Item CRUD (Create, Read, Update, Delete, Bulk Delete) integrated with Dexie
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
-- [x] Initial performance optimizations (route and dialog code-splitting)
+- [x] Initial performance optimizations (route/dialog code-splitting, strict Zustand state isolation, React.memo list rendering)
 - [x] Theme system implemented (Dark/Light mode switch)
 - [x] Brand mascot (Sulo) & interactive morphing logo implemented
 - [x] Sulo mascot contextual whisper feedback on header
@@ -90,7 +90,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
 - [x] Global Settings Page (tabbed layout)
-- [x] Import/Export Data (JSON, CSV, TXT)
+- [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata preservation (images, logos, creation dates)
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI
 - [ ] PWA/offline support
