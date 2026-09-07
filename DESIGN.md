@@ -175,6 +175,10 @@ Minimal shadows. Prefer border/background differentiation.
 
 ## Favicon Fetching
 
+We first attempt to render the `logo` metadata (saved locally in IndexedDB when the item was added) to display the most accurate, live favicon.
+
+If the saved logo is missing or fails to load, we seamlessly fall back to Google's S2 Favicon service:
+
 ```
 https://www.google.com/s2/favicons?domain={origin}&sz=64
 ```

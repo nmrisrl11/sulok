@@ -75,7 +75,7 @@ export function ItemCard({ item }: { item: Item }) {
 					rel="noopener noreferrer"
 					className="flex items-center gap-3 min-w-0 flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
 				>
-					<SiteFavicon url={item.url} className="h-6 w-6 shrink-0" />
+					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6 shrink-0" />
 					<div className="flex flex-col overflow-hidden">
 						<span className="text-foreground line-clamp-2 text-sm font-medium hover:underline decoration-muted-foreground/30 underline-offset-4">
 							{titleToDisplay}

@@ -4,12 +4,14 @@ import { useState } from "react";
 
 interface SiteFaviconProps {
 	url: string;
+	logo?: string;
 	className?: string;
 	size?: number; // size in pixels, used for fetching from Google
 }
 
-export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
+export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProps) {
 	const [error, setError] = useState(false);
+	const [logoError, setLogoError] = useState(false);
 
 	const [prevUrl, setPrevUrl] = useState(url);
 
@@ -17,6 +19,7 @@ export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 	if (url !== prevUrl) {
 		setPrevUrl(url);
 		setError(false);
+		setLogoError(false);
 	}
 
 	// Extract domain for the favicon service
@@ -28,7 +31,7 @@ export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 		if (!error) setError(true);
 	}
 
-	if (error || !domain) {
+	if (error || (!domain && !logo)) {
 		return (
 			<div
 				className={cn(
@@ -48,12 +51,21 @@ export function SiteFavicon({ url, className, size = 64 }: SiteFaviconProps) {
 				className,
 			)}
 		>
-			<img
-				src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
-				alt="favicon"
-				className="h-3/4 w-3/4 object-contain"
-				onError={() => setError(true)}
-			/>
+			{logo && !logoError ? (
+				<img
+					src={logo}
+					alt="favicon"
+					className="h-3/4 w-3/4 object-contain"
+					onError={() => setLogoError(true)}
+				/>
+			) : (
+				<img
+					src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
+					alt="favicon"
+					className="h-3/4 w-3/4 object-contain"
+					onError={() => setError(true)}
+				/>
+			)}
 		</div>
 	);
 }

@@ -22,6 +22,9 @@
 - 🔧 Improved UX by hiding search and sort controls when the library is completely empty.
 - 🌐 Added SEO and Agentic Browsing foundations (`robots.txt`, `sitemap.xml`, and `llms.txt`).
 - 🐛 Fixed Sulo incorrectly cheering when deleting items by introducing a `hideReaction` toast option.
+- 🐛 Fixed missing/broken OG Image previews by normalizing relative URLs from the metadata fetcher.
+- ✨ Added support for storing favicon/logo and OG image metadata into the database for immediate rendering without waiting for Google S2 caching.
+- 🐛 Fixed `SiteFavicon` to gracefully fall back to Google's S2 service if the saved logo fails to load.
 - 🐛 Improved duplicate link detection by fuzzy-matching URLs to ignore `www.` prefixes and trailing slashes.
 - 🐛 Fixed a bug where the site title and description were not correctly saved for new items.
 - 🐛 Fixed `ItemRepository` to preserve custom ports when normalizing URLs for duplicate detection, and enforced uniqueness atomically during database transactions.
