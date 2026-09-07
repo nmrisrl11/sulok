@@ -200,6 +200,7 @@ export function SulokLogo({ className }: { className?: string }) {
 					onMouseEnter={handleMouseEnter}
 					onMouseLeave={handleMouseLeave}
 					aria-label={`${APP_INFO.name} Home`}
+					data-no-sound="true"
 				>
 					{logoElement}
 				</button>
@@ -217,6 +218,7 @@ export function SulokLogo({ className }: { className?: string }) {
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				aria-label={`${APP_INFO.name} Home`}
+				data-no-sound="true"
 			>
 				{logoElement}
 			</Link>

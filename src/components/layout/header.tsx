@@ -1,7 +1,6 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { SettingsSheet } from "@/features/settings/components/settings-sheet";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { SettingsIcon } from "lucide-react";
@@ -49,12 +48,18 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-1">
 					<ModeToggle />
-					<SettingsSheet>
-						<Button variant="ghost" size="icon" className="rounded-full">
-							<SettingsIcon className="w-5 h-5" />
-							<span className="sr-only">Settings</span>
-						</Button>
-					</SettingsSheet>
+					<NavLink to="/settings">
+						{({ isActive }) => (
+							<Button
+								variant="ghost"
+								size="icon"
+								className={cn("rounded-full transition-colors", isActive && "bg-accent")}
+							>
+								<SettingsIcon className="w-5 h-5" />
+								<span className="sr-only">Settings</span>
+							</Button>
+						)}
+					</NavLink>
 				</div>
 			</nav>
 		</header>

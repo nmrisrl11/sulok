@@ -17,10 +17,6 @@ export function QuickLinkActionBar() {
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const isMac =
-		typeof navigator !== "undefined" && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
-	const modifierKey = isMac ? "⌘" : "Ctrl";
-
 	const urlSchema = itemSchema.shape.url;
 
 	useEffect(() => {
@@ -155,11 +151,6 @@ export function QuickLinkActionBar() {
 					aria-label="Paste a link to preview"
 					tabIndex={isExpanded ? 0 : -1}
 				/>
-				{!url && !isFocused && (
-					<kbd className="hidden md:inline-flex h-5 items-center gap-1 rounded border border-border/50 bg-muted/30 px-1.5 font-mono text-[10px] font-medium text-muted-foreground shrink-0 select-none pointer-events-none transition-opacity">
-						{modifierKey} K
-					</kbd>
-				)}
 				<Button
 					type="submit"
 					size="icon"

@@ -57,14 +57,17 @@ sulok/
 │   ├── components/
 │   │   ├── layout/      # App layout, header, footer
 │   │   └── ui/          # shadcn/ui components
+│   ├── constants/       # App metadata and global constants
+│   ├── data/            # Static data (e.g. changelog)
 │   ├── features/
-│   │   ├── folders/     # Folder CRUD, tree, drag-drop
-│   │   ├── items/       # Item CRUD, cards, list (formerly links)
-│   │   └── search/      # Search, filter, sort
+│   │   ├── items/       # Item CRUD, cards, list
+│   │   └── settings/    # Settings configuration and UI
 │   ├── pages/
-│   │   ├── home/
 │   │   ├── about/
-│   │   └── not-found/
+│   │   ├── home/
+│   │   ├── not-found/
+│   │   ├── settings/
+│   │   └── updates/
 │   ├── hooks/
 │   ├── lib/
 │   ├── schemas/         # Zod schemas (domain)
@@ -100,6 +103,7 @@ sulok/
 - **Skeletons & Empty States:** Co-locate loading skeletons with their respective components. Use dedicated beautifully designed components for empty states rather than plain text. Hide irrelevant UI controls (like search or sort filters) when a collection is truly empty to reduce clutter, but ensure they remain visible during active filtering (e.g., 0 search results). Use route-specific fallbacks (e.g., `HomeRouteFallback`, `AboutSkeleton`) wrapped in `<Suspense>` per route. Avoid layout flashes by ensuring fallback states exactly match the layout structure of the empty state they resolve to.
 - **Scrollbars:** Always use the `.custom-scrollbar` class on any scrollable container (e.g., `overflow-y-auto`) to ensure a consistent, branded scrollbar styling across the application.
 - **Notifications:** Do not use `sonner` or shadcn's `useToast` directly. Always use the `notify` utility from `src/lib/notify.ts` which wraps `goey-toast` for fluid, animated notifications.
+- **Interactive Sounds:** Use `cuelume` for UI sound effects. Global interactions are handled automatically via `useGlobalSoundInteractions.ts`. To opt a specific element (and its children) out of hover/click sounds, add the `data-no-sound="true"` attribute to the element.
 - **Floating UI Coordination:** When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 - **Safe Area Insets:** When building fixed UI elements anchored to the bottom (like the `BottomActionSystem`), always incorporate `env(safe-area-inset-bottom)` into their positioning. The main app layout (`AppLayout`) ensures scrollable content isn't obscured by providing safe bottom padding on mobile viewports.
 - **Glassmorphism:** Bottom floating action bars use a glassmorphic effect (`bg-card/80 backdrop-blur-md`) to blend smoothly with scrolling content.
