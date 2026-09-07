@@ -121,10 +121,10 @@ export const ItemRepository = {
 				id: item.id || crypto.randomUUID(),
 				...parsedData,
 				url,
-				createdAt: item.createdAt || now,
-				updatedAt: item.updatedAt || now,
+				createdAt: item.createdAt ?? now,
+				updatedAt: item.updatedAt ?? now,
 			};
-			await db.items.put(record);
+			await db.items.add(record);
 		});
 
 		setHasDataHint(true);
