@@ -51,6 +51,4 @@ export const importItemSchema = z.object({
 		}),
 });
 
-export const importFileSchema = z.array(importItemSchema);
-
 export type ImportItem = z.infer<typeof importItemSchema>;

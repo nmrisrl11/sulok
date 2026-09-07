@@ -27,6 +27,10 @@
 - 🐛 Fixed an issue in `ItemForm` where explicitly clearing the title or description would incorrectly revert to the original metadata upon save.
 - 💄 Updated item cards to use a sleek monospace font for URLs.
 - ♿ Improved keyboard accessibility for the collapsed Quick Link Action Bar (FAB) to support focus and Enter/Space activation.
+- 🐛 Fixed race condition in Data Backup import preview where rapid file selections could result in incorrect data rendering.
+- 🐛 Fixed Radix UI style selectors (`slider`, `switch`, `select`) in Tailwind v4 to properly target state data attributes (`data-[state=...]`).
+- 🐛 Fixed header navigation active state styling by properly using `useLocation` with `Button asChild`.
+- 🧹 Cleaned up unused `shadcn/ui` components (`alert`, `card`, `sheet`, `textarea`), legacy scripts, and unused dependencies.
 
 ---
 

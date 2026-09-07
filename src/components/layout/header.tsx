@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { SettingsIcon } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export function Header() {
 	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
+	const location = useLocation();
 
 	return (
 		<header className="flex items-center justify-between p-4 md:py-6">
@@ -48,18 +49,20 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-1">
 					<ModeToggle />
-					<NavLink to="/settings">
-						{({ isActive }) => (
-							<Button
-								variant="ghost"
-								size="icon"
-								className={cn("rounded-full transition-colors", isActive && "bg-accent")}
-							>
-								<SettingsIcon className="w-5 h-5" />
-								<span className="sr-only">Settings</span>
-							</Button>
+					<Button
+						variant="ghost"
+						size="icon"
+						asChild
+						className={cn(
+							"rounded-full transition-colors",
+							location.pathname === "/settings" && "bg-accent",
 						)}
-					</NavLink>
+					>
+						<NavLink to="/settings">
+							<SettingsIcon className="w-5 h-5" />
+							<span className="sr-only">Settings</span>
+						</NavLink>
+					</Button>
 				</div>
 			</nav>
 		</header>

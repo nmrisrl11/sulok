@@ -1,3 +1,4 @@
+import type { ElementType } from "react";
 import {
 	ArrivalIcon,
 	BloomIcon,
@@ -20,7 +21,7 @@ import {
 import type { SoundSettings } from "@/types/settings";
 import type { SoundName } from "cuelume";
 
-export const SOUND_ICONS: Record<SoundName, React.ElementType> = {
+export const SOUND_ICONS: Record<SoundName, ElementType> = {
 	chime: ChimeIcon,
 	sparkle: SparkleIcon,
 	droplet: DropletIcon,

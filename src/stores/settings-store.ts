@@ -36,9 +36,15 @@ function deepMerge<T>(target: unknown, source: unknown): T {
 	return output as T;
 }
 
-export const mergeState = (persistedState: unknown, currentState: SettingsState) => {
+const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	const state = persistedState as Partial<SettingsState>;
-	const safeSettings = isObject(state?.settings) ? state.settings : {};
+	const safeSettings = (isObject(state?.settings) ? state.settings : {}) as Partial<Settings>;
+
+	// Prevent invalid soundSettings from overriding the defaults with null/undefined
+	if (safeSettings.soundSettings === null || typeof safeSettings.soundSettings !== "object") {
+		delete safeSettings.soundSettings;
+	}
+
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);
 
 	return {

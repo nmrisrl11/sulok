@@ -20,6 +20,8 @@ export function DataStorageSection() {
 	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
 	const [parsedData, setParsedData] = useState<ParsedImportData | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const importIdRef = useRef(0);
+	const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const itemCount = useLiveQuery(() => db.items.count()) ?? 0;
 
 	const handleExport = (format: "json" | "csv" | "txt") => {
@@ -32,15 +34,25 @@ export function DataStorageSection() {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
+		const currentId = ++importIdRef.current;
+		if (cleanupTimerRef.current) {
+			clearTimeout(cleanupTimerRef.current);
+			cleanupTimerRef.current = null;
+		}
+
 		try {
 			const data = await parseImportFile(file);
-			setParsedData(data);
-			setIsImportPreviewOpen(true);
+			if (currentId === importIdRef.current) {
+				setParsedData(data);
+				setIsImportPreviewOpen(true);
+			}
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				notify.error(error.message);
-			} else {
-				notify.error("Failed to parse file");
+			if (currentId === importIdRef.current) {
+				if (error instanceof Error) {
+					notify.error(error.message);
+				} else {
+					notify.error("Failed to parse file");
+				}
 			}
 		}
 
@@ -187,7 +199,11 @@ export function DataStorageSection() {
 					isOpen={isImportPreviewOpen}
 					onClose={() => {
 						setIsImportPreviewOpen(false);
-						setTimeout(() => setParsedData(null), 300);
+						const currentId = importIdRef.current;
+						if (cleanupTimerRef.current) clearTimeout(cleanupTimerRef.current);
+						cleanupTimerRef.current = setTimeout(() => {
+							if (currentId === importIdRef.current) setParsedData(null);
+						}, 300);
 					}}
 					data={parsedData}
 				/>
