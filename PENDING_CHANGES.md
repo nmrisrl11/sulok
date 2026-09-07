@@ -13,6 +13,7 @@
 - 💄 Redesigned the Data & Backup section with modern, premium cards for Export and Restore functionality.
 - ✨ Made the Quick Link Action Bar an expandable Floating Action Button (FAB) to reduce visual clutter. Expands via click, `Ctrl+K`, or `Ctrl+V`.
 - ✨ Added Data Import/Export functionality with JSON, CSV, and TXT support (including human-readable dates).
+- 🐛 Fixed Data Import/Export for CSV and TXT formats to correctly include, validate, and parse `image` and `logo` metadata.
 - ✨ Switched UI font to Manrope for improved optical alignment and cleaner metrics.
 - ✨ Added Action Bar with Search and Sort controls to the Home page.
 - 🔧 Replaced "links" terminology with "items" across the application to consistently reflect the product's branding.

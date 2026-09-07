@@ -29,6 +29,8 @@ export const importItemSchema = z.object({
 		),
 	title: z.string().optional(),
 	description: z.string().optional(),
+	image: z.string().optional(),
+	logo: z.string().optional(),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()
