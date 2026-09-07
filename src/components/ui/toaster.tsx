@@ -1,4 +1,4 @@
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/hooks/use-theme";
 import { GooeyToaster } from "goey-toast";
 import "goey-toast/styles.css";
 

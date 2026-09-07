@@ -7,6 +7,7 @@
 
 ## Unreleased
 
+- 🔧 Enforced zero-tolerance strict production builds by configuring `oxlint` to block on warnings, strictly banning `any` and `@ts-ignore`, enforcing `verbatimModuleSyntax`, and refactoring exports for robust React Fast Refresh.
 - ✨ Added a dedicated Settings page with a tabbed layout, replacing the old Settings Sheet.
 - ✨ Added interactive UI sound effects (powered by cuelume), configurable in the Sound FX settings.
 - 💄 Redesigned the Data & Backup section with modern, premium cards for Export and Restore functionality.
