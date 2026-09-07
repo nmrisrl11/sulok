@@ -33,13 +33,10 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 
 		setIsImporting(true);
 		try {
-			const importPromises = itemsToImport.map((item) =>
-				ItemRepository.save({
-					url: item.url,
-					title: item.title,
-					description: item.description,
-				}),
-			);
+			const importPromises = itemsToImport.map((item) => {
+				const { isDuplicate: _isDuplicate, ...itemData } = item;
+				return ItemRepository.importItem(itemData);
+			});
 			const results = await Promise.allSettled(importPromises);
 
 			const successCount = results.filter((r) => r.status === "fulfilled").length;
@@ -136,7 +133,12 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 									className={`flex items-center justify-between gap-3 p-2 rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle transition-colors border ${item.isDuplicate ? "opacity-50 grayscale bg-muted/30 border-transparent" : "bg-card hover:bg-card/80"}`}
 								>
 									<div className="flex items-center gap-3 min-w-0 flex-1">
-										<SiteFavicon url={item.url} className="w-5 h-5 shrink-0" size={64} />
+										<SiteFavicon
+											url={item.url}
+											logo={item.logo}
+											className="w-5 h-5 shrink-0"
+											size={64}
+										/>
 										<div className="flex-1 min-w-0">
 											<p className="truncate text-sm font-medium">{item.title || hostname}</p>
 											<p className="truncate text-[11px] text-muted-foreground font-mono">

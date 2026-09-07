@@ -48,11 +48,18 @@ export function QuickLinkActionBar() {
 			}
 		};
 
+		const handleOpenQuickLink = () => {
+			setIsExpanded(true);
+			setTimeout(() => inputRef.current?.focus(), 50);
+		};
+
 		document.addEventListener("paste", handleGlobalPaste);
 		document.addEventListener("keydown", handleKeyDown);
+		document.addEventListener("open-quick-link", handleOpenQuickLink);
 		return () => {
 			document.removeEventListener("paste", handleGlobalPaste);
 			document.removeEventListener("keydown", handleKeyDown);
+			document.removeEventListener("open-quick-link", handleOpenQuickLink);
 		};
 	}, [error, urlSchema]);
 
@@ -89,6 +96,7 @@ export function QuickLinkActionBar() {
 		setError(null);
 		openCreateDialog(result.data);
 		setUrl("");
+		setIsExpanded(false);
 	};
 
 	return (

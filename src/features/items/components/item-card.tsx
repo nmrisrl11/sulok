@@ -25,12 +25,17 @@ import {
 	MoreVerticalIcon,
 	Trash2Icon,
 } from "lucide-react";
-export function ItemCard({ item }: { item: Item }) {
-	const { deleteItem, openEditDialog, selectedIds, toggleSelection } = useItemStore();
+import { memo } from "react";
+
+export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
+	const deleteItem = useItemStore((state) => state.deleteItem);
+	const openEditDialog = useItemStore((state) => state.openEditDialog);
+	const toggleSelection = useItemStore((state) => state.toggleSelection);
+
+	const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
+
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const { isCopied, copyToClipboard } = useCopyToClipboard();
-
-	const isSelected = selectedIds.includes(item.id);
 
 	const titleToDisplay = item.title || item.url;
 
@@ -209,4 +214,4 @@ export function ItemCard({ item }: { item: Item }) {
 			</div>
 		</div>
 	);
-}
+});

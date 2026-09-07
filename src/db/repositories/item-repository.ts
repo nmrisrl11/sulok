@@ -100,6 +100,36 @@ export const ItemRepository = {
 		setHasDataHint(true);
 	},
 
+	async importItem(
+		item: Omit<Item, "id" | "createdAt" | "updatedAt"> & {
+			id?: string;
+			createdAt?: number;
+			updatedAt?: number;
+		},
+	): Promise<void> {
+		const parsedData = itemSchema.parse(item);
+		const url = parsedData.url as string;
+		const now = Date.now();
+
+		await db.transaction("rw", db.items, async () => {
+			const existing = await ItemRepository.findByUrl(url);
+			if (existing) {
+				throw new Error("This link is already in your corner.");
+			}
+
+			const record: Item = {
+				id: item.id || crypto.randomUUID(),
+				...parsedData,
+				url,
+				createdAt: item.createdAt ?? now,
+				updatedAt: item.updatedAt ?? now,
+			};
+			await db.items.add(record);
+		});
+
+		setHasDataHint(true);
+	},
+
 	async update(id: string, updates: Partial<Item>): Promise<void> {
 		const parsedData = itemSchema.partial().parse(updates);
 
