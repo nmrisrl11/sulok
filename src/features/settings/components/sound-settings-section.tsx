@@ -148,7 +148,7 @@ export function SoundSettingsSection() {
 											>
 												<SelectValue placeholder="Select sound" />
 											</SelectTrigger>
-											<SelectContent position="popper" className="max-h-75">
+											<SelectContent position="popper" className="max-h-75" data-no-sound="true">
 												{sounds.map((sound) => {
 													const Icon = SOUND_ICONS[sound];
 													return (
