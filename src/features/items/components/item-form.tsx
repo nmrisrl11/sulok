@@ -18,6 +18,7 @@ interface ItemFormProps {
 	onCancel: () => void;
 	isSubmitting?: boolean;
 	submitError?: string | null;
+	isEditing?: boolean;
 }
 
 export function ItemForm({
@@ -26,6 +27,7 @@ export function ItemForm({
 	onCancel,
 	isSubmitting,
 	submitError,
+	isEditing = false,
 }: ItemFormProps) {
 	const {
 		register,
@@ -63,12 +65,14 @@ export function ItemForm({
 		? formatUrl(rawUrl) !== formatUrl(defaultValues.url)
 		: true;
 
+	const shouldSkipFetch = isEditing && !currentIsUrlChanged;
+
 	// Fetch metadata if we have a URL to preview AND it's a new or changed URL
-	const shouldFetch = fetchUrl.length > 3 && currentIsUrlChanged;
+	const shouldFetch = fetchUrl.length > 3 && !shouldSkipFetch;
 	const { data: fetchedMetadata, loading, error } = useMetadata(fetchUrl, shouldFetch);
 
-	// Use fetched metadata if URL changed, otherwise use the existing data for preview
-	const metadata = currentIsUrlChanged
+	// Use fetched metadata if URL changed or new item, otherwise use the existing data for preview
+	const metadata = !shouldSkipFetch
 		? fetchedMetadata
 		: {
 				title: defaultValues?.title,
@@ -85,7 +89,7 @@ export function ItemForm({
 			setValue("description", "");
 			setValue("image", "");
 			setValue("logo", "");
-		} else if (!currentIsUrlChanged) {
+		} else if (shouldSkipFetch) {
 			setValue("title", defaultValues?.title || "");
 			setValue("description", defaultValues?.description || "");
 			setValue("image", defaultValues?.image || "");
@@ -101,7 +105,7 @@ export function ItemForm({
 			setValue("image", "");
 			setValue("logo", "");
 		}
-	}, [fetchedMetadata, rawUrl, error, defaultValues, setValue, currentIsUrlChanged]);
+	}, [fetchedMetadata, rawUrl, error, defaultValues, setValue, shouldSkipFetch]);
 
 	const isPending = rawUrl !== debouncedUrl || loading;
 

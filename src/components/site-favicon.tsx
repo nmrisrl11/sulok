@@ -14,10 +14,12 @@ export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProp
 	const [logoError, setLogoError] = useState(false);
 
 	const [prevUrl, setPrevUrl] = useState(url);
+	const [prevLogo, setPrevLogo] = useState(logo);
 
-	// Reset error when URL changes (derived state instead of effect)
-	if (url !== prevUrl) {
+	// Reset error when URL or logo changes (derived state instead of effect)
+	if (url !== prevUrl || logo !== prevLogo) {
 		setPrevUrl(url);
+		setPrevLogo(logo);
 		setError(false);
 		setLogoError(false);
 	}

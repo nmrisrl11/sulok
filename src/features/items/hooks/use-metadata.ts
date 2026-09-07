@@ -85,7 +85,11 @@ export function useMetadata(url: string, enabled: boolean = true) {
 					const resultData = parsed.data;
 
 					// Normalize relative URLs
-					const origin = new URL(url).origin;
+					const sourceUrl = new URL(url);
+					sourceUrl.username = "";
+					sourceUrl.password = "";
+					const baseUrl = sourceUrl.toString();
+
 					const normalizeUrl = (u?: string | null) => {
 						if (!u) return undefined;
 						if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("data:")) {
@@ -94,10 +98,11 @@ export function useMetadata(url: string, enabled: boolean = true) {
 						if (u.startsWith("//")) {
 							return `https:${u}`;
 						}
-						if (u.startsWith("/")) {
-							return `${origin}${u}`;
+						try {
+							return new URL(u, baseUrl).toString();
+						} catch {
+							return u;
 						}
-						return `${origin}/${u}`;
 					};
 
 					const parsedMetadata: URLMetadata = {
