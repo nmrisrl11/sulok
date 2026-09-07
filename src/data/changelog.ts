@@ -14,6 +14,41 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.2.0",
+		date: "Sep 8, 2026",
+		title: "Performance, Settings, and Data Portability",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Data Portability: You can now import and export your entire library (JSON, CSV, and TXT) directly from the new Settings page. All custom logos, images, and saved dates are perfectly preserved.",
+					"Dedicated Settings & Sound FX: A beautiful new tabbed Settings page gives you full control over the app, including new interactive UI sound effects.",
+					"Action Bar Improvements: The Home page now features an Action Bar with Search and Sort controls to easily find your saved items.",
+					"Floating Quick Add: The Quick Link Action Bar is now an expandable floating button that reduces visual clutter. You can expand it via a click or keyboard shortcuts (Ctrl+K or Ctrl+V).",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Snappier Performance: We completely overhauled how the app renders behind the scenes, ensuring buttery-smooth performance, zero-latency interactions, and faster initial load times even as your library grows.",
+					"Sleek Typography: The app now uses the Manrope font for a cleaner, more readable interface, and a sleek monospace font for all web addresses.",
+					"Brand Consistency: We now consistently use the term 'items' instead of 'links', and replaced native browser elements with custom branded inputs.",
+					"Smarter Link Previews: Sulok now instantly saves and displays high-quality custom logos and images for your links, caching them locally so they load instantly.",
+					"Streamlined UI: We decluttered the interface by hiding search and sort controls when your library is empty, and improved keyboard accessibility across the app.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Metadata Accuracy: Fixed issues where editing an existing link or importing data could sometimes lose or revert custom site titles, descriptions, and logos.",
+					"Duplicate Detection: Sulok is now much smarter at detecting duplicate links when you save, properly ignoring trailing slashes and 'www.' prefixes.",
+					"Selection & Actions: Fixed a bug where the 'Select All' checkbox would select hidden items during a search, and fixed Sulo incorrectly cheering when deleting items.",
+					"Visual Polish: Addressed minor visual bugs including missing active states on the header navigation, styling glitches on interactive sliders, and broken image previews for certain websites.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.1.0",
 		date: "Sep 5, 2026",
 		title: "Initial Release & Public Beta",
