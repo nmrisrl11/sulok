@@ -16,15 +16,16 @@
 
 ## Color Palette
 
-Five colors only. No additions without explicit approval.
+Six colors only. No additions without explicit approval.
 
-| Token              | Name     | Hex       | HSL          | Usage                              |
-| ------------------ | -------- | --------- | ------------ | ---------------------------------- |
-| `--color-charcoal` | Charcoal | `#1E1B18` | `30 12% 10%` | Text, foreground, headings         |
-| `--color-cream`    | Cream    | `#F7F5F0` | `40 30% 95%` | Page background                    |
-| `--color-amber`    | Amber    | `#C49A6C` | `30 40% 60%` | Primary accent, brand, interactive |
-| `--color-stone`    | Stone    | `#7C7570` | `25 4% 47%`  | Muted text, borders, icons         |
-| `--color-linen`    | Linen    | `#E8E4DE` | `36 16% 89%` | Cards, surfaces, hover states      |
+| Token                    | Name           | Hex       | HSL          | Usage                               |
+| ------------------------ | -------------- | --------- | ------------ | ----------------------------------- |
+| `--color-charcoal`       | Charcoal       | `#1E1B18` | `30 12% 10%` | Text, foreground, headings          |
+| `--color-charcoal-muted` | Charcoal Muted | `#24201C` | `30 12% 13%` | Dark mode skeleton and muted tokens |
+| `--color-cream`          | Cream          | `#F7F5F0` | `40 30% 95%` | Page background                     |
+| `--color-amber`          | Amber          | `#C49A6C` | `30 40% 60%` | Primary accent, brand, interactive  |
+| `--color-stone`          | Stone          | `#7C7570` | `25 4% 47%`  | Muted text, borders, icons          |
+| `--color-linen`          | Linen          | `#E8E4DE` | `36 16% 89%` | Cards, surfaces, hover states       |
 
 ### Semantic Mapping
 

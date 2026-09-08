@@ -15,6 +15,9 @@
 	--font-mono: "Geist Mono", monospace;
 
 	--color-charcoal: oklch(0.224 0.007 67.44); /* #1e1b18 */
+	--color-charcoal-muted: oklch(
+		0.269 0.007 67.44
+	); /* slightly lighter charcoal for dark mode muted */
 	--color-cream: oklch(0.97 0.007 88.64); /* #f7f5f0 */
 	--color-amber: oklch(0.715 0.079 68.54); /* #c49a6c */
 	--color-stone: oklch(0.567 0.012 58.08); /* #7c7570 */
@@ -84,7 +87,7 @@
 	--primary-foreground: oklch(0.985 0 0);
 	--secondary: oklch(0.97 0 0);
 	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.97 0 0);
+	--muted: var(--color-linen);
 	--muted-foreground: oklch(0.556 0 0);
 	--accent: oklch(0.97 0 0);
 	--accent-foreground: oklch(0.205 0 0);
@@ -119,7 +122,7 @@
 	--primary-foreground: oklch(0.205 0 0);
 	--secondary: oklch(0.269 0 0);
 	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.269 0 0);
+	--muted: var(--color-charcoal-muted);
 	--muted-foreground: oklch(0.708 0 0);
 	--accent: oklch(0.269 0 0);
 	--accent-foreground: oklch(0.985 0 0);

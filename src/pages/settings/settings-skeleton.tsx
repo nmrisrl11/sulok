@@ -5,7 +5,6 @@ export function SettingsSkeleton() {
 		<div className="mx-auto w-full max-w-2xl animate-in px-4 py-8 pb-24 duration-500 fade-in sm:px-6 md:py-12 md:pb-12">
 			<div className="mb-10 text-center sm:text-left">
 				<h1 className="flex items-center justify-center gap-2.5 font-heading text-3xl font-bold sm:justify-start">
-					<Skeleton className="h-7 w-7 rounded-full" />
 					<Skeleton className="h-8 w-32" />
 				</h1>
 				<Skeleton className="mx-auto mt-3 h-5 w-64 sm:mx-0" />
