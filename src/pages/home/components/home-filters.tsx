@@ -50,7 +50,7 @@ function HomeSearchInput() {
 				<button
 					type="button"
 					onClick={() => setLocalSearch("")}
-					className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+					className="absolute top-1/2 right-1 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
 					aria-label="Clear search"
 				>
 					<XIcon className="h-4 w-4" />

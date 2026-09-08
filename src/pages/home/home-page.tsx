@@ -8,7 +8,7 @@ import { useItemStore } from "@/stores/item-store";
 import { memo } from "react";
 import { HomeFilters } from "./components/home-filters";
 import { HomeFiltersSkeleton, HomeItemListSkeleton } from "./home-skeleton";
-import { useHomeManagement, useHomeStatus } from "./hooks/use-home-management";
+import { useHomeData } from "./hooks/use-home-management";
 
 function SelectionHeader({ items, hasItems }: { items: Item[]; hasItems: boolean }) {
 	const selectedIds = useItemStore((state) => state.selectedIds);
@@ -50,8 +50,15 @@ function SelectionHeader({ items, hasItems }: { items: Item[]; hasItems: boolean
 	);
 }
 
-function HomeHeaderArea() {
-	const { totalItems, isFiltersActive, isTotalLoading } = useHomeStatus();
+function HomeHeaderArea({
+	totalItems,
+	isFiltersActive,
+	isTotalLoading,
+}: {
+	totalItems: number;
+	isFiltersActive: boolean;
+	isTotalLoading: boolean;
+}) {
 	const showFilters = totalItems > 0 || isFiltersActive;
 
 	return (
@@ -66,9 +73,17 @@ function HomeHeaderArea() {
 
 const MemoizedHomeHeaderArea = memo(HomeHeaderArea);
 
-function HomeItemArea() {
-	const { searchQuery, items, totalItems, isLoading } = useHomeManagement();
-
+function HomeItemArea({
+	searchQuery,
+	items,
+	totalItems,
+	isLoading,
+}: {
+	searchQuery: string;
+	items: Item[];
+	totalItems: number;
+	isLoading: boolean;
+}) {
 	if (isLoading) {
 		return <HomeItemListSkeleton />;
 	}
@@ -103,11 +118,22 @@ function HomeItemArea() {
 }
 
 export function HomePage({ className }: { className?: string }) {
+	const homeData = useHomeData();
+
 	return (
 		<main className={cn("flex flex-col gap-10", className)}>
 			<div className="flex flex-col gap-4">
-				<MemoizedHomeHeaderArea />
-				<HomeItemArea />
+				<MemoizedHomeHeaderArea
+					totalItems={homeData.totalItems}
+					isFiltersActive={homeData.isFiltersActive}
+					isTotalLoading={homeData.isTotalLoading}
+				/>
+				<HomeItemArea
+					searchQuery={homeData.searchQuery}
+					items={homeData.items}
+					totalItems={homeData.totalItems}
+					isLoading={homeData.isLoading}
+				/>
 			</div>
 		</main>
 	);

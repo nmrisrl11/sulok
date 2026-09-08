@@ -3,7 +3,7 @@ import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton
 
 export function HomeItemListSkeleton() {
 	return (
-		<>
+		<div role="alert" aria-label="Loading items" className="contents">
 			<div className="mt-1 flex items-center justify-between px-2">
 				<div className="flex items-center gap-3">
 					<Skeleton className="h-4 w-4 rounded-sm" />
@@ -17,13 +17,17 @@ export function HomeItemListSkeleton() {
 				<ItemCardSkeleton />
 				<ItemCardSkeleton />
 			</div>
-		</>
+		</div>
 	);
 }
 
 export function HomeFiltersSkeleton() {
 	return (
-		<div className="flex w-full flex-col items-center gap-2 sm:w-auto sm:flex-row">
+		<div
+			role="alert"
+			aria-label="Loading filters"
+			className="flex w-full flex-col items-center gap-2 sm:w-auto sm:flex-row"
+		>
 			<Skeleton className="h-9 w-full rounded-full sm:w-64" />
 			<div className="flex w-full items-center justify-end gap-2 sm:w-auto">
 				<Skeleton className="h-9 w-44 rounded-full" />
