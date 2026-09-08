@@ -2,7 +2,7 @@ import { AppearanceIcon, DataIcon, SoundFxIcon, SuloCustomizationIcon } from "@/
 import { cn } from "@/lib/utils";
 import { LoaderIcon, SettingsIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 
 const DataStorageSection = lazy(() =>
 	import("@/features/settings/components/data-storage-section").then((m) => ({
@@ -21,6 +21,46 @@ const TABS = [
 	{ id: "sounds", label: "Sound FX", icon: SoundFxIcon, disabled: false },
 	{ id: "sulo", label: "Sulo Customization", icon: SuloCustomizationIcon, disabled: true },
 ] as const;
+
+function SettingsTabTrigger({
+	tab,
+	isActive,
+	onClick,
+}: {
+	tab: (typeof TABS)[number];
+	isActive: boolean;
+	onClick: () => void;
+}) {
+	const triggerRef = useRef<HTMLButtonElement>(null);
+
+	useEffect(() => {
+		if (isActive && triggerRef.current) {
+			triggerRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+		}
+	}, [isActive]);
+
+	const Icon = tab.icon;
+
+	return (
+		<button
+			ref={triggerRef}
+			onClick={onClick}
+			disabled={tab.disabled}
+			className={cn(
+				"flex snap-start items-center gap-2 rounded-full px-4 py-2 text-sm whitespace-nowrap transition-all corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
+				isActive
+					? "bg-primary font-medium text-primary-foreground shadow-sm"
+					: "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+				tab.disabled && "cursor-not-allowed opacity-50",
+			)}
+		>
+			<Icon
+				className={cn("h-4 w-4", isActive ? "text-primary-foreground" : "text-muted-foreground")}
+			/>
+			{tab.label}
+		</button>
+	);
+}
 
 export function SettingsPage() {
 	const [activeTab, setActiveTab] = useQueryState(
@@ -80,32 +120,14 @@ export function SettingsPage() {
 
 			<div className="flex flex-col gap-10">
 				<nav className="custom-scrollbar flex snap-x items-center gap-2 overflow-x-auto border-b border-border/50 pb-4">
-					{TABS.map((tab) => {
-						const Icon = tab.icon;
-						const isActive = activeTab === tab.id;
-						return (
-							<button
-								key={tab.id}
-								onClick={() => !tab.disabled && setActiveTab(tab.id)}
-								disabled={tab.disabled}
-								className={cn(
-									"flex snap-start items-center gap-2 rounded-full px-4 py-2 text-sm whitespace-nowrap transition-all corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-									isActive
-										? "bg-primary font-medium text-primary-foreground shadow-sm"
-										: "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
-									tab.disabled && "cursor-not-allowed opacity-50",
-								)}
-							>
-								<Icon
-									className={cn(
-										"h-4 w-4",
-										isActive ? "text-primary-foreground" : "text-muted-foreground",
-									)}
-								/>
-								{tab.label}
-							</button>
-						);
-					})}
+					{TABS.map((tab) => (
+						<SettingsTabTrigger
+							key={tab.id}
+							tab={tab}
+							isActive={activeTab === tab.id}
+							onClick={() => !tab.disabled && setActiveTab(tab.id)}
+						/>
+					))}
 				</nav>
 
 				<main className="min-w-0 flex-1 pb-10">{renderContent()}</main>

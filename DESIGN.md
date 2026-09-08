@@ -145,6 +145,12 @@ Minimal shadows. Prefer border/background differentiation.
 - Filter dropdowns (tags, type) inline or in a popover.
 - Sort toggle (name, date, manual).
 
+### Navigation Tabs
+
+- Use scrollable horizontal tabs for mobile viewports, wrapping gracefully or sticking to vertical layouts on desktop if appropriate.
+- **Scroll Snap:** Tab list containers must use `snap-x` and individual tabs `snap-start` for tactile mobile scrolling.
+- **Auto-Scrolling:** When a tab becomes active (e.g., via click or deep link), it must automatically scroll into the center of the view (using `scrollIntoView({ behavior: 'smooth', inline: 'center' })`) to ensure the user's current context is always visible.
+
 ### Bulk Action Bar
 
 - Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
