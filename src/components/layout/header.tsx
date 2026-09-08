@@ -15,14 +15,14 @@ export function Header() {
 		<header className="flex items-center justify-between p-4 md:py-6">
 			<SulokLogo />
 			<nav className="flex items-center gap-2 sm:gap-4">
-				<div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 rounded-full p-1 shadow-inner">
+				<div className="flex items-center gap-1 rounded-full bg-black/5 p-1 shadow-inner dark:bg-white/10">
 					<NavLink
 						to="/about"
 						onMouseEnter={() => setTemporaryExpression("shy", 10000)}
 						onMouseLeave={clearTemporaryExpression}
 						className={({ isActive }) =>
 							cn(
-								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium",
+								"cursor-pointer rounded-full px-2 py-1 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3 sm:py-1.5 sm:text-sm",
 								isActive
 									? "bg-background text-foreground shadow-sm"
 									: "text-muted-foreground hover:text-foreground",
@@ -37,7 +37,7 @@ export function Header() {
 						onMouseLeave={clearTemporaryExpression}
 						className={({ isActive }) =>
 							cn(
-								"transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer rounded-full px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium",
+								"cursor-pointer rounded-full px-2 py-1 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3 sm:py-1.5 sm:text-sm",
 								isActive
 									? "bg-background text-foreground shadow-sm"
 									: "text-muted-foreground hover:text-foreground",
@@ -59,7 +59,7 @@ export function Header() {
 						)}
 					>
 						<NavLink to="/settings">
-							<SettingsIcon className="w-5 h-5" />
+							<SettingsIcon className="h-5 w-5" />
 							<span className="sr-only">Settings</span>
 						</NavLink>
 					</Button>

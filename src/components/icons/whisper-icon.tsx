@@ -7,7 +7,7 @@ export function WhisperIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
-			className={cn("w-4 h-4", className)}
+			className={cn("h-4 w-4", className)}
 			{...props}
 		>
 			<path d="M20.807,4.29a1,1,0,0,0-1.415,1.415,8.913,8.913,0,0,1,0,12.59,1,1,0,0,0,1.415,1.415A10.916,10.916,0,0,0,20.807,4.29Z" />

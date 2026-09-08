@@ -40,7 +40,7 @@ function SelectionHeader({ items, hasItems }: { items: Item[]; hasItems: boolean
 				/>
 				<label
 					htmlFor="select-all"
-					className="text-sm font-medium leading-none cursor-pointer select-none text-foreground"
+					className="cursor-pointer text-sm leading-none font-medium text-foreground select-none"
 				>
 					Select All
 				</label>
@@ -83,8 +83,8 @@ export function HomePage({ className }: { className?: string }) {
 		<main className={cn("flex flex-col gap-10", className)}>
 			{/* Item List Section */}
 			<div className="flex flex-col gap-4">
-				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2 sm:px-0">
-					<h2 className="text-foreground font-heading text-2xl font-bold tracking-tight">
+				<div className="flex flex-col justify-between gap-4 px-2 sm:flex-row sm:items-center sm:px-0">
+					<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
 						Your Corner
 					</h2>
 					{(hasItems || q) && <ItemControls />}

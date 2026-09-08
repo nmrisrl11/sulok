@@ -62,21 +62,21 @@ export function DataStorageSection() {
 	};
 
 	return (
-		<div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+		<div className="animate-in space-y-8 duration-300 fade-in slide-in-from-bottom-2">
 			<div>
 				<h2 className="font-heading text-xl font-semibold">Data & Backup</h2>
-				<p className="text-sm text-muted-foreground mt-1">
+				<p className="mt-1 text-sm text-muted-foreground">
 					Your Archive: Securely back up your saved corners or restore them from a previous export.
 				</p>
 			</div>
 
 			<div className="space-y-8">
-				<div className="space-y-4 pb-8 border-b border-border/50">
+				<div className="space-y-4 border-b border-border/50 pb-8">
 					<div>
-						<p className="text-sm font-medium flex items-center gap-2">
-							<DownloadIcon className="w-4 h-4" /> Export Library
+						<p className="flex items-center gap-2 text-sm font-medium">
+							<DownloadIcon className="h-4 w-4" /> Export Library
 						</p>
-						<p className="text-xs text-muted-foreground mt-1">
+						<p className="mt-1 text-xs text-muted-foreground">
 							Create a backup of your saved items in JSON, CSV, or TXT format.
 						</p>
 					</div>
@@ -86,18 +86,18 @@ export function DataStorageSection() {
 							onClick={() => handleExport("json")}
 							disabled={itemCount === 0}
 							className={cn(
-								"flex flex-col items-center sm:items-start gap-2 sm:gap-3 p-3 sm:p-4 text-center sm:text-left transition-all",
-								"bg-card hover:bg-accent border border-border/50 hover:border-border rounded-2xl shadow-sm hover:shadow",
+								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
+								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
 								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
 							)}
 						>
-							<div className="p-2 bg-background rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-xl text-muted-foreground shadow-sm">
-								<BracesIcon className="w-5 h-5" />
+							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+								<BracesIcon className="h-5 w-5" />
 							</div>
 							<div>
-								<h4 className="font-medium text-sm text-foreground">JSON</h4>
-								<p className="text-xs text-muted-foreground mt-0.5 leading-snug hidden sm:block">
+								<h4 className="text-sm font-medium text-foreground">JSON</h4>
+								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
 									Full backup with complete metadata
 								</p>
 							</div>
@@ -107,18 +107,18 @@ export function DataStorageSection() {
 							onClick={() => handleExport("csv")}
 							disabled={itemCount === 0}
 							className={cn(
-								"flex flex-col items-center sm:items-start gap-2 sm:gap-3 p-3 sm:p-4 text-center sm:text-left transition-all",
-								"bg-card hover:bg-accent border border-border/50 hover:border-border rounded-2xl shadow-sm hover:shadow",
+								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
+								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
 								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
 							)}
 						>
-							<div className="p-2 bg-background rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-xl text-muted-foreground shadow-sm">
-								<TableIcon className="w-5 h-5" />
+							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+								<TableIcon className="h-5 w-5" />
 							</div>
 							<div>
-								<h4 className="font-medium text-sm text-foreground">CSV</h4>
-								<p className="text-xs text-muted-foreground mt-0.5 leading-snug hidden sm:block">
+								<h4 className="text-sm font-medium text-foreground">CSV</h4>
+								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
 									Spreadsheet compatible format
 								</p>
 							</div>
@@ -128,39 +128,39 @@ export function DataStorageSection() {
 							onClick={() => handleExport("txt")}
 							disabled={itemCount === 0}
 							className={cn(
-								"flex flex-col items-center sm:items-start gap-2 sm:gap-3 p-3 sm:p-4 text-center sm:text-left transition-all",
-								"bg-card hover:bg-accent border border-border/50 hover:border-border rounded-2xl shadow-sm hover:shadow",
+								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
+								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
 								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
 							)}
 						>
-							<div className="p-2 bg-background rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-xl text-muted-foreground shadow-sm">
-								<FileTextIcon className="w-5 h-5" />
+							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+								<FileTextIcon className="h-5 w-5" />
 							</div>
 							<div>
-								<h4 className="font-medium text-sm text-foreground">TXT</h4>
-								<p className="text-xs text-muted-foreground mt-0.5 leading-snug hidden sm:block">
+								<h4 className="text-sm font-medium text-foreground">TXT</h4>
+								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
 									Simple plain text list of links
 								</p>
 							</div>
 						</button>
 					</div>
 					{itemCount === 0 && (
-						<div className="flex items-start gap-2 bg-amber-500/10 text-amber-500 p-2.5 rounded-md">
-							<AlertCircleIcon className="w-4 h-4 shrink-0 mt-0.5" />
-							<p className="text-xs font-medium leading-relaxed">
+						<div className="flex items-start gap-2 rounded-md bg-amber-500/10 p-2.5 text-amber-500">
+							<AlertCircleIcon className="mt-0.5 h-4 w-4 shrink-0" />
+							<p className="text-xs leading-relaxed font-medium">
 								You don't have any items to export yet. Add some items first.
 							</p>
 						</div>
 					)}
 				</div>
 
-				<div className="space-y-4 pb-8 border-b border-border/50">
+				<div className="space-y-4 border-b border-border/50 pb-8">
 					<div>
-						<p className="text-sm font-medium flex items-center gap-2">
-							<UploadIcon className="w-4 h-4" /> Restore Library
+						<p className="flex items-center gap-2 text-sm font-medium">
+							<UploadIcon className="h-4 w-4" /> Restore Library
 						</p>
-						<p className="text-xs text-muted-foreground mt-1">
+						<p className="mt-1 text-xs text-muted-foreground">
 							Restore your items from a previous backup file.
 						</p>
 					</div>
@@ -175,18 +175,18 @@ export function DataStorageSection() {
 						type="button"
 						onClick={() => fileInputRef.current?.click()}
 						className={cn(
-							"w-full group flex items-center justify-start gap-4 p-4 text-left transition-all",
-							"bg-card hover:bg-accent border border-border/50 hover:border-border rounded-2xl shadow-sm hover:shadow",
+							"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
+							"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
 							"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-							"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+							"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 						)}
 					>
-						<div className="p-2.5 bg-background group-hover:bg-background rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-xl text-muted-foreground shadow-sm transition-colors">
-							<UploadCloudIcon className="w-5 h-5" />
+						<div className="rounded-xl bg-background p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle group-hover:bg-background supports-[corner-shape:squircle]:rounded-xl">
+							<UploadCloudIcon className="h-5 w-5" />
 						</div>
 						<div>
-							<h4 className="font-medium text-sm text-foreground">Select backup file</h4>
-							<p className="text-xs text-muted-foreground mt-0.5">
+							<h4 className="text-sm font-medium text-foreground">Select backup file</h4>
+							<p className="mt-0.5 text-xs text-muted-foreground">
 								Supports .json, .csv, and .txt files
 							</p>
 						</div>

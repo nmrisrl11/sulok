@@ -3,7 +3,7 @@ export const APP_INFO = {
 	shortName: "Sulok",
 	pronunciation: "/suː.lok/",
 	meaning: "A Tagalog word meaning 'corner' or 'nook'.",
-	tagline: "Your corner of the web.",
+	tagline: "Your corner of the web",
 	title: "Sulok — Your corner of the web",
 	description:
 		"A personal web library — a local-first app for saving, organizing, and rediscovering bookmarks/links from the web.",

@@ -10,15 +10,15 @@ export function ItemEmptyState({ disabled }: { disabled?: boolean }) {
 	return (
 		<div
 			className={cn(
-				"flex flex-col items-center justify-center p-8 text-center rounded-xl border border-dashed py-12",
+				"flex flex-col items-center justify-center rounded-xl border border-dashed p-8 py-12 text-center",
 				disabled && "pointer-events-none opacity-50",
 			)}
 		>
-			<div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted/50 mb-4">
+			<div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted/50">
 				<BoxIcon className="h-10 w-10 text-muted-foreground/50" />
 			</div>
 			<h3 className="text-xl font-semibold tracking-tight">Your corner is empty</h3>
-			<p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto mb-6">
+			<p className="mx-auto mt-2 mb-6 max-w-sm text-sm text-muted-foreground">
 				Start saving links, articles, and resources you find across the web to build your personal
 				library.
 			</p>

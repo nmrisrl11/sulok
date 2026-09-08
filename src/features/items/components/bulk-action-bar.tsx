@@ -34,17 +34,17 @@ export function BulkActionBar() {
 	};
 
 	return (
-		<div className="bg-card/80 backdrop-blur-md text-card-foreground shadow-lg border border-border rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle px-4 py-2 flex items-center gap-4 mx-auto w-fit animate-in slide-in-from-bottom-10 fade-in duration-300">
-			<span className="text-sm font-medium whitespace-nowrap px-2">
+		<div className="mx-auto flex w-fit animate-in items-center gap-4 rounded-full border border-border bg-card/80 px-4 py-2 text-card-foreground shadow-lg backdrop-blur-md duration-300 slide-in-from-bottom-10 corner-squircle fade-in supports-[corner-shape:squircle]:rounded-2xl">
+			<span className="px-2 text-sm font-medium whitespace-nowrap">
 				{selectedIds.length} selected
 			</span>
-			<div className="w-px h-6 bg-border" />
+			<div className="h-6 w-px bg-border" />
 			<div className="flex items-center gap-1">
 				<Button
 					variant="ghost"
 					size="sm"
 					onClick={handleDeleteSelected}
-					className="h-8 gap-2 hover:bg-destructive/10 hover:text-destructive rounded-full!"
+					className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
 				>
 					<Trash2Icon className="h-4 w-4" />
 					Delete Selected

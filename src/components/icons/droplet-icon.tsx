@@ -7,7 +7,7 @@ export function DropletIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
-			className={cn("w-4 h-4", className)}
+			className={cn("h-4 w-4", className)}
 			{...props}
 		>
 			<path d="M13,24a6.006,6.006,0,0,1-6-6c0-1.56,1.2-4.045,3.552-7.388a3.016,3.016,0,0,1,4.9,0C17.805,13.955,19,16.44,19,18A6.006,6.006,0,0,1,13,24Zm0-12.657a.98.98,0,0,0-.813.422C9.311,15.844,9,17.484,9,18a4,4,0,0,0,8,0c0-.516-.311-2.156-3.187-6.235A.98.98,0,0,0,13,11.343Z" />

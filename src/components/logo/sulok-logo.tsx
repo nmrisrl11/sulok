@@ -135,7 +135,7 @@ export function SulokLogo({ className }: { className?: string }) {
 	};
 
 	const classNameValue = cn(
-		"group relative flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm cursor-pointer select-none [-webkit-touch-callout:none]",
+		"group relative flex cursor-pointer items-center rounded-sm outline-none select-none [-webkit-touch-callout:none] focus-visible:ring-2 focus-visible:ring-ring",
 		isMobile ? "h-9" : "h-12",
 		className,
 	);
@@ -149,7 +149,7 @@ export function SulokLogo({ className }: { className?: string }) {
 		>
 			<motion.svg
 				viewBox={viewBox}
-				className="absolute w-full h-full fill-foreground overflow-visible"
+				className="absolute h-full w-full overflow-visible fill-foreground"
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<motion.g style={{ y: yTransform }}>
@@ -164,11 +164,11 @@ export function SulokLogo({ className }: { className?: string }) {
 			</motion.svg>
 
 			<motion.div
-				className="absolute w-full h-full pointer-events-none"
+				className="pointer-events-none absolute h-full w-full"
 				style={{ opacity: eyesOpacity }}
 			>
 				{/* Render full SuloMascot - its body perfectly overlaps the morphed path */}
-				<SuloMascot expression={currentExpression} className={isMobile ? "w-9 h-9" : "w-12 h-12"} />
+				<SuloMascot expression={currentExpression} className={isMobile ? "h-9 w-9" : "h-12 w-12"} />
 			</motion.div>
 		</motion.div>
 	);
@@ -180,10 +180,10 @@ export function SulokLogo({ className }: { className?: string }) {
 					initial={{ opacity: 0, x: -10, scale: 0.95 }}
 					animate={{ opacity: 1, x: 0, scale: 1 }}
 					exit={{ opacity: 0, scale: 0.95 }}
-					className="relative bg-foreground text-background font-mono text-[11px] px-3 py-1 rounded-full shadow-md corner-squircle whitespace-nowrap pointer-events-none tracking-tight"
+					className="pointer-events-none relative rounded-full bg-foreground px-3 py-1 font-mono text-[11px] tracking-tight whitespace-nowrap text-background shadow-md corner-squircle"
 				>
 					{/* Small tail for the speech bubble effect pointing to Sulo */}
-					<div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-foreground rotate-45 rounded-sm" />
+					<div className="absolute top-1/2 -left-1 h-2 w-2 -translate-y-1/2 rotate-45 rounded-sm bg-foreground" />
 					<span className="relative z-10">{whisperText}</span>
 				</motion.div>
 			)}

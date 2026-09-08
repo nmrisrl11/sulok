@@ -13,7 +13,7 @@ interface ItemPreviewProps {
 export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps) {
 	if (!url && !loading && !error && !metadata) {
 		return (
-			<div className="flex flex-col items-center justify-center gap-2 border border-dashed p-8 text-center bg-muted/20 text-muted-foreground rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle">
+			<div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-muted/20 p-8 text-center text-muted-foreground corner-squircle supports-[corner-shape:squircle]:rounded-[24px]">
 				<GlobeIcon className="h-8 w-8 opacity-20" />
 				<div className="flex flex-col gap-1">
 					<p className="text-sm font-medium">No preview available</p>
@@ -25,7 +25,7 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 
 	if (loading) {
 		return (
-			<div className="flex flex-col gap-3 rounded-md border p-4 bg-muted/20 animate-pulse">
+			<div className="flex animate-pulse flex-col gap-3 rounded-md border bg-muted/20 p-4">
 				<div className="flex items-center gap-2">
 					<Skeleton className="h-4 w-4 rounded-full" />
 					<Skeleton className="h-4 w-32" />
@@ -40,16 +40,16 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 		return (
 			<div
 				role="alert"
-				className="relative flex items-start gap-3 rounded-md border p-3 text-muted-foreground bg-muted/10 overflow-hidden"
+				className="relative flex items-start gap-3 overflow-hidden rounded-md border bg-muted/10 p-3 text-muted-foreground"
 			>
-				<GlobeIcon className="h-4 w-4 mt-0.5 shrink-0 opacity-50 relative z-10" />
-				<div className="flex flex-col gap-0.5 leading-tight relative z-10 pr-8">
+				<GlobeIcon className="relative z-10 mt-0.5 h-4 w-4 shrink-0 opacity-50" />
+				<div className="relative z-10 flex flex-col gap-0.5 pr-8 leading-tight">
 					<span className="text-sm font-medium text-foreground">Preview unavailable</span>
 					<span className="text-xs opacity-80">You can still save this URL to your corner.</span>
 				</div>
 				<SuloMascot
 					expression="confused"
-					className="absolute -bottom-5 -right-3 w-16 h-16 -rotate-12 pointer-events-none"
+					className="pointer-events-none absolute -right-3 -bottom-5 h-16 w-16 -rotate-12"
 				/>
 			</div>
 		);
@@ -68,13 +68,13 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 	})();
 
 	return (
-		<div className="flex flex-col shrink-0 overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-[24px] corner-squircle border bg-card text-card-foreground shadow-sm">
+		<div className="flex shrink-0 flex-col overflow-hidden rounded-md border bg-card text-card-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-[24px]">
 			{metadata.image ? (
-				<div className="relative aspect-video w-full overflow-hidden bg-muted border-b">
-					<img src={metadata.image} alt="Preview" className="object-cover w-full h-full" />
+				<div className="relative aspect-video w-full overflow-hidden border-b bg-muted">
+					<img src={metadata.image} alt="Preview" className="h-full w-full object-cover" />
 				</div>
 			) : (
-				<div className="flex items-center justify-center aspect-3/1 w-full bg-muted border-b text-muted-foreground">
+				<div className="flex aspect-3/1 w-full items-center justify-center border-b bg-muted text-muted-foreground">
 					<ImageIcon className="h-8 w-8 opacity-20" />
 				</div>
 			)}
@@ -87,11 +87,11 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 					)}
 					<span className="truncate">{hostname}</span>
 				</div>
-				<h3 className="line-clamp-2 text-sm font-semibold leading-tight mt-1">
+				<h3 className="mt-1 line-clamp-2 text-sm leading-tight font-semibold">
 					{metadata.title || "Unknown Title"}
 				</h3>
 				{metadata.description && (
-					<p className="line-clamp-2 text-xs text-muted-foreground mt-0.5">
+					<p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
 						{metadata.description}
 					</p>
 				)}

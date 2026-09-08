@@ -58,7 +58,7 @@ export function ConfirmationDialog() {
 							"This action cannot be undone. This will permanently delete your data."}
 					</AlertDialogDescription>
 					{error && (
-						<div className="bg-destructive/15 text-destructive rounded-md p-3 text-sm">{error}</div>
+						<div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>
 					)}
 				</AlertDialogHeader>
 				<AlertDialogFooter>
@@ -66,7 +66,7 @@ export function ConfirmationDialog() {
 						{options.cancelText || "Cancel"}
 					</AlertDialogCancel>
 					<AlertDialogAction
-						className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+						className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
 						onClick={handleConfirm}
 						disabled={isConfirming}
 					>
