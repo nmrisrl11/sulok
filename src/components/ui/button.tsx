@@ -23,7 +23,7 @@ function Button({
 			data-variant={variant}
 			data-size={size}
 			className={cn(
-				"rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle",
+				"rounded-md corner-squircle supports-[corner-shape:squircle]:rounded-xl",
 				buttonVariants({ variant, size, className }),
 			)}
 			{...props}

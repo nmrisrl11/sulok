@@ -60,8 +60,8 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 
 	return (
 		<Dialog open={isOpen} onOpenChange={(open) => !open && !isImporting && onClose()}>
-			<DialogContent className="sm:max-w-xl max-h-[90vh] flex flex-col gap-0 p-0">
-				<div className="p-6 pb-4 border-b">
+			<DialogContent className="flex max-h-[90vh] flex-col gap-0 p-0 sm:max-w-xl">
+				<div className="border-b p-6 pb-4">
 					<DialogHeader>
 						<DialogTitle className="font-heading text-xl">Import Preview</DialogTitle>
 						<DialogDescription>
@@ -70,12 +70,12 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 						</DialogDescription>
 					</DialogHeader>
 
-					<div className="flex items-center gap-6 mt-6">
+					<div className="mt-6 flex items-center gap-6">
 						<div className="flex flex-col">
 							<span className="font-mono text-xl font-semibold text-foreground">
 								{itemsToImport.length}
 							</span>
-							<span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
+							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
 								To Import
 							</span>
 						</div>
@@ -83,7 +83,7 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 							<span className="font-mono text-xl font-medium text-muted-foreground">
 								{data.duplicateCount}
 							</span>
-							<span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
+							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
 								Duplicates
 							</span>
 						</div>
@@ -91,26 +91,26 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 							<span className="font-mono text-xl font-medium text-muted-foreground">
 								{data.invalidCount}
 							</span>
-							<span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
+							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
 								Invalid
 							</span>
 						</div>
 					</div>
 				</div>
 
-				<div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-4 space-y-4">
+				<div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto px-6 py-4">
 					{(data.duplicateCount > 0 || data.invalidCount > 0) && (
-						<div className="text-xs text-muted-foreground space-y-1.5 pb-2">
+						<div className="space-y-1.5 pb-2 text-xs text-muted-foreground">
 							{data.duplicateCount > 0 && (
 								<p className="flex items-center gap-1.5">
-									<InfoIcon className="w-4 h-4" />
+									<InfoIcon className="h-4 w-4" />
 									{data.duplicateCount} {data.duplicateCount === 1 ? "item" : "items"} already exist
 									in your library and will be skipped.
 								</p>
 							)}
 							{data.invalidCount > 0 && (
 								<p className="flex items-center gap-1.5">
-									<AlertCircleIcon className="w-4 h-4" />
+									<AlertCircleIcon className="h-4 w-4" />
 									{data.invalidCount} {data.invalidCount === 1 ? "item has" : "items have"} missing
 									or invalid URLs and will be skipped.
 								</p>
@@ -130,24 +130,24 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 							return (
 								<div
 									key={index}
-									className={`flex items-center justify-between gap-3 p-2 rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle transition-colors border ${item.isDuplicate ? "opacity-50 grayscale bg-muted/30 border-transparent" : "bg-card hover:bg-card/80"}`}
+									className={`flex items-center justify-between gap-3 rounded-md border p-2 transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-xl ${item.isDuplicate ? "border-transparent bg-muted/30 opacity-50 grayscale" : "bg-card hover:bg-card/80"}`}
 								>
-									<div className="flex items-center gap-3 min-w-0 flex-1">
+									<div className="flex min-w-0 flex-1 items-center gap-3">
 										<SiteFavicon
 											url={item.url}
 											logo={item.logo}
-											className="w-5 h-5 shrink-0"
+											className="h-5 w-5 shrink-0"
 											size={64}
 										/>
-										<div className="flex-1 min-w-0">
+										<div className="min-w-0 flex-1">
 											<p className="truncate text-sm font-medium">{item.title || hostname}</p>
-											<p className="truncate text-[11px] text-muted-foreground font-mono">
+											<p className="truncate font-mono text-[11px] text-muted-foreground">
 												{item.url}
 											</p>
 										</div>
 									</div>
 									{item.isDuplicate && (
-										<span className="shrink-0 text-[10px] font-bold tracking-wider uppercase text-muted-foreground bg-background/50 border px-1.5 py-0.5 rounded-sm">
+										<span className="shrink-0 rounded-sm border bg-background/50 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
 											Exists
 										</span>
 									)}
@@ -155,14 +155,14 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 							);
 						})}
 						{data.validItems.length > 100 && (
-							<div className="text-center text-xs text-muted-foreground italic py-4">
+							<div className="py-4 text-center text-xs text-muted-foreground italic">
 								+ {data.validItems.length - 100} more items
 							</div>
 						)}
 					</div>
 				</div>
 
-				<DialogFooter className="p-4 border-t m-0">
+				<DialogFooter className="m-0 border-t p-4">
 					<Button variant="ghost" onClick={() => onClose()} disabled={isImporting}>
 						Cancel
 					</Button>

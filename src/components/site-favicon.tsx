@@ -37,7 +37,7 @@ export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProp
 		return (
 			<div
 				className={cn(
-					"bg-muted flex items-center justify-center overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle border",
+					"flex items-center justify-center overflow-hidden rounded-md border bg-muted corner-squircle supports-[corner-shape:squircle]:rounded-xl",
 					className,
 				)}
 			>
@@ -49,7 +49,7 @@ export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProp
 	return (
 		<div
 			className={cn(
-				"bg-white flex items-center justify-center overflow-hidden rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle border shadow-sm",
+				"flex items-center justify-center overflow-hidden rounded-md border bg-white shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl",
 				className,
 			)}
 		>

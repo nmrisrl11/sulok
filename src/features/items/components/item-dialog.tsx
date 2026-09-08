@@ -68,7 +68,7 @@ export function ItemDialog() {
 
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-			<DialogContent className="flex flex-col gap-0 p-0 sm:max-w-sm max-h-[90vh]">
+			<DialogContent className="flex max-h-[90vh] flex-col gap-0 p-0 sm:max-w-sm">
 				<DialogHeader className="border-b p-4 pb-2">
 					<DialogTitle>{editingItem ? "Edit Item" : `Add to ${APP_INFO.name}`}</DialogTitle>
 					<DialogDescription>

@@ -8,5 +8,10 @@
 	"jsxSingleQuote": false,
 	"trailingComma": "all",
 	"bracketSpacing": true,
-	"arrowParens": "always"
+	"arrowParens": "always",
+	"sortTailwindcss": {
+		"stylesheet": "./src/index.css",
+		"functions": ["clsx", "cn"],
+		"preserveWhitespace": true
+	}
 }

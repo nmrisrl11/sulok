@@ -120,20 +120,20 @@ export function QuickLinkActionBar() {
 				}
 			}}
 			className={cn(
-				"bg-card/80 backdrop-blur-md text-card-foreground shadow-lg border border-border flex items-center gap-3 mx-auto transition-all duration-300 animate-in slide-in-from-bottom-10 fade-in",
+				"mx-auto flex animate-in items-center gap-3 border border-border bg-card/80 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-300 slide-in-from-bottom-10 fade-in",
 				isExpanded
-					? "rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-1.5 pr-2 w-full max-w-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background"
-					: "rounded-full supports-[corner-shape:squircle]:rounded-2xl corner-squircle p-2 w-13 cursor-pointer hover:bg-card/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+					? "w-full max-w-md rounded-full p-1.5 pr-2 corner-squircle focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background supports-[corner-shape:squircle]:rounded-2xl"
+					: "w-13 cursor-pointer rounded-full p-2 corner-squircle hover:scale-105 hover:bg-card/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
 			)}
 		>
-			<div className="w-9 h-9 shrink-0 bg-muted/30 rounded-full flex items-center justify-center relative overflow-hidden transition-colors">
-				<SuloMascot expression={getExpression()} className="w-5 h-5" />
+			<div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted/30 transition-colors">
+				<SuloMascot expression={getExpression()} className="h-5 w-5" />
 			</div>
 
 			<div
 				className={cn(
 					"flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out",
-					isExpanded ? "flex-1 opacity-100 max-w-full" : "w-0 opacity-0 pointer-events-none",
+					isExpanded ? "max-w-full flex-1 opacity-100" : "pointer-events-none w-0 opacity-0",
 				)}
 			>
 				<input
@@ -155,7 +155,7 @@ export function QuickLinkActionBar() {
 						}
 					}}
 					placeholder="Drop a link to your corner..."
-					className="flex-1 bg-transparent border-none outline-none text-base md:text-sm placeholder:text-muted-foreground min-w-0"
+					className="min-w-0 flex-1 border-none bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
 					aria-label="Paste a link to preview"
 					tabIndex={isExpanded ? 0 : -1}
 				/>
@@ -164,7 +164,7 @@ export function QuickLinkActionBar() {
 					size="icon"
 					variant={url.trim() ? "default" : "ghost"}
 					disabled={!url.trim()}
-					className="h-8 w-8 rounded-full shrink-0 transition-all duration-300"
+					className="h-8 w-8 shrink-0 rounded-full transition-all duration-300"
 					aria-label="Preview link"
 					tabIndex={isExpanded ? 0 : -1}
 				>

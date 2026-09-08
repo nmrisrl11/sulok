@@ -32,14 +32,14 @@ export function ItemControls() {
 	};
 
 	return (
-		<div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
-			<div className="relative w-full sm:w-64 flex-1">
-				<SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+		<div className="flex w-full flex-col items-center gap-2 sm:w-auto sm:flex-row">
+			<div className="relative w-full flex-1 sm:w-64">
+				<SearchIcon className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<Input
 					id="search-item"
 					type="search"
 					placeholder="Search..."
-					className="pl-9 pr-9 h-9 rounded-full bg-card corner-squircle"
+					className="h-9 rounded-full bg-card pr-9 pl-9 corner-squircle"
 					value={q}
 					onChange={(e) => setQ(e.target.value || null)}
 					autoComplete="off"
@@ -48,7 +48,7 @@ export function ItemControls() {
 					<button
 						type="button"
 						onClick={() => setQ(null)}
-						className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
+						className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
 						aria-label="Clear search"
 					>
 						<XIcon className="h-4 w-4" />
@@ -56,13 +56,13 @@ export function ItemControls() {
 				)}
 			</div>
 
-			<div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+			<div className="flex w-full items-center justify-end gap-2 sm:w-auto">
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button
 							variant="ghost"
 							size="sm"
-							className="h-9 gap-1 rounded-full corner-squircle text-muted-foreground"
+							className="h-9 gap-1 rounded-full text-muted-foreground corner-squircle"
 						>
 							<ArrowUpDownIcon className="h-4 w-4" />
 							Sort
@@ -88,7 +88,7 @@ export function ItemControls() {
 				<Button
 					variant="ghost"
 					size="sm"
-					className="h-9 gap-1 rounded-full corner-squircle text-muted-foreground opacity-50 cursor-not-allowed"
+					className="h-9 cursor-not-allowed gap-1 rounded-full text-muted-foreground opacity-50 corner-squircle"
 					title="Filters coming soon"
 					disabled
 				>

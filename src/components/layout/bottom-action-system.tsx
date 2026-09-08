@@ -29,9 +29,9 @@ export function BottomActionSystem() {
 	return (
 		<div
 			ref={containerRef}
-			className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:bottom-6 left-0 right-0 z-50 pointer-events-none flex flex-col items-center px-4 w-full"
+			className="pointer-events-none fixed right-0 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-0 z-50 flex w-full flex-col items-center px-4 md:bottom-6"
 		>
-			<div className="pointer-events-auto w-full max-w-md flex justify-center">
+			<div className="pointer-events-auto flex w-full max-w-md justify-center">
 				{isSelectionMode ? (
 					<Suspense fallback={null}>
 						<BulkActionBar />

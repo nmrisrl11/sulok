@@ -8,13 +8,13 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	const isDev = import.meta.env.DEV;
 
 	return (
-		<div className="flex flex-col items-center justify-center w-full py-12 gap-6 text-center animate-in fade-in duration-500">
-			<div className="w-48 h-48 sm:w-64 sm:h-64">
+		<div className="flex w-full animate-in flex-col items-center justify-center gap-6 py-12 text-center duration-500 fade-in">
+			<div className="h-48 w-48 sm:h-64 sm:w-64">
 				<SuloMascot expression="sad" />
 			</div>
 			<div className="flex flex-col gap-2">
 				<h1 className="font-heading text-3xl font-bold">Uh oh, Sulo tripped!</h1>
-				<p className="text-muted-foreground max-w-sm mx-auto">
+				<p className="mx-auto max-w-sm text-muted-foreground">
 					{isDev && (error as Error)?.message
 						? (error as Error).message
 						: "An unexpected error occurred while loading this corner of the web."}

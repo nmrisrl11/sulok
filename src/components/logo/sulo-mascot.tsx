@@ -221,7 +221,7 @@ export function SuloMascot({ expression = "sleepy", className }: SuloMascotProps
 			role="img"
 			aria-label={`Sulo mascot (${expression})`}
 			xmlns="http://www.w3.org/2000/svg"
-			className={cn("w-full h-full", className)}
+			className={cn("h-full w-full", className)}
 		>
 			<g>
 				{/* Sulo Body: Inverts themes. Background in light mode is dark, vice versa. */}

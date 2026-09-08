@@ -125,7 +125,7 @@ export function ItemForm({
 			<form
 				id="item-form"
 				onSubmit={handleSubmit(handleFormSubmit)}
-				className="flex flex-1 flex-col gap-5 overflow-y-auto p-4 custom-scrollbar"
+				className="custom-scrollbar flex flex-1 flex-col gap-5 overflow-y-auto p-4"
 			>
 				<div className="space-y-2">
 					<Label htmlFor="url">URL *</Label>
@@ -148,7 +148,7 @@ export function ItemForm({
 				<input type="hidden" {...register("logo")} />
 
 				<div className="flex flex-col gap-2">
-					<h3 className="text-muted-foreground font-medium text-sm leading-none">Preview</h3>
+					<h3 className="text-sm leading-none font-medium text-muted-foreground">Preview</h3>
 					<ItemPreview metadata={metadata} loading={loading} error={error} url={formattedUrl} />
 				</div>
 
