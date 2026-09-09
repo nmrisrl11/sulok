@@ -2,6 +2,7 @@ import { ResetButton } from "@/components/reset-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { WHISPER_PHRASES } from "@/constants/whispers";
+import { SettingsCard } from "@/features/settings/components/settings-card";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { whispersSchema, type WhispersFormValues } from "@/schemas/settings.schema";
@@ -19,10 +20,13 @@ function mapFormToPhrases(items: { value: string }[]) {
 }
 
 const categoryMap: Record<keyof WhispersFormValues, { label: string; desc: string }> = {
-	positive: { label: "Success", desc: "When things go perfectly right." },
-	negative: { label: "Errors", desc: "When something fails or breaks." },
-	warning: { label: "Warnings", desc: "When caution is needed." },
-	info: { label: "Info", desc: "For general updates and hints." },
+	positive: {
+		label: "Happy Moments",
+		desc: "When things go perfectly right and Sulo wants to cheer.",
+	},
+	negative: { label: "Oopsies", desc: "When something fails or breaks and Sulo offers comfort." },
+	warning: { label: "Heads Up", desc: "When caution is needed for an action." },
+	info: { label: "Friendly Hints", desc: "For general updates and helpful hints." },
 };
 
 const WhispersHeader = memo(function WhispersHeader({ onRestore }: { onRestore: () => void }) {
@@ -120,24 +124,28 @@ export function SuloWhispersSection() {
 		<div className="space-y-6">
 			<WhispersHeader onRestore={handleRestoreWhispers} />
 
-			<form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
-				<div className="custom-scrollbar flex gap-2 overflow-x-auto pb-2">
-					{(Object.keys(categoryMap) as Array<keyof WhispersFormValues>).map((cat) => (
-						<Button
-							key={cat}
-							type="button"
-							variant={activeCategory === cat ? "default" : "secondary"}
-							onClick={() => setActiveCategory(cat)}
-							className="shrink-0 rounded-full"
-						>
-							{categoryMap[cat].label}
-						</Button>
-					))}
-				</div>
+			<form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+				<SettingsCard className="space-y-6">
+					<div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+						{(Object.keys(categoryMap) as Array<keyof WhispersFormValues>).map((cat) => (
+							<Button
+								key={cat}
+								type="button"
+								variant={activeCategory === cat ? "default" : "secondary"}
+								onClick={() => setActiveCategory(cat)}
+								className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+							>
+								{categoryMap[cat].label}
+							</Button>
+						))}
+					</div>
 
-				<div className="space-y-4 rounded-xl border bg-muted/10 p-6">
-					<div className="mb-4">
-						<h4 className="font-medium">{categoryMap[activeCategory].label} Phrases</h4>
+					<div className="border-t border-border/50" />
+
+					<div className="mb-2">
+						<h4 className="font-medium text-foreground">
+							{categoryMap[activeCategory].label} Phrases
+						</h4>
 						<p className="text-sm text-muted-foreground">{categoryMap[activeCategory].desc}</p>
 					</div>
 
@@ -185,7 +193,7 @@ export function SuloWhispersSection() {
 							</Button>
 						)}
 					</div>
-				</div>
+				</SettingsCard>
 
 				<div className="flex justify-end pt-2">
 					<Button type="submit" disabled={!form.formState.isDirty}>

@@ -1,5 +1,6 @@
 import { db } from "@/db/db";
 import { ImportPreviewDialog } from "@/features/settings/components/import-preview-dialog";
+import { SettingsCard } from "@/features/settings/components/settings-card";
 import { exportData } from "@/features/settings/utils/export-utils";
 import { parseImportFile, type ParsedImportData } from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
@@ -15,6 +16,46 @@ import {
 	UploadIcon,
 } from "lucide-react";
 import { useRef, useState } from "react";
+
+interface ExportOptionButtonProps {
+	icon: React.ReactNode;
+	title: string;
+	description: string;
+	onClick: () => void;
+	disabled: boolean;
+}
+
+function ExportOptionButton({
+	icon,
+	title,
+	description,
+	onClick,
+	disabled,
+}: ExportOptionButtonProps) {
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			disabled={disabled}
+			className={cn(
+				"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
+				"rounded-2xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+				"corner-squircle supports-[corner-shape:squircle]:rounded-3xl",
+				"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+			)}
+		>
+			<div className="rounded-xl border border-border/50 bg-card p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+				{icon}
+			</div>
+			<div>
+				<h4 className="text-sm font-medium text-foreground">{title}</h4>
+				<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
+					{description}
+				</p>
+			</div>
+		</button>
+	);
+}
 
 export function DataStorageSection() {
 	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
@@ -64,104 +105,63 @@ export function DataStorageSection() {
 	return (
 		<div className="animate-in space-y-8 duration-300 fade-in slide-in-from-bottom-2">
 			<div>
-				<h2 className="font-heading text-xl font-semibold">Data & Backup</h2>
+				<h2 className="font-heading text-xl font-semibold">Data & Storage</h2>
 				<p className="mt-1 text-sm text-muted-foreground">
-					Your Archive: Securely back up your saved corners or restore them from a previous export.
+					Your library is stored locally on your device. Manage your storage and export backups to
+					safeguard your saved corners.
 				</p>
 			</div>
 
-			<div className="space-y-8">
-				<div className="space-y-4 border-b border-border/50 pb-8">
+			<div className="space-y-6">
+				<SettingsCard>
 					<div>
-						<p className="flex items-center gap-2 text-sm font-medium">
+						<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 							<DownloadIcon className="h-4 w-4" /> Export Library
 						</p>
 						<p className="mt-1 text-xs text-muted-foreground">
-							Create a backup of your saved items in JSON, CSV, or TXT format.
+							Create an offline archive of your library to keep your data safe.
 						</p>
 					</div>
 					<div className="grid grid-cols-3 gap-3">
-						<button
-							type="button"
+						<ExportOptionButton
+							icon={<BracesIcon className="h-5 w-5" />}
+							title="JSON"
+							description="Full backup with complete metadata"
 							onClick={() => handleExport("json")}
 							disabled={itemCount === 0}
-							className={cn(
-								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
-								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
-								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-							)}
-						>
-							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
-								<BracesIcon className="h-5 w-5" />
-							</div>
-							<div>
-								<h4 className="text-sm font-medium text-foreground">JSON</h4>
-								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
-									Full backup with complete metadata
-								</p>
-							</div>
-						</button>
-						<button
-							type="button"
+						/>
+						<ExportOptionButton
+							icon={<TableIcon className="h-5 w-5" />}
+							title="CSV"
+							description="Spreadsheet compatible format"
 							onClick={() => handleExport("csv")}
 							disabled={itemCount === 0}
-							className={cn(
-								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
-								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
-								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-							)}
-						>
-							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
-								<TableIcon className="h-5 w-5" />
-							</div>
-							<div>
-								<h4 className="text-sm font-medium text-foreground">CSV</h4>
-								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
-									Spreadsheet compatible format
-								</p>
-							</div>
-						</button>
-						<button
-							type="button"
+						/>
+						<ExportOptionButton
+							icon={<FileTextIcon className="h-5 w-5" />}
+							title="TXT"
+							description="Simple plain text list of links"
 							onClick={() => handleExport("txt")}
 							disabled={itemCount === 0}
-							className={cn(
-								"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
-								"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
-								"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-								"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-							)}
-						>
-							<div className="rounded-xl bg-background p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
-								<FileTextIcon className="h-5 w-5" />
-							</div>
-							<div>
-								<h4 className="text-sm font-medium text-foreground">TXT</h4>
-								<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
-									Simple plain text list of links
-								</p>
-							</div>
-						</button>
+						/>
 					</div>
 					{itemCount === 0 && (
-						<div className="flex items-start gap-2 rounded-md bg-amber-500/10 p-2.5 text-amber-500">
+						<div className="flex items-start gap-2 rounded-xl bg-amber-500/10 p-3 text-amber-500 corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 							<AlertCircleIcon className="mt-0.5 h-4 w-4 shrink-0" />
 							<p className="text-xs leading-relaxed font-medium">
 								You don't have any items to export yet. Add some items first.
 							</p>
 						</div>
 					)}
-				</div>
+				</SettingsCard>
 
-				<div className="space-y-4 border-b border-border/50 pb-8">
+				<SettingsCard>
 					<div>
-						<p className="flex items-center gap-2 text-sm font-medium">
+						<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 							<UploadIcon className="h-4 w-4" /> Restore Library
 						</p>
 						<p className="mt-1 text-xs text-muted-foreground">
-							Restore your items from a previous backup file.
+							Bring back your saved corners from a previous backup file.
 						</p>
 					</div>
 					<input
@@ -176,12 +176,12 @@ export function DataStorageSection() {
 						onClick={() => fileInputRef.current?.click()}
 						className={cn(
 							"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
-							"rounded-2xl border border-border/50 bg-card shadow-sm hover:border-border hover:bg-accent hover:shadow",
-							"corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
+							"rounded-2xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+							"corner-squircle supports-[corner-shape:squircle]:rounded-3xl",
 							"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 						)}
 					>
-						<div className="rounded-xl bg-background p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle group-hover:bg-background supports-[corner-shape:squircle]:rounded-xl">
+						<div className="rounded-xl border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-xl">
 							<UploadCloudIcon className="h-5 w-5" />
 						</div>
 						<div>
@@ -191,7 +191,7 @@ export function DataStorageSection() {
 							</p>
 						</div>
 					</button>
-				</div>
+				</SettingsCard>
 			</div>
 
 			{parsedData && (
