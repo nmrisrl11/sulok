@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { ResetButton } from "@/components/reset-button";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -14,7 +14,6 @@ import { INTERACTION_TYPES, SOUND_ICONS } from "@/constants/sounds-settings";
 import { useSoundEffects } from "@/hooks/use-sound-effects";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import { sounds, type SoundName } from "cuelume";
-import { RotateCcwIcon } from "lucide-react";
 import { useState } from "react";
 
 function VolumeControl() {
@@ -153,15 +152,11 @@ export function SoundSettingsSection() {
 						Bring your corner to life with subtle audio cues as you interact with {APP_INFO.name}.
 					</p>
 				</div>
-				<Button
-					variant="outline"
-					size="sm"
+				<ResetButton
 					onClick={handleRestore}
-					className="w-full shrink-0 gap-2 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto"
-				>
-					<RotateCcwIcon className="h-3.5 w-3.5" />
-					Reset Configuration
-				</Button>
+					label="Reset Configuration"
+					className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				/>
 			</div>
 
 			<div className="space-y-8">

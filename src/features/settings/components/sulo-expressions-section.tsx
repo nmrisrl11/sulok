@@ -1,5 +1,5 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
-import { Button } from "@/components/ui/button";
+import { ResetButton } from "@/components/reset-button";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -12,7 +12,6 @@ import { notify } from "@/lib/notify";
 import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import type { SuloSettings } from "@/types/settings";
-import { RotateCcwIcon } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 
 const ExpressionSelect = memo(function ExpressionSelect({
@@ -78,15 +77,7 @@ const ExpressionsHeader = memo(function ExpressionsHeader({
 					Choose Sulo's default reaction for different scenarios.
 				</p>
 			</div>
-			<Button
-				variant="outline"
-				size="sm"
-				onClick={onRestore}
-				className="w-full shrink-0 gap-2 sm:w-auto"
-			>
-				<RotateCcwIcon className="h-3.5 w-3.5" />
-				Reset Expressions
-			</Button>
+			<ResetButton onClick={onRestore} label="Reset Expressions" />
 		</div>
 	);
 });
