@@ -8,6 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { SettingsCard } from "@/features/settings/components/settings-card";
 import { notify } from "@/lib/notify";
 import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
@@ -40,26 +41,35 @@ const ExpressionSelect = memo(function ExpressionSelect({
 	};
 
 	return (
-		<div className="space-y-2">
-			<Label htmlFor={`expression-${id}`}>{label}</Label>
-			<Select value={value} onValueChange={(v) => handleExpressionChange(v as SuloExpression)}>
-				<SelectTrigger id={`expression-${id}`} className="w-full capitalize">
-					<SelectValue />
-				</SelectTrigger>
-				<SelectContent position="popper" className="max-h-60" data-no-sound="true">
-					{EXPRESSIONS.map((expr) => (
-						<SelectItem
-							key={expr}
-							value={expr}
-							className="rounded-md px-3 py-2.5 capitalize"
-							onMouseEnter={() => setPreviewExpression(expr)}
-						>
-							{expr}
-						</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
-			<p className="text-xs text-muted-foreground">{description}</p>
+		<div className="flex flex-col gap-4 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+			<div className="space-y-1">
+				<Label htmlFor={`expression-${id}`} className="text-sm font-medium text-foreground">
+					{label}
+				</Label>
+				<p className="text-sm text-muted-foreground">{description}</p>
+			</div>
+			<div className="shrink-0 sm:w-50">
+				<Select value={value} onValueChange={(v) => handleExpressionChange(v as SuloExpression)}>
+					<SelectTrigger
+						id={`expression-${id}`}
+						className="w-full capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+					>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent position="popper" className="max-h-60" data-no-sound="true">
+						{EXPRESSIONS.map((expr) => (
+							<SelectItem
+								key={expr}
+								value={expr}
+								className="rounded-md px-3 py-2.5 capitalize"
+								onMouseEnter={() => setPreviewExpression(expr)}
+							>
+								{expr}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
 		</div>
 	);
 });
@@ -107,7 +117,7 @@ export function SuloExpressionsSection() {
 			<ExpressionsHeader onRestore={handleRestoreExpressions} />
 
 			{/* Horizontal Full-Width Preview Banner */}
-			<div className="relative flex w-full items-center gap-6 overflow-hidden rounded-xl border bg-card p-6 shadow-sm">
+			<div className="relative flex w-full items-center gap-6 overflow-hidden rounded-2xl border border-border/50 bg-card p-6 shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-3xl">
 				{/* Dotted Background Pattern */}
 				<div
 					className="pointer-events-none absolute inset-0 text-foreground opacity-[0.08]"
@@ -122,7 +132,7 @@ export function SuloExpressionsSection() {
 				<div className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent to-card/80" />
 
 				{/* Content */}
-				<div className="relative z-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-full border bg-muted/80 shadow-sm backdrop-blur-sm">
+				<div className="relative z-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-border/50 bg-muted/80 shadow-sm backdrop-blur-sm">
 					<SuloMascot expression={previewExpression} className="h-12 w-12" />
 				</div>
 				<div className="relative z-10 flex-1">
@@ -146,45 +156,46 @@ export function SuloExpressionsSection() {
 					</div>
 				</div>
 			</div>
-
-			<div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-				<ExpressionSelect
-					id="expressionEmptyState"
-					label="Empty Corner"
-					description="When a folder has no links yet."
-					setPreviewExpression={setPreviewExpression}
-				/>
-				<ExpressionSelect
-					id="expression404"
-					label="Page Not Found"
-					description="When you visit a broken link."
-					setPreviewExpression={setPreviewExpression}
-				/>
-				<ExpressionSelect
-					id="expressionNavbar"
-					label="Main Logo"
-					description="Default state in the navigation bar."
-					setPreviewExpression={setPreviewExpression}
-				/>
-				<ExpressionSelect
-					id="expressionQuickAction"
-					label="Quick Action Bar"
-					description="When adding a link via the command bar."
-					setPreviewExpression={setPreviewExpression}
-				/>
-				<ExpressionSelect
-					id="expressionPreviewUnavailable"
-					label="Preview Failed"
-					description="When a link's image cannot load."
-					setPreviewExpression={setPreviewExpression}
-				/>
-				<ExpressionSelect
-					id="expressionError"
-					label="App Crash"
-					description="When something unexpected goes wrong."
-					setPreviewExpression={setPreviewExpression}
-				/>
-			</div>
+			<SettingsCard>
+				<div className="flex flex-col divide-y divide-border/50">
+					<ExpressionSelect
+						id="expressionEmptyState"
+						label="Empty Corner"
+						description="When a folder has no links yet."
+						setPreviewExpression={setPreviewExpression}
+					/>
+					<ExpressionSelect
+						id="expression404"
+						label="Page Not Found"
+						description="When you visit a broken link."
+						setPreviewExpression={setPreviewExpression}
+					/>
+					<ExpressionSelect
+						id="expressionNavbar"
+						label="Main Logo"
+						description="Default state in the navigation bar."
+						setPreviewExpression={setPreviewExpression}
+					/>
+					<ExpressionSelect
+						id="expressionQuickAction"
+						label="Quick Action Bar"
+						description="When adding a link via the command bar."
+						setPreviewExpression={setPreviewExpression}
+					/>
+					<ExpressionSelect
+						id="expressionPreviewUnavailable"
+						label="Preview Failed"
+						description="When a link's image cannot load."
+						setPreviewExpression={setPreviewExpression}
+					/>
+					<ExpressionSelect
+						id="expressionError"
+						label="App Crash"
+						description="When something unexpected goes wrong."
+						setPreviewExpression={setPreviewExpression}
+					/>
+				</div>
+			</SettingsCard>
 		</div>
 	);
 }

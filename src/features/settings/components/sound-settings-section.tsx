@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { APP_INFO } from "@/constants/app-info";
 import { INTERACTION_TYPES, SOUND_ICONS } from "@/constants/sounds-settings";
+import { SettingsCard } from "@/features/settings/components/settings-card";
 import { useSoundEffects } from "@/hooks/use-sound-effects";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import { sounds, type SoundName } from "cuelume";
@@ -44,10 +45,12 @@ function VolumeControl() {
 	};
 
 	return (
-		<div className="space-y-4 border-b border-border/50 pb-8">
+		<SettingsCard>
 			<div className="flex items-center justify-between">
-				<h3 className="text-sm font-semibold">Volume</h3>
-				<span className="text-sm text-muted-foreground">{Math.round(localVolume * 100)}%</span>
+				<h3 className="text-sm font-medium text-foreground">Master Volume</h3>
+				<span className="text-sm font-medium text-muted-foreground">
+					{Math.round(localVolume * 100)}%
+				</span>
 			</div>
 			<Slider
 				id="master-volume"
@@ -61,7 +64,7 @@ function VolumeControl() {
 				aria-label="Master volume"
 				className="py-2"
 			/>
-		</div>
+		</SettingsCard>
 	);
 }
 
@@ -95,7 +98,7 @@ function AudioSignatureSelect({
 
 	return (
 		<div className="space-y-2">
-			<Label htmlFor={`sound-${id}`} className="text-sm">
+			<Label htmlFor={`sound-${id}`} className="text-sm font-medium text-foreground">
 				{label}
 			</Label>
 			<Select value={value} onValueChange={(val: string) => handleMappingChange(val as SoundName)}>
@@ -159,26 +162,28 @@ export function SoundSettingsSection() {
 				/>
 			</div>
 
-			<div className="space-y-8">
-				<div className="space-y-4 border-b border-border/50 pb-8">
+			<div className="space-y-6">
+				<SettingsCard>
 					<div className="flex items-center justify-between gap-4">
-						<Label className="text-sm font-semibold" htmlFor="enable-sound">
-							Play Interaction Sounds
-						</Label>
+						<div className="space-y-1">
+							<Label className="text-sm font-medium text-foreground" htmlFor="enable-sound">
+								Play Interaction Sounds
+							</Label>
+							<p className="max-w-md text-sm text-muted-foreground">
+								Play audio feedback for interactions like navigating or saving items.
+							</p>
+						</div>
 						<Switch id="enable-sound" checked={enabled} onCheckedChange={handleEnabledChange} />
 					</div>
-					<p className="max-w-md text-sm text-muted-foreground">
-						Play audio feedback for interactions like navigating or saving items.
-					</p>
-				</div>
+				</SettingsCard>
 
 				{enabled && (
 					<>
 						<VolumeControl />
 
-						<div className="space-y-4 border-b border-border/50 pb-8">
+						<SettingsCard>
 							<div>
-								<h3 className="text-sm font-semibold">Audio Signatures</h3>
+								<h3 className="text-sm font-medium text-foreground">Audio Signatures</h3>
 								<p className="mt-1 text-sm text-muted-foreground">
 									Choose which sound plays for different types of interactions.
 								</p>
@@ -189,7 +194,7 @@ export function SoundSettingsSection() {
 									<AudioSignatureSelect key={id} id={id} label={label} />
 								))}
 							</div>
-						</div>
+						</SettingsCard>
 					</>
 				)}
 			</div>

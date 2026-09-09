@@ -88,6 +88,7 @@ sulok/
 
 - Use shadcn/ui components. Run `npx shadcn@latest add <component>` to add new ones.
 - **Component Folder Rule:** App-specific global components go in `src/components/`. The `src/components/ui/` folder is strictly dedicated to external UI library components (like shadcn/ui). Do not put internal/custom logic components in `components/ui`.
+- **Settings Layout & Hierarchy:** Group related settings into dedicated cards (e.g., using `SettingsCard`). For settings with descriptions, strictly prefer vertical lists with dividers (`divide-y`) over multi-column grids to prevent visual crowding. Enforce a clear hierarchy: Title (left) > Description (left) > Control (right).
 - Use `cn()` utility for conditional class merging.
 - **Zustand Performance & Selectors:** NEVER destructure the entire state object from a store (e.g., `const { selectedIds } = useStore()`). This subscribes the component to every state change in the store, causing massive performance drops and unnecessary re-renders. ALWAYS use explicit atomic selectors (e.g., `const selectedIds = useStore((state) => state.selectedIds)`).
 - **Component State Isolation:** If a component subscribes to global state but its wrapper doesn't need to, extract the state-dependent UI into its own smaller component. This ensures that state changes only trigger re-renders exactly where the data is displayed, isolating layout shifts and preventing parent component cascades.
