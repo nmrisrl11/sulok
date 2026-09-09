@@ -1,3 +1,4 @@
+import { ResetButton } from "@/components/reset-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { WHISPER_PHRASES } from "@/constants/whispers";
@@ -6,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { whispersSchema, type WhispersFormValues } from "@/schemas/settings.schema";
 import { useSettingsStore } from "@/stores/settings-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon, RotateCcwIcon, TrashIcon } from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useFieldArray, useForm, type FieldErrors } from "react-hook-form";
 
@@ -33,15 +34,7 @@ const WhispersHeader = memo(function WhispersHeader({ onRestore }: { onRestore: 
 					What should Sulo whisper to you? Customize his responses.
 				</p>
 			</div>
-			<Button
-				variant="outline"
-				size="sm"
-				onClick={onRestore}
-				className="w-full shrink-0 gap-2 sm:w-auto"
-			>
-				<RotateCcwIcon className="h-3.5 w-3.5" />
-				Reset Whispers
-			</Button>
+			<ResetButton onClick={onRestore} label="Reset Whispers" />
 		</div>
 	);
 });

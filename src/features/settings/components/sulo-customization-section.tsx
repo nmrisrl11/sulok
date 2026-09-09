@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { ResetButton } from "@/components/reset-button";
 import { notify } from "@/lib/notify";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
-import { RotateCcwIcon } from "lucide-react";
 import { SuloExpressionsSection } from "./sulo-expressions-section";
 import { SuloWhispersSection } from "./sulo-whispers-section";
 
@@ -23,15 +22,11 @@ export function SuloCustomizationSection() {
 						Personalize how Sulo reacts and what he says throughout the app.
 					</p>
 				</div>
-				<Button
-					variant="outline"
-					size="sm"
+				<ResetButton
 					onClick={handleRestoreAll}
-					className="w-full shrink-0 gap-2 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto"
-				>
-					<RotateCcwIcon className="h-3.5 w-3.5" />
-					Reset All
-				</Button>
+					label="Reset All"
+					className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				/>
 			</div>
 
 			{/* Isolated Sub-sections */}
