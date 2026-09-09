@@ -1,5 +1,6 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSettingsStore } from "@/stores/settings-store";
 import { GlobeIcon, ImageIcon } from "lucide-react";
 import type { URLMetadata } from "../hooks/use-metadata";
 
@@ -11,6 +12,10 @@ interface ItemPreviewProps {
 }
 
 export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps) {
+	const defaultExpression = useSettingsStore(
+		(state) => state.settings.suloSettings.expressionPreviewUnavailable,
+	);
+
 	if (!url && !loading && !error && !metadata) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-muted/20 p-8 text-center text-muted-foreground corner-squircle supports-[corner-shape:squircle]:rounded-[24px]">
@@ -48,7 +53,7 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 					<span className="text-xs opacity-80">You can still save this URL to your corner.</span>
 				</div>
 				<SuloMascot
-					expression="confused"
+					expression={defaultExpression}
 					className="pointer-events-none absolute -right-3 -bottom-5 h-16 w-16 -rotate-12"
 				/>
 			</div>

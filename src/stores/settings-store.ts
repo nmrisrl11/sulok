@@ -1,10 +1,20 @@
 import { DEFAULT_SOUND_SETTINGS } from "@/constants/sounds-settings";
+import { WHISPER_PHRASES } from "@/constants/whispers";
 import type { Settings } from "@/types/settings";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export const defaultSettings: Settings = {
 	soundSettings: DEFAULT_SOUND_SETTINGS,
+	suloSettings: {
+		expression404: "confused",
+		expressionEmptyState: "sleepy",
+		expressionNavbar: "sleepy",
+		expressionQuickAction: "sleepy",
+		expressionPreviewUnavailable: "neutral",
+		expressionError: "sad",
+		whispers: WHISPER_PHRASES,
+	},
 };
 
 interface SettingsState {
@@ -43,6 +53,11 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	// Prevent invalid soundSettings from overriding the defaults with null/undefined
 	if (safeSettings.soundSettings === null || typeof safeSettings.soundSettings !== "object") {
 		delete safeSettings.soundSettings;
+	}
+
+	// Prevent invalid suloSettings from overriding the defaults with null/undefined
+	if (safeSettings.suloSettings === null || typeof safeSettings.suloSettings !== "object") {
+		delete safeSettings.suloSettings;
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

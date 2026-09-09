@@ -70,7 +70,7 @@ sulok/
 │   │   └── updates/
 │   ├── hooks/
 │   ├── lib/
-│   ├── schemas/         # Zod schemas (domain)
+│   ├── schemas/         # Zod schemas (domain) (*.schema.ts)
 │   ├── stores/
 │   ├── db/
 │   ├── types/
@@ -91,6 +91,7 @@ sulok/
 - Use `cn()` utility for conditional class merging.
 - **Zustand Performance & Selectors:** NEVER destructure the entire state object from a store (e.g., `const { selectedIds } = useStore()`). This subscribes the component to every state change in the store, causing massive performance drops and unnecessary re-renders. ALWAYS use explicit atomic selectors (e.g., `const selectedIds = useStore((state) => state.selectedIds)`).
 - **Component State Isolation:** If a component subscribes to global state but its wrapper doesn't need to, extract the state-dependent UI into its own smaller component. This ensures that state changes only trigger re-renders exactly where the data is displayed, isolating layout shifts and preventing parent component cascades.
+- **Memoization & Transient State:** When a component needs to hold transient local state (e.g., `useState` for hover previews) that causes its parent wrapper to re-render frequently, extract its static children or headers into their own `memo`ized components (using `React.memo`), and wrap stable functions in `useCallback`. This guarantees that frequent state changes in the parent do not cause massive cascading re-renders across expensive sibling components (like complex forms or dropdowns).
 - Zustand stores use the slice pattern if they grow beyond ~50 lines.
 - **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
 - **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.

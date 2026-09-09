@@ -1,4 +1,3 @@
-import { getRandomWhisper } from "@/constants/whispers";
 import { useLogoStore } from "@/stores/logo-store";
 import { useSettingsStore } from "@/stores/settings-store";
 import { play } from "cuelume";
@@ -9,6 +8,13 @@ const playNotifySound = (type: "success" | "error") => {
 	if (soundSettings.enabled) {
 		play(soundSettings.mappings[type], { volume: soundSettings.volume });
 	}
+};
+
+const getWhisper = (type: "positive" | "negative" | "warning" | "info") => {
+	const { suloSettings } = useSettingsStore.getState().settings;
+	const phrases = suloSettings.whispers[type];
+	if (!phrases || phrases.length === 0) return "";
+	return phrases[Math.floor(Math.random() * phrases.length)];
 };
 
 type ToastOptions = {
@@ -37,28 +43,28 @@ type PromiseOptions<T> = {
 export const notify = {
 	success: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
-			useLogoStore.getState().setReaction("happy", getRandomWhisper("positive"));
+			useLogoStore.getState().setReaction("happy", getWhisper("positive"));
 		}
 		playNotifySound("success");
 		return gooeyToast.success(message, { ...options, showTimestamp: false });
 	},
 	error: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
-			useLogoStore.getState().setReaction("sad", getRandomWhisper("negative"));
+			useLogoStore.getState().setReaction("sad", getWhisper("negative"));
 		}
 		playNotifySound("error");
 		return gooeyToast.error(message, { ...options, showTimestamp: false });
 	},
 	warning: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
-			useLogoStore.getState().setReaction("surprised", getRandomWhisper("warning"));
+			useLogoStore.getState().setReaction("surprised", getWhisper("warning"));
 		}
 		playNotifySound("error"); // Fallback to error for warning
 		return gooeyToast.warning(message, { ...options, showTimestamp: false });
 	},
 	info: (message: string, options?: ToastOptions) => {
 		if (!options?.hideReaction) {
-			useLogoStore.getState().setReaction("curious", getRandomWhisper("info"));
+			useLogoStore.getState().setReaction("curious", getWhisper("info"));
 		}
 		return gooeyToast.info(message, { ...options, showTimestamp: false });
 	},

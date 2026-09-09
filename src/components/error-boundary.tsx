@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from "react-error-boundary";
 
+import { useSettingsStore } from "@/stores/settings-store";
+
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	// Only show actual error message in development for a calmer production experience
 	const isDev = import.meta.env.DEV;
+	const defaultExpression = useSettingsStore(
+		(state) => state.settings.suloSettings.expressionError,
+	);
 
 	return (
 		<div className="flex w-full animate-in flex-col items-center justify-center gap-6 py-12 text-center duration-500 fade-in">
 			<div className="h-48 w-48 sm:h-64 sm:w-64">
-				<SuloMascot expression="sad" />
+				<SuloMascot expression={defaultExpression} />
 			</div>
 			<div className="flex flex-col gap-2">
 				<h1 className="font-heading text-3xl font-bold">Uh oh, Sulo tripped!</h1>

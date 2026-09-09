@@ -14,12 +14,17 @@ const SoundSettingsSection = lazy(() =>
 		default: m.SoundSettingsSection,
 	})),
 );
+const SuloCustomizationSection = lazy(() =>
+	import("@/features/settings/components/sulo-customization-section").then((m) => ({
+		default: m.SuloCustomizationSection,
+	})),
+);
 
 const TABS = [
 	{ id: "data", label: "Data & Storage", icon: DataIcon, disabled: false },
 	{ id: "appearance", label: "Appearance", icon: AppearanceIcon, disabled: true },
 	{ id: "sounds", label: "Sound FX", icon: SoundFxIcon, disabled: false },
-	{ id: "sulo", label: "Sulo Customization", icon: SuloCustomizationIcon, disabled: true },
+	{ id: "sulo", label: "Sulo Customization", icon: SuloCustomizationIcon, disabled: false },
 ] as const;
 
 function SettingsTabTrigger({
@@ -92,6 +97,18 @@ export function SettingsPage() {
 						}
 					>
 						<SoundSettingsSection />
+					</Suspense>
+				);
+			case "sulo":
+				return (
+					<Suspense
+						fallback={
+							<div className="flex justify-center p-12">
+								<LoaderIcon className="h-5 w-5 animate-spin text-muted-foreground" />
+							</div>
+						}
+					>
+						<SuloCustomizationSection />
 					</Suspense>
 				);
 			default:
