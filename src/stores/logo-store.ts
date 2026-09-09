@@ -1,22 +1,25 @@
 import { create } from "zustand";
 
-export type SuloExpression =
-	| "sleepy"
-	| "excited"
-	| "suspicious"
-	| "confused"
-	| "curious"
-	| "shy"
-	| "unimpressed"
-	| "angry"
-	| "attentive"
-	| "happy"
-	| "laughing"
-	| "neutral"
-	| "proud"
-	| "sad"
-	| "scared"
-	| "surprised";
+export const EXPRESSIONS = [
+	"sleepy",
+	"excited",
+	"suspicious",
+	"confused",
+	"curious",
+	"shy",
+	"unimpressed",
+	"angry",
+	"attentive",
+	"happy",
+	"laughing",
+	"neutral",
+	"proud",
+	"sad",
+	"scared",
+	"surprised",
+] as const;
+
+export type SuloExpression = (typeof EXPRESSIONS)[number];
 
 interface LogoStore {
 	temporaryExpression: SuloExpression | null;

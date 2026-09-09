@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { itemSchema } from "@/schemas/item.schema";
 import { useItemStore } from "@/stores/item-store";
 import type { SuloExpression } from "@/stores/logo-store";
+import { useSettingsStore } from "@/stores/settings-store";
 import { CornerDownLeftIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,6 +16,9 @@ export function QuickLinkActionBar() {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
+	const defaultExpression = useSettingsStore(
+		(state) => state.settings.suloSettings.expressionQuickAction,
+	);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const urlSchema = itemSchema.shape.url;
@@ -67,7 +71,7 @@ export function QuickLinkActionBar() {
 		if (error) return "confused";
 		if (url && isFocused) return "attentive";
 		if (isFocused) return "curious";
-		return "sleepy";
+		return defaultExpression;
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {

@@ -2,6 +2,7 @@ import { APP_INFO } from "@/constants/app-info";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
+import { useSettingsStore } from "@/stores/settings-store";
 import { combine } from "flubber";
 import { animate, AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -31,7 +32,10 @@ const getInterpolator = () => {
 
 export function SulokLogo({ className }: { className?: string }) {
 	const temporaryExpression = useLogoStore((state) => state.temporaryExpression);
-	const currentExpression = temporaryExpression || "sleepy";
+	const defaultExpression = useSettingsStore(
+		(state) => state.settings.suloSettings.expressionNavbar,
+	);
+	const currentExpression = temporaryExpression || defaultExpression;
 
 	const [isMorphed, setIsMorphed] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
