@@ -8,7 +8,7 @@ import { useSettingsStore } from "@/stores/settings-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, RotateCcwIcon, TrashIcon } from "lucide-react";
 import { memo, useCallback, useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type FieldErrors } from "react-hook-form";
 
 function mapPhrasesToForm(phrases: readonly string[]) {
 	return phrases.map((p) => ({ value: p }));
@@ -114,13 +114,20 @@ export function SuloWhispersSection() {
 		notify.success("Whispers saved successfully", { id: "save-whispers" });
 	};
 
+	const onInvalid = (errors: FieldErrors<WhispersFormValues>) => {
+		const firstErrorCategory = Object.keys(errors)[0] as keyof WhispersFormValues;
+		if (firstErrorCategory && firstErrorCategory !== activeCategory) {
+			setActiveCategory(firstErrorCategory);
+		}
+	};
+
 	const activeErrors = form.formState.errors[activeCategory];
 
 	return (
 		<div className="space-y-6">
 			<WhispersHeader onRestore={handleRestoreWhispers} />
 
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
 				<div className="custom-scrollbar flex gap-2 overflow-x-auto pb-2">
 					{(Object.keys(categoryMap) as Array<keyof WhispersFormValues>).map((cat) => (
 						<Button

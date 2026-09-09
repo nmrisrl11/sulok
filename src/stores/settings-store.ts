@@ -1,5 +1,6 @@
 import { DEFAULT_SOUND_SETTINGS } from "@/constants/sounds-settings";
 import { WHISPER_PHRASES } from "@/constants/whispers";
+import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
 import type { Settings } from "@/types/settings";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -58,6 +59,38 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	// Prevent invalid suloSettings from overriding the defaults with null/undefined
 	if (safeSettings.suloSettings === null || typeof safeSettings.suloSettings !== "object") {
 		delete safeSettings.suloSettings;
+	} else {
+		const sulo = safeSettings.suloSettings as unknown as Record<string, unknown>;
+		const expressionFields = [
+			"expression404",
+			"expressionEmptyState",
+			"expressionNavbar",
+			"expressionQuickAction",
+			"expressionPreviewUnavailable",
+			"expressionError",
+		];
+
+		for (const field of expressionFields) {
+			if (sulo[field] !== undefined && !EXPRESSIONS.includes(sulo[field] as SuloExpression)) {
+				delete sulo[field];
+			}
+		}
+
+		if (sulo.whispers !== undefined) {
+			if (!isObject(sulo.whispers)) {
+				delete sulo.whispers;
+			} else {
+				const categories = ["positive", "negative", "warning", "info"];
+				for (const cat of categories) {
+					const arr = sulo.whispers[cat];
+					if (arr !== undefined) {
+						if (!Array.isArray(arr) || !arr.every((item) => typeof item === "string")) {
+							delete sulo.whispers[cat];
+						}
+					}
+				}
+			}
+		}
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

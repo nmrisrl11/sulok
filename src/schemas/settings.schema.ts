@@ -4,7 +4,7 @@ export const whispersSchema = z.object({
 	positive: z
 		.array(
 			z.object({
-				value: z.string().min(1, "Cannot be empty").max(30, "Max 30 characters"),
+				value: z.string().trim().min(1, "Cannot be empty").max(30, "Max 30 characters"),
 			}),
 		)
 		.min(1, "Must have at least 1 phrase")
@@ -12,7 +12,7 @@ export const whispersSchema = z.object({
 	negative: z
 		.array(
 			z.object({
-				value: z.string().min(1, "Cannot be empty").max(30, "Max 30 characters"),
+				value: z.string().trim().min(1, "Cannot be empty").max(30, "Max 30 characters"),
 			}),
 		)
 		.min(1, "Must have at least 1 phrase")
@@ -20,7 +20,7 @@ export const whispersSchema = z.object({
 	warning: z
 		.array(
 			z.object({
-				value: z.string().min(1, "Cannot be empty").max(30, "Max 30 characters"),
+				value: z.string().trim().min(1, "Cannot be empty").max(30, "Max 30 characters"),
 			}),
 		)
 		.min(1, "Must have at least 1 phrase")
@@ -28,7 +28,7 @@ export const whispersSchema = z.object({
 	info: z
 		.array(
 			z.object({
-				value: z.string().min(1, "Cannot be empty").max(30, "Max 30 characters"),
+				value: z.string().trim().min(1, "Cannot be empty").max(30, "Max 30 characters"),
 			}),
 		)
 		.min(1, "Must have at least 1 phrase")
