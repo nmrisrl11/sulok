@@ -6,6 +6,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export const defaultSettings: Settings = {
+	appearanceSettings: {
+		accentColor: "charcoal",
+		cornerStyle: "squircle",
+		layoutDensity: "compact",
+	},
 	soundSettings: DEFAULT_SOUND_SETTINGS,
 	suloSettings: {
 		expression404: "confused",
@@ -54,6 +59,34 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	// Prevent invalid soundSettings from overriding the defaults with null/undefined
 	if (safeSettings.soundSettings === null || typeof safeSettings.soundSettings !== "object") {
 		delete safeSettings.soundSettings;
+	}
+
+	// Validate appearance settings
+	if (!isObject(safeSettings.appearanceSettings)) {
+		delete safeSettings.appearanceSettings;
+	} else {
+		const appearance = safeSettings.appearanceSettings as unknown as Record<string, unknown>;
+		const validColors = ["charcoal", "amber", "rose", "blue", "green"];
+		if (
+			appearance.accentColor !== undefined &&
+			!validColors.includes(appearance.accentColor as string)
+		) {
+			delete appearance.accentColor;
+		}
+		const validStyles = ["squircle", "standard"];
+		if (
+			appearance.cornerStyle !== undefined &&
+			!validStyles.includes(appearance.cornerStyle as string)
+		) {
+			delete appearance.cornerStyle;
+		}
+		const validDensities = ["compact", "cozy"];
+		if (
+			appearance.layoutDensity !== undefined &&
+			!validDensities.includes(appearance.layoutDensity as string)
+		) {
+			delete appearance.layoutDensity;
+		}
 	}
 
 	// Prevent invalid suloSettings from overriding the defaults with null/undefined

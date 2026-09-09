@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function ItemCardSkeleton() {
 	return (
-		<div className="flex items-center justify-between gap-3 rounded-md px-2 py-2">
+		<div className="flex items-center justify-between gap-3 rounded-md px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem)">
 			<div className="flex w-full max-w-50 items-center gap-3 sm:max-w-md">
 				<Skeleton className="h-6 w-6 shrink-0 rounded-md" />
 				<div className="flex w-full flex-col gap-1.5 overflow-hidden">

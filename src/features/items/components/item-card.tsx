@@ -64,7 +64,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 	return (
 		<div
 			className={cn(
-				"group flex items-center justify-between gap-3 rounded-md px-2 py-2 transition-colors corner-squircle hover:bg-card/50 supports-[corner-shape:squircle]:rounded-xl",
+				"group flex items-center justify-between gap-3 rounded-md px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:bg-card/50 supports-[corner-shape:squircle]:rounded-xl",
 				isSelected && "bg-card/50 shadow-sm ring-1 ring-border",
 			)}
 		>
