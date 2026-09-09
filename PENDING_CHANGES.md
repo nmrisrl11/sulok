@@ -9,6 +9,8 @@
 
 ### Added
 
+- **Appearance Customization**: You can now fully personalize how Sulok looks! Choose between light and dark themes, pick your favorite accent color, toggle modern rounded corners (squircles), and adjust the layout density for a cozier or more compact feel.
+
 - **Sulo Customization**: You can now fully personalize Sulo's reactions! Choose his default expressions for different scenarios (like when a page is not found or when you copy a link), and customize the specific phrases he whispers to you.
 
 ### Fixed

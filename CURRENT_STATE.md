@@ -40,8 +40,7 @@ The project is currently in the **core features implementation phase**.
 
 1. Implement folder CRUD (post-MVP)
 2. Implement item tags, categories, and filter capabilities.
-3. Finalize overall UI polish for mobile responsiveness.
-4. Implement remaining Personalization settings (Custom theme colors).
+3. Refine overall UI polish for mobile responsiveness.
 
 ---
 
@@ -90,7 +89,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
 - [x] Global Settings Page (tabbed layout)
-- [x] Personalization Settings (Sulo expressions and custom whispers)
+- [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, colors, and layout density)
 - [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata preservation (images, logos, creation dates)
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI

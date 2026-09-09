@@ -4,6 +4,11 @@ import { LoaderIcon, SettingsIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, lazy, useEffect, useRef } from "react";
 
+const AppearanceSection = lazy(() =>
+	import("@/features/settings/components/appearance-section").then((m) => ({
+		default: m.AppearanceSection,
+	})),
+);
 const DataStorageSection = lazy(() =>
 	import("@/features/settings/components/data-storage-section").then((m) => ({
 		default: m.DataStorageSection,
@@ -22,7 +27,7 @@ const SuloCustomizationSection = lazy(() =>
 
 const TABS = [
 	{ id: "data", label: "Data & Storage", icon: DataIcon, disabled: false },
-	{ id: "appearance", label: "Appearance", icon: AppearanceIcon, disabled: true },
+	{ id: "appearance", label: "Appearance", icon: AppearanceIcon, disabled: false },
 	{ id: "sounds", label: "Sound FX", icon: SoundFxIcon, disabled: false },
 	{ id: "sulo", label: "Sulo Customization", icon: SuloCustomizationIcon, disabled: false },
 ] as const;
@@ -76,41 +81,13 @@ export function SettingsPage() {
 	const renderContent = () => {
 		switch (activeTab) {
 			case "data":
-				return (
-					<Suspense
-						fallback={
-							<div className="flex justify-center p-12">
-								<LoaderIcon className="h-5 w-5 animate-spin text-muted-foreground" />
-							</div>
-						}
-					>
-						<DataStorageSection />
-					</Suspense>
-				);
+				return <DataStorageSection />;
+			case "appearance":
+				return <AppearanceSection />;
 			case "sounds":
-				return (
-					<Suspense
-						fallback={
-							<div className="flex justify-center p-12">
-								<LoaderIcon className="h-5 w-5 animate-spin text-muted-foreground" />
-							</div>
-						}
-					>
-						<SoundSettingsSection />
-					</Suspense>
-				);
+				return <SoundSettingsSection />;
 			case "sulo":
-				return (
-					<Suspense
-						fallback={
-							<div className="flex justify-center p-12">
-								<LoaderIcon className="h-5 w-5 animate-spin text-muted-foreground" />
-							</div>
-						}
-					>
-						<SuloCustomizationSection />
-					</Suspense>
-				);
+				return <SuloCustomizationSection />;
 			default:
 				return (
 					<div className="flex flex-col items-center justify-center py-20 text-center">
@@ -147,7 +124,17 @@ export function SettingsPage() {
 					))}
 				</nav>
 
-				<main className="min-w-0 flex-1 pb-10">{renderContent()}</main>
+				<main className="min-w-0 flex-1 pb-10">
+					<Suspense
+						fallback={
+							<div className="flex justify-center p-12">
+								<LoaderIcon className="h-5 w-5 animate-spin text-muted-foreground" />
+							</div>
+						}
+					>
+						{renderContent()}
+					</Suspense>
+				</main>
 			</div>
 		</div>
 	);
