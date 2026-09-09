@@ -1,8 +1,9 @@
+import type { ElementType } from "react";
 import type { Theme } from "@/hooks/use-theme";
 import type { AccentColor } from "@/types/settings";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 
-export const THEME_OPTIONS: { id: Theme; label: string; icon: React.ElementType }[] = [
+export const THEME_OPTIONS: { id: Theme; label: string; icon: ElementType }[] = [
 	{ id: "light", label: "Light", icon: SunIcon },
 	{ id: "dark", label: "Dark", icon: MoonIcon },
 	{ id: "system", label: "System", icon: MonitorIcon },

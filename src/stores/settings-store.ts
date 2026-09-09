@@ -62,10 +62,7 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	}
 
 	// Validate appearance settings
-	if (
-		safeSettings.appearanceSettings === null ||
-		typeof safeSettings.appearanceSettings !== "object"
-	) {
+	if (!isObject(safeSettings.appearanceSettings)) {
 		delete safeSettings.appearanceSettings;
 	} else {
 		const appearance = safeSettings.appearanceSettings as unknown as Record<string, unknown>;

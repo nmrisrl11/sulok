@@ -82,6 +82,7 @@ function AccentColorCard() {
 								key={id}
 								onClick={() => handleUpdate(id)}
 								aria-label={`Select ${label} accent color`}
+								aria-pressed={isActive}
 								className={cn(
 									"h-6 w-6 shrink-0 rounded-full transition-all hover:scale-110",
 									bgClass,
