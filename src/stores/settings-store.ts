@@ -68,8 +68,20 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		delete safeSettings.appearanceSettings;
 	} else {
 		const appearance = safeSettings.appearanceSettings as unknown as Record<string, unknown>;
-		if (appearance.accentColor !== undefined && typeof appearance.accentColor !== "string") {
-			delete appearance.accentColor;
+		if (appearance.accentColor !== undefined) {
+			const color = appearance.accentColor as string;
+			const legacyMap: Record<string, string> = {
+				amber: "#C49A6C",
+				charcoal: "#1E1B18",
+				rose: "#e11d48",
+				blue: "#3b82f6",
+				green: "#22c55e",
+			};
+			if (legacyMap[color]) {
+				appearance.accentColor = legacyMap[color];
+			} else if (color !== "foreground" && !/^#([0-9A-Fa-f]{3}){1,2}$/.test(color)) {
+				delete appearance.accentColor;
+			}
 		}
 		const validStyles = ["squircle", "standard", "custom"];
 		if (
@@ -78,11 +90,11 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		) {
 			delete appearance.cornerStyle;
 		}
-		if (
-			appearance.customCornerRadius !== undefined &&
-			typeof appearance.customCornerRadius !== "number"
-		) {
-			delete appearance.customCornerRadius;
+		if (appearance.customCornerRadius !== undefined) {
+			const val = appearance.customCornerRadius as number;
+			if (!Number.isFinite(val) || val < 0 || val > 32) {
+				delete appearance.customCornerRadius;
+			}
 		}
 		const validDensities = ["compact", "cozy", "custom"];
 		if (
@@ -91,11 +103,11 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		) {
 			delete appearance.layoutDensity;
 		}
-		if (
-			appearance.customLayoutDensity !== undefined &&
-			typeof appearance.customLayoutDensity !== "number"
-		) {
-			delete appearance.customLayoutDensity;
+		if (appearance.customLayoutDensity !== undefined) {
+			const val = appearance.customLayoutDensity as number;
+			if (!Number.isFinite(val) || val < 4 || val > 32) {
+				delete appearance.customLayoutDensity;
+			}
 		}
 	}
 

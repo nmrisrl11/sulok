@@ -231,6 +231,7 @@ function CornerRadiusCard() {
 								onValueCommit={handleCustomRadiusCommit}
 								max={32}
 								step={1}
+								aria-label="Radius Value"
 							/>
 						</div>
 					)}
@@ -315,9 +316,10 @@ function LayoutDensityCard() {
 								value={[localDensity]}
 								onValueChange={(val) => setLocalDensity(val[0])}
 								onValueCommit={handleCustomDensityCommit}
-								max={32}
 								min={4}
+								max={32}
 								step={1}
+								aria-label="Padding Value"
 							/>
 						</div>
 					)}

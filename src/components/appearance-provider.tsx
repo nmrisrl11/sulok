@@ -21,6 +21,12 @@ function getLuminance(hex: string) {
 	return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL;
 }
 
+function getContrastRatio(luma1: number, luma2: number) {
+	const lighter = Math.max(luma1, luma2);
+	const darker = Math.min(luma1, luma2);
+	return (lighter + 0.05) / (darker + 0.05);
+}
+
 export function AppearanceProvider({ children }: { children: React.ReactNode }) {
 	const appearanceSettings = useSettingsStore((state) => state.settings.appearanceSettings);
 
@@ -35,8 +41,18 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 		} else if (appearanceSettings.accentColor.startsWith("#")) {
 			root.style.setProperty("--primary", appearanceSettings.accentColor);
 			root.style.setProperty("--ring", appearanceSettings.accentColor);
-			const luma = getLuminance(appearanceSettings.accentColor);
-			root.style.setProperty("--primary-foreground", luma > 0.5 ? "#1E1B18" : "#F7F5F0");
+
+			const bgLuma = getLuminance(appearanceSettings.accentColor);
+			const darkLuma = getLuminance("#1E1B18");
+			const lightLuma = getLuminance("#F7F5F0");
+
+			const contrastDark = getContrastRatio(bgLuma, darkLuma);
+			const contrastLight = getContrastRatio(bgLuma, lightLuma);
+
+			root.style.setProperty(
+				"--primary-foreground",
+				contrastDark > contrastLight ? "#1E1B18" : "#F7F5F0",
+			);
 		}
 
 		// 2. Corner Style
