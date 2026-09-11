@@ -7,7 +7,17 @@
 
 ## Unreleased
 
-(No pending changes)
+### Added
+
+- Added new curated Workspace Themes (Sepia, Sand, Midnight, Mocha) to fully personalize the lighting environment.
+
+### Changed
+
+- Redesigned the Workspace Theme selection UI in the Appearance settings to be more compact and user-friendly across all devices.
+
+### Removed
+
+- Removed the legacy light/dark mode toggle from the navigation bar to prevent conflicts with the new custom Workspace Themes.
 
 ---
 

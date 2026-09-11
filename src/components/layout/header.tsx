@@ -1,5 +1,4 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
@@ -48,7 +47,6 @@ export function Header() {
 					</NavLink>
 				</div>
 				<div className="flex items-center gap-1">
-					<ModeToggle />
 					<Button
 						variant="ghost"
 						size="icon"
