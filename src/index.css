@@ -145,6 +145,58 @@
 	--sidebar-ring: oklch(0.439 0 0);
 }
 
+.theme-sepia {
+	--background: #f4ecd8;
+	--foreground: #4a3c31;
+	--card: #f9f3e5;
+	--card-foreground: #4a3c31;
+	--popover: #f9f3e5;
+	--popover-foreground: #4a3c31;
+	--muted: #e8dfca;
+	--muted-foreground: #7c6f64;
+	--border: #dbcdb0;
+	--input: #dbcdb0;
+}
+
+.theme-sand {
+	--background: #eae6df;
+	--foreground: #45423e;
+	--card: #f2efea;
+	--card-foreground: #45423e;
+	--popover: #f2efea;
+	--popover-foreground: #45423e;
+	--muted: #dfdacf;
+	--muted-foreground: #78746d;
+	--border: #cfc9bd;
+	--input: #cfc9bd;
+}
+
+.theme-midnight {
+	--background: #0b1120;
+	--foreground: #f8fafc;
+	--card: #151d33;
+	--card-foreground: #f8fafc;
+	--popover: #151d33;
+	--popover-foreground: #f8fafc;
+	--muted: #1e293b;
+	--muted-foreground: #94a3b8;
+	--border: #334155;
+	--input: #334155;
+}
+
+.theme-mocha {
+	--background: #241c18;
+	--foreground: #f5efeb;
+	--card: #312621;
+	--card-foreground: #f5efeb;
+	--popover: #312621;
+	--popover-foreground: #f5efeb;
+	--muted: #43352e;
+	--muted-foreground: #a49288;
+	--border: #5c4a42;
+	--input: #5c4a42;
+}
+
 /* Overrides for Corner Style and Density */
 :root.radius-standard {
 	--radius: 0.375rem;

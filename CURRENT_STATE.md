@@ -26,7 +26,7 @@ The project is currently in the **core features implementation phase**.
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
 - [x] Initial performance optimizations (route/dialog code-splitting, strict Zustand state isolation, React.memo list rendering)
-- [x] Theme system implemented (Dark/Light mode switch)
+- [x] Workspace Theme system (Dark, Light, Sepia, Sand, Midnight, Mocha)
 - [x] Brand mascot (Sulo) & interactive morphing logo implemented
 - [x] Sulo mascot contextual whisper feedback on header
 - [x] Vite Rollup code splitting (manualChunks) optimizations

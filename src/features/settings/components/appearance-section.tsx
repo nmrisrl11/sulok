@@ -9,12 +9,19 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { APP_INFO } from "@/constants/app-info";
-import { THEME_OPTIONS } from "@/constants/appearance-options";
 import { SettingsCard } from "@/features/settings/components/settings-card";
-import { useTheme, type Theme } from "@/hooks/use-theme";
+import { useTheme, useThemeDispatch, type Theme } from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import type { CornerStyle, LayoutDensity } from "@/types/settings";
-import { Rows3Icon, Rows4Icon, Settings2Icon, SquareIcon, SquircleIcon } from "lucide-react";
+import {
+	CheckIcon,
+	Rows3Icon,
+	Rows4Icon,
+	Settings2Icon,
+	SquareIcon,
+	SquircleIcon,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 function DebouncedColorPicker({
@@ -78,41 +85,65 @@ function DebouncedColorPicker({
 	);
 }
 
-function ThemeModeCard() {
+function WorkspaceThemeCard() {
 	const { theme, setTheme } = useTheme();
+
+	const WORKSPACE_THEMES = [
+		{
+			id: "system",
+			label: "System",
+			bg: "linear-gradient(135deg, #f7f5f0 50%, #1e1b18 50%)",
+			fg: "#888",
+			type: "system",
+		},
+		{ id: "light", label: "Cream", bg: "#f7f5f0", fg: "#1e1b18", type: "light" },
+		{ id: "sepia", label: "Sepia", bg: "#F4ECD8", fg: "#4A3C31", type: "light" },
+		{ id: "sand", label: "Sand", bg: "#EAE6DF", fg: "#45423E", type: "light" },
+		{ id: "dark", label: "Charcoal", bg: "#1e1b18", fg: "#f7f5f0", type: "dark" },
+		{ id: "midnight", label: "Midnight", bg: "#0B1120", fg: "#F8FAFC", type: "dark" },
+		{ id: "mocha", label: "Mocha", bg: "#241C18", fg: "#F5EFEB", type: "dark" },
+	] as const;
 
 	return (
 		<SettingsCard>
-			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+			<div className="flex flex-col gap-4">
 				<div className="space-y-1">
-					<Label className="text-sm font-medium text-foreground" htmlFor="theme-mode">
-						Theme Mode
-					</Label>
+					<h3 className="text-sm font-medium text-foreground">Workspace Theme</h3>
 					<p className="max-w-md text-sm text-muted-foreground">
-						Select your preferred lighting environment.
+						Select a curated lighting environment for your workspace.
 					</p>
 				</div>
-				<div className="w-full shrink-0 sm:w-48">
-					<Select value={theme} onValueChange={(val) => setTheme(val as Theme)}>
-						<SelectTrigger
-							id="theme-mode"
-							className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				<div className="flex flex-wrap gap-4 pt-2 sm:gap-6">
+					{WORKSPACE_THEMES.map((t) => (
+						<button
+							key={t.id}
+							type="button"
+							onClick={() => setTheme(t.id as Theme)}
+							className={cn("group relative flex flex-col items-center gap-2 outline-none")}
 						>
-							<SelectValue placeholder="Select theme" />
-						</SelectTrigger>
-						<SelectContent position="popper" className="max-h-75">
-							{THEME_OPTIONS.map(({ id, label, icon: Icon }) => (
-								<SelectItem key={id} value={id} className="rounded-md px-3 py-2.5">
-									<div className="flex items-center gap-3">
-										<div className="flex w-5 shrink-0 items-center justify-center">
-											<Icon className="h-4 w-4 text-muted-foreground" />
-										</div>
-										<span>{label}</span>
-									</div>
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+							<div
+								className={cn(
+									"flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-background transition-all hover:scale-110 sm:h-10 sm:w-10",
+									theme === t.id ? "ring-primary" : "ring-border hover:ring-muted-foreground",
+								)}
+								style={{ background: t.bg }}
+							>
+								{theme === t.id && (
+									<CheckIcon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: t.fg }} />
+								)}
+							</div>
+							<span
+								className={cn(
+									"text-[10px] font-medium transition-colors sm:text-xs",
+									theme === t.id
+										? "text-foreground"
+										: "text-muted-foreground group-hover:text-foreground",
+								)}
+							>
+								{t.label}
+							</span>
+						</button>
+					))}
 				</div>
 			</div>
 		</SettingsCard>
@@ -157,7 +188,10 @@ function AccentColorCard() {
 }
 
 function CornerRadiusCard() {
-	const settings = useSettingsStore((state) => state.settings.appearanceSettings);
+	const cornerStyle = useSettingsStore((state) => state.settings.appearanceSettings.cornerStyle);
+	const customCornerRadius = useSettingsStore(
+		(state) => state.settings.appearanceSettings.customCornerRadius,
+	);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
 	const handleUpdate = (val: string) => {
@@ -170,12 +204,12 @@ function CornerRadiusCard() {
 		updateSettings({ appearanceSettings: { ...currentSettings, customCornerRadius: val[0] } });
 	};
 
-	const [localRadius, setLocalRadius] = useState(settings.customCornerRadius);
-	const [prevRadius, setPrevRadius] = useState(settings.customCornerRadius);
+	const [localRadius, setLocalRadius] = useState(customCornerRadius);
+	const [prevRadius, setPrevRadius] = useState(customCornerRadius);
 
-	if (settings.customCornerRadius !== prevRadius) {
-		setLocalRadius(settings.customCornerRadius);
-		setPrevRadius(settings.customCornerRadius);
+	if (customCornerRadius !== prevRadius) {
+		setLocalRadius(customCornerRadius);
+		setPrevRadius(customCornerRadius);
 	}
 
 	return (
@@ -190,7 +224,7 @@ function CornerRadiusCard() {
 					</p>
 				</div>
 				<div className="flex w-full shrink-0 flex-col gap-4 sm:w-48">
-					<Select value={settings.cornerStyle} onValueChange={handleUpdate}>
+					<Select value={cornerStyle} onValueChange={handleUpdate}>
 						<SelectTrigger
 							id="corner-style"
 							className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
@@ -219,7 +253,7 @@ function CornerRadiusCard() {
 						</SelectContent>
 					</Select>
 
-					{settings.cornerStyle === "custom" && (
+					{cornerStyle === "custom" && (
 						<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
 							<div className="flex items-center justify-between">
 								<Label className="text-xs text-muted-foreground">Radius Value</Label>
@@ -242,7 +276,12 @@ function CornerRadiusCard() {
 }
 
 function LayoutDensityCard() {
-	const settings = useSettingsStore((state) => state.settings.appearanceSettings);
+	const layoutDensity = useSettingsStore(
+		(state) => state.settings.appearanceSettings.layoutDensity,
+	);
+	const customLayoutDensity = useSettingsStore(
+		(state) => state.settings.appearanceSettings.customLayoutDensity,
+	);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
 	const handleUpdate = (val: string) => {
@@ -257,12 +296,12 @@ function LayoutDensityCard() {
 		updateSettings({ appearanceSettings: { ...currentSettings, customLayoutDensity: val[0] } });
 	};
 
-	const [localDensity, setLocalDensity] = useState(settings.customLayoutDensity);
-	const [prevDensity, setPrevDensity] = useState(settings.customLayoutDensity);
+	const [localDensity, setLocalDensity] = useState(customLayoutDensity);
+	const [prevDensity, setPrevDensity] = useState(customLayoutDensity);
 
-	if (settings.customLayoutDensity !== prevDensity) {
-		setLocalDensity(settings.customLayoutDensity);
-		setPrevDensity(settings.customLayoutDensity);
+	if (customLayoutDensity !== prevDensity) {
+		setLocalDensity(customLayoutDensity);
+		setPrevDensity(customLayoutDensity);
 	}
 
 	return (
@@ -277,7 +316,7 @@ function LayoutDensityCard() {
 					</p>
 				</div>
 				<div className="flex w-full shrink-0 flex-col gap-4 sm:w-48">
-					<Select value={settings.layoutDensity} onValueChange={handleUpdate}>
+					<Select value={layoutDensity} onValueChange={handleUpdate}>
 						<SelectTrigger
 							id="layout-density"
 							className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
@@ -306,7 +345,7 @@ function LayoutDensityCard() {
 						</SelectContent>
 					</Select>
 
-					{settings.layoutDensity === "custom" && (
+					{layoutDensity === "custom" && (
 						<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
 							<div className="flex items-center justify-between">
 								<Label className="text-xs text-muted-foreground">Padding Value</Label>
@@ -331,7 +370,7 @@ function LayoutDensityCard() {
 
 function RestoreAppearanceButton() {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
-	const { setTheme } = useTheme();
+	const setTheme = useThemeDispatch();
 
 	const handleRestore = () => {
 		updateSettings({ appearanceSettings: defaultSettings.appearanceSettings });
@@ -363,7 +402,7 @@ export function AppearanceSection() {
 			</div>
 
 			<div className="space-y-6">
-				<ThemeModeCard />
+				<WorkspaceThemeCard />
 				<AccentColorCard />
 				<CornerRadiusCard />
 				<LayoutDensityCard />

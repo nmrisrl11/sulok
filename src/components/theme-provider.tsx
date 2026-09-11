@@ -1,5 +1,5 @@
-import { type Theme, ThemeProviderContext } from "@/hooks/use-theme";
-import { useEffect, useState } from "react";
+import { type Theme, ThemeDispatchContext, ThemeStateContext } from "@/hooks/use-theme";
+import { useCallback, useEffect, useState } from "react";
 
 type ThemeProviderProps = {
 	children: React.ReactNode;
@@ -11,7 +11,6 @@ export function ThemeProvider({
 	children,
 	defaultTheme = "system",
 	storageKey = "sulok-ui-theme",
-	...props
 }: ThemeProviderProps) {
 	const [theme, setTheme] = useState<Theme>(
 		() => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
@@ -20,7 +19,14 @@ export function ThemeProvider({
 	useEffect(() => {
 		const root = window.document.documentElement;
 
-		root.classList.remove("light", "dark");
+		root.classList.remove(
+			"light",
+			"dark",
+			"theme-sepia",
+			"theme-sand",
+			"theme-midnight",
+			"theme-mocha",
+		);
 
 		if (theme === "system") {
 			const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -31,20 +37,31 @@ export function ThemeProvider({
 			return;
 		}
 
-		root.classList.add(theme);
+		if (theme === "light" || theme === "dark") {
+			root.classList.add(theme);
+			return;
+		}
+
+		root.classList.add(`theme-${theme}`);
+
+		if (theme === "midnight" || theme === "mocha") {
+			root.classList.add("dark");
+		}
 	}, [theme]);
 
-	const value = {
-		theme,
-		setTheme: (theme: Theme) => {
-			localStorage.setItem(storageKey, theme);
-			setTheme(theme);
+	const handleSetTheme = useCallback(
+		(newTheme: Theme) => {
+			localStorage.setItem(storageKey, newTheme);
+			setTheme(newTheme);
 		},
-	};
+		[storageKey],
+	);
 
 	return (
-		<ThemeProviderContext.Provider {...props} value={value}>
-			{children}
-		</ThemeProviderContext.Provider>
+		<ThemeStateContext.Provider value={theme}>
+			<ThemeDispatchContext.Provider value={handleSetTheme}>
+				{children}
+			</ThemeDispatchContext.Provider>
+		</ThemeStateContext.Provider>
 	);
 }

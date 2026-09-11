@@ -5,6 +5,13 @@ import "goey-toast/styles.css";
 export function Toaster() {
 	const { theme } = useTheme();
 
+	const toasterTheme =
+		theme === "system"
+			? undefined
+			: theme === "dark" || theme === "midnight" || theme === "mocha"
+				? "dark"
+				: "light";
+
 	return (
 		<>
 			<style>{`
@@ -13,7 +20,7 @@ export function Toaster() {
 				}
 			`}</style>
 			<GooeyToaster
-				theme={theme === "system" ? undefined : theme}
+				theme={toasterTheme}
 				position="bottom-center"
 				closeOnEscape={false}
 				showTimestamp={false}
