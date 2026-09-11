@@ -7,9 +7,11 @@ import { persist } from "zustand/middleware";
 
 export const defaultSettings: Settings = {
 	appearanceSettings: {
-		accentColor: "charcoal",
+		accentColor: "foreground",
 		cornerStyle: "squircle",
+		customCornerRadius: 16,
 		layoutDensity: "compact",
+		customLayoutDensity: 12,
 	},
 	soundSettings: DEFAULT_SOUND_SETTINGS,
 	suloSettings: {
@@ -66,26 +68,46 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		delete safeSettings.appearanceSettings;
 	} else {
 		const appearance = safeSettings.appearanceSettings as unknown as Record<string, unknown>;
-		const validColors = ["charcoal", "amber", "rose", "blue", "green"];
-		if (
-			appearance.accentColor !== undefined &&
-			!validColors.includes(appearance.accentColor as string)
-		) {
-			delete appearance.accentColor;
+		if (appearance.accentColor !== undefined) {
+			const color = appearance.accentColor as string;
+			const legacyMap: Record<string, string> = {
+				amber: "#C49A6C",
+				charcoal: "#1E1B18",
+				rose: "#e11d48",
+				blue: "#3b82f6",
+				green: "#22c55e",
+			};
+			if (legacyMap[color]) {
+				appearance.accentColor = legacyMap[color];
+			} else if (color !== "foreground" && !/^#([0-9A-Fa-f]{3}){1,2}$/.test(color)) {
+				delete appearance.accentColor;
+			}
 		}
-		const validStyles = ["squircle", "standard"];
+		const validStyles = ["squircle", "standard", "custom"];
 		if (
 			appearance.cornerStyle !== undefined &&
 			!validStyles.includes(appearance.cornerStyle as string)
 		) {
 			delete appearance.cornerStyle;
 		}
-		const validDensities = ["compact", "cozy"];
+		if (appearance.customCornerRadius !== undefined) {
+			const val = appearance.customCornerRadius as number;
+			if (!Number.isFinite(val) || val < 0 || val > 32) {
+				delete appearance.customCornerRadius;
+			}
+		}
+		const validDensities = ["compact", "cozy", "custom"];
 		if (
 			appearance.layoutDensity !== undefined &&
 			!validDensities.includes(appearance.layoutDensity as string)
 		) {
 			delete appearance.layoutDensity;
+		}
+		if (appearance.customLayoutDensity !== undefined) {
+			const val = appearance.customLayoutDensity as number;
+			if (!Number.isFinite(val) || val < 4 || val > 32) {
+				delete appearance.customLayoutDensity;
+			}
 		}
 	}
 

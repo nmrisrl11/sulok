@@ -29,15 +29,23 @@ Six colors only. No additions without explicit approval.
 
 ### Semantic Mapping
 
-| Semantic Token | Maps To  | Usage                        |
-| -------------- | -------- | ---------------------------- |
-| `--foreground` | Charcoal | Primary text                 |
-| `--background` | Cream    | Page background              |
-| `--primary`    | Amber    | Buttons, links, accents      |
-| `--muted`      | Stone    | Secondary text, placeholders |
-| `--card`       | Linen    | Card backgrounds, sections   |
-| `--border`     | Linen    | Borders, dividers            |
-| `--ring`       | Amber    | Focus rings                  |
+| Semantic Token | Maps To  | Usage                                                                       |
+| -------------- | -------- | --------------------------------------------------------------------------- |
+| `--foreground` | Charcoal | Primary text                                                                |
+| `--background` | Cream    | Page background                                                             |
+| `--primary`    | Dynamic  | Buttons, links, accents (Set via user's Accent Color in AppearanceProvider) |
+| `--muted`      | Stone    | Secondary text, placeholders                                                |
+| `--card`       | Linen    | Card backgrounds, sections                                                  |
+| `--border`     | Linen    | Borders, dividers                                                           |
+| `--ring`       | Dynamic  | Focus rings (Set via user's Accent Color in AppearanceProvider)             |
+
+### Dynamic Appearance
+
+Sulok allows full personalization via the Settings page. The `AppearanceProvider` dynamically overrides the CSS variables on the `:root` element based on user preferences stored in IndexedDB:
+
+- **`--primary` / `--ring`:** Dynamically mapped from the user's custom Accent Color hex value, or mapped to `--foreground` for a sleek monochrome look.
+- **`--radius`:** Dynamically mapped from the user's selected Corner Radius (`squircle` or `standard`) and custom px value.
+- **`--density-px` / `--density-py`:** Dynamically mapped from the Layout Density settings.
 
 ---
 

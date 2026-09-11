@@ -31,14 +31,16 @@ const categoryMap: Record<keyof WhispersFormValues, { label: string; desc: strin
 
 const WhispersHeader = memo(function WhispersHeader({ onRestore }: { onRestore: () => void }) {
 	return (
-		<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-			<div>
+		<div className="flex flex-col gap-1">
+			<div className="flex items-center justify-between gap-4">
 				<h3 className="text-sm font-semibold">Whispers</h3>
-				<p className="text-sm text-muted-foreground">
-					What should Sulo whisper to you? Customize his responses.
-				</p>
+
+				<ResetButton onClick={onRestore} label="Reset Whispers" />
 			</div>
-			<ResetButton onClick={onRestore} label="Reset Whispers" />
+
+			<p className="text-sm text-muted-foreground">
+				What should Sulo whisper to you? Customize his responses.
+			</p>
 		</div>
 	);
 });

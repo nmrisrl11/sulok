@@ -15,18 +15,20 @@ export function SuloCustomizationSection() {
 	return (
 		<div className="flex animate-in flex-col gap-12 duration-300 fade-in slide-in-from-bottom-2">
 			{/* Header */}
-			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-				<div>
+			<div className="flex flex-col gap-1">
+				<div className="flex items-center justify-between gap-4">
 					<h2 className="font-heading text-xl font-semibold">Sulo Customization</h2>
-					<p className="mt-1 text-sm text-muted-foreground">
-						Personalize how Sulo reacts and what he says throughout the app.
-					</p>
+
+					<ResetButton
+						onClick={handleRestoreAll}
+						label="Reset All"
+						className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+					/>
 				</div>
-				<ResetButton
-					onClick={handleRestoreAll}
-					label="Reset All"
-					className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
-				/>
+
+				<p className="mt-1 text-sm text-muted-foreground">
+					Personalize how Sulo reacts and what he says throughout the app.
+				</p>
 			</div>
 
 			{/* Isolated Sub-sections */}
