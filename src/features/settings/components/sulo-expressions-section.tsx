@@ -80,14 +80,15 @@ const ExpressionsHeader = memo(function ExpressionsHeader({
 	onRestore: () => void;
 }) {
 	return (
-		<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-			<div>
+		<div className="flex flex-col gap-1">
+			<div className="flex items-center justify-between gap-4">
 				<h3 className="text-sm font-semibold">Expressions</h3>
-				<p className="text-sm text-muted-foreground">
-					Choose Sulo's default reaction for different scenarios.
-				</p>
+				<ResetButton onClick={onRestore} label="Reset Expressions" />
 			</div>
-			<ResetButton onClick={onRestore} label="Reset Expressions" />
+
+			<p className="text-sm text-muted-foreground">
+				Choose Sulo's default reaction for different scenarios.
+			</p>
 		</div>
 	);
 });

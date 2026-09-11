@@ -1,14 +1,16 @@
 import type { SuloExpression } from "@/stores/logo-store";
 import type { SoundName } from "cuelume";
 
-export type AccentColor = "charcoal" | "amber" | "rose" | "blue" | "green";
-export type CornerStyle = "squircle" | "standard";
-export type LayoutDensity = "compact" | "cozy";
+export type AccentColor = string;
+export type CornerStyle = "squircle" | "standard" | "custom";
+export type LayoutDensity = "compact" | "cozy" | "custom";
 
 export interface AppearanceSettings {
 	accentColor: AccentColor;
 	cornerStyle: CornerStyle;
+	customCornerRadius: number;
 	layoutDensity: LayoutDensity;
+	customLayoutDensity: number;
 }
 
 export interface SoundSettings {

@@ -7,9 +7,11 @@ import { persist } from "zustand/middleware";
 
 export const defaultSettings: Settings = {
 	appearanceSettings: {
-		accentColor: "charcoal",
+		accentColor: "foreground",
 		cornerStyle: "squircle",
+		customCornerRadius: 16,
 		layoutDensity: "compact",
+		customLayoutDensity: 12,
 	},
 	soundSettings: DEFAULT_SOUND_SETTINGS,
 	suloSettings: {
@@ -66,26 +68,34 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		delete safeSettings.appearanceSettings;
 	} else {
 		const appearance = safeSettings.appearanceSettings as unknown as Record<string, unknown>;
-		const validColors = ["charcoal", "amber", "rose", "blue", "green"];
-		if (
-			appearance.accentColor !== undefined &&
-			!validColors.includes(appearance.accentColor as string)
-		) {
+		if (appearance.accentColor !== undefined && typeof appearance.accentColor !== "string") {
 			delete appearance.accentColor;
 		}
-		const validStyles = ["squircle", "standard"];
+		const validStyles = ["squircle", "standard", "custom"];
 		if (
 			appearance.cornerStyle !== undefined &&
 			!validStyles.includes(appearance.cornerStyle as string)
 		) {
 			delete appearance.cornerStyle;
 		}
-		const validDensities = ["compact", "cozy"];
+		if (
+			appearance.customCornerRadius !== undefined &&
+			typeof appearance.customCornerRadius !== "number"
+		) {
+			delete appearance.customCornerRadius;
+		}
+		const validDensities = ["compact", "cozy", "custom"];
 		if (
 			appearance.layoutDensity !== undefined &&
 			!validDensities.includes(appearance.layoutDensity as string)
 		) {
 			delete appearance.layoutDensity;
+		}
+		if (
+			appearance.customLayoutDensity !== undefined &&
+			typeof appearance.customLayoutDensity !== "number"
+		) {
+			delete appearance.customLayoutDensity;
 		}
 	}
 
