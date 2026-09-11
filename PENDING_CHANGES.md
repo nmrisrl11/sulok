@@ -9,7 +9,7 @@
 
 ### Added
 
-- Added new curated Workspace Themes (Sepia, Sand, Midnight, Mocha, Cream, Charcoal) to fully personalize the lighting environment.
+- Added new curated Workspace Themes (Sepia, Sand, Midnight, Mocha) to fully personalize the lighting environment.
 
 ### Changed
 

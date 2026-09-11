@@ -162,6 +162,8 @@ function AccentColorCard() {
 
 	const isDark =
 		theme === "dark" ||
+		theme === "midnight" ||
+		theme === "mocha" ||
 		(theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 	const resolvedColor =
 		accentColor === "foreground" ? (isDark ? "#f7f5f0" : "#1e1b18") : accentColor;
