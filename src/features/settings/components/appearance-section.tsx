@@ -28,10 +28,12 @@ function DebouncedColorPicker({
 	value,
 	onChange,
 	id,
+	"aria-label": ariaLabel,
 }: {
 	value: string;
 	onChange: (val: string) => void;
 	id?: string;
+	"aria-label"?: string;
 }) {
 	const [localValue, setLocalValue] = useState(value);
 	const [prevValueState, setPrevValueState] = useState(value);
@@ -80,7 +82,7 @@ function DebouncedColorPicker({
 			}}
 			className="absolute -top-2 -left-2 h-12 w-12 cursor-pointer border-0 p-0"
 			id={id}
-			aria-label={id ? undefined : "Color picker"}
+			aria-label={ariaLabel || (id ? undefined : "Color picker")}
 		/>
 	);
 }
@@ -166,7 +168,11 @@ function WorkspaceThemeCard() {
 	);
 }
 
-export function AccentColorControl() {
+export function AccentColorControl({
+	"aria-label": ariaLabel,
+}: {
+	"aria-label"?: string;
+} = {}) {
 	const accentColor = useSettingsStore((state) => state.settings.appearanceSettings.accentColor);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const { theme } = useTheme();
@@ -186,7 +192,12 @@ export function AccentColorControl() {
 
 	return (
 		<div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-border ring-offset-2 ring-offset-background transition-all hover:scale-110">
-			<DebouncedColorPicker id="accent-color" value={resolvedColor} onChange={handleUpdate} />
+			<DebouncedColorPicker
+				id="accent-color"
+				aria-label={ariaLabel || "Accent Color"}
+				value={resolvedColor}
+				onChange={handleUpdate}
+			/>
 		</div>
 	);
 }

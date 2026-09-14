@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
 import { useUIStore } from "@/stores/ui-store";
-import { PaletteIcon, SettingsIcon } from "lucide-react";
+import { SettingsIcon, WandSparklesIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
 export function Header() {
@@ -57,7 +57,7 @@ export function Header() {
 							useUIStore((state) => state.isQuickCustomizeOpen) && "bg-accent",
 						)}
 					>
-						<PaletteIcon className="h-5 w-5" />
+						<WandSparklesIcon className="h-5 w-5" />
 						<span className="sr-only">Quick Customize</span>
 					</Button>
 					<Button

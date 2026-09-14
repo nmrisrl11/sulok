@@ -40,7 +40,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key.toLowerCase() === "c" && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
 				// Don't trigger if user is typing in an input
-				if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+				if (
+					e.target instanceof HTMLInputElement ||
+					e.target instanceof HTMLTextAreaElement ||
+					(e.target instanceof HTMLElement && e.target.isContentEditable)
+				)
+					return;
 				e.preventDefault();
 				toggleQuickCustomize();
 			}

@@ -27,7 +27,7 @@ import { useSoundEffects } from "@/hooks/use-sound-effects";
 import { type SuloExpression } from "@/stores/logo-store";
 import { useSettingsStore } from "@/stores/settings-store";
 import { useUIStore } from "@/stores/ui-store";
-import { PaletteIcon } from "lucide-react";
+import { WandSparklesIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 
 export function QuickCustomizeSheet() {
@@ -63,7 +63,7 @@ export function QuickCustomizeSheet() {
 				<div className="border-b border-border/50 bg-muted/20 p-6 pb-4">
 					<SheetHeader className="p-0">
 						<div className="flex items-center gap-2">
-							<PaletteIcon className="h-5 w-5 text-primary" />
+							<WandSparklesIcon className="h-5 w-5 text-primary" />
 							<SheetTitle className="text-xl">Quick Customize</SheetTitle>
 						</div>
 						<SheetDescription>Preview changes live without leaving your corner.</SheetDescription>

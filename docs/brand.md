@@ -38,7 +38,7 @@ The name was chosen through an extensive brand discovery process that evaluated 
 
 ### Available Domains
 
-- `sulok.vercel.app` (primary, verified available)
+- `sulok-app.vercel.app` (primary, verified available)
 - `getsulok.com` / `getsulok.app`
 - `usesulok.com` / `usesulok.app`
 - `sulok.dev`

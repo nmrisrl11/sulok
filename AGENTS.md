@@ -9,7 +9,7 @@
 - **Tagline:** Your corner of the web.
 - **Stack:** React 19 + Vite + TypeScript + TailwindCSS v4 + shadcn/ui + Zustand + Dexie.js
 - **Architecture:** Local-first, no backend, IndexedDB storage, PWA-capable
-- **Deployment:** Vercel (sulok.vercel.app)
+- **Deployment:** Vercel (sulok-app.vercel.app)
 
 ## Before You Start
 
