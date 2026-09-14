@@ -16,8 +16,15 @@ interface ItemState {
 	// DB Actions
 	addItem: (data: Omit<Item, "id" | "createdAt" | "updatedAt">) => Promise<void>;
 	updateItem: (id: string, data: Partial<Item>) => Promise<void>;
-	deleteItem: (id: string) => Promise<void>;
-	deleteSelectedItems: () => Promise<void>;
+
+	// Soft delete / restore
+	softDeleteItems: (ids: string[]) => Promise<void>;
+	restoreItems: (ids: string[]) => Promise<void>;
+
+	// Hard delete
+	hardDeleteItem: (id: string) => Promise<void>;
+	hardDeleteSelectedItems: () => Promise<void>;
+	emptyTrash: () => Promise<void>;
 
 	// Selection Actions
 	toggleSelection: (id: string) => void;
@@ -49,16 +56,30 @@ export const useItemStore = create<ItemState>((set, get) => ({
 		await ItemRepository.update(id, data);
 	},
 
-	deleteItem: async (id) => {
+	softDeleteItems: async (ids) => {
+		await ItemRepository.softDeleteMany(ids);
+		set((state) => ({ selectedIds: state.selectedIds.filter((id) => !ids.includes(id)) }));
+	},
+
+	restoreItems: async (ids) => {
+		await ItemRepository.restoreMany(ids);
+		set((state) => ({ selectedIds: state.selectedIds.filter((id) => !ids.includes(id)) }));
+	},
+
+	hardDeleteItem: async (id) => {
 		await ItemRepository.delete(id);
 		set((state) => ({ selectedIds: state.selectedIds.filter((selectedId) => selectedId !== id) }));
 	},
 
-	deleteSelectedItems: async () => {
+	hardDeleteSelectedItems: async () => {
 		const { selectedIds } = get();
 		if (selectedIds.length === 0) return;
 		await ItemRepository.deleteMany(selectedIds);
 		set({ selectedIds: [] });
+	},
+
+	emptyTrash: async () => {
+		await ItemRepository.emptyTrash();
 	},
 
 	toggleSelection: (id) =>

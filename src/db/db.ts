@@ -2,6 +2,7 @@ import Dexie, { type EntityTable } from "dexie";
 
 export interface Item {
 	id: string; // UUID
+	folderId?: string; // Relation to Folder
 	url: string;
 	title?: string;
 	description?: string;
@@ -9,10 +10,24 @@ export interface Item {
 	logo?: string;
 	createdAt: number;
 	updatedAt: number;
+	deletedAt?: number;
+	isFavorite?: boolean;
+}
+
+export interface Folder {
+	id: string; // nanoid
+	parentId: string | null; // null for root folders
+	name: string;
+	createdAt: number;
+	updatedAt: number;
+	order: number;
+	deletedAt?: number;
+	isFavorite?: boolean;
 }
 
 const db = new Dexie("SulokDB") as Dexie & {
 	items: EntityTable<Item, "id">;
+	folders: EntityTable<Folder, "id">;
 };
 
 // Schema declaration
@@ -34,5 +49,24 @@ db.version(2)
 db.version(3).stores({
 	bookmarks: null, // drop legacy table
 });
+
+db.version(4)
+	.stores({
+		items: "id, folderId, url, title, createdAt, updatedAt",
+		folders: "id, parentId, name, createdAt, updatedAt, order",
+	})
+	.upgrade((_trans) => {
+		// Upgrade existing items to have no folderId implicitly, or we could leave it since it's optional.
+		// Dexie adds the index automatically.
+	});
+
+db.version(5)
+	.stores({
+		items: "id, folderId, url, title, createdAt, updatedAt, deletedAt, isFavorite",
+		folders: "id, parentId, name, createdAt, updatedAt, order, deletedAt, isFavorite",
+	})
+	.upgrade((_trans) => {
+		// Add soft delete and favorite indexes
+	});
 
 export { db };

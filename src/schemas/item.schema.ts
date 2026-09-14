@@ -35,6 +35,9 @@ export const itemSchema = z.object({
 		.optional(),
 	image: z.string().optional(),
 	logo: z.string().optional(),
+	folderId: z.string().optional(),
+	deletedAt: z.number().optional(),
+	isFavorite: z.boolean().optional(),
 });
 
 export type ItemFormValues = z.infer<typeof itemSchema>;

@@ -38,9 +38,9 @@ The project is currently in the **core features implementation phase**.
 
 ### Next Steps
 
-1. Implement folder CRUD (post-MVP)
-2. Implement item tags, categories, and filter capabilities.
-3. Refine overall UI polish for mobile responsiveness.
+1. Implement item tags, categories, and filter capabilities.
+2. Refine overall UI polish for mobile responsiveness.
+3. Finalize the "My Corner" default UX (e.g., handling new users and default folders).
 
 ---
 

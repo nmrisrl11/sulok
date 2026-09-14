@@ -14,6 +14,9 @@
 
 ### Changed
 
+- Refactored multiple actions (deleting, restoring, moving) to use a unified and more reliable background process, ensuring items and folders are handled seamlessly together.
+- When you are in the Recycle Bin, tapping or clicking any item now safely selects it instead of accidentally opening the link or navigating into the folder.
+- Checkboxes on your links and folders are now permanently visible on mobile devices, making them much easier to tap.
 - Redesigned the Workspace Theme selection UI in the Appearance settings to be more compact and user-friendly across all devices.
 - Improved accessibility for the Accent Color picker by providing explicit labels for screen readers.
 - Refactored all internal UI components to strictly use named React imports, ensuring cleaner code and full compatibility with modern TypeScript build tools.
@@ -23,6 +26,9 @@
 - Fixed a "Flash of Unstyled Content" (FOUC) issue where the screen would briefly flash white before applying custom dark themes like Mocha or Midnight on initial load.
 - Fixed a visual bug where the outer selection ring of the Accent Color picker was being clipped at the edges of the settings accordion.
 - Fixed an issue where the `Shift + C` Quick Customize shortcut would accidentally trigger while typing in rich text editors or content-editable areas.
+- Fixed an issue where moving or managing subfolders from the Favorites view could behave inconsistently.
+- Fixed keyboard accessibility bugs that prevented users from navigating the folder list using the keyboard inside the Move to... dialog.
+- Fixed a visual glitch where dialog titles wouldn't update smoothly when switching between creating new folders and renaming existing ones.
 
 ### Removed
 
