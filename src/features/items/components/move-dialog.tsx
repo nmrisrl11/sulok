@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import type { Folder } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
-import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { useFolderStore } from "@/stores/folder-store";
@@ -62,22 +61,23 @@ export function MoveDialog() {
 
 	const treeList = buildFolderTreeList(filteredFolders);
 
+	const handleClose = () => {
+		setSelectedFolderId(null);
+		closeMoveDialog();
+	};
+
 	const handleMove = async () => {
 		setIsMoving(true);
 		try {
-			if (movingItemIds.length > 0) {
-				await ItemRepository.moveMany(movingItemIds, selectedFolderId);
-			}
-			if (movingFolderIds.length > 0) {
-				await FolderRepository.moveMany(movingFolderIds, selectedFolderId);
-			}
+			const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+			await BulkRepository.move(movingItemIds, movingFolderIds, selectedFolderId);
 
 			// Clear selections if they were moved
 			useItemStore.getState().clearSelection();
 			useFolderStore.getState().clearSelection();
 
 			notify.success(`Moved ${movingItemIds.length + movingFolderIds.length} items`);
-			closeMoveDialog();
+			handleClose();
 		} catch (error) {
 			console.error("Failed to move items", error);
 			notify.error("Failed to move items");
@@ -89,7 +89,7 @@ export function MoveDialog() {
 	const totalItems = movingItemIds.length + movingFolderIds.length;
 
 	return (
-		<Dialog open={isOpen} onOpenChange={(open) => !open && closeMoveDialog()}>
+		<Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
 			<DialogContent className="flex max-h-[85vh] flex-col sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>Move Items</DialogTitle>
@@ -100,9 +100,10 @@ export function MoveDialog() {
 				</DialogHeader>
 
 				<div className="custom-scrollbar mt-2 min-h-75 flex-1 overflow-y-auto rounded-md border p-1">
-					<div
+					<button
+						type="button"
 						className={cn(
-							"flex cursor-pointer items-center gap-3 rounded-sm px-3 py-2 transition-colors",
+							"flex w-full cursor-pointer items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 							selectedFolderId === null
 								? "bg-primary/10 font-medium text-primary"
 								: "hover:bg-muted",
@@ -116,13 +117,14 @@ export function MoveDialog() {
 							)}
 						/>
 						<span>My Corner (Root)</span>
-					</div>
+					</button>
 
 					{treeList.map(({ folder, depth }) => (
-						<div
+						<button
 							key={folder.id}
+							type="button"
 							className={cn(
-								"flex cursor-pointer items-center gap-3 rounded-sm px-3 py-2 transition-colors",
+								"flex w-full cursor-pointer items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 								selectedFolderId === folder.id
 									? "bg-primary/10 font-medium text-primary"
 									: "hover:bg-muted",
@@ -139,12 +141,12 @@ export function MoveDialog() {
 								)}
 							/>
 							<span className="truncate">{folder.name}</span>
-						</div>
+						</button>
 					))}
 				</div>
 
 				<DialogFooter className="mt-4 gap-2 sm:justify-end">
-					<Button variant="ghost" onClick={closeMoveDialog} disabled={isMoving}>
+					<Button variant="ghost" onClick={handleClose} disabled={isMoving}>
 						Cancel
 					</Button>
 					<Button onClick={handleMove} disabled={isMoving}>

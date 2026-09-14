@@ -37,7 +37,12 @@ export function useHomeData() {
 				q: searchQuery,
 				sort: dbSort,
 				dir: dbDir,
-				folderId: view === "all" ? (folderId ? folderId : null) : undefined,
+				folderId:
+					view === "all"
+						? folderId || null
+						: view === "favorites"
+							? folderId || undefined
+							: undefined,
 				view,
 			}),
 		[searchQuery, dbSort, dbDir, folderId, view],
@@ -47,7 +52,12 @@ export function useHomeData() {
 		() =>
 			FolderRepository.query({
 				view,
-				parentId: view === "all" ? (folderId ? folderId : null) : undefined,
+				parentId:
+					view === "all"
+						? folderId || null
+						: view === "favorites"
+							? folderId || undefined
+							: undefined,
 				q: searchQuery,
 			}),
 		[view, folderId, searchQuery],

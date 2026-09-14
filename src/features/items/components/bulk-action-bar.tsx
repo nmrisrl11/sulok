@@ -10,15 +10,8 @@ import { FolderInputIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 
 export function BulkActionBar() {
-	const { selectedIds, clearSelection, softDeleteItems, restoreItems, hardDeleteSelectedItems } =
-		useItemStore();
-	const {
-		selectedFolderIds,
-		clearSelection: clearFolderSelection,
-		softDeleteFolders,
-		restoreFolders,
-		hardDeleteSelectedFolders,
-	} = useFolderStore();
+	const { selectedIds, clearSelection } = useItemStore();
+	const { selectedFolderIds, clearSelection: clearFolderSelection } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const [view] = useQueryState("view", parseAsString.withDefault("all"));
 
@@ -28,17 +21,19 @@ export function BulkActionBar() {
 
 	const handleSoftDeleteSelected = async () => {
 		try {
-			if (selectedIds.length > 0) await softDeleteItems(selectedIds);
-			if (selectedFolderIds.length > 0) await softDeleteFolders(selectedFolderIds);
+			const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+			await BulkRepository.softDelete(selectedIds, selectedFolderIds);
+			clearSelection();
+			clearFolderSelection();
 			useLogoStore.getState().setTemporaryExpression("unimpressed");
 			notify.success(`Moved ${totalSelected} items to Recycle Bin`, {
 				id: "bulk-soft-deleted",
 				hideReaction: true,
 				action: {
 					label: "Undo",
-					onClick: () => {
-						if (selectedIds.length > 0) restoreItems(selectedIds);
-						if (selectedFolderIds.length > 0) restoreFolders(selectedFolderIds);
+					onClick: async () => {
+						const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+						await BulkRepository.restore(selectedIds, selectedFolderIds);
 					},
 				},
 			});
@@ -50,8 +45,10 @@ export function BulkActionBar() {
 
 	const handleRestoreSelected = async () => {
 		try {
-			if (selectedIds.length > 0) await restoreItems(selectedIds);
-			if (selectedFolderIds.length > 0) await restoreFolders(selectedFolderIds);
+			const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+			await BulkRepository.restore(selectedIds, selectedFolderIds);
+			clearSelection();
+			clearFolderSelection();
 			notify.success(`Restored ${totalSelected} items`, { id: "bulk-restored" });
 		} catch (error) {
 			console.error("Failed to restore items", error);
@@ -66,8 +63,10 @@ export function BulkActionBar() {
 			confirmText: "Delete Forever",
 			onConfirm: async () => {
 				try {
-					if (selectedIds.length > 0) await hardDeleteSelectedItems();
-					if (selectedFolderIds.length > 0) await hardDeleteSelectedFolders();
+					const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+					await BulkRepository.hardDelete(selectedIds, selectedFolderIds);
+					clearSelection();
+					clearFolderSelection();
 					useLogoStore.getState().setTemporaryExpression("unimpressed");
 					notify.success(`Removed ${totalSelected} items from your corner`, {
 						id: "bulk-deleted",
@@ -98,6 +97,7 @@ export function BulkActionBar() {
 						>
 							<RotateCcwIcon className="h-4 w-4 text-muted-foreground" />
 							<span className="hidden sm:inline">Restore Selected</span>
+							<span className="sr-only sm:hidden">Restore Selected</span>
 						</Button>
 						<Button
 							variant="ghost"
@@ -107,6 +107,7 @@ export function BulkActionBar() {
 						>
 							<Trash2Icon className="h-4 w-4" />
 							<span className="hidden sm:inline">Delete Forever</span>
+							<span className="sr-only sm:hidden">Delete Forever</span>
 						</Button>
 					</>
 				) : (
@@ -118,6 +119,7 @@ export function BulkActionBar() {
 					>
 						<Trash2Icon className="h-4 w-4" />
 						<span className="hidden sm:inline">Delete Selected</span>
+						<span className="sr-only sm:hidden">Delete Selected</span>
 					</Button>
 				)}
 				{view !== "trash" && (
@@ -133,6 +135,7 @@ export function BulkActionBar() {
 					>
 						<FolderInputIcon className="h-4 w-4" />
 						<span className="hidden sm:inline">Move Selected</span>
+						<span className="sr-only sm:hidden">Move Selected</span>
 					</Button>
 				)}
 				<Button

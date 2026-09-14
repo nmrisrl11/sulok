@@ -21,6 +21,9 @@ export const FolderRepository = {
 			results = deletedFolders.filter((f) => !f.parentId || !deletedFolderIds.has(f.parentId));
 		} else if (view === "favorites") {
 			results = results.filter((f) => !f.deletedAt && f.isFavorite);
+			if (parentId !== undefined) {
+				results = results.filter((f) => f.parentId === parentId);
+			}
 		} else {
 			results = results.filter((f) => !f.deletedAt);
 

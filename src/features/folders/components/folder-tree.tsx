@@ -45,26 +45,28 @@ export function FolderTree() {
 			</div>
 
 			<div className="mb-2 flex flex-col gap-0.5">
-				<div
+				<button
+					type="button"
 					className={cn(
-						"flex cursor-pointer items-center gap-2 rounded-md border border-transparent px-2 py-1.5 transition-colors hover:bg-card",
+						"flex w-full cursor-pointer items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 						activeFolderId === "" && "border-primary/20 bg-card",
 					)}
-					onClick={() => setActiveFolderId("")}
+					onClick={() => setActiveFolderId(null)}
 				>
 					<LayersIcon className="size-4 shrink-0 text-muted-foreground" />
 					<span className="text-sm font-medium text-foreground/90">All Links</span>
-				</div>
-				<div
+				</button>
+				<button
+					type="button"
 					className={cn(
-						"flex cursor-pointer items-center gap-2 rounded-md border border-transparent px-2 py-1.5 transition-colors hover:bg-card",
+						"flex w-full cursor-pointer items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 						activeFolderId === "unorganized" && "border-primary/20 bg-card",
 					)}
 					onClick={() => setActiveFolderId("unorganized")}
 				>
 					<InboxIcon className="size-4 shrink-0 text-muted-foreground" />
 					<span className="text-sm font-medium text-foreground/90">Unorganized</span>
-				</div>
+				</button>
 			</div>
 
 			{folders.length === 0 ? (

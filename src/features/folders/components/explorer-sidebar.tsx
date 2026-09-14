@@ -8,10 +8,14 @@ export function ExplorerSidebar() {
 		parseAsStringEnum(["all", "favorites", "trash"]).withDefault("all"),
 	);
 	const [folderId, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
+	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
 
 	const handleNavigate = (newView: "all" | "favorites" | "trash") => {
 		setView(newView);
 		setFolderId(""); // Reset folder navigation when changing root views
+		if (newView === "trash" && searchQuery) {
+			setSearchQuery(""); // Clear search filter when entering Recycle Bin
+		}
 	};
 
 	const navItems = [
@@ -43,10 +47,11 @@ export function ExplorerSidebar() {
 			{navItems.map((item) => {
 				const Icon = item.icon;
 				return (
-					<div
+					<button
 						key={item.id}
+						type="button"
 						className={cn(
-							"flex cursor-pointer items-center gap-3 rounded-md border border-transparent px-3 py-2 transition-colors hover:bg-card",
+							"flex w-full cursor-pointer items-center gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 							item.isActive && "border-primary/20 bg-card",
 						)}
 						onClick={item.onClick}
@@ -65,7 +70,7 @@ export function ExplorerSidebar() {
 						>
 							{item.label}
 						</span>
-					</div>
+					</button>
 				);
 			})}
 		</div>

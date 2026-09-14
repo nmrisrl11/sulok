@@ -62,7 +62,7 @@ export function FolderNode({ folder, allFolders, depth = 0 }: FolderNodeProps) {
 		e.stopPropagation();
 		confirm({
 			title: "Delete Folder",
-			description: `Are you sure you want to delete "${folder.name}"? All items and sub-folders inside will also be deleted. This action cannot be undone.`,
+			description: `Are you sure you want to delete "${folder.name}"? The folder and its contents will be moved to the Recycle Bin.`,
 			confirmText: "Delete",
 			cancelText: "Cancel",
 			onConfirm: async () => {
@@ -74,13 +74,21 @@ export function FolderNode({ folder, allFolders, depth = 0 }: FolderNodeProps) {
 	return (
 		<div className="flex w-full flex-col">
 			<div
+				role="button"
+				tabIndex={0}
 				className={cn(
-					"group flex cursor-pointer items-center justify-between rounded-md border border-transparent px-2 py-1.5 transition-colors hover:bg-card",
+					"group flex cursor-pointer items-center justify-between rounded-md border border-transparent px-2 py-1.5 transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 					isActive && "border-primary/20 bg-card",
 					isSelected && "border-dashed bg-card/50", // Just in case bulk selection is ever used, give it a different style
 				)}
 				style={{ paddingLeft: `${depth * 12 + 8}px` }}
 				onClick={handleSelect}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						handleSelect();
+					}
+				}}
 			>
 				<div className="flex items-center gap-2 overflow-hidden">
 					<button

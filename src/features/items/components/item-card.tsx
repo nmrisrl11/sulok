@@ -114,7 +114,8 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 					onCheckedChange={() => toggleSelection(item.id)}
 					className={cn(
 						"shrink-0 transition-opacity duration-200 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
-						!isSelected && "group-focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100",
+						!isSelected &&
+							"group-focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-coarse:opacity-100",
 					)}
 				/>
 				<a

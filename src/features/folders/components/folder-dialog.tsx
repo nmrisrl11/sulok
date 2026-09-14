@@ -13,7 +13,7 @@ import { notify } from "@/lib/notify";
 import { type FolderFormData, folderSchema } from "@/schemas/folder.schema";
 import { useFolderStore } from "@/stores/folder-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function FolderDialog() {
@@ -22,8 +22,15 @@ export function FolderDialog() {
 
 	// Derive state for smooth animations
 	const [activeFolder, setActiveFolder] = useState(editingFolder);
-	if (isDialogOpen && activeFolder !== editingFolder) {
-		setActiveFolder(editingFolder);
+	const [prevIsDialogOpen, setPrevIsDialogOpen] = useState(isDialogOpen);
+	const [prevEditingFolder, setPrevEditingFolder] = useState(editingFolder);
+
+	if (isDialogOpen !== prevIsDialogOpen || editingFolder !== prevEditingFolder) {
+		setPrevIsDialogOpen(isDialogOpen);
+		setPrevEditingFolder(editingFolder);
+		if (isDialogOpen) {
+			setActiveFolder(editingFolder);
+		}
 	}
 
 	const {
@@ -38,11 +45,15 @@ export function FolderDialog() {
 			: { name: "", parentId: null },
 	});
 
-	// Reset form when dialog opens/closes
-	if (isDialogOpen && !activeFolder && errors.name) {
-		// Reset errors if opened as create
-		reset({ name: "", parentId: null });
-	}
+	useEffect(() => {
+		if (isDialogOpen) {
+			reset(
+				editingFolder
+					? { name: editingFolder.name, parentId: editingFolder.parentId }
+					: { name: "", parentId: null },
+			);
+		}
+	}, [isDialogOpen, editingFolder, reset]);
 
 	const handleFormSubmit = async (data: FolderFormData) => {
 		setIsSubmitting(true);

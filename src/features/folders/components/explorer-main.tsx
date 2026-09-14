@@ -76,8 +76,10 @@ function FolderCard({ folder }: { folder: Folder }) {
 
 	return (
 		<div
+			role="button"
+			tabIndex={0}
 			className={cn(
-				"group flex cursor-pointer items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:border-border hover:bg-card/50 supports-[corner-shape:squircle]:rounded-xl",
+				"group flex cursor-pointer items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
 				isSelected && "bg-card/50 shadow-sm ring-1 ring-border",
 			)}
 			onClick={() => {
@@ -87,12 +89,23 @@ function FolderCard({ folder }: { folder: Folder }) {
 					setFolderId(folder.id);
 				}
 			}}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					if (view === "trash") {
+						toggleSelection(folder.id);
+					} else {
+						setFolderId(folder.id);
+					}
+				}
+			}}
 		>
 			<div className="flex min-w-0 flex-1 items-center gap-3">
 				<div
 					className={cn(
 						"flex shrink-0 items-center gap-3 transition-opacity duration-200",
-						!isSelected && "group-focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100",
+						!isSelected &&
+							"group-focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-coarse:opacity-100",
 					)}
 					onClick={(e) => e.stopPropagation()}
 				>
@@ -231,6 +244,9 @@ export function ExplorerMain({
 		"mode",
 		parseAsStringEnum(["list", "grid", "compact"]).withDefault("list"),
 	);
+	const [_, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
+	const [view] = useQueryState("view", parseAsString.withDefault("all"));
+	const { toggleSelection } = useFolderStore();
 
 	if (isLoading) {
 		return (
@@ -260,7 +276,26 @@ export function ExplorerMain({
 				{folders.map((folder) => (
 					<div
 						key={folder.id}
-						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50"
+						role="button"
+						tabIndex={0}
+						onClick={() => {
+							if (view === "trash") {
+								toggleSelection(folder.id);
+							} else {
+								setFolderId(folder.id);
+							}
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								if (view === "trash") {
+									toggleSelection(folder.id);
+								} else {
+									setFolderId(folder.id);
+								}
+							}
+						}}
+						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 					>
 						<FolderIcon className="size-12 fill-primary/20 text-primary" />
 						<span className="w-full truncate text-center text-sm font-medium">{folder.name}</span>
@@ -269,7 +304,16 @@ export function ExplorerMain({
 				{items.map((item) => (
 					<div
 						key={item.id}
-						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50"
+						role="button"
+						tabIndex={0}
+						onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								window.open(item.url, "_blank", "noopener,noreferrer");
+							}
+						}}
+						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 					>
 						<div className="flex size-12 items-center justify-center rounded-full bg-muted/50">
 							<span className="text-xs text-muted-foreground">Link</span>

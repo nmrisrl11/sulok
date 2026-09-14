@@ -47,8 +47,8 @@ export function ExplorerToolbar({
 		parseAsStringEnum([...SORT_OPTIONS]).withDefault("date-desc"),
 	);
 
-	const { openCreateDialog, emptyTrash: emptyFolderTrash } = useFolderStore();
-	const { openCreateDialog: openItemCreateDialog, emptyTrash: emptyItemTrash } = useItemStore();
+	const { openCreateDialog } = useFolderStore();
+	const { openCreateDialog: openItemCreateDialog } = useItemStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
 
 	const handleEmptyTrash = () => {
@@ -59,8 +59,8 @@ export function ExplorerToolbar({
 			confirmText: "Empty Recycle Bin",
 			onConfirm: async () => {
 				try {
-					await emptyFolderTrash();
-					await emptyItemTrash();
+					const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+					await BulkRepository.emptyTrash();
 					useLogoStore.getState().setTemporaryExpression("unimpressed");
 					notify.success("Recycle Bin emptied");
 				} catch (error) {
