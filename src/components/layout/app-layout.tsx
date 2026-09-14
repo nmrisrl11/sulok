@@ -1,7 +1,9 @@
 import { Toaster } from "@/components/ui/toaster";
 
 import { useConfirmationStore } from "@/stores/confirmation-store";
+import { useFolderStore } from "@/stores/folder-store";
 import { useItemStore } from "@/stores/item-store";
+import { useMoveStore } from "@/stores/move-store";
 import { useUIStore } from "@/stores/ui-store";
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ErrorBoundary } from "../error-boundary";
@@ -17,12 +19,26 @@ const ConfirmationDialog = lazy(() =>
 		default: m.ConfirmationDialog,
 	})),
 );
+const FolderDialog = lazy(() =>
+	import("@/features/folders/components/folder-dialog").then((m) => ({
+		default: m.FolderDialog,
+	})),
+);
+const MoveDialog = lazy(() =>
+	import("@/features/items/components/move-dialog").then((m) => ({
+		default: m.MoveDialog,
+	})),
+);
 
 export function AppLayout({ children }: { children: ReactNode }) {
 	const isItemDialogOpen = useItemStore((state) => state.isDialogOpen);
+	const isFolderDialogOpen = useFolderStore((state) => state.isDialogOpen);
 	const isConfirmationDialogOpen = useConfirmationStore((state) => state.isOpen);
+	const isMoveDialogOpen = useMoveStore((state) => state.isOpen);
 
 	const [hasLoadedItemDialog, setHasLoadedItemDialog] = useState(isItemDialogOpen);
+	const [hasLoadedFolderDialog, setHasLoadedFolderDialog] = useState(isFolderDialogOpen);
+	const [hasLoadedMoveDialog, setHasLoadedMoveDialog] = useState(isMoveDialogOpen);
 	const [hasLoadedConfirmationDialog, setHasLoadedConfirmationDialog] =
 		useState(isConfirmationDialogOpen);
 
@@ -30,8 +46,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
 		setHasLoadedItemDialog(true);
 	}
 
+	if (isFolderDialogOpen && !hasLoadedFolderDialog) {
+		setHasLoadedFolderDialog(true);
+	}
+
 	if (isConfirmationDialogOpen && !hasLoadedConfirmationDialog) {
 		setHasLoadedConfirmationDialog(true);
+	}
+
+	if (isMoveDialogOpen && !hasLoadedMoveDialog) {
+		setHasLoadedMoveDialog(true);
 	}
 
 	const toggleQuickCustomize = useUIStore((state) => state.toggleQuickCustomize);
@@ -72,6 +96,20 @@ export function AppLayout({ children }: { children: ReactNode }) {
 				<ErrorBoundary>
 					<Suspense fallback={null}>
 						<ConfirmationDialog />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+			{hasLoadedFolderDialog && (
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<FolderDialog />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+			{hasLoadedMoveDialog && (
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<MoveDialog />
 					</Suspense>
 				</ErrorBoundary>
 			)}

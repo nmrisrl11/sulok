@@ -52,7 +52,7 @@
 - Single-column layout on mobile, expandable on desktop.
 - File tree structure for folder/link hierarchy.
 - Drag-and-drop for organization.
-- No sidebar navigation — header-based navigation only.
+- Sidebar navigation exists for the main file explorer (My Corner), keeping navigation structured.
 
 ### Interaction
 
@@ -61,6 +61,10 @@
 - Undo support for destructive actions (delete, move).
 - No confirmation modals for non-destructive actions.
 - Toast notifications for feedback, not alert dialogs. Always use `notify` from `src/lib/notify.ts` (powered by `goey-toast`), and never standard `sonner`.
+- **List UX**: Checkboxes on items and folders in the main explorer should be hidden on desktop by default, appearing only on hover or when focused/selected. On mobile/touch devices, keep them visible.
+- **Recycle Bin Context**:
+  - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.
+  - Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.
 - **Interactive Sounds**: Use `cuelume` for UI sound effects. Global interactions are handled automatically via `useGlobalSoundInteractions.ts`. To opt a specific element (and its children) out of hover/click sounds, add the `data-no-sound="true"` attribute to the element.
 - When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 

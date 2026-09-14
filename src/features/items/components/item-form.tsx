@@ -2,11 +2,20 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { APP_INFO } from "@/constants/app-info";
+import { FolderRepository } from "@/db/repositories/folder-repository";
 import { useDebounce } from "@/hooks/use-debounce";
 import { formatUrl } from "@/lib/utils";
 import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useMetadata } from "../hooks/use-metadata";
@@ -44,8 +53,12 @@ export function ItemForm({
 			description: defaultValues?.description || "",
 			image: defaultValues?.image || "",
 			logo: defaultValues?.logo || "",
+			folderId: defaultValues?.folderId || "unorganized", // Using "unorganized" as a special ID for null/none
 		},
 	});
+
+	const folders = useLiveQuery(() => FolderRepository.getAll()) || [];
+	const selectedFolderId = useWatch({ control, name: "folderId" });
 
 	const rawUrl = useWatch({ control, name: "url" }) || "";
 	const debouncedUrl = useDebounce(rawUrl, 500);
@@ -117,6 +130,7 @@ export function ItemForm({
 			description: getValues("description") || metadata?.description || "",
 			image: getValues("image") || metadata?.image || undefined,
 			logo: getValues("logo") || metadata?.logo || undefined,
+			folderId: getValues("folderId") === "unorganized" ? undefined : getValues("folderId"),
 		});
 	};
 
@@ -146,6 +160,23 @@ export function ItemForm({
 				<input type="hidden" {...register("description")} />
 				<input type="hidden" {...register("image")} />
 				<input type="hidden" {...register("logo")} />
+
+				<div className="space-y-2">
+					<Label htmlFor="folderId">Folder</Label>
+					<Select value={selectedFolderId} onValueChange={(val) => setValue("folderId", val)}>
+						<SelectTrigger id="folderId">
+							<SelectValue placeholder="Select a folder" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="unorganized">None (Unorganized)</SelectItem>
+							{folders.map((folder) => (
+								<SelectItem key={folder.id} value={folder.id}>
+									{folder.name}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
 
 				<div className="flex flex-col gap-2">
 					<h3 className="text-sm leading-none font-medium text-muted-foreground">Preview</h3>

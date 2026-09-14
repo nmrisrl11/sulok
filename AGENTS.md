@@ -117,6 +117,8 @@ sulok/
 - **Safe Area Insets:** When building fixed UI elements anchored to the bottom (like the `BottomActionSystem`), always incorporate `env(safe-area-inset-bottom)` into their positioning. The main app layout (`AppLayout`) ensures scrollable content isn't obscured by providing safe bottom padding on mobile viewports.
 - **Glassmorphism:** Bottom floating action bars use a glassmorphic effect (`bg-card/80 backdrop-blur-md`) to blend smoothly with scrolling content.
 - **Route-Specific State Cleanup:** Always clear contextual global state (like `selectedIds` for bulk actions) when the associated page component (e.g., `HomePage`) unmounts to prevent UI components from persisting improperly across different routes.
+- **List UX:** Checkboxes on items and folders in the main explorer should be hidden on desktop by default, appearing only on hover or when focused/selected. On mobile/touch devices, keep them visible.
+- **Recycle Bin Context:** Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder. Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.
 - **Favicon fetching:** Attempt to use the locally saved `logo` URL from the item first. If unavailable or if it fails to load, gracefully fall back to Google's S2 service: `https://www.google.com/s2/favicons?domain=[origin]&sz=64` (use the full origin, e.g. `https://domain.com`, to ensure it resolves modern PaaS deployments properly).
 - **Metadata fetching:** Uses `api.ogfetch.com` for robust open-graph metadata preview. **Optimization Rule:** When editing an existing item, do not refetch metadata from external APIs unless the URL has explicitly changed. Utilize the locally stored metadata (`title`, `description`, `image`, `logo`) to populate the preview and form state to conserve API limits.
 - **Vite Chunking:** Always use `rollupOptions.output.manualChunks` as a function in `vite.config.ts` to logically group dependencies into domain-specific chunks (e.g., `vendor-react`, `vendor-db`) to prevent massive bundle sizes.
@@ -130,6 +132,5 @@ sulok/
 - Do not add a backend, API, or authentication.
 - Do not add new npm dependencies without explicit approval.
 - Do not change the color palette or fonts without approval.
-- Do not add a sidebar layout. The app uses a header + content layout.
 - Do not add AI/ML features unless explicitly requested.
 - Do not use `localStorage` for structured data — use Dexie.js.

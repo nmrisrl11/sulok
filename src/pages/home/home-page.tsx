@@ -1,34 +1,50 @@
-import { ErrorBoundary } from "@/components/error-boundary";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type Item } from "@/db/db";
-import { ItemCard } from "@/features/items/components/item-card";
-import { ItemEmptyState } from "@/features/items/components/item-empty-state";
+import { type Folder, type Item } from "@/db/db";
+import { ExplorerMain } from "@/features/folders/components/explorer-main";
+import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar";
+import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
 import { cn } from "@/lib/utils";
+import { useFolderStore } from "@/stores/folder-store";
 import { useItemStore } from "@/stores/item-store";
 import { memo } from "react";
-import { HomeFilters } from "./components/home-filters";
-import { HomeFiltersSkeleton, HomeItemListSkeleton } from "./home-skeleton";
 import { useHomeData } from "./hooks/use-home-management";
 
-function SelectionHeader({ items, hasItems }: { items: Item[]; hasItems: boolean }) {
+function SelectionHeader({
+	items,
+	hasItems,
+	folders,
+	hasFolders,
+}: {
+	items: Item[];
+	hasItems: boolean;
+	folders: Folder[];
+	hasFolders: boolean;
+}) {
 	const selectedIds = useItemStore((state) => state.selectedIds);
-	const selectAll = useItemStore((state) => state.selectAll);
-	const clearSelection = useItemStore((state) => state.clearSelection);
+	const selectedFolderIds = useFolderStore((state) => state.selectedFolderIds);
+	const selectAllItems = useItemStore((state) => state.selectAll);
+	const clearItemSelection = useItemStore((state) => state.clearSelection);
+	const selectAllFolders = useFolderStore((state) => state.selectAll);
+	const clearFolderSelection = useFolderStore((state) => state.clearSelection);
 
-	if (!hasItems) return null;
+	if (!hasItems && !hasFolders) return null;
 
-	const isAllSelected = items.length > 0 && items.every((item) => selectedIds.includes(item.id));
+	const isAllSelected =
+		(items.length === 0 || items.every((item) => selectedIds.includes(item.id))) &&
+		(folders.length === 0 || folders.every((folder) => selectedFolderIds.includes(folder.id)));
 
 	const handleSelectAllChange = (checked: boolean | string) => {
 		if (checked === true) {
-			selectAll(items.map((item) => item.id));
+			selectAllItems(items.map((item) => item.id));
+			selectAllFolders(folders.map((folder) => folder.id));
 		} else {
-			clearSelection();
+			clearItemSelection();
+			clearFolderSelection();
 		}
 	};
 
 	return (
-		<div className="flex items-center justify-between px-2">
+		<div className="mb-2 flex items-center justify-between border-b px-3 py-2">
 			<div className="flex items-center gap-3">
 				<Checkbox
 					id="select-all"
@@ -38,84 +54,29 @@ function SelectionHeader({ items, hasItems }: { items: Item[]; hasItems: boolean
 				/>
 				<label
 					htmlFor="select-all"
-					className="cursor-pointer text-sm leading-none font-medium text-foreground select-none"
+					className="cursor-pointer text-xs font-medium text-muted-foreground select-none"
 				>
-					Select All
+					Name
 				</label>
 			</div>
-			<div className="text-sm text-muted-foreground">
-				{items.length} {items.length === 1 ? "item" : "items"}
+			<div className="text-xs font-medium text-muted-foreground">
+				{items.length + folders.length} {items.length + folders.length === 1 ? "item" : "items"}
 			</div>
 		</div>
 	);
 }
 
-function HomeHeaderArea({
-	totalItems,
-	isFiltersActive,
-	isTotalLoading,
-}: {
-	totalItems: number;
-	isFiltersActive: boolean;
-	isTotalLoading: boolean;
-}) {
-	const showFilters = totalItems > 0 || isFiltersActive;
-
+function HomeHeaderArea() {
 	return (
 		<div className="flex flex-col justify-between gap-4 px-2 sm:flex-row sm:items-center sm:px-0">
 			<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
 				Your Corner
 			</h2>
-			{isTotalLoading ? <HomeFiltersSkeleton /> : showFilters ? <HomeFilters /> : null}
 		</div>
 	);
 }
 
 const MemoizedHomeHeaderArea = memo(HomeHeaderArea);
-
-function HomeItemArea({
-	searchQuery,
-	items,
-	totalItems,
-	isLoading,
-}: {
-	searchQuery: string;
-	items: Item[];
-	totalItems: number;
-	isLoading: boolean;
-}) {
-	if (isLoading) {
-		return <HomeItemListSkeleton />;
-	}
-
-	const hasItems = items.length > 0;
-	// When clearing search, q becomes "" instantly but items might still be [] for a split second.
-	const isTransitioning = !hasItems && !searchQuery && totalItems > 0;
-
-	return (
-		<>
-			{hasItems && <SelectionHeader items={items} hasItems={hasItems} />}
-
-			<div className="flex flex-col gap-2">
-				<ErrorBoundary>
-					{isTransitioning ? null : !hasItems ? (
-						totalItems === 0 ? (
-							<ItemEmptyState />
-						) : (
-							<div className="py-12 text-center">
-								<p className="text-sm text-muted-foreground italic">
-									No items found matching your criteria.
-								</p>
-							</div>
-						)
-					) : (
-						items.map((item) => <ItemCard key={item.id} item={item} />)
-					)}
-				</ErrorBoundary>
-			</div>
-		</>
-	);
-}
 
 export function HomePage({ className }: { className?: string }) {
 	const homeData = useHomeData();
@@ -123,17 +84,29 @@ export function HomePage({ className }: { className?: string }) {
 	return (
 		<main className={cn("flex flex-col gap-10", className)}>
 			<div className="flex flex-col gap-4">
-				<MemoizedHomeHeaderArea
-					totalItems={homeData.totalItems}
-					isFiltersActive={homeData.isFiltersActive}
-					isTotalLoading={homeData.isTotalLoading}
-				/>
-				<HomeItemArea
-					searchQuery={homeData.searchQuery}
-					items={homeData.items}
-					totalItems={homeData.totalItems}
-					isLoading={homeData.isLoading}
-				/>
+				<MemoizedHomeHeaderArea />
+				<div className="flex flex-col items-start gap-8 md:flex-row">
+					<div className="w-full shrink-0 rounded-lg border bg-card/30 p-2 shadow-sm md:w-56">
+						<ExplorerSidebar />
+					</div>
+					<div className="flex w-full min-w-0 flex-1 flex-col">
+						<ExplorerToolbar
+							hasItems={homeData.items.length > 0}
+							hasFolders={homeData.folders.length > 0}
+						/>
+						<SelectionHeader
+							items={homeData.items}
+							hasItems={homeData.items.length > 0}
+							folders={homeData.folders}
+							hasFolders={homeData.folders.length > 0}
+						/>
+						<ExplorerMain
+							folders={homeData.folders}
+							items={homeData.items}
+							isLoading={homeData.isLoading}
+						/>
+					</div>
+				</div>
 			</div>
 		</main>
 	);

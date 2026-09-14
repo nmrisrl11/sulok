@@ -2,57 +2,146 @@ import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { notify } from "@/lib/notify";
 import { useConfirmationStore } from "@/stores/confirmation-store";
+import { useFolderStore } from "@/stores/folder-store";
 import { useItemStore } from "@/stores/item-store";
 import { useLogoStore } from "@/stores/logo-store";
-import { Trash2Icon } from "lucide-react";
+import { useMoveStore } from "@/stores/move-store";
+import { FolderInputIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import { parseAsString, useQueryState } from "nuqs";
 
 export function BulkActionBar() {
-	const { selectedIds, clearSelection, deleteSelectedItems } = useItemStore();
+	const { selectedIds, clearSelection, softDeleteItems, restoreItems, hardDeleteSelectedItems } =
+		useItemStore();
+	const {
+		selectedFolderIds,
+		clearSelection: clearFolderSelection,
+		softDeleteFolders,
+		restoreFolders,
+		hardDeleteSelectedFolders,
+	} = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
+	const [view] = useQueryState("view", parseAsString.withDefault("all"));
 
-	if (selectedIds.length === 0) return null;
+	const totalSelected = selectedIds.length + selectedFolderIds.length;
 
-	const handleDeleteSelected = () => {
+	if (totalSelected === 0) return null;
+
+	const handleSoftDeleteSelected = async () => {
+		try {
+			if (selectedIds.length > 0) await softDeleteItems(selectedIds);
+			if (selectedFolderIds.length > 0) await softDeleteFolders(selectedFolderIds);
+			useLogoStore.getState().setTemporaryExpression("unimpressed");
+			notify.success(`Moved ${totalSelected} items to Recycle Bin`, {
+				id: "bulk-soft-deleted",
+				hideReaction: true,
+				action: {
+					label: "Undo",
+					onClick: () => {
+						if (selectedIds.length > 0) restoreItems(selectedIds);
+						if (selectedFolderIds.length > 0) restoreFolders(selectedFolderIds);
+					},
+				},
+			});
+		} catch (error) {
+			console.error("Failed to move items to Recycle Bin", error);
+			notify.error("Unable to remove items", { id: "bulk-delete-fail" });
+		}
+	};
+
+	const handleRestoreSelected = async () => {
+		try {
+			if (selectedIds.length > 0) await restoreItems(selectedIds);
+			if (selectedFolderIds.length > 0) await restoreFolders(selectedFolderIds);
+			notify.success(`Restored ${totalSelected} items`, { id: "bulk-restored" });
+		} catch (error) {
+			console.error("Failed to restore items", error);
+			notify.error("Unable to restore items", { id: "bulk-restore-fail" });
+		}
+	};
+
+	const handleHardDeleteSelected = () => {
 		confirm({
 			title: "Delete Items",
-			description: `Are you sure you want to delete ${selectedIds.length} items from your ${APP_INFO.name}? This action cannot be undone.`,
-			confirmText: "Delete",
+			description: `Are you sure you want to permanently delete ${totalSelected} items from your ${APP_INFO.name}? This action cannot be undone.`,
+			confirmText: "Delete Forever",
 			onConfirm: async () => {
 				try {
-					await deleteSelectedItems();
+					if (selectedIds.length > 0) await hardDeleteSelectedItems();
+					if (selectedFolderIds.length > 0) await hardDeleteSelectedFolders();
 					useLogoStore.getState().setTemporaryExpression("unimpressed");
-					notify.success(`Removed ${selectedIds.length} items from your corner`, {
-						id: "items-bulk-deleted",
+					notify.success(`Removed ${totalSelected} items from your corner`, {
+						id: "bulk-deleted",
 						hideReaction: true,
 					});
 				} catch (error) {
 					console.error("Failed to delete items", error);
-					notify.error("Unable to remove links", { id: "items-bulk-delete-fail" });
+					notify.error("Unable to remove items", { id: "bulk-delete-fail" });
 				}
 			},
 		});
 	};
 
 	return (
-		<div className="mx-auto flex w-fit animate-in items-center gap-4 rounded-full border border-border bg-card/80 px-4 py-2 text-card-foreground shadow-lg backdrop-blur-md duration-300 slide-in-from-bottom-10 corner-squircle fade-in supports-[corner-shape:squircle]:rounded-2xl">
-			<span className="px-2 text-sm font-medium whitespace-nowrap">
-				{selectedIds.length} selected
+		<div className="mx-auto flex w-fit animate-in items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-2 text-card-foreground shadow-lg backdrop-blur-md duration-300 slide-in-from-bottom-10 corner-squircle fade-in supports-[corner-shape:squircle]:rounded-2xl sm:gap-4 sm:px-4">
+			<span className="px-1 text-xs font-medium whitespace-nowrap sm:px-2 sm:text-sm">
+				{totalSelected} selected
 			</span>
-			<div className="h-6 w-px bg-border" />
+			<div className="h-6 w-px shrink-0 bg-border" />
 			<div className="flex items-center gap-1">
+				{view === "trash" ? (
+					<>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={handleRestoreSelected}
+							className="h-8 gap-2 rounded-full! hover:bg-muted"
+						>
+							<RotateCcwIcon className="h-4 w-4 text-muted-foreground" />
+							<span className="hidden sm:inline">Restore Selected</span>
+						</Button>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={handleHardDeleteSelected}
+							className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
+						>
+							<Trash2Icon className="h-4 w-4" />
+							<span className="hidden sm:inline">Delete Forever</span>
+						</Button>
+					</>
+				) : (
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleSoftDeleteSelected}
+						className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
+					>
+						<Trash2Icon className="h-4 w-4" />
+						<span className="hidden sm:inline">Delete Selected</span>
+					</Button>
+				)}
+				{view !== "trash" && (
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={() =>
+							useMoveStore
+								.getState()
+								.openMoveDialog({ itemIds: selectedIds, folderIds: selectedFolderIds })
+						}
+						className="h-8 gap-2 rounded-full! hover:bg-muted"
+					>
+						<FolderInputIcon className="h-4 w-4" />
+						<span className="hidden sm:inline">Move Selected</span>
+					</Button>
+				)}
 				<Button
 					variant="ghost"
 					size="sm"
-					onClick={handleDeleteSelected}
-					className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
-				>
-					<Trash2Icon className="h-4 w-4" />
-					Delete Selected
-				</Button>
-				<Button
-					variant="ghost"
-					size="sm"
-					onClick={clearSelection}
+					onClick={() => {
+						clearSelection();
+						clearFolderSelection();
+					}}
 					className="h-8 rounded-full! text-muted-foreground"
 				>
 					Clear

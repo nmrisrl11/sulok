@@ -4,13 +4,44 @@ import { db, type Item } from "../db";
 
 export const ItemRepository = {
 	async getAll(): Promise<Item[]> {
-		return await db.items.orderBy("createdAt").reverse().toArray();
+		return await db.items
+			.orderBy("createdAt")
+			.filter((item) => !item.deletedAt)
+			.reverse()
+			.toArray();
 	},
 
-	async query(params: { q?: string; sort?: string; dir?: string }): Promise<Item[]> {
-		const { q = "", sort = "createdAt", dir = "desc" } = params;
+	async query(params: {
+		q?: string;
+		sort?: string;
+		dir?: string;
+		folderId?: string | null;
+		view?: "all" | "favorites" | "trash";
+	}): Promise<Item[]> {
+		const { q = "", sort = "createdAt", dir = "desc", folderId, view = "all" } = params;
 
 		let results = await db.items.toArray();
+
+		if (view === "trash") {
+			const deletedFolders = await db.folders.filter((f) => !!f.deletedAt).toArray();
+			const deletedFolderIds = new Set(deletedFolders.map((f) => f.id));
+
+			results = results.filter(
+				(item) => item.deletedAt && (!item.folderId || !deletedFolderIds.has(item.folderId)),
+			);
+		} else if (view === "favorites") {
+			results = results.filter((item) => !item.deletedAt && item.isFavorite);
+		} else {
+			results = results.filter((item) => !item.deletedAt);
+		}
+
+		if (folderId !== undefined) {
+			if (folderId === "unorganized" || folderId === null) {
+				results = results.filter((item) => !item.folderId);
+			} else {
+				results = results.filter((item) => item.folderId === folderId);
+			}
+		}
 
 		if (q.trim()) {
 			const query = q.toLowerCase().trim();
@@ -45,7 +76,11 @@ export const ItemRepository = {
 	},
 
 	queryAllSorted(): Promise<Item[]> {
-		return db.items.orderBy("createdAt").reverse().toArray();
+		return db.items
+			.orderBy("createdAt")
+			.filter((item) => !item.deletedAt)
+			.reverse()
+			.toArray();
 	},
 
 	async getById(id: string): Promise<Item | undefined> {
@@ -172,6 +207,62 @@ export const ItemRepository = {
 
 	async deleteMany(ids: string[]): Promise<void> {
 		await db.items.bulkDelete(ids);
+		const count = await db.items.count();
+		if (count === 0) {
+			setHasDataHint(false);
+		}
+	},
+
+	async softDeleteMany(ids: string[]): Promise<void> {
+		const now = Date.now();
+		await db.transaction("rw", db.items, async () => {
+			for (const id of ids) {
+				await db.items.update(id, { deletedAt: now, updatedAt: now });
+			}
+		});
+	},
+
+	async restoreMany(ids: string[]): Promise<void> {
+		const now = Date.now();
+		await db.transaction("rw", db.items, async () => {
+			for (const id of ids) {
+				const item = await db.items.get(id);
+				if (item) {
+					// We can't just set to undefined, Dexie update might ignore it.
+					// Actually, passing `undefined` to update removes the property in IndexedDB, which is what we want.
+					await db.items.update(id, { deletedAt: undefined, updatedAt: now });
+				}
+			}
+		});
+	},
+
+	async moveMany(ids: string[], targetFolderId: string | null): Promise<void> {
+		const now = Date.now();
+		await db.transaction("rw", db.items, async () => {
+			for (const id of ids) {
+				await db.items.update(id, { folderId: targetFolderId ?? undefined, updatedAt: now });
+			}
+		});
+	},
+
+	async toggleFavorite(id: string): Promise<boolean> {
+		let isFav = false;
+		await db.transaction("rw", db.items, async () => {
+			const item = await db.items.get(id);
+			if (item) {
+				isFav = !item.isFavorite;
+				await db.items.update(id, { isFavorite: isFav, updatedAt: Date.now() });
+			}
+		});
+		return isFav;
+	},
+
+	async emptyTrash(): Promise<void> {
+		await db.transaction("rw", db.items, async () => {
+			const trashItems = await db.items.filter((item) => !!item.deletedAt).toArray();
+			const ids = trashItems.map((item) => item.id);
+			await db.items.bulkDelete(ids);
+		});
 		const count = await db.items.count();
 		if (count === 0) {
 			setHasDataHint(false);
