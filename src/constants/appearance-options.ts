@@ -1,4 +1,4 @@
-import type { Theme } from "@/hooks/use-theme";
+import type { Theme } from "@/hooks";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import type { ElementType } from "react";
 

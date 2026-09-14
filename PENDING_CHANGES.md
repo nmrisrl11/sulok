@@ -14,6 +14,7 @@
 
 ### Changed
 
+- Implemented barrel files (`index.ts`) for the `stores`, `hooks`, and `schemas` directories to centralize public APIs, clean up imports project-wide, and prevent circular dependencies.
 - Refactored multiple actions (deleting, restoring, moving) to use a unified and more reliable background process, ensuring items and folders are handled seamlessly together.
 - When you are in the Recycle Bin, tapping or clicking any item now safely selects it instead of accidentally opening the link or navigating into the folder.
 - Checkboxes on your links and folders are now permanently visible on mobile devices, making them much easier to tap.

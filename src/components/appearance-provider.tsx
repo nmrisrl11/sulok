@@ -1,4 +1,4 @@
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores";
 import { type ReactNode, useEffect } from "react";
 
 function getLuminance(hex: string) {

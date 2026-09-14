@@ -1,8 +1,8 @@
 import { APP_INFO } from "@/constants/app-info";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { useLogoStore } from "@/stores/logo-store";
-import { useSettingsStore } from "@/stores/settings-store";
+import { useLogoStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { combine } from "flubber";
 import { animate, AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";

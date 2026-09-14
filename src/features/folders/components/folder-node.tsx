@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useFolderStore } from "@/stores/folder-store";
+import { useConfirmationStore } from "@/stores";
+import { useFolderStore } from "@/stores";
 import {
 	ChevronDownIcon,
 	ChevronRightIcon,

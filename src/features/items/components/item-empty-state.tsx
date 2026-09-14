@@ -1,8 +1,8 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { SuloExpression } from "@/stores/logo-store";
-import { useSettingsStore } from "@/stores/settings-store";
+import type { SuloExpression } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 

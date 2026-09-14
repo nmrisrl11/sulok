@@ -4,8 +4,8 @@ import { ExplorerMain } from "@/features/folders/components/explorer-main";
 import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar";
 import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
 import { cn } from "@/lib/utils";
-import { useFolderStore } from "@/stores/folder-store";
-import { useItemStore } from "@/stores/item-store";
+import { useFolderStore } from "@/stores";
+import { useItemStore } from "@/stores";
 import { memo } from "react";
 import { useHomeData } from "./hooks/use-home-management";
 

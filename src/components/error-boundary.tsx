@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { type ReactNode } from "react";
 import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from "react-error-boundary";
 
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores";
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	// Only show actual error message in development for a calmer production experience

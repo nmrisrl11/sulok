@@ -1,4 +1,4 @@
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores";
 import { type SoundName, play } from "cuelume";
 import { useCallback } from "react";
 

@@ -1,6 +1,6 @@
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
-import { useItemStore } from "@/stores/item-store";
+import { useItemStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
 import { useEffect } from "react";

@@ -1,5 +1,5 @@
-import { useLogoStore } from "@/stores/logo-store";
-import { useSettingsStore } from "@/stores/settings-store";
+import { useLogoStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { play } from "cuelume";
 import { gooeyToast } from "goey-toast";
 

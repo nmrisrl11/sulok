@@ -10,10 +10,10 @@ import {
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { notify } from "@/lib/notify";
 import { SORT_OPTIONS } from "@/pages/home/hooks/use-home-management";
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useFolderStore } from "@/stores/folder-store";
-import { useItemStore } from "@/stores/item-store";
-import { useLogoStore } from "@/stores/logo-store";
+import { useConfirmationStore } from "@/stores";
+import { useFolderStore } from "@/stores";
+import { useItemStore } from "@/stores";
+import { useLogoStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
 	ChevronRightIcon,

@@ -11,8 +11,8 @@ import {
 import { SettingsCard } from "@/features/settings/components/settings-card";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
-import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
+import { EXPRESSIONS, type SuloExpression } from "@/stores";
+import { defaultSettings, useSettingsStore } from "@/stores";
 import type { SuloSettings } from "@/types/settings";
 import { memo, useCallback, useState } from "react";
 

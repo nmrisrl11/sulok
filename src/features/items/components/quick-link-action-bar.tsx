@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { itemSchema } from "@/schemas/item.schema";
-import { useItemStore } from "@/stores/item-store";
-import type { SuloExpression } from "@/stores/logo-store";
-import { useSettingsStore } from "@/stores/settings-store";
+import { itemSchema } from "@/schemas";
+import { useItemStore } from "@/stores";
+import type { SuloExpression } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { CornerDownLeftIcon } from "lucide-react";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 

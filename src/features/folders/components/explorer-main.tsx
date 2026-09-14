@@ -11,9 +11,9 @@ import { type Folder, type Item } from "@/db/db";
 import { ItemCard } from "@/features/items/components/item-card";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useFolderStore } from "@/stores/folder-store";
-import { useMoveStore } from "@/stores/move-store";
+import { useConfirmationStore } from "@/stores";
+import { useFolderStore } from "@/stores";
+import { useMoveStore } from "@/stores";
 import {
 	Edit2Icon,
 	FolderIcon,

@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme } from "@/hooks";
 import { GooeyToaster } from "goey-toast";
 import "goey-toast/styles.css";
 

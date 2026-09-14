@@ -1,10 +1,10 @@
 import { Toaster } from "@/components/ui/toaster";
 
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useFolderStore } from "@/stores/folder-store";
-import { useItemStore } from "@/stores/item-store";
-import { useMoveStore } from "@/stores/move-store";
-import { useUIStore } from "@/stores/ui-store";
+import { useConfirmationStore } from "@/stores";
+import { useFolderStore } from "@/stores";
+import { useItemStore } from "@/stores";
+import { useMoveStore } from "@/stores";
+import { useUIStore } from "@/stores";
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ErrorBoundary } from "../error-boundary";
 import { BottomActionSystem } from "./bottom-action-system";

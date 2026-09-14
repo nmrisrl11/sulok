@@ -7,7 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useItemStore } from "@/stores/item-store";
+import { useItemStore } from "@/stores";
 import { FilterXIcon, SearchIcon, XIcon } from "lucide-react";
 import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
 import { memo, useEffect, useState } from "react";

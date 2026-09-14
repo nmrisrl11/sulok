@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/select";
 import { APP_INFO } from "@/constants/app-info";
 import { FolderRepository } from "@/db/repositories/folder-repository";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/hooks";
 import { formatUrl } from "@/lib/utils";
-import { itemSchema, type ItemFormValues } from "@/schemas/item.schema";
+import { itemSchema, type ItemFormValues } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect } from "react";

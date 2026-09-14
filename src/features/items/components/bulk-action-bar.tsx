@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { notify } from "@/lib/notify";
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useFolderStore } from "@/stores/folder-store";
-import { useItemStore } from "@/stores/item-store";
-import { useLogoStore } from "@/stores/logo-store";
-import { useMoveStore } from "@/stores/move-store";
+import { useConfirmationStore } from "@/stores";
+import { useFolderStore } from "@/stores";
+import { useItemStore } from "@/stores";
+import { useLogoStore } from "@/stores";
+import { useMoveStore } from "@/stores";
 import { FolderInputIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 

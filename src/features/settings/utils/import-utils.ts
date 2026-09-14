@@ -1,5 +1,5 @@
 import { ItemRepository } from "@/db/repositories/item-repository";
-import { importItemSchema, type ImportItem } from "@/schemas/import.schema";
+import { importItemSchema, type ImportItem } from "@/schemas";
 
 export type ParsedImportItem = ImportItem & {
 	isDuplicate: boolean;

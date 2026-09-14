@@ -1,4 +1,4 @@
-import { folderSchema } from "@/schemas/folder.schema";
+import { folderSchema } from "@/schemas";
 import { db, type Folder } from "../db";
 
 export const FolderRepository = {

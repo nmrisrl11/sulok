@@ -1,6 +1,6 @@
 import { DEFAULT_SOUND_SETTINGS } from "@/constants/sounds-settings";
 import { WHISPER_PHRASES } from "@/constants/whispers";
-import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
+import { EXPRESSIONS, type SuloExpression } from "@/stores";
 import type { Settings } from "@/types/settings";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

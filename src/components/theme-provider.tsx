@@ -1,4 +1,4 @@
-import { type Theme, ThemeDispatchContext, ThemeStateContext } from "@/hooks/use-theme";
+import { type Theme, ThemeDispatchContext, ThemeStateContext } from "@/hooks";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 
 type ThemeProviderProps = {
