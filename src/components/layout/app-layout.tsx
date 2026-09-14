@@ -2,10 +2,12 @@ import { Toaster } from "@/components/ui/toaster";
 
 import { useConfirmationStore } from "@/stores/confirmation-store";
 import { useItemStore } from "@/stores/item-store";
-import React, { lazy, Suspense, useState } from "react";
+import { useUIStore } from "@/stores/ui-store";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ErrorBoundary } from "../error-boundary";
 import { BottomActionSystem } from "./bottom-action-system";
 import { Header } from "./header";
+import { QuickCustomizeSheet } from "./quick-customize-sheet";
 
 const ItemDialog = lazy(() =>
 	import("@/features/items/components/item-dialog").then((m) => ({ default: m.ItemDialog })),
@@ -16,7 +18,7 @@ const ConfirmationDialog = lazy(() =>
 	})),
 );
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+export function AppLayout({ children }: { children: ReactNode }) {
 	const isItemDialogOpen = useItemStore((state) => state.isDialogOpen);
 	const isConfirmationDialogOpen = useConfirmationStore((state) => state.isOpen);
 
@@ -31,6 +33,26 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 	if (isConfirmationDialogOpen && !hasLoadedConfirmationDialog) {
 		setHasLoadedConfirmationDialog(true);
 	}
+
+	const toggleQuickCustomize = useUIStore((state) => state.toggleQuickCustomize);
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key.toLowerCase() === "c" && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
+				// Don't trigger if user is typing in an input
+				if (
+					e.target instanceof HTMLInputElement ||
+					e.target instanceof HTMLTextAreaElement ||
+					(e.target instanceof HTMLElement && e.target.isContentEditable)
+				)
+					return;
+				e.preventDefault();
+				toggleQuickCustomize();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [toggleQuickCustomize]);
 
 	return (
 		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
@@ -54,6 +76,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 				</ErrorBoundary>
 			)}
 			<BottomActionSystem />
+			<QuickCustomizeSheet />
 			<Toaster />
 		</div>
 	);

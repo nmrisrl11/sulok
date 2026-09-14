@@ -9,7 +9,7 @@
 - **Tagline:** Your corner of the web.
 - **Stack:** React 19 + Vite + TypeScript + TailwindCSS v4 + shadcn/ui + Zustand + Dexie.js
 - **Architecture:** Local-first, no backend, IndexedDB storage, PWA-capable
-- **Deployment:** Vercel (sulok.vercel.app)
+- **Deployment:** Vercel (sulok-app.vercel.app)
 
 ## Before You Start
 
@@ -99,9 +99,9 @@ sulok/
 - **Strict Hydration Guards:** Never blindly deep merge unvalidated payloads from `localStorage` (via Zustand persist) if they map to complex domain types or string literals. Always validate and sanitize the inbound state payload inside the `merge` function before merging it with default settings to prevent malformed or obsolete local data from crashing the UI.
 - **Data Layer:** Dexie operations must be abstracted into a Repository object in `src/db/repositories/` (e.g., `ItemRepository`). Never call IndexedDB or `db` directly from a component or store.
 - **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.
-- **Strict TypeScript & Build:** The project strictly enforces `typescript/no-explicit-any` and bans `@ts-ignore` bypasses via `oxlint`. Code formatting is handled by `oxfmt`. The production build is configured to strictly fail on any warnings (`--deny-warnings`). NEVER use `any`. Use `unknown` and type guard it if necessary. When using Vite, `verbatimModuleSyntax` is enabled, so you must use type-only imports (e.g., `import type { ... }`).
+- **Strict TypeScript & Build:** The project strictly enforces `typescript/no-explicit-any` and bans `@ts-ignore` bypasses via `oxlint`. Code formatting is handled by `oxfmt`. The production build is configured to strictly fail on any warnings (`--deny-warnings`). NEVER use `any`. Use `unknown` and type guard it if necessary. When using Vite, `verbatimModuleSyntax` is enabled, so you must use type-only imports for TypeScript types (e.g., `import { type ReactNode, type ComponentProps } from "react";`).
 - **Fast Refresh Strictness:** To ensure React Fast Refresh works perfectly without losing component state, component files (`.tsx`) must strictly ONLY export components. The `react/only-export-components` rule permits constant exports, but non-components (like custom hooks or Context objects) must be extracted into dedicated files (e.g. `hooks/use-theme.ts`). Do not bypass the `react/only-export-components` rule.
-- **React Imports:** Always use named imports for React hooks (e.g., `import { useState, useEffect } from "react";`) rather than namespace imports (`React.useState`). This ensures consistency across the codebase.
+- **React Imports:** NEVER use namespace imports for React (e.g., `React.useState`, `React.ReactNode`, `React.ComponentProps`). Always use named imports (e.g., `import { useState, useEffect, type ReactNode } from "react";`). For React types (like `ComponentProps`, `ReactNode`, `MouseEvent`, `FormEvent`), you MUST prefix them with the `type` keyword inside the import block to comply with `verbatimModuleSyntax`.
 - **Import Aliases:** Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
 - **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
 - **Global Dialogs Pattern:** Do not render `<Dialog />` or `<AlertDialog />` components inside list items or looped components. Instead, create a global store (e.g., `ConfirmationStore`) and render a single global dialog component in the app layout that opens when needed.

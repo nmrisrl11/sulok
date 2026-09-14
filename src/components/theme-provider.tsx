@@ -1,8 +1,8 @@
 import { type Theme, ThemeDispatchContext, ThemeStateContext } from "@/hooks/use-theme";
-import { useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 
 type ThemeProviderProps = {
-	children: React.ReactNode;
+	children: ReactNode;
 	defaultTheme?: Theme;
 	storageKey?: string;
 };

@@ -9,7 +9,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useState } from "react";
+import { type MouseEvent, useState } from "react";
 
 export function ConfirmationDialog() {
 	const { isOpen, options, isConfirming, close, setConfirming } = useConfirmationStore();
@@ -27,7 +27,7 @@ export function ConfirmationDialog() {
 
 	if (!options) return null;
 
-	const handleConfirm = async (e: React.MouseEvent) => {
+	const handleConfirm = async (e: MouseEvent) => {
 		e.preventDefault();
 		try {
 			setError(null);

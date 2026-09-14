@@ -147,6 +147,12 @@ Minimal shadows. Prefer border/background differentiation.
 - Drag handle visible on hover.
 - Active/selected folder: Linen background with Amber left border.
 
+### Quick Customize Sheet
+
+- Global contextual side sheet triggered via `Shift + C`.
+- Renders without a backdrop filter to allow the user to view real-time changes applied to the underlying app layout.
+- Utilizes a `variant="compact"` prop for individual setting controls (Theme, Mascot, Audio) to switch from horizontal flowing layouts (used in full Settings) to vertically stacked, dense column structures.
+
 ### Settings Panels
 
 - Group related controls in bordered cards (`SettingsCard`) with `bg-card` and squircle corners.

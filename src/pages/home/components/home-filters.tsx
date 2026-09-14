@@ -10,7 +10,7 @@ import {
 import { useItemStore } from "@/stores/item-store";
 import { FilterXIcon, SearchIcon, XIcon } from "lucide-react";
 import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
-import React, { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { SORT_OPTIONS } from "../hooks/use-home-management";
 
 function HomeSearchInput() {
@@ -118,7 +118,7 @@ function ClearFiltersButton() {
 	);
 }
 
-export const HomeFilters = React.memo(function HomeFilters() {
+export const HomeFilters = memo(function HomeFilters() {
 	return (
 		<div className="flex w-full flex-col items-center gap-2 sm:w-auto sm:flex-row">
 			<HomeSearchInput />

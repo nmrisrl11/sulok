@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { SettingsCard } from "@/features/settings/components/settings-card";
 import { notify } from "@/lib/notify";
+import { cn } from "@/lib/utils";
 import { EXPRESSIONS, type SuloExpression } from "@/stores/logo-store";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import type { SuloSettings } from "@/types/settings";
@@ -20,11 +21,13 @@ const ExpressionSelect = memo(function ExpressionSelect({
 	label,
 	description,
 	setPreviewExpression,
+	variant = "default",
 }: {
 	id: keyof SuloSettings;
 	label: string;
 	description: string;
 	setPreviewExpression: (expr: SuloExpression) => void;
+	variant?: "default" | "compact";
 }) {
 	const value = useSettingsStore((state) => state.settings.suloSettings[id] as SuloExpression);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
@@ -41,14 +44,21 @@ const ExpressionSelect = memo(function ExpressionSelect({
 	};
 
 	return (
-		<div className="flex flex-col gap-4 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+		<div
+			className={cn(
+				"py-4 first:pt-0 last:pb-0",
+				variant === "default"
+					? "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+					: "flex flex-col gap-3",
+			)}
+		>
 			<div className="space-y-1">
 				<Label htmlFor={`expression-${id}`} className="text-sm font-medium text-foreground">
 					{label}
 				</Label>
 				<p className="text-sm text-muted-foreground">{description}</p>
 			</div>
-			<div className="shrink-0 sm:w-50">
+			<div className={cn("shrink-0", variant === "default" ? "sm:w-50" : "w-full")}>
 				<Select value={value} onValueChange={(v) => handleExpressionChange(v as SuloExpression)}>
 					<SelectTrigger
 						id={`expression-${id}`}
@@ -92,6 +102,61 @@ const ExpressionsHeader = memo(function ExpressionsHeader({
 		</div>
 	);
 });
+
+export function SuloExpressionsControl({
+	setPreviewExpression,
+	variant = "default",
+}: {
+	setPreviewExpression: (expr: SuloExpression) => void;
+	variant?: "default" | "compact";
+}) {
+	return (
+		<div className="flex flex-col divide-y divide-border/50">
+			<ExpressionSelect
+				id="expressionEmptyState"
+				label="Empty Corner"
+				description="When a folder has no links yet."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+			<ExpressionSelect
+				id="expression404"
+				label="Page Not Found"
+				description="When you visit a broken link."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+			<ExpressionSelect
+				id="expressionNavbar"
+				label="Main Logo"
+				description="Default state in the navigation bar."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+			<ExpressionSelect
+				id="expressionQuickAction"
+				label="Quick Action Bar"
+				description="When adding a link via the command bar."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+			<ExpressionSelect
+				id="expressionPreviewUnavailable"
+				label="Preview Failed"
+				description="When a link's image cannot load."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+			<ExpressionSelect
+				id="expressionError"
+				label="App Crash"
+				description="When something unexpected goes wrong."
+				setPreviewExpression={setPreviewExpression}
+				variant={variant}
+			/>
+		</div>
+	);
+}
 
 export function SuloExpressionsSection() {
 	const [previewExpression, setPreviewExpression] = useState<SuloExpression>("happy");
@@ -158,44 +223,7 @@ export function SuloExpressionsSection() {
 				</div>
 			</div>
 			<SettingsCard>
-				<div className="flex flex-col divide-y divide-border/50">
-					<ExpressionSelect
-						id="expressionEmptyState"
-						label="Empty Corner"
-						description="When a folder has no links yet."
-						setPreviewExpression={setPreviewExpression}
-					/>
-					<ExpressionSelect
-						id="expression404"
-						label="Page Not Found"
-						description="When you visit a broken link."
-						setPreviewExpression={setPreviewExpression}
-					/>
-					<ExpressionSelect
-						id="expressionNavbar"
-						label="Main Logo"
-						description="Default state in the navigation bar."
-						setPreviewExpression={setPreviewExpression}
-					/>
-					<ExpressionSelect
-						id="expressionQuickAction"
-						label="Quick Action Bar"
-						description="When adding a link via the command bar."
-						setPreviewExpression={setPreviewExpression}
-					/>
-					<ExpressionSelect
-						id="expressionPreviewUnavailable"
-						label="Preview Failed"
-						description="When a link's image cannot load."
-						setPreviewExpression={setPreviewExpression}
-					/>
-					<ExpressionSelect
-						id="expressionError"
-						label="App Crash"
-						description="When something unexpected goes wrong."
-						setPreviewExpression={setPreviewExpression}
-					/>
-				</div>
+				<SuloExpressionsControl setPreviewExpression={setPreviewExpression} />
 			</SettingsCard>
 		</div>
 	);

@@ -15,10 +15,10 @@ import {
 	UploadCloudIcon,
 	UploadIcon,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { type ChangeEvent, type ReactNode, useRef, useState } from "react";
 
 interface ExportOptionButtonProps {
-	icon: React.ReactNode;
+	icon: ReactNode;
 	title: string;
 	description: string;
 	onClick: () => void;
@@ -71,7 +71,7 @@ export function DataStorageSection() {
 		});
 	};
 
-	const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 

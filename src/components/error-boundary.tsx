@@ -1,6 +1,6 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import { type ReactNode } from "react";
 import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from "react-error-boundary";
 
 import { useSettingsStore } from "@/stores/settings-store";
@@ -32,6 +32,6 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	);
 }
 
-export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+export function ErrorBoundary({ children }: { children: ReactNode }) {
 	return <ReactErrorBoundary FallbackComponent={ErrorFallback}>{children}</ReactErrorBoundary>;
 }

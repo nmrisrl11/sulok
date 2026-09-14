@@ -13,11 +13,12 @@ import { APP_INFO } from "@/constants/app-info";
 import { INTERACTION_TYPES, SOUND_ICONS } from "@/constants/sounds-settings";
 import { SettingsCard } from "@/features/settings/components/settings-card";
 import { useSoundEffects } from "@/hooks/use-sound-effects";
+import { cn } from "@/lib/utils";
 import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
 import { sounds, type SoundName } from "cuelume";
 import { useState } from "react";
 
-function VolumeControl() {
+export function VolumeControl() {
 	const volume = useSettingsStore((state) => state.settings.soundSettings.volume);
 	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
@@ -45,7 +46,7 @@ function VolumeControl() {
 	};
 
 	return (
-		<SettingsCard>
+		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center justify-between">
 				<h3 className="text-sm font-medium text-foreground">Master Volume</h3>
 				<span className="text-sm font-medium text-muted-foreground">
@@ -64,6 +65,14 @@ function VolumeControl() {
 				aria-label="Master volume"
 				className="py-2"
 			/>
+		</div>
+	);
+}
+
+function VolumeControlCard() {
+	return (
+		<SettingsCard>
+			<VolumeControl />
 		</SettingsCard>
 	);
 }
@@ -133,17 +142,50 @@ function AudioSignatureSelect({
 	);
 }
 
+export function SoundSettingsControl() {
+	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+
+	const handleEnabledChange = (enabledValue: boolean) => {
+		const currentSettings = useSettingsStore.getState().settings.soundSettings;
+		updateSettings({ soundSettings: { ...currentSettings, enabled: enabledValue } });
+	};
+
+	return (
+		<div className="flex items-center justify-between gap-4">
+			<div className="space-y-1">
+				<Label className="text-sm font-medium text-foreground" htmlFor="enable-sound">
+					Play Interaction Sounds
+				</Label>
+				<p className="max-w-md text-sm text-muted-foreground">
+					Play audio feedback for interactions like navigating or saving items.
+				</p>
+			</div>
+			<Switch id="enable-sound" checked={enabled} onCheckedChange={handleEnabledChange} />
+		</div>
+	);
+}
+
+export function AudioSignaturesControl({
+	variant = "default",
+}: { variant?: "default" | "compact" } = {}) {
+	return (
+		<div
+			className={cn(variant === "default" ? "grid gap-4 sm:grid-cols-2" : "flex flex-col gap-4")}
+		>
+			{INTERACTION_TYPES.map(({ id, label }) => (
+				<AudioSignatureSelect key={id} id={id} label={label} />
+			))}
+		</div>
+	);
+}
+
 export function SoundSettingsSection() {
 	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
 	const handleRestore = () => {
 		updateSettings({ soundSettings: defaultSettings.soundSettings });
-	};
-
-	const handleEnabledChange = (enabledValue: boolean) => {
-		const currentSettings = useSettingsStore.getState().settings.soundSettings;
-		updateSettings({ soundSettings: { ...currentSettings, enabled: enabledValue } });
 	};
 
 	return (
@@ -166,22 +208,12 @@ export function SoundSettingsSection() {
 
 			<div className="space-y-6">
 				<SettingsCard>
-					<div className="flex items-center justify-between gap-4">
-						<div className="space-y-1">
-							<Label className="text-sm font-medium text-foreground" htmlFor="enable-sound">
-								Play Interaction Sounds
-							</Label>
-							<p className="max-w-md text-sm text-muted-foreground">
-								Play audio feedback for interactions like navigating or saving items.
-							</p>
-						</div>
-						<Switch id="enable-sound" checked={enabled} onCheckedChange={handleEnabledChange} />
-					</div>
+					<SoundSettingsControl />
 				</SettingsCard>
 
 				{enabled && (
 					<>
-						<VolumeControl />
+						<VolumeControlCard />
 
 						<SettingsCard>
 							<div>
@@ -190,11 +222,8 @@ export function SoundSettingsSection() {
 									Choose which sound plays for different types of interactions.
 								</p>
 							</div>
-
-							<div className="grid gap-4 sm:grid-cols-2">
-								{INTERACTION_TYPES.map(({ id, label }) => (
-									<AudioSignatureSelect key={id} id={id} label={label} />
-								))}
+							<div className="mt-4">
+								<AudioSignaturesControl />
 							</div>
 						</SettingsCard>
 					</>
