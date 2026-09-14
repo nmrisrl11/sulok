@@ -115,8 +115,9 @@ src/
   - This rule is strict and heavily enforced by `oxlint`. The production build will explicitly fail on any warnings (`oxlint --deny-warnings`) or if `@ts-ignore`/`@ts-expect-error` bypasses are used.
   - Do not use `any`, `any[]`, `Record<string, any>`, or bypass types with `as any`.
   - Use `unknown` for unpredictable structures, then type guard or narrow them.
-  - `verbatimModuleSyntax` is enabled in `tsconfig.app.json`. You MUST import types using the `type` modifier (e.g., `import type { Theme } from "@/hooks/use-theme";`).
+  - `verbatimModuleSyntax` is enabled in `tsconfig.app.json`. You MUST import types using the `type` modifier for external and internal types (e.g., `import { type ReactNode, type ComponentProps } from "react";`).
 - **Fast Refresh Architecture:** Files containing React components (`.tsx`) MUST ONLY export React components. If a file needs to export a constant (like `cva` button variants), a custom hook, or a Context, extract those non-components into a separate file (e.g. `button-variants.ts`, `use-theme.ts`). Do not use `eslint-disable` to bypass this rule.
+- **React Imports:** NEVER use namespace imports for React (e.g., `React.useState`, `React.ReactNode`, `React.ComponentProps`). Always use named imports (e.g., `import { useState, useEffect, type ReactNode } from "react";`). For React types (like `ComponentProps`, `ReactNode`, `MouseEvent`, `FormEvent`), you MUST prefix them with the `type` keyword inside the import block to comply with `verbatimModuleSyntax`.
 - Use Zod schemas as the source of truth for types where possible.
 - Export types from their feature module, not from a global types file.
 

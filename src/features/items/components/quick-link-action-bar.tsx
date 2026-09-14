@@ -8,7 +8,7 @@ import { useItemStore } from "@/stores/item-store";
 import type { SuloExpression } from "@/stores/logo-store";
 import { useSettingsStore } from "@/stores/settings-store";
 import { CornerDownLeftIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
@@ -74,7 +74,7 @@ export function QuickLinkActionBar() {
 		return defaultExpression;
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (!url.trim()) return;
 

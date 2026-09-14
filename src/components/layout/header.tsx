@@ -2,7 +2,8 @@ import { SulokLogo } from "@/components/logo/sulok-logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLogoStore } from "@/stores/logo-store";
-import { SettingsIcon } from "lucide-react";
+import { useUIStore } from "@/stores/ui-store";
+import { PaletteIcon, SettingsIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
 export function Header() {
@@ -47,6 +48,18 @@ export function Header() {
 					</NavLink>
 				</div>
 				<div className="flex items-center gap-1">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={() => useUIStore.getState().toggleQuickCustomize()}
+						className={cn(
+							"rounded-full transition-colors",
+							useUIStore((state) => state.isQuickCustomizeOpen) && "bg-accent",
+						)}
+					>
+						<PaletteIcon className="h-5 w-5" />
+						<span className="sr-only">Quick Customize</span>
+					</Button>
 					<Button
 						variant="ghost"
 						size="icon"

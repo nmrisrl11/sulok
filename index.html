@@ -34,13 +34,18 @@
 			(function () {
 				try {
 					var theme = localStorage.getItem("sulok-ui-theme") || "system";
-					if (
-						theme === "dark" ||
-						(theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-					) {
-						document.documentElement.classList.add("dark");
+					var root = document.documentElement;
+
+					if (theme === "system") {
+						var isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+						root.classList.add(isDark ? "dark" : "light");
+					} else if (theme === "light" || theme === "dark") {
+						root.classList.add(theme);
 					} else {
-						document.documentElement.classList.remove("dark");
+						root.classList.add("theme-" + theme);
+						if (theme === "midnight" || theme === "mocha") {
+							root.classList.add("dark");
+						}
 					}
 				} catch (e) {}
 			})();

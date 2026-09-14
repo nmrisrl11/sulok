@@ -85,7 +85,9 @@ function DebouncedColorPicker({
 	);
 }
 
-function WorkspaceThemeCard() {
+export function WorkspaceThemeControl({
+	variant = "default",
+}: { variant?: "default" | "compact" } = {}) {
 	const { theme, setTheme } = useTheme();
 
 	const WORKSPACE_THEMES = [
@@ -105,6 +107,49 @@ function WorkspaceThemeCard() {
 	] as const;
 
 	return (
+		<div
+			className={cn(
+				variant === "default"
+					? "flex flex-wrap gap-4 sm:gap-6"
+					: "grid grid-cols-4 gap-x-2 gap-y-6 sm:grid-cols-5",
+			)}
+		>
+			{WORKSPACE_THEMES.map((t) => (
+				<button
+					key={t.id}
+					type="button"
+					onClick={() => setTheme(t.id as Theme)}
+					className={cn("group relative flex flex-col items-center gap-2 outline-none")}
+				>
+					<div
+						className={cn(
+							"flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-background transition-all hover:scale-110 sm:h-10 sm:w-10",
+							theme === t.id ? "ring-primary" : "ring-border hover:ring-muted-foreground",
+						)}
+						style={{ background: t.bg }}
+					>
+						{theme === t.id && (
+							<CheckIcon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: t.fg }} />
+						)}
+					</div>
+					<span
+						className={cn(
+							"text-[10px] font-medium transition-colors sm:text-xs",
+							theme === t.id
+								? "text-foreground"
+								: "text-muted-foreground group-hover:text-foreground",
+						)}
+					>
+						{t.label}
+					</span>
+				</button>
+			))}
+		</div>
+	);
+}
+
+function WorkspaceThemeCard() {
+	return (
 		<SettingsCard>
 			<div className="flex flex-col gap-4">
 				<div className="space-y-1">
@@ -113,44 +158,15 @@ function WorkspaceThemeCard() {
 						Select a curated lighting environment for your workspace.
 					</p>
 				</div>
-				<div className="flex flex-wrap gap-4 pt-2 sm:gap-6">
-					{WORKSPACE_THEMES.map((t) => (
-						<button
-							key={t.id}
-							type="button"
-							onClick={() => setTheme(t.id as Theme)}
-							className={cn("group relative flex flex-col items-center gap-2 outline-none")}
-						>
-							<div
-								className={cn(
-									"flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-background transition-all hover:scale-110 sm:h-10 sm:w-10",
-									theme === t.id ? "ring-primary" : "ring-border hover:ring-muted-foreground",
-								)}
-								style={{ background: t.bg }}
-							>
-								{theme === t.id && (
-									<CheckIcon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: t.fg }} />
-								)}
-							</div>
-							<span
-								className={cn(
-									"text-[10px] font-medium transition-colors sm:text-xs",
-									theme === t.id
-										? "text-foreground"
-										: "text-muted-foreground group-hover:text-foreground",
-								)}
-							>
-								{t.label}
-							</span>
-						</button>
-					))}
+				<div className="pt-2">
+					<WorkspaceThemeControl />
 				</div>
 			</div>
 		</SettingsCard>
 	);
 }
 
-function AccentColorCard() {
+export function AccentColorControl() {
 	const accentColor = useSettingsStore((state) => state.settings.appearanceSettings.accentColor);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const { theme } = useTheme();
@@ -169,6 +185,14 @@ function AccentColorCard() {
 		accentColor === "foreground" ? (isDark ? "#f7f5f0" : "#1e1b18") : accentColor;
 
 	return (
+		<div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-border ring-offset-2 ring-offset-background transition-all hover:scale-110">
+			<DebouncedColorPicker id="accent-color" value={resolvedColor} onChange={handleUpdate} />
+		</div>
+	);
+}
+
+function AccentColorCard() {
+	return (
 		<SettingsCard>
 			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 				<div className="space-y-1">
@@ -180,16 +204,14 @@ function AccentColorCard() {
 					</p>
 				</div>
 				<div className="flex shrink-0 items-center gap-4">
-					<div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-border ring-offset-2 ring-offset-background transition-all hover:scale-110">
-						<DebouncedColorPicker id="accent-color" value={resolvedColor} onChange={handleUpdate} />
-					</div>
+					<AccentColorControl />
 				</div>
 			</div>
 		</SettingsCard>
 	);
 }
 
-function CornerRadiusCard() {
+export function CornerRadiusControl() {
 	const cornerStyle = useSettingsStore((state) => state.settings.appearanceSettings.cornerStyle);
 	const customCornerRadius = useSettingsStore(
 		(state) => state.settings.appearanceSettings.customCornerRadius,
@@ -215,6 +237,58 @@ function CornerRadiusCard() {
 	}
 
 	return (
+		<div className="flex w-full flex-col gap-4">
+			<Select value={cornerStyle} onValueChange={handleUpdate}>
+				<SelectTrigger
+					id="corner-style"
+					className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				>
+					<SelectValue placeholder="Select style" />
+				</SelectTrigger>
+				<SelectContent position="popper" className="max-h-75">
+					<SelectItem value="squircle" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<SquircleIcon className="h-4 w-4 text-muted-foreground" />
+							<span>Squircle</span>
+						</div>
+					</SelectItem>
+					<SelectItem value="standard" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<SquareIcon className="h-4 w-4 text-muted-foreground" />
+							<span>Standard</span>
+						</div>
+					</SelectItem>
+					<SelectItem value="custom" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<Settings2Icon className="h-4 w-4 text-muted-foreground" />
+							<span>Custom</span>
+						</div>
+					</SelectItem>
+				</SelectContent>
+			</Select>
+
+			{cornerStyle === "custom" && (
+				<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
+					<div className="flex items-center justify-between">
+						<Label className="text-xs text-muted-foreground">Radius Value</Label>
+						<span className="text-xs font-medium tabular-nums">{localRadius}px</span>
+					</div>
+					<Slider
+						value={[localRadius]}
+						onValueChange={(val) => setLocalRadius(val[0])}
+						onValueCommit={handleCustomRadiusCommit}
+						max={32}
+						step={1}
+						aria-label="Radius Value"
+					/>
+				</div>
+			)}
+		</div>
+	);
+}
+
+function CornerRadiusCard() {
+	return (
 		<SettingsCard>
 			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
 				<div className="space-y-1">
@@ -226,58 +300,14 @@ function CornerRadiusCard() {
 					</p>
 				</div>
 				<div className="flex w-full shrink-0 flex-col gap-4 sm:w-48">
-					<Select value={cornerStyle} onValueChange={handleUpdate}>
-						<SelectTrigger
-							id="corner-style"
-							className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
-						>
-							<SelectValue placeholder="Select style" />
-						</SelectTrigger>
-						<SelectContent position="popper" className="max-h-75">
-							<SelectItem value="squircle" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<SquircleIcon className="h-4 w-4 text-muted-foreground" />
-									<span>Squircle</span>
-								</div>
-							</SelectItem>
-							<SelectItem value="standard" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<SquareIcon className="h-4 w-4 text-muted-foreground" />
-									<span>Standard</span>
-								</div>
-							</SelectItem>
-							<SelectItem value="custom" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<Settings2Icon className="h-4 w-4 text-muted-foreground" />
-									<span>Custom</span>
-								</div>
-							</SelectItem>
-						</SelectContent>
-					</Select>
-
-					{cornerStyle === "custom" && (
-						<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
-							<div className="flex items-center justify-between">
-								<Label className="text-xs text-muted-foreground">Radius Value</Label>
-								<span className="text-xs font-medium tabular-nums">{localRadius}px</span>
-							</div>
-							<Slider
-								value={[localRadius]}
-								onValueChange={(val) => setLocalRadius(val[0])}
-								onValueCommit={handleCustomRadiusCommit}
-								max={32}
-								step={1}
-								aria-label="Radius Value"
-							/>
-						</div>
-					)}
+					<CornerRadiusControl />
 				</div>
 			</div>
 		</SettingsCard>
 	);
 }
 
-function LayoutDensityCard() {
+export function LayoutDensityControl() {
 	const layoutDensity = useSettingsStore(
 		(state) => state.settings.appearanceSettings.layoutDensity,
 	);
@@ -307,6 +337,59 @@ function LayoutDensityCard() {
 	}
 
 	return (
+		<div className="flex w-full flex-col gap-4">
+			<Select value={layoutDensity} onValueChange={handleUpdate}>
+				<SelectTrigger
+					id="layout-density"
+					className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+				>
+					<SelectValue placeholder="Select density" />
+				</SelectTrigger>
+				<SelectContent position="popper" className="max-h-75">
+					<SelectItem value="compact" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<Rows4Icon className="h-4 w-4 text-muted-foreground" />
+							<span>Compact</span>
+						</div>
+					</SelectItem>
+					<SelectItem value="cozy" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<Rows3Icon className="h-4 w-4 text-muted-foreground" />
+							<span>Cozy</span>
+						</div>
+					</SelectItem>
+					<SelectItem value="custom" className="rounded-md px-3 py-2.5">
+						<div className="flex items-center gap-3">
+							<Settings2Icon className="h-4 w-4 text-muted-foreground" />
+							<span>Custom</span>
+						</div>
+					</SelectItem>
+				</SelectContent>
+			</Select>
+
+			{layoutDensity === "custom" && (
+				<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
+					<div className="flex items-center justify-between">
+						<Label className="text-xs text-muted-foreground">Padding Value</Label>
+						<span className="text-xs font-medium tabular-nums">{localDensity}px</span>
+					</div>
+					<Slider
+						value={[localDensity]}
+						onValueChange={(val) => setLocalDensity(val[0])}
+						onValueCommit={handleCustomDensityCommit}
+						min={4}
+						max={32}
+						step={1}
+						aria-label="Padding Value"
+					/>
+				</div>
+			)}
+		</div>
+	);
+}
+
+function LayoutDensityCard() {
+	return (
 		<SettingsCard>
 			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
 				<div className="space-y-1">
@@ -318,52 +401,7 @@ function LayoutDensityCard() {
 					</p>
 				</div>
 				<div className="flex w-full shrink-0 flex-col gap-4 sm:w-48">
-					<Select value={layoutDensity} onValueChange={handleUpdate}>
-						<SelectTrigger
-							id="layout-density"
-							className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
-						>
-							<SelectValue placeholder="Select density" />
-						</SelectTrigger>
-						<SelectContent position="popper" className="max-h-75">
-							<SelectItem value="compact" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<Rows4Icon className="h-4 w-4 text-muted-foreground" />
-									<span>Compact</span>
-								</div>
-							</SelectItem>
-							<SelectItem value="cozy" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<Rows3Icon className="h-4 w-4 text-muted-foreground" />
-									<span>Cozy</span>
-								</div>
-							</SelectItem>
-							<SelectItem value="custom" className="rounded-md px-3 py-2.5">
-								<div className="flex items-center gap-3">
-									<Settings2Icon className="h-4 w-4 text-muted-foreground" />
-									<span>Custom</span>
-								</div>
-							</SelectItem>
-						</SelectContent>
-					</Select>
-
-					{layoutDensity === "custom" && (
-						<div className="animate-in space-y-4 rounded-md border border-border p-3 fade-in slide-in-from-top-1">
-							<div className="flex items-center justify-between">
-								<Label className="text-xs text-muted-foreground">Padding Value</Label>
-								<span className="text-xs font-medium tabular-nums">{localDensity}px</span>
-							</div>
-							<Slider
-								value={[localDensity]}
-								onValueChange={(val) => setLocalDensity(val[0])}
-								onValueCommit={handleCustomDensityCommit}
-								min={4}
-								max={32}
-								step={1}
-								aria-label="Padding Value"
-							/>
-						</div>
-					)}
+					<LayoutDensityControl />
 				</div>
 			</div>
 		</SettingsCard>

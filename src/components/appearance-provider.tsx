@@ -1,5 +1,5 @@
 import { useSettingsStore } from "@/stores/settings-store";
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 
 function getLuminance(hex: string) {
 	let r = 0,
@@ -27,7 +27,7 @@ function getContrastRatio(luma1: number, luma2: number) {
 	return (lighter + 0.05) / (darker + 0.05);
 }
 
-export function AppearanceProvider({ children }: { children: React.ReactNode }) {
+export function AppearanceProvider({ children }: { children: ReactNode }) {
 	const appearanceSettings = useSettingsStore((state) => state.settings.appearanceSettings);
 
 	useEffect(() => {
