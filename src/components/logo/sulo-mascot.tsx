@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { SuloExpression } from "@/stores/logo-store";
+import type { SuloExpression } from "@/stores";
 import { useEffect, useState } from "react";
 
 const EXPRESSION_DATA: Record<

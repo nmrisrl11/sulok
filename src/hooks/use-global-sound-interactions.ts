@@ -1,4 +1,4 @@
-import { useSoundEffects } from "@/hooks/use-sound-effects";
+import { useSoundEffects } from "@/hooks";
 import { useEffect } from "react";
 
 // Elements that should trigger interactive sounds

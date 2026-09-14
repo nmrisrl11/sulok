@@ -22,6 +22,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Dexie.js database schema defined and Repository Pattern implemented
 - [x] Domain schema centralized in `src/schemas/`
 - [x] Zustand stores scaffolded (Item and Confirmation stores)
+- [x] Core layers (stores, hooks, schemas) use barrel files (`index.ts`) for clean public APIs and circular dependency prevention
 - [x] Item CRUD (Create, Read, Update, Delete, Bulk Delete) integrated with Dexie
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding

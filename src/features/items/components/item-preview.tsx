@@ -1,6 +1,6 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores";
 import { GlobeIcon, ImageIcon } from "lucide-react";
 import type { URLMetadata } from "../hooks/use-metadata";
 

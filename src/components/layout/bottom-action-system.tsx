@@ -1,6 +1,6 @@
 import { QuickLinkActionBar } from "@/features/items/components/quick-link-action-bar";
-import { useFolderStore } from "@/stores/folder-store";
-import { useItemStore } from "@/stores/item-store";
+import { useFolderStore } from "@/stores";
+import { useItemStore } from "@/stores";
 import { lazy, Suspense, useEffect, useRef } from "react";
 
 const BulkActionBar = lazy(() =>

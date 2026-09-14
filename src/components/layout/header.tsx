@@ -1,8 +1,8 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useLogoStore } from "@/stores/logo-store";
-import { useUIStore } from "@/stores/ui-store";
+import { useLogoStore } from "@/stores";
+import { useUIStore } from "@/stores";
 import { SettingsIcon, WandSparklesIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 

@@ -8,9 +8,9 @@ import {
 import { APP_INFO } from "@/constants/app-info";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
-import type { ItemFormValues } from "@/schemas/item.schema";
-import { useItemStore } from "@/stores/item-store";
-import { useLogoStore } from "@/stores/logo-store";
+import type { ItemFormValues } from "@/schemas";
+import { useItemStore } from "@/stores";
+import { useLogoStore } from "@/stores";
 import { useState } from "react";
 import { ItemForm } from "./item-form";
 

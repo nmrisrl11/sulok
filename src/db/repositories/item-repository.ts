@@ -1,5 +1,5 @@
 import { setHasDataHint } from "@/lib/storage";
-import { itemSchema } from "@/schemas/item.schema";
+import { itemSchema } from "@/schemas";
 import { db, type Item } from "../db";
 
 export const ItemRepository = {

@@ -23,10 +23,10 @@ import {
 	VolumeControl,
 } from "@/features/settings/components/sound-settings-section";
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-expressions-section";
-import { useSoundEffects } from "@/hooks/use-sound-effects";
-import { type SuloExpression } from "@/stores/logo-store";
-import { useSettingsStore } from "@/stores/settings-store";
-import { useUIStore } from "@/stores/ui-store";
+import { useSoundEffects } from "@/hooks";
+import { type SuloExpression } from "@/stores";
+import { useSettingsStore } from "@/stores";
+import { useUIStore } from "@/stores";
 import { WandSparklesIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 

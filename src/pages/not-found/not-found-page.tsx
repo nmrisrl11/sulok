@@ -1,6 +1,6 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores";
 import { Link } from "react-router-dom";
 
 export function NotFoundPage() {

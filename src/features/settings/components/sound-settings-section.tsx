@@ -12,9 +12,9 @@ import { Switch } from "@/components/ui/switch";
 import { APP_INFO } from "@/constants/app-info";
 import { INTERACTION_TYPES, SOUND_ICONS } from "@/constants/sounds-settings";
 import { SettingsCard } from "@/features/settings/components/settings-card";
-import { useSoundEffects } from "@/hooks/use-sound-effects";
+import { useSoundEffects } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
+import { defaultSettings, useSettingsStore } from "@/stores";
 import { sounds, type SoundName } from "cuelume";
 import { useState } from "react";
 

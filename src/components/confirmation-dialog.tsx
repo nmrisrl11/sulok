@@ -8,7 +8,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useConfirmationStore } from "@/stores/confirmation-store";
+import { useConfirmationStore } from "@/stores";
 import { type MouseEvent, useState } from "react";
 
 export function ConfirmationDialog() {

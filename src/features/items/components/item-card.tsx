@@ -11,13 +11,13 @@ import {
 
 import { APP_INFO } from "@/constants/app-info";
 import type { Item } from "@/db/db";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { useCopyToClipboard } from "@/hooks";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore } from "@/stores/confirmation-store";
-import { useItemStore } from "@/stores/item-store";
-import { useLogoStore } from "@/stores/logo-store";
-import { useMoveStore } from "@/stores/move-store";
+import { useConfirmationStore } from "@/stores";
+import { useItemStore } from "@/stores";
+import { useLogoStore } from "@/stores";
+import { useMoveStore } from "@/stores";
 import {
 	CheckIcon,
 	CopyIcon,

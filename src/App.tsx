@@ -5,7 +5,7 @@ import { AppearanceProvider } from "./components/appearance-provider";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
-import { useGlobalSoundInteractions } from "./hooks/use-global-sound-interactions";
+import { useGlobalSoundInteractions } from "./hooks";
 import { AboutSkeleton } from "./pages/about/about-skeleton";
 import { HomeRouteFallback } from "./pages/home/home-route-fallback";
 import { SettingsSkeleton } from "./pages/settings/settings-skeleton";

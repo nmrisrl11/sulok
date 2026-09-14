@@ -10,9 +10,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { APP_INFO } from "@/constants/app-info";
 import { SettingsCard } from "@/features/settings/components/settings-card";
-import { useTheme, useThemeDispatch, type Theme } from "@/hooks/use-theme";
+import { useTheme, useThemeDispatch, type Theme } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
+import { defaultSettings, useSettingsStore } from "@/stores";
 import type { CornerStyle, LayoutDensity } from "@/types/settings";
 import {
 	CheckIcon,

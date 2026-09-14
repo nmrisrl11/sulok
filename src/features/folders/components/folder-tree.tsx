@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { cn } from "@/lib/utils";
-import { useFolderStore } from "@/stores/folder-store";
+import { useFolderStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { InboxIcon, LayersIcon, PlusIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";

@@ -1,4 +1,4 @@
-import type { SuloExpression } from "@/stores/logo-store";
+import type { SuloExpression } from "@/stores";
 import type { SoundName } from "cuelume";
 
 export type AccentColor = string;

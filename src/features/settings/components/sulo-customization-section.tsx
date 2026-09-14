@@ -1,6 +1,6 @@
 import { ResetButton } from "@/components/reset-button";
 import { notify } from "@/lib/notify";
-import { defaultSettings, useSettingsStore } from "@/stores/settings-store";
+import { defaultSettings, useSettingsStore } from "@/stores";
 import { SuloExpressionsSection } from "./sulo-expressions-section";
 import { SuloWhispersSection } from "./sulo-whispers-section";
 
