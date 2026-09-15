@@ -113,7 +113,7 @@ src/
 - **Stores:** camelCase with `Store` suffix (`useFolderStore`, `useItemStore`)
 - **Types:** PascalCase (`Folder`, `Item`, `ItemType`)
 - **Constants:** SCREAMING_SNAKE_CASE (`DEFAULT_FOLDER_NAME`, `MAX_TAGS`)
-- **Icons (lucide-react):** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`).
+- **Icons:** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`). For deletion actions, ALWAYS use the bespoke custom icons from `@/components/icons`: `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete), and `TrashUndoIcon` (restore), instead of generic lucide trash icons.
 
 ### TypeScript
 

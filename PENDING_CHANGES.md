@@ -25,6 +25,7 @@
 - Refactored all internal UI components to strictly use named React imports, ensuring cleaner code and full compatibility with modern TypeScript build tools.
 - Redesigned the Explorer Toolbar for a cleaner aesthetic, separating the breadcrumb header from the search/sort utility pill.
 - Enhanced breadcrumb context to treat Favorites and Recycle Bin as independent top-level views rather than sub-folders of the Library, complete with explicit labels and corresponding icons.
+- Replaced generic trash icons with bespoke SVG designs to provide clearer visual distinction between soft deleting, restoring, and permanently deleting items across the application.
 
 ### Fixed
 

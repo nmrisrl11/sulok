@@ -206,6 +206,11 @@ Minimal shadows. Prefer border/background differentiation.
 - Positioned at the `bottom-center` with no timestamps.
 - Use friendly, branded copywriting (e.g., "Added to your corner", "Changes saved") instead of generic system terms (e.g., "Item saved", "Success").
 
+### Icons
+
+- Use `lucide-react` for standard utility icons.
+- **Trash/Deletion Icons:** Always use the bespoke SVG icons for delete actions to provide clear visual distinction: `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete/empty), and `TrashUndoIcon` (restore).
+
 ---
 
 ## Favicon Fetching

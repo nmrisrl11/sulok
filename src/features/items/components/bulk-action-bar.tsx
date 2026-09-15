@@ -1,3 +1,4 @@
+import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { BulkRepository } from "@/db/repositories/bulk-repository";
@@ -11,7 +12,7 @@ import {
 	useMoveStore,
 } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
-import { FolderInputIcon, HeartIcon, HeartOffIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import { FolderInputIcon, HeartIcon, HeartOffIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function BulkActionBar() {
@@ -124,7 +125,7 @@ export function BulkActionBar() {
 							onClick={handleRestoreSelected}
 							className="h-8 gap-2 rounded-full! hover:bg-muted"
 						>
-							<RotateCcwIcon className="h-4 w-4 text-muted-foreground" />
+							<TrashUndoIcon className="h-4 w-4" />
 							<span className="hidden sm:inline">Restore Selected</span>
 							<span className="sr-only sm:hidden">Restore Selected</span>
 						</Button>
@@ -134,7 +135,7 @@ export function BulkActionBar() {
 							onClick={handleHardDeleteSelected}
 							className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
 						>
-							<Trash2Icon className="h-4 w-4" />
+							<TrashXMarkIcon className="h-4 w-4" />
 							<span className="hidden sm:inline">Delete Forever</span>
 							<span className="sr-only sm:hidden">Delete Forever</span>
 						</Button>
@@ -171,7 +172,7 @@ export function BulkActionBar() {
 							onClick={handleSoftDeleteSelected}
 							className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
 						>
-							<Trash2Icon className="h-4 w-4" />
+							<TrashClockIcon className="h-4 w-4" />
 							<span className="hidden sm:inline">Delete</span>
 							<span className="sr-only sm:hidden">Delete Selected</span>
 						</Button>

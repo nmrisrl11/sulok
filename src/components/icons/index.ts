@@ -22,4 +22,7 @@ export * from "./success-icon";
 export * from "./sulo-customization-icon";
 export * from "./tick-icon";
 export * from "./toggle-icon";
+export * from "./trash-clock-icon";
+export * from "./trash-undo-icon";
+export * from "./trash-xmark-icon";
 export * from "./whisper-icon";
