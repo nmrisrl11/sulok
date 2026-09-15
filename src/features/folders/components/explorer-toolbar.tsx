@@ -1,4 +1,4 @@
-import { FolderPlusCircleIcon } from "@/components/icons";
+import { FolderPlusCircleIcon, TrashXMarkIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,7 +16,7 @@ import {
 	viewParser,
 } from "@/lib/search-params";
 import { useConfirmationStore, useFolderStore, useLogoStore, useUIStore } from "@/stores";
-import { LayoutGridIcon, ListIcon, PlusIcon, SearchIcon, TrashIcon } from "lucide-react";
+import { LayoutGridIcon, ListIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
 
@@ -73,7 +73,7 @@ export function ExplorerToolbar({
 								onClick={handleEmptyTrash}
 								className="h-8 rounded-md px-2 text-sm font-medium text-destructive/80 hover:bg-destructive/10 hover:text-destructive supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
-								<TrashIcon className="mr-0 size-4 sm:mr-2" />
+								<TrashXMarkIcon className="mr-0 size-4 sm:mr-2" />
 								<span className="hidden sm:inline">Empty Recycle Bin</span>
 							</Button>
 						)

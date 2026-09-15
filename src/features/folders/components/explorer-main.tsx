@@ -1,3 +1,4 @@
+import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -13,15 +14,7 @@ import { notify } from "@/lib/notify";
 import { folderIdParser, viewModeParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
-import {
-	Edit2Icon,
-	FolderIcon,
-	FolderInputIcon,
-	HeartIcon,
-	MoreVerticalIcon,
-	RotateCcwIcon,
-	Trash2Icon,
-} from "lucide-react";
+import { Edit2Icon, FolderIcon, FolderInputIcon, HeartIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 function FolderCard({ folder }: { folder: Folder }) {
 	const [_, setFolderId] = useQueryState("folder", folderIdParser);
@@ -167,7 +160,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 					{view === "trash" ? (
 						<>
 							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
-								<RotateCcwIcon className="h-4 w-4 text-muted-foreground" />
+								<TrashUndoIcon className="h-4 w-4" />
 								<span className="sr-only">Restore</span>
 							</Button>
 							<Button
@@ -176,7 +169,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 								className="h-8 w-8 hover:text-destructive"
 								onClick={handleHardDelete}
 							>
-								<Trash2Icon className="h-4 w-4" />
+								<TrashXMarkIcon className="h-4 w-4" />
 								<span className="sr-only">Delete Forever</span>
 							</Button>
 						</>
@@ -187,7 +180,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 							className="h-8 w-8 hover:text-destructive"
 							onClick={handleSoftDelete}
 						>
-							<Trash2Icon className="h-4 w-4" />
+							<TrashClockIcon className="h-4 w-4" />
 							<span className="sr-only">Delete</span>
 						</Button>
 					)}
@@ -208,7 +201,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 										onClick={handleRestore}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<RotateCcwIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashUndoIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
 										<span className="text-[13px]">Restore</span>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
@@ -217,7 +210,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<Trash2Icon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
 										<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
 									</DropdownMenuItem>
 								</>
@@ -263,7 +256,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<Trash2Icon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashClockIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
 										<span className="text-[13px]">Delete</span>
 									</DropdownMenuItem>
 								</>

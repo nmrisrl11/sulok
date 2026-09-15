@@ -9,6 +9,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
 import type { Item } from "@/db/db";
 import { viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
@@ -21,8 +22,6 @@ import {
 	FolderInputIcon,
 	HeartIcon,
 	MoreVerticalIcon,
-	RotateCcwIcon,
-	Trash2Icon,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
@@ -159,7 +158,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 					{view === "trash" ? (
 						<>
 							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
-								<RotateCcwIcon className="h-4 w-4 text-muted-foreground" />
+								<TrashUndoIcon className="h-4 w-4" />
 								<span className="sr-only">Restore</span>
 							</Button>
 							<Button
@@ -168,7 +167,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 								className="h-8 w-8 hover:text-destructive"
 								onClick={handleHardDelete}
 							>
-								<Trash2Icon className="h-4 w-4" />
+								<TrashXMarkIcon className="h-4 w-4" />
 								<span className="sr-only">Delete Forever</span>
 							</Button>
 						</>
@@ -179,7 +178,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 							className="h-8 w-8 hover:text-destructive"
 							onClick={handleSoftDelete}
 						>
-							<Trash2Icon className="h-4 w-4" />
+							<TrashClockIcon className="h-4 w-4" />
 							<span className="sr-only">Delete</span>
 						</Button>
 					)}
@@ -248,7 +247,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										onClick={handleRestore}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<RotateCcwIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<TrashUndoIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
 										<span className="text-[13px]">Restore</span>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
@@ -257,7 +256,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<Trash2Icon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
 										<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
 									</DropdownMenuItem>
 								</>
@@ -267,7 +266,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 									variant="destructive"
 									className="cursor-pointer py-2.5 md:py-1.5"
 								>
-									<Trash2Icon className="mr-2 h-3.5 w-3.5 opacity-70" />
+									<TrashClockIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
 									<span className="text-[13px]">Delete</span>
 								</DropdownMenuItem>
 							)}
