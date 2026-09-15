@@ -1,24 +1,9 @@
 import { FolderLinkIcon, FollowFolderIcon, RecycleBinIcon } from "@/components/icons";
-import {
-	Breadcrumb,
-	BreadcrumbEllipsis,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { Fragment } from "react";
+import { FolderBreadcrumbs } from "./folder-breadcrumbs";
 
 export function ExplorerBreadcrumb() {
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
@@ -27,122 +12,40 @@ export function ExplorerBreadcrumb() {
 	// We need to fetch the hierarchy. Since it's local, we can fetch all folders and build the path.
 	const allFolders = useLiveQuery(() => FolderRepository.getAll()) || [];
 
-	let breadcrumbs: { id: string; name: string }[] = [];
-	if (folderId) {
-		let currentFolder = allFolders.find((f) => f.id === folderId);
-		while (currentFolder) {
-			breadcrumbs.unshift({ id: currentFolder.id, name: currentFolder.name });
-			currentFolder = allFolders.find((f) => f.id === currentFolder!.parentId);
+	const handleNavigate = (id: string | null) => {
+		setFolderId(id);
+		if (id === null && view !== "favorites" && view !== "trash") {
+			setView(null);
 		}
+	};
+
+	let rootLabel = "Library";
+	let RootIcon = FolderLinkIcon;
+	let hideDropdown = false;
+	let hideBreadcrumbs = false;
+
+	if (view === "favorites") {
+		rootLabel = "Favorites";
+		RootIcon = FollowFolderIcon;
+		hideDropdown = true;
+	} else if (view === "trash") {
+		rootLabel = "Recycle Bin";
+		RootIcon = RecycleBinIcon;
+		hideBreadcrumbs = true;
 	}
 
-	const ITEMS_TO_DISPLAY = 3;
-	const isTruncated = breadcrumbs.length > ITEMS_TO_DISPLAY;
-	const visibleBreadcrumbs = isTruncated ? breadcrumbs.slice(-ITEMS_TO_DISPLAY) : breadcrumbs;
-	const hiddenBreadcrumbs = isTruncated ? breadcrumbs.slice(0, -ITEMS_TO_DISPLAY) : [];
-
 	return (
-		<Breadcrumb>
-			<BreadcrumbList className="flex-nowrap sm:flex-wrap">
-				{view === "favorites" ? (
-					<BreadcrumbItem>
-						{!folderId ? (
-							<BreadcrumbPage className="flex items-center gap-1.5 text-base font-semibold">
-								<FollowFolderIcon className="size-4" />
-								Favorites
-							</BreadcrumbPage>
-						) : (
-							<BreadcrumbLink
-								asChild
-								className="cursor-pointer hover:text-foreground"
-								onClick={() => setFolderId(null)}
-							>
-								<button type="button" className="flex items-center gap-1.5">
-									<FollowFolderIcon className="size-4" />
-									Favorites
-								</button>
-							</BreadcrumbLink>
-						)}
-					</BreadcrumbItem>
-				) : view === "trash" ? (
-					<BreadcrumbItem>
-						<BreadcrumbPage className="flex items-center gap-1.5 text-base font-semibold">
-							<RecycleBinIcon className="size-4" />
-							Recycle Bin
-						</BreadcrumbPage>
-					</BreadcrumbItem>
-				) : (
-					<BreadcrumbItem>
-						{!folderId ? (
-							<BreadcrumbPage className="flex items-center gap-1.5 text-base font-semibold">
-								<FolderLinkIcon className="size-4" />
-								Library
-							</BreadcrumbPage>
-						) : (
-							<BreadcrumbLink
-								asChild
-								className="cursor-pointer hover:text-foreground"
-								onClick={() => {
-									setFolderId(null);
-									setView(null);
-								}}
-							>
-								<button type="button" className="flex items-center gap-1.5">
-									<FolderLinkIcon className="size-4" />
-									Library
-								</button>
-							</BreadcrumbLink>
-						)}
-					</BreadcrumbItem>
-				)}
-
-				{isTruncated && view !== "favorites" && view !== "trash" && (
-					<>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<DropdownMenu>
-								<DropdownMenuTrigger className="flex items-center gap-1 focus:outline-none">
-									<BreadcrumbEllipsis className="size-4" />
-									<span className="sr-only">Toggle menu</span>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="start">
-									{hiddenBreadcrumbs.map((crumb) => (
-										<DropdownMenuItem
-											key={crumb.id}
-											onClick={() => setFolderId(crumb.id)}
-											className="cursor-pointer"
-										>
-											{crumb.name}
-										</DropdownMenuItem>
-									))}
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</BreadcrumbItem>
-					</>
-				)}
-
-				{view !== "trash" &&
-					visibleBreadcrumbs.map((crumb, index) => (
-						<Fragment key={crumb.id}>
-							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								{index === visibleBreadcrumbs.length - 1 ? (
-									<BreadcrumbPage className="max-w-37.5 truncate sm:max-w-50 md:max-w-none">
-										{crumb.name}
-									</BreadcrumbPage>
-								) : (
-									<BreadcrumbLink
-										asChild
-										className="max-w-25 cursor-pointer truncate hover:text-foreground sm:max-w-none"
-										onClick={() => setFolderId(crumb.id)}
-									>
-										<button type="button">{crumb.name}</button>
-									</BreadcrumbLink>
-								)}
-							</BreadcrumbItem>
-						</Fragment>
-					))}
-			</BreadcrumbList>
-		</Breadcrumb>
+		<FolderBreadcrumbs
+			currentFolderId={folderId}
+			allFolders={allFolders}
+			onNavigate={handleNavigate}
+			rootLabel={rootLabel}
+			rootIcon={RootIcon}
+			rootClassName="text-base font-semibold"
+			hideBreadcrumbs={hideBreadcrumbs}
+			hideDropdown={hideDropdown}
+			leafClassName="max-w-37.5 sm:max-w-50 md:max-w-none"
+			linkClassName="max-w-25 sm:max-w-none"
+		/>
 	);
 }

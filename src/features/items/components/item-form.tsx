@@ -164,11 +164,11 @@ export function ItemForm({
 				<div className="space-y-2">
 					<Label htmlFor="folderId">Folder</Label>
 					<Select value={selectedFolderId} onValueChange={(val) => setValue("folderId", val)}>
-						<SelectTrigger id="folderId">
+						<SelectTrigger id="folderId" className="w-full">
 							<SelectValue placeholder="Select a folder" />
 						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="unorganized">None (Unorganized)</SelectItem>
+						<SelectContent className="max-h-64">
+							<SelectItem value="unorganized">Leave unorganized</SelectItem>
 							{folders.map((folder) => (
 								<SelectItem key={folder.id} value={folder.id}>
 									{folder.name}
