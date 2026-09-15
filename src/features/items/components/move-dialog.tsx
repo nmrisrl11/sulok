@@ -1,3 +1,4 @@
+import { FolderIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -13,7 +14,7 @@ import { FolderBreadcrumbs } from "@/features/folders/components/folder-breadcru
 import { notify } from "@/lib/notify";
 import { useFolderStore, useItemStore, useMoveStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
-import { ChevronRightIcon, FolderIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 
 export function MoveDialog() {
@@ -110,7 +111,7 @@ export function MoveDialog() {
 							</div>
 						) : currentChildren.length === 0 ? (
 							<div className="flex h-full flex-col items-center justify-center py-12 text-center">
-								<FolderIcon className="mb-3 size-12 text-muted/30" />
+								<FolderIcon className="mb-3 size-12 opacity-50 grayscale" />
 								<p className="text-sm font-medium text-foreground">No folders here</p>
 								<p className="mt-1 text-xs text-muted-foreground">
 									Click "Move Here" to move items to this location.
@@ -124,7 +125,7 @@ export function MoveDialog() {
 									className="group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 									onClick={() => setCurrentParentId(folder.id)}
 								>
-									<FolderIcon className="size-5 shrink-0 fill-muted text-muted-foreground transition-colors group-hover:fill-primary/20 group-hover:text-primary" />
+									<FolderIcon className="size-5 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
 									<span className="flex-1 truncate">{folder.name}</span>
 									<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5" />
 								</button>

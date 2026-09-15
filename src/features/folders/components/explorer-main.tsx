@@ -3,6 +3,7 @@ import {
 	CustomHeartIcon,
 	CustomHeartSlashIcon,
 	FolderEditIcon,
+	FolderIcon,
 	MoveToFolderIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
@@ -23,7 +24,7 @@ import { notify } from "@/lib/notify";
 import { folderIdParser, viewModeParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
-import { FolderIcon, MoreVerticalIcon } from "lucide-react";
+import { MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { FolderGridCard } from "./folder-grid-card";
 function FolderCard({ folder }: { folder: Folder }) {
@@ -128,7 +129,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 						className="shrink-0 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
 					/>
 				</div>
-				<FolderIcon className="size-6 shrink-0 fill-primary/20 text-primary" />
+				<FolderIcon className="size-6 shrink-0" />
 				<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
 			</div>
 
@@ -304,7 +305,7 @@ export function ExplorerMain({
 		return (
 			<div className="flex flex-col items-center justify-center py-20 text-center">
 				<div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
-					<FolderIcon className="size-8 text-muted-foreground" />
+					<FolderIcon className="size-8" />
 				</div>
 				<h3 className="mb-1 text-lg font-medium text-foreground">This folder is empty</h3>
 				<p className="text-sm text-muted-foreground">
