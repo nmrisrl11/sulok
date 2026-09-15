@@ -87,6 +87,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`
 - [x] Responsive item action menus (desktop hover vs mobile dropdown)
+- [x] Favorites feature for folders and items (list/grid view & bulk actions)
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
 - [x] Global Settings Page (tabbed layout)
