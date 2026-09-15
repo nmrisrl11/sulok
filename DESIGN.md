@@ -173,6 +173,12 @@ Minimal shadows. Prefer border/background differentiation.
 - **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs (Search, Select) use a 6px radius (`rounded-md`) to perfectly nest inside the outer pill's 12px radius (`rounded-xl`).
 - **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
 
+### Explorer Sidebar
+
+- Radically responsive layout. On desktop, it is a vertical stack of links inside a static container.
+- On mobile devices, it transforms into a sleek, horizontal pill layout that groups the icons and text tightly (`[Icon] [Label]`).
+- On mobile, it utilizes `sticky top-2 z-20` and a frosted glass effect (`bg-card/80 backdrop-blur-md`) to remain beautifully accessible as the user scrolls down long lists.
+
 ### Navigation Tabs
 
 - Use scrollable horizontal tabs for mobile viewports, wrapping gracefully or sticking to vertical layouts on desktop if appropriate.

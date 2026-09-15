@@ -41,7 +41,7 @@ export function ExplorerSidebar() {
 	];
 
 	return (
-		<div className="flex w-full flex-col gap-1.5">
+		<nav className="flex w-full flex-row gap-1 md:flex-col md:gap-1.5">
 			{navItems.map((item) => {
 				const Icon = item.icon;
 				return (
@@ -49,7 +49,7 @@ export function ExplorerSidebar() {
 						key={item.id}
 						type="button"
 						className={cn(
-							"group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+							"group flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-md p-2 text-center transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl md:flex-row md:justify-start md:gap-3 md:px-3 md:py-2 md:text-left",
 							item.isActive
 								? "bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20"
 								: "text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm",
@@ -58,7 +58,7 @@ export function ExplorerSidebar() {
 					>
 						<Icon
 							className={cn(
-								"size-4 shrink-0 transition-colors",
+								"size-5 shrink-0 transition-colors md:size-4",
 								item.isActive
 									? "text-primary"
 									: "text-muted-foreground/80 group-hover:text-foreground",
@@ -66,7 +66,7 @@ export function ExplorerSidebar() {
 						/>
 						<span
 							className={cn(
-								"text-sm transition-colors",
+								"text-[10px] transition-colors md:text-sm",
 								item.isActive ? "font-semibold text-primary" : "font-medium text-foreground/80",
 							)}
 						>
@@ -75,6 +75,6 @@ export function ExplorerSidebar() {
 					</button>
 				);
 			})}
-		</div>
+		</nav>
 	);
 }
