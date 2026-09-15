@@ -17,8 +17,8 @@
 ### Changed
 
 - Redesigned the "Move to..." dialog to use an intuitive drill-down navigation system with interactive breadcrumb trails, making it much easier to move items deep into nested folders.
+- Prevented text overflow on mobile by strictly truncating lengthy file paths and labels within the breadcrumb navigation.
 - Improved breadcrumb navigation across the main explorer and dialogs for a clearer, more consistent experience when navigating through deep folder structures.
-
 - Implemented barrel files (`index.ts`) for the `stores`, `hooks`, and `schemas` directories to centralize public APIs, clean up imports project-wide, and prevent circular dependencies.
 - Refactored multiple actions (deleting, restoring, moving) to use a unified and more reliable background process, ensuring items and folders are handled seamlessly together.
 - When you are in the Recycle Bin, tapping or clicking any item now safely selects it instead of accidentally opening the link or navigating into the folder.
@@ -35,6 +35,9 @@
 
 ### Fixed
 
+- Fixed an issue where clicking into a favorited folder from the Favorites view incorrectly hid its contents unless they were also individually favorited.
+- Fixed a visual glitch in the "Move to..." dialog where it would briefly display "No folders here" before finishing loading the folders.
+- Fixed keyboard accessibility styling on the breadcrumb dropdown menus to properly show a focus ring.
 - Fixed a visual glitch where the Quick Link action bar would rapidly stretch across the entire screen when repeatedly opened and closed.
 - Fixed a "Flash of Unstyled Content" (FOUC) issue where the screen would briefly flash white before applying custom dark themes like Mocha or Midnight on initial load.
 - Fixed a visual bug where the outer selection ring of the Accent Color picker was being clipped at the edges of the settings accordion.
