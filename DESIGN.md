@@ -209,6 +209,10 @@ Minimal shadows. Prefer border/background differentiation.
 ### Icons
 
 - Use `lucide-react` for standard utility icons.
+- **Folder Icon:** Use `FolderIcon` from `@/components/icons`. It is a bespoke multi-layer SVG designed for theme customization via CSS variables:
+  - `--folder-color-back` (default: `#56b2e3`)
+  - `--folder-color-paper` (default: `#ffffff`)
+  - `--folder-color-front` (default: `#98cfef`)
 - **Action Icons:** Always use the bespoke custom icons from `@/components/icons` for item and folder actions to ensure brand consistency:
   - `CopyIcon`, `ExternalLinkIcon`, `FileEditIcon`, `FolderEditIcon`, `MoveToFolderIcon`.
   - `CustomHeartIcon` (outline), `CustomHeartFilledIcon` (solid), `CustomHeartSlashIcon` (unfavorite).

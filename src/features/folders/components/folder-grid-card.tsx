@@ -3,6 +3,7 @@ import {
 	CustomHeartIcon,
 	CustomHeartSlashIcon,
 	FolderEditIcon,
+	FolderIcon,
 	MoveToFolderIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
@@ -21,7 +22,7 @@ import { notify } from "@/lib/notify";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useLogoStore, useMoveStore } from "@/stores";
-import { FolderIcon, MoreVerticalIcon } from "lucide-react";
+import { MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
 
@@ -219,7 +220,7 @@ export const FolderGridCard = memo(function FolderGridCard({ folder }: { folder:
 				</DropdownMenu>
 			</div>
 
-			<FolderIcon className="size-12 fill-primary/20 text-primary" />
+			<FolderIcon className="size-12" />
 			<div className="flex w-full items-center justify-center gap-1">
 				{folder.isFavorite && <CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />}
 				<span className="truncate text-center text-sm font-medium">{folder.name}</span>
