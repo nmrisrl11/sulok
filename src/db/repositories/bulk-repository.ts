@@ -161,13 +161,13 @@ export const BulkRepository = {
 		let itemsAllFav = true;
 		if (itemIds.length > 0) {
 			const items = await db.items.where("id").anyOf(itemIds).toArray();
-			itemsAllFav = items.every((i) => i.isFavorite);
+			itemsAllFav = items.length === new Set(itemIds).size && items.every((i) => i.isFavorite);
 		}
 
 		let foldersAllFav = true;
 		if (folderIds.length > 0) {
 			const folders = await db.folders.where("id").anyOf(folderIds).toArray();
-			foldersAllFav = folders.every((f) => f.isFavorite);
+			foldersAllFav = folders.length === new Set(folderIds).size && folders.every((f) => f.isFavorite);
 		}
 
 		return itemsAllFav && foldersAllFav;
