@@ -10,6 +10,7 @@ import {
 import { type Folder, type Item } from "@/db/db";
 import { ItemCard } from "@/features/items/components/item-card";
 import { notify } from "@/lib/notify";
+import { folderIdParser, viewModeParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
 import {
@@ -21,13 +22,12 @@ import {
 	StarIcon,
 	Trash2Icon,
 } from "lucide-react";
-import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
-
+import { useQueryState } from "nuqs";
 function FolderCard({ folder }: { folder: Folder }) {
-	const [_, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
+	const [_, setFolderId] = useQueryState("folder", folderIdParser);
 	const { openEditDialog } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
-	const [view] = useQueryState("view", parseAsString.withDefault("all"));
+	const [view] = useQueryState("view", viewParser);
 	const { softDeleteFolders, restoreFolders, hardDeleteFolder, toggleSelection } = useFolderStore();
 	const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 
@@ -285,12 +285,9 @@ export function ExplorerMain({
 	items: Item[];
 	isLoading: boolean;
 }) {
-	const [viewMode] = useQueryState(
-		"mode",
-		parseAsStringEnum(["list", "grid", "compact"]).withDefault("list"),
-	);
-	const [_, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
-	const [view] = useQueryState("view", parseAsString.withDefault("all"));
+	const [viewMode] = useQueryState("mode", viewModeParser);
+	const [_, setFolderId] = useQueryState("folder", folderIdParser);
+	const [view] = useQueryState("view", viewParser);
 	const { toggleSelection } = useFolderStore();
 
 	if (isLoading) {

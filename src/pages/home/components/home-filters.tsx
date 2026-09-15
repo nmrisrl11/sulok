@@ -7,14 +7,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { searchQueryParser, sortOptionParser } from "@/lib/search-params";
 import { useItemStore } from "@/stores";
 import { FilterXIcon, SearchIcon, XIcon } from "lucide-react";
-import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { memo, useEffect, useState } from "react";
-import { SORT_OPTIONS } from "../hooks/use-home-management";
 
 function HomeSearchInput() {
-	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [localSearch, setLocalSearch] = useState(searchQuery);
 	const [prevSearchQuery, setPrevSearchQuery] = useState(searchQuery);
 	const clearSelection = useItemStore((state) => state.clearSelection);
@@ -61,15 +61,14 @@ function HomeSearchInput() {
 }
 
 function HomeSortSelect() {
-	const [sortOption, setSortOption] = useQueryState(
-		"sort",
-		parseAsStringEnum([...SORT_OPTIONS]).withDefault("date-desc"),
-	);
+	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 
 	return (
 		<Select
 			value={sortOption}
-			onValueChange={(val) => setSortOption(val as (typeof SORT_OPTIONS)[number])}
+			onValueChange={(val) =>
+				setSortOption(val as "date-desc" | "date-asc" | "name-asc" | "name-desc")
+			}
 		>
 			<SelectTrigger
 				className="h-9 w-44 rounded-full bg-card corner-squircle"
@@ -88,11 +87,8 @@ function HomeSortSelect() {
 }
 
 function ClearFiltersButton() {
-	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
-	const [sortOption, setSortOption] = useQueryState(
-		"sort",
-		parseAsStringEnum([...SORT_OPTIONS]).withDefault("date-desc"),
-	);
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 
 	const isFiltersActive = searchQuery !== "" || sortOption !== "date-desc";
 

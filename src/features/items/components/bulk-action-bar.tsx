@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { BulkRepository } from "@/db/repositories/bulk-repository";
 import { notify } from "@/lib/notify";
+import { viewParser } from "@/lib/search-params";
 import {
 	useConfirmationStore,
 	useFolderStore,
@@ -11,13 +12,13 @@ import {
 } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { FolderInputIcon, RotateCcwIcon, StarIcon, StarOffIcon, Trash2Icon } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 
 export function BulkActionBar() {
 	const { selectedIds, clearSelection } = useItemStore();
 	const { selectedFolderIds, clearSelection: clearFolderSelection } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
-	const [view] = useQueryState("view", parseAsString.withDefault("all"));
+	const [view] = useQueryState("view", viewParser);
 
 	const allFavorited =
 		useLiveQuery(

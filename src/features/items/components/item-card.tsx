@@ -9,12 +9,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { APP_INFO } from "@/constants/app-info";
 import type { Item } from "@/db/db";
-import { useCopyToClipboard } from "@/hooks";
-import { notify } from "@/lib/notify";
+import { viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore, useItemStore, useLogoStore, useMoveStore } from "@/stores";
+import { useItemStore, useMoveStore } from "@/stores";
 import {
 	CheckIcon,
 	CopyIcon,
@@ -26,81 +24,28 @@ import {
 	StarIcon,
 	Trash2Icon,
 } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { memo } from "react";
+import { useItemActions } from "../hooks/use-item-actions";
 
 export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
-	const openEditDialog = useItemStore((state) => state.openEditDialog);
-	const toggleSelection = useItemStore((state) => state.toggleSelection);
-
-	const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
-
-	const confirm = useConfirmationStore((state) => state.confirm);
-	const [view] = useQueryState("view", parseAsString.withDefault("all"));
-	const { isCopied, copyToClipboard } = useCopyToClipboard();
-
 	const titleToDisplay = item.title || item.url;
 
-	const handleSoftDelete = async () => {
-		try {
-			await useItemStore.getState().softDeleteItems([item.id]);
-			useLogoStore.getState().setTemporaryExpression("unimpressed");
-			notify.success("Moved to Recycle Bin", {
-				id: "item-soft-deleted",
-				hideReaction: true,
-				action: {
-					label: "Undo",
-					onClick: () => useItemStore.getState().restoreItems([item.id]),
-				},
-			});
-		} catch (error) {
-			console.error("Failed to move item to Recycle Bin", error);
-			notify.error("Unable to remove link", { id: "item-delete-fail" });
-		}
-	};
+	const toggleSelection = useItemStore((state) => state.toggleSelection);
+	const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
 
-	const handleRestore = async () => {
-		try {
-			await useItemStore.getState().restoreItems([item.id]);
-			notify.success("Link restored", { id: "item-restored" });
-		} catch (error) {
-			console.error("Failed to restore item", error);
-			notify.error("Unable to restore link", { id: "item-restore-fail" });
-		}
-	};
+	const [view] = useQueryState("view", viewParser);
 
-	const handleHardDelete = () => {
-		confirm({
-			title: "Delete Item",
-			description: `Are you sure you want to permanently delete this item from your ${APP_INFO.name}? This action cannot be undone.`,
-			confirmText: "Delete Forever",
-			onConfirm: async () => {
-				try {
-					await useItemStore.getState().hardDeleteItem(item.id);
-					useLogoStore.getState().setTemporaryExpression("unimpressed");
-					notify.success("Removed from your corner", { id: "item-deleted", hideReaction: true });
-				} catch (error) {
-					console.error("Failed to delete item", error);
-					notify.error("Unable to remove link", { id: "item-delete-fail" });
-				}
-			},
-		});
-	};
-
-	const handleOpenLink = () => {
-		window.open(item.url, "_blank", "noopener,noreferrer");
-	};
-
-	const handleToggleFavorite = async () => {
-		try {
-			const { ItemRepository } = await import("@/db/repositories/item-repository");
-			const isFav = await ItemRepository.toggleFavorite(item.id);
-			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
-		} catch (error) {
-			console.error("Failed to toggle favorite", error);
-			notify.error("Failed to update favorite status");
-		}
-	};
+	const {
+		isCopied,
+		handleCopy,
+		handleEdit,
+		handleSoftDelete,
+		handleRestore,
+		handleHardDelete,
+		handleOpenLink,
+		handleToggleFavorite,
+	} = useItemActions(item);
 
 	return (
 		<div
@@ -172,7 +117,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										? "text-emerald-600 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-900/30"
 										: "text-muted-foreground hover:text-foreground",
 								)}
-								onClick={() => copyToClipboard(item.url)}
+								onClick={handleCopy}
 							>
 								{isCopied ? (
 									<CheckIcon className="h-4 w-4" aria-hidden="true" />
@@ -204,12 +149,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 								</span>
 							</Button>
 
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8"
-								onClick={() => openEditDialog(item)}
-							>
+							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleEdit}>
 								<Edit2Icon className="h-4 w-4 text-muted-foreground" />
 								<span className="sr-only">Edit</span>
 							</Button>
@@ -257,7 +197,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 							{view !== "trash" && (
 								<>
 									<DropdownMenuItem
-										onClick={() => copyToClipboard(item.url)}
+										onClick={handleCopy}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
 										<CopyIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
@@ -287,7 +227,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										</span>
 									</DropdownMenuItem>
 									<DropdownMenuItem
-										onClick={() => openEditDialog(item)}
+										onClick={handleEdit}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
 										<Edit2Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />

@@ -1,27 +1,23 @@
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
+import {
+	folderIdParser,
+	searchQueryParser,
+	sortOptionParser,
+	viewModeParser,
+	viewParser,
+} from "@/lib/search-params";
 import { useItemStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
-import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { useEffect } from "react";
 
-export const SORT_OPTIONS = ["date-desc", "date-asc", "name-asc", "name-desc"] as const;
-
 export function useHomeData() {
-	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
-	const [sortOption, setSortOption] = useQueryState(
-		"sort",
-		parseAsStringEnum([...SORT_OPTIONS]).withDefault("date-desc"),
-	);
-	const [view, setView] = useQueryState(
-		"view",
-		parseAsStringEnum(["all", "favorites", "trash"]).withDefault("all"),
-	);
-	const [folderId, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
-	const [viewMode, setViewMode] = useQueryState(
-		"mode",
-		parseAsStringEnum(["list", "grid", "compact"]).withDefault("list"),
-	);
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
+	const [view, setView] = useQueryState("view", viewParser);
+	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
+	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 
 	const clearSelection = useItemStore((state) => state.clearSelection);
 

@@ -23,7 +23,7 @@
 - **State:** Zustand for app state.
 - **Routing:** React Router DOM v7. Keep routing simple (`BrowserRouter` in `App.tsx`); do not over-engineer or over-abstract routing registries.
 - **Forms:** React Hook Form + Zod for validation.
-- **URL State:** nuqs for URL query parameters within pages.
+- **URL State:** nuqs for URL query parameters within pages. All `nuqs` parsers MUST be centralized in `src/lib/search-params.ts`. Do not define inline parsers in components.
 - **Data:** IndexedDB via Dexie.js. No localStorage for structured data. No SQLite.
 - **PWA:** Vite PWA plugin. Service worker for offline support.
 
@@ -106,7 +106,7 @@ src/
 ### Naming Conventions
 
 - **Files:** kebab-case (`item-card.tsx`, `use-folders.ts`)
-- **Components:** PascalCase (`ItemCard`, `FolderTree`)
+- **Components:** PascalCase (`ItemCard`, `FolderCard`)
 - **Hooks:** camelCase with `use` prefix (`useFolders`, `useItems`)
 - **Stores:** camelCase with `Store` suffix (`useFolderStore`, `useItemStore`)
 - **Types:** PascalCase (`Folder`, `Item`, `ItemType`)
