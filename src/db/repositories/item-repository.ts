@@ -29,7 +29,7 @@ export const ItemRepository = {
 			results = results.filter(
 				(item) => item.deletedAt && (!item.folderId || !deletedFolderIds.has(item.folderId)),
 			);
-		} else if (view === "favorites") {
+		} else if (view === "favorites" && folderId === undefined) {
 			results = results.filter((item) => !item.deletedAt && item.isFavorite);
 		} else {
 			results = results.filter((item) => !item.deletedAt);
