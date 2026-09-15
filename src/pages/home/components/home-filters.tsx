@@ -41,7 +41,7 @@ function HomeSearchInput() {
 				id="search-item"
 				type="search"
 				placeholder="Search..."
-				className="h-9 rounded-full bg-card pr-9 pl-9 corner-squircle"
+				className="h-9 rounded-full bg-card pr-9 pl-9 corner-squircle supports-[corner-shape:squircle]:rounded-2xl"
 				value={localSearch}
 				onChange={(e) => setLocalSearch(e.target.value)}
 				autoComplete="off"
@@ -71,7 +71,7 @@ function HomeSortSelect() {
 			}
 		>
 			<SelectTrigger
-				className="h-9 w-44 rounded-full bg-card corner-squircle"
+				className="h-9 w-44 rounded-full bg-card corner-squircle supports-[corner-shape:squircle]:rounded-2xl"
 				aria-label="Sort items"
 			>
 				<SelectValue placeholder="Sort by" />
@@ -103,7 +103,7 @@ function ClearFiltersButton() {
 		<Button
 			variant="ghost"
 			size="sm"
-			className="h-9 shrink-0 gap-1 rounded-full text-muted-foreground corner-squircle hover:bg-destructive/10 hover:text-destructive"
+			className="h-9 shrink-0 gap-1 rounded-full text-muted-foreground corner-squircle hover:bg-destructive/10 hover:text-destructive supports-[corner-shape:squircle]:rounded-2xl"
 			onClick={handleClearFilters}
 			aria-label="Clear all filters"
 			title="Clear all filters"

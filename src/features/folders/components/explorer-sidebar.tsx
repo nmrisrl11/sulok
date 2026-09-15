@@ -1,6 +1,6 @@
+import { FolderLinkIcon, FollowFolderIcon, RecycleBinIcon } from "@/components/icons";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
-import { FolderIcon, StarIcon, TrashIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function ExplorerSidebar() {
@@ -19,29 +19,29 @@ export function ExplorerSidebar() {
 	const navItems = [
 		{
 			id: "all",
-			label: "My Corner",
-			icon: FolderIcon,
+			label: "Library",
+			icon: FolderLinkIcon,
 			isActive: view === "all" && folderId === "",
 			onClick: () => handleNavigate("all"),
 		},
 		{
 			id: "favorites",
 			label: "Favorites",
-			icon: StarIcon,
+			icon: FollowFolderIcon,
 			isActive: view === "favorites",
 			onClick: () => handleNavigate("favorites"),
 		},
 		{
 			id: "trash",
 			label: "Recycle Bin",
-			icon: TrashIcon,
+			icon: RecycleBinIcon,
 			isActive: view === "trash",
 			onClick: () => handleNavigate("trash"),
 		},
 	];
 
 	return (
-		<div className="flex w-full flex-col gap-1">
+		<div className="flex w-full flex-col gap-1.5">
 			{navItems.map((item) => {
 				const Icon = item.icon;
 				return (
@@ -49,21 +49,25 @@ export function ExplorerSidebar() {
 						key={item.id}
 						type="button"
 						className={cn(
-							"flex w-full cursor-pointer items-center gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-							item.isActive && "border-primary/20 bg-card",
+							"group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+							item.isActive
+								? "bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20"
+								: "text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm",
 						)}
 						onClick={item.onClick}
 					>
 						<Icon
 							className={cn(
-								"size-4 shrink-0 text-muted-foreground",
-								item.isActive && "text-primary",
+								"size-4 shrink-0 transition-colors",
+								item.isActive
+									? "text-primary"
+									: "text-muted-foreground/80 group-hover:text-foreground",
 							)}
 						/>
 						<span
 							className={cn(
-								"text-sm font-medium text-foreground/90",
-								item.isActive && "font-semibold text-foreground",
+								"text-sm transition-colors",
+								item.isActive ? "font-semibold text-primary" : "font-medium text-foreground/80",
 							)}
 						>
 							{item.label}

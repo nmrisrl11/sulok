@@ -116,7 +116,7 @@ export function MoveDialog() {
 								selectedFolderId === null ? "text-primary" : "text-muted-foreground",
 							)}
 						/>
-						<span>My Corner (Root)</span>
+						<span>Library (Root)</span>
 					</button>
 
 					{treeList.map(({ folder, depth }) => (

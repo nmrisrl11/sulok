@@ -102,7 +102,7 @@ src/
 
 - **Repository Pattern:** React components never query the database directly. All Dexie operations are abstracted into `Repositories` inside `src/db/`.
 - **Feature-driven:** Logic is grouped by feature (`src/features/items/`) rather than by file type.
-- **Barrel Files:** Core layers like `stores/`, `hooks/`, and `schemas/` use `index.ts` barrel files to serve as public APIs and prevent circular dependencies. Consumers must import from the directory root (e.g., `@/stores`) rather than individual files.
+- **Barrel Files:** Core layers like `stores/`, `hooks/`, `schemas/`, and `components/icons/` use `index.ts` barrel files to serve as public APIs and prevent circular dependencies. Consumers must import from the directory root (e.g., `@/stores` or `@/components/icons`) rather than individual files.
 
 ---
 
