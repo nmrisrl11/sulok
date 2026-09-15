@@ -5,24 +5,26 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
+import {
+	CopyIcon,
+	CustomHeartFilledIcon,
+	CustomHeartIcon,
+	CustomHeartSlashIcon,
+	ExternalLinkIcon,
+	FileEditIcon,
+	MoveToFolderIcon,
+	TrashClockIcon,
+	TrashUndoIcon,
+	TrashXMarkIcon,
+} from "@/components/icons";
 import type { Item } from "@/db/db";
 import { viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
-import {
-	CheckIcon,
-	CopyIcon,
-	Edit2Icon,
-	ExternalLinkIcon,
-	FolderInputIcon,
-	HeartIcon,
-	MoreVerticalIcon,
-} from "lucide-react";
+import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
 import { useItemActions } from "../hooks/use-item-actions";
@@ -104,84 +106,103 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 			</div>
 
 			<div className="flex shrink-0 items-center gap-1 sm:gap-2">
-				<div className="hidden shrink-0 items-center opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 md:flex">
-					{view !== "trash" && (
-						<>
-							<Button
-								variant="ghost"
-								size="icon"
-								className={cn(
-									"h-8 w-8 transition-colors",
-									isCopied
-										? "text-emerald-600 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-900/30"
-										: "text-muted-foreground hover:text-foreground",
-								)}
-								onClick={handleCopy}
-							>
-								{isCopied ? (
-									<CheckIcon className="h-4 w-4" aria-hidden="true" />
-								) : (
-									<CopyIcon className="h-4 w-4" aria-hidden="true" />
-								)}
-								<span className="sr-only">Copy URL</span>
-							</Button>
+				<div className="hidden shrink-0 items-center opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 md:block">
+					<div className="flex h-9 items-center rounded-lg border bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+						{view !== "trash" ? (
+							<>
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										className={cn(
+											"h-8 w-8 transition-colors",
+											isCopied
+												? "text-emerald-600 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-900/30"
+												: "hover:text-foreground",
+										)}
+										onClick={handleCopy}
+									>
+										{isCopied ? (
+											<CheckIcon className="h-4 w-4" aria-hidden="true" />
+										) : (
+											<CopyIcon className="h-4 w-4" aria-hidden="true" />
+										)}
+										<span className="sr-only">{isCopied ? "Copied" : "Copy URL"}</span>
+									</Button>
 
-							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleOpenLink}>
-								<ExternalLinkIcon className="h-4 w-4 text-muted-foreground" />
-								<span className="sr-only">Open Link</span>
-							</Button>
+									<Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+										<a href={item.url} target="_blank" rel="noopener noreferrer">
+											<ExternalLinkIcon className="h-4 w-4" />
+											<span className="sr-only">Open Link</span>
+										</a>
+									</Button>
+								</div>
 
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8"
-								onClick={handleToggleFavorite}
-							>
-								<HeartIcon
-									className={cn(
-										"h-4 w-4 transition-colors",
-										item.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground",
-									)}
-								/>
-								<span className="sr-only">
-									{item.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-								</span>
-							</Button>
+								<div className="mx-0.5 h-4 w-px bg-border/50" />
 
-							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleEdit}>
-								<Edit2Icon className="h-4 w-4 text-muted-foreground" />
-								<span className="sr-only">Edit</span>
-							</Button>
-						</>
-					)}
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										className={cn(
+											"h-8 w-8 transition-colors",
+											item.isFavorite
+												? "text-red-500 hover:bg-red-500/10 hover:text-red-600"
+												: "hover:text-foreground",
+										)}
+										onClick={handleToggleFavorite}
+									>
+										{item.isFavorite ? (
+											<CustomHeartFilledIcon className="h-4 w-4" />
+										) : (
+											<CustomHeartIcon className="h-4 w-4" />
+										)}
+										<span className="sr-only">{item.isFavorite ? "Unfavorite" : "Favorite"}</span>
+									</Button>
+								</div>
 
-					{view === "trash" ? (
-						<>
-							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
-								<TrashUndoIcon className="h-4 w-4" />
-								<span className="sr-only">Restore</span>
-							</Button>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8 hover:text-destructive"
-								onClick={handleHardDelete}
-							>
-								<TrashXMarkIcon className="h-4 w-4" />
-								<span className="sr-only">Delete Forever</span>
-							</Button>
-						</>
-					) : (
-						<Button
-							variant="ghost"
-							size="icon"
-							className="h-8 w-8 hover:text-destructive"
-							onClick={handleSoftDelete}
-						>
-							<TrashClockIcon className="h-4 w-4" />
-							<span className="sr-only">Delete</span>
-						</Button>
-					)}
+								<div className="mx-0.5 h-4 w-px bg-border/50" />
+
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										className="h-8 w-8 hover:text-foreground"
+										onClick={handleEdit}
+									>
+										<FileEditIcon className="h-4 w-4" />
+										<span className="sr-only">Edit</span>
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										className="h-8 w-8 hover:text-destructive"
+										onClick={handleSoftDelete}
+									>
+										<TrashClockIcon className="h-4 w-4" />
+										<span className="sr-only">Delete</span>
+									</Button>
+								</div>
+							</>
+						) : (
+							<div className="flex items-center">
+								<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
+									<TrashUndoIcon className="h-4 w-4" />
+									<span className="sr-only">Restore</span>
+								</Button>
+								<div className="mx-0.5 h-4 w-px bg-border/50" />
+								<Button
+									variant="ghost"
+									size="icon"
+									className="h-8 w-8 hover:text-destructive"
+									onClick={handleHardDelete}
+								>
+									<TrashXMarkIcon className="h-4 w-4" />
+									<span className="sr-only">Delete Forever</span>
+								</Button>
+							</div>
+						)}
+					</div>
 				</div>
 
 				<div className="flex md:hidden">
@@ -199,27 +220,26 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										onClick={handleCopy}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<CopyIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<CopyIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Copy URL</span>
 									</DropdownMenuItem>
 									<DropdownMenuItem
 										onClick={handleOpenLink}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<ExternalLinkIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<ExternalLinkIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Open Link</span>
 									</DropdownMenuItem>
 									<DropdownMenuItem
 										onClick={handleToggleFavorite}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<HeartIcon
-											className={cn(
-												"mr-2 h-3.5 w-3.5",
-												item.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground/80",
-											)}
-										/>
-										<span className={cn(item.isFavorite && "text-red-500")}>
+										{item.isFavorite ? (
+											<CustomHeartSlashIcon className="mr-2 h-3.5 w-3.5 text-red-500" />
+										) : (
+											<CustomHeartIcon className="mr-2 h-3.5 w-3.5" />
+										)}
+										<span className={cn(item.isFavorite && "text-red-500", "text-[13px]")}>
 											{item.isFavorite ? "Unfavorite" : "Favorite"}
 										</span>
 									</DropdownMenuItem>
@@ -227,18 +247,16 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										onClick={handleEdit}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<Edit2Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<FileEditIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Edit</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={() => useMoveStore.getState().openMoveDialog({ itemIds: [item.id] })}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<FolderInputIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<MoveToFolderIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Move to...</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 								</>
 							)}
 							{view === "trash" ? (
@@ -247,16 +265,15 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										onClick={handleRestore}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<TrashUndoIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<TrashUndoIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Restore</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={handleHardDelete}
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
 									</DropdownMenuItem>
 								</>
@@ -266,7 +283,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 									variant="destructive"
 									className="cursor-pointer py-2.5 md:py-1.5"
 								>
-									<TrashClockIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+									<TrashClockIcon className="mr-2 h-3.5 w-3.5" />
 									<span className="text-[13px]">Delete</span>
 								</DropdownMenuItem>
 							)}

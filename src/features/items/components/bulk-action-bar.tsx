@@ -1,4 +1,11 @@
-import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
+import {
+	CustomHeartIcon,
+	CustomHeartSlashIcon,
+	MoveToFolderIcon,
+	TrashClockIcon,
+	TrashUndoIcon,
+	TrashXMarkIcon,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
 import { BulkRepository } from "@/db/repositories/bulk-repository";
@@ -12,7 +19,6 @@ import {
 	useMoveStore,
 } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
-import { FolderInputIcon, HeartIcon, HeartOffIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function BulkActionBar() {
@@ -149,7 +155,7 @@ export function BulkActionBar() {
 								onClick={() => handleBulkFavorite(true)}
 								className="h-8 gap-2 rounded-full! hover:bg-muted"
 							>
-								<HeartIcon className="h-4 w-4" />
+								<CustomHeartIcon className="h-4 w-4" />
 								<span className="hidden sm:inline">Favorite</span>
 								<span className="sr-only sm:hidden">Favorite Selected</span>
 							</Button>
@@ -159,9 +165,9 @@ export function BulkActionBar() {
 								variant="ghost"
 								size="sm"
 								onClick={() => handleBulkFavorite(false)}
-								className="h-8 gap-2 rounded-full! hover:bg-muted"
+								className="h-8 gap-2 rounded-full! text-red-500 hover:bg-muted hover:text-red-600"
 							>
-								<HeartOffIcon className="h-4 w-4" />
+								<CustomHeartSlashIcon className="h-4 w-4" />
 								<span className="hidden sm:inline">Unfavorite</span>
 								<span className="sr-only sm:hidden">Unfavorite Selected</span>
 							</Button>
@@ -186,7 +192,7 @@ export function BulkActionBar() {
 							}
 							className="h-8 gap-2 rounded-full! hover:bg-muted"
 						>
-							<FolderInputIcon className="h-4 w-4" />
+							<MoveToFolderIcon className="h-4 w-4" />
 							<span className="hidden sm:inline">Move</span>
 							<span className="sr-only sm:hidden">Move Selected</span>
 						</Button>
