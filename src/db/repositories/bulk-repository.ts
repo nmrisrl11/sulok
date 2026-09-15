@@ -133,4 +133,43 @@ export const BulkRepository = {
 			}
 		});
 	},
+
+	async setFavoriteStatus(
+		itemIds: string[],
+		folderIds: string[],
+		isFavorite: boolean,
+	): Promise<void> {
+		const now = Date.now();
+		await db.transaction("rw", db.folders, db.items, async () => {
+			if (folderIds.length > 0) {
+				for (const id of folderIds) {
+					await db.folders.update(id, { isFavorite, updatedAt: now });
+				}
+			}
+
+			if (itemIds.length > 0) {
+				for (const id of itemIds) {
+					await db.items.update(id, { isFavorite, updatedAt: now });
+				}
+			}
+		});
+	},
+
+	async areAllSelectedFavorited(itemIds: string[], folderIds: string[]): Promise<boolean> {
+		if (itemIds.length === 0 && folderIds.length === 0) return false;
+
+		let itemsAllFav = true;
+		if (itemIds.length > 0) {
+			const items = await db.items.where("id").anyOf(itemIds).toArray();
+			itemsAllFav = items.every((i) => i.isFavorite);
+		}
+
+		let foldersAllFav = true;
+		if (folderIds.length > 0) {
+			const folders = await db.folders.where("id").anyOf(folderIds).toArray();
+			foldersAllFav = folders.every((f) => f.isFavorite);
+		}
+
+		return itemsAllFav && foldersAllFav;
+	},
 };

@@ -9,6 +9,8 @@
 
 ### Added
 
+- Added the ability to instantly Favorite or Unfavorite folders and links directly from your list or grid view.
+- Added support for bulk favoriting or unfavoriting multiple items at once using the bulk action bar.
 - Added a Quick Customize side sheet (accessible globally via `Shift + C`) to instantly tweak themes, sounds, and mascot settings without leaving your current view.
 - Added new curated Workspace Themes (Sepia, Sand, Midnight, Mocha) to fully personalize the lighting environment.
 

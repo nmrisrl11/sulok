@@ -1,4 +1,4 @@
-import { NuqsAdapter } from "nuqs/adapters/react-router";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppearanceProvider } from "./components/appearance-provider";

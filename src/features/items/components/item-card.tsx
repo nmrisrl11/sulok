@@ -14,10 +14,7 @@ import type { Item } from "@/db/db";
 import { useCopyToClipboard } from "@/hooks";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore } from "@/stores";
-import { useItemStore } from "@/stores";
-import { useLogoStore } from "@/stores";
-import { useMoveStore } from "@/stores";
+import { useConfirmationStore, useItemStore, useLogoStore, useMoveStore } from "@/stores";
 import {
 	CheckIcon,
 	CopyIcon,
@@ -26,6 +23,7 @@ import {
 	FolderInputIcon,
 	MoreVerticalIcon,
 	RotateCcwIcon,
+	StarIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
@@ -91,6 +89,17 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 
 	const handleOpenLink = () => {
 		window.open(item.url, "_blank", "noopener,noreferrer");
+	};
+
+	const handleToggleFavorite = async () => {
+		try {
+			const { ItemRepository } = await import("@/db/repositories/item-repository");
+			const isFav = await ItemRepository.toggleFavorite(item.id);
+			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
+		} catch (error) {
+			console.error("Failed to toggle favorite", error);
+			notify.error("Failed to update favorite status");
+		}
 	};
 
 	return (
@@ -182,6 +191,23 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 								variant="ghost"
 								size="icon"
 								className="h-8 w-8"
+								onClick={handleToggleFavorite}
+							>
+								<StarIcon
+									className={cn(
+										"h-4 w-4 transition-colors",
+										item.isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground",
+									)}
+								/>
+								<span className="sr-only">
+									{item.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+								</span>
+							</Button>
+
+							<Button
+								variant="ghost"
+								size="icon"
+								className="h-8 w-8"
 								onClick={() => openEditDialog(item)}
 							>
 								<Edit2Icon className="h-4 w-4 text-muted-foreground" />
@@ -243,6 +269,22 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 									>
 										<ExternalLinkIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
 										<span className="text-[13px]">Open Link</span>
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={handleToggleFavorite}
+										className="cursor-pointer py-2.5 md:py-1.5"
+									>
+										<StarIcon
+											className={cn(
+												"mr-2 h-3.5 w-3.5",
+												item.isFavorite
+													? "fill-yellow-400 text-yellow-400"
+													: "text-muted-foreground/80",
+											)}
+										/>
+										<span className="text-[13px]">
+											{item.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+										</span>
 									</DropdownMenuItem>
 									<DropdownMenuItem
 										onClick={() => openEditDialog(item)}

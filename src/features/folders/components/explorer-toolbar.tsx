@@ -10,10 +10,7 @@ import {
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { notify } from "@/lib/notify";
 import { SORT_OPTIONS } from "@/pages/home/hooks/use-home-management";
-import { useConfirmationStore } from "@/stores";
-import { useFolderStore } from "@/stores";
-import { useItemStore } from "@/stores";
-import { useLogoStore } from "@/stores";
+import { useConfirmationStore, useFolderStore, useItemStore, useLogoStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
 	ChevronRightIcon,
@@ -139,7 +136,7 @@ export function ExplorerToolbar({
 								Empty Recycle Bin
 							</Button>
 						)
-					) : (
+					) : view !== "favorites" ? (
 						<>
 							<Button variant="outline" size="sm" onClick={() => openCreateDialog()}>
 								<FolderPlusIcon className="mr-2 size-4" />
@@ -150,7 +147,7 @@ export function ExplorerToolbar({
 								Add Link
 							</Button>
 						</>
-					)}
+					) : null}
 				</div>
 			</div>
 

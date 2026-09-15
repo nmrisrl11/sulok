@@ -11,15 +11,14 @@ import { type Folder, type Item } from "@/db/db";
 import { ItemCard } from "@/features/items/components/item-card";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore } from "@/stores";
-import { useFolderStore } from "@/stores";
-import { useMoveStore } from "@/stores";
+import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
 import {
 	Edit2Icon,
 	FolderIcon,
 	FolderInputIcon,
 	MoreVerticalIcon,
 	RotateCcwIcon,
+	StarIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
@@ -74,6 +73,17 @@ function FolderCard({ folder }: { folder: Folder }) {
 		});
 	};
 
+	const handleToggleFavorite = async () => {
+		try {
+			const { FolderRepository } = await import("@/db/repositories/folder-repository");
+			const isFav = await FolderRepository.toggleFavorite(folder.id);
+			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
+		} catch (error) {
+			console.error("Failed to toggle favorite", error);
+			notify.error("Failed to update favorite status");
+		}
+	};
+
 	return (
 		<div
 			role="button"
@@ -125,15 +135,33 @@ function FolderCard({ folder }: { folder: Folder }) {
 			>
 				<div className="hidden shrink-0 items-center opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 md:flex">
 					{view !== "trash" && (
-						<Button
-							variant="ghost"
-							size="icon"
-							className="h-8 w-8"
-							onClick={() => openEditDialog(folder)}
-						>
-							<Edit2Icon className="h-4 w-4 text-muted-foreground" />
-							<span className="sr-only">Rename</span>
-						</Button>
+						<>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="h-8 w-8"
+								onClick={handleToggleFavorite}
+							>
+								<StarIcon
+									className={cn(
+										"h-4 w-4 transition-colors",
+										folder.isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground",
+									)}
+								/>
+								<span className="sr-only">
+									{folder.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+								</span>
+							</Button>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="h-8 w-8"
+								onClick={() => openEditDialog(folder)}
+							>
+								<Edit2Icon className="h-4 w-4 text-muted-foreground" />
+								<span className="sr-only">Rename</span>
+							</Button>
+						</>
 					)}
 
 					{view === "trash" ? (
@@ -195,6 +223,23 @@ function FolderCard({ folder }: { folder: Folder }) {
 								</>
 							) : (
 								<>
+									<DropdownMenuItem
+										onClick={handleToggleFavorite}
+										className="cursor-pointer py-2.5 md:py-1.5"
+									>
+										<StarIcon
+											className={cn(
+												"mr-2 h-3.5 w-3.5",
+												folder.isFavorite
+													? "fill-yellow-400 text-yellow-400"
+													: "text-muted-foreground/80",
+											)}
+										/>
+										<span className="text-[13px]">
+											{folder.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+										</span>
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={() => openEditDialog(folder)}
 										className="cursor-pointer py-2.5 md:py-1.5"
@@ -298,7 +343,12 @@ export function ExplorerMain({
 						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 					>
 						<FolderIcon className="size-12 fill-primary/20 text-primary" />
-						<span className="w-full truncate text-center text-sm font-medium">{folder.name}</span>
+						<div className="flex w-full items-center justify-center gap-1">
+							{folder.isFavorite && (
+								<StarIcon className="size-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
+							)}
+							<span className="truncate text-center text-sm font-medium">{folder.name}</span>
+						</div>
 					</div>
 				))}
 				{items.map((item) => (
@@ -318,9 +368,14 @@ export function ExplorerMain({
 						<div className="flex size-12 items-center justify-center rounded-full bg-muted/50">
 							<span className="text-xs text-muted-foreground">Link</span>
 						</div>
-						<span className="w-full truncate text-center text-sm font-medium">
-							{item.title || item.url}
-						</span>
+						<div className="flex w-full items-center justify-center gap-1">
+							{item.isFavorite && (
+								<StarIcon className="size-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
+							)}
+							<span className="truncate text-center text-sm font-medium">
+								{item.title || item.url}
+							</span>
+						</div>
 					</div>
 				))}
 			</div>

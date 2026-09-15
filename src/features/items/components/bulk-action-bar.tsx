@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { APP_INFO } from "@/constants/app-info";
+import { BulkRepository } from "@/db/repositories/bulk-repository";
 import { notify } from "@/lib/notify";
-import { useConfirmationStore } from "@/stores";
-import { useFolderStore } from "@/stores";
-import { useItemStore } from "@/stores";
-import { useLogoStore } from "@/stores";
-import { useMoveStore } from "@/stores";
-import { FolderInputIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import {
+	useConfirmationStore,
+	useFolderStore,
+	useItemStore,
+	useLogoStore,
+	useMoveStore,
+} from "@/stores";
+import { useLiveQuery } from "dexie-react-hooks";
+import { FolderInputIcon, RotateCcwIcon, StarIcon, StarOffIcon, Trash2Icon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 
 export function BulkActionBar() {
@@ -14,6 +18,12 @@ export function BulkActionBar() {
 	const { selectedFolderIds, clearSelection: clearFolderSelection } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const [view] = useQueryState("view", parseAsString.withDefault("all"));
+
+	const allFavorited =
+		useLiveQuery(
+			() => BulkRepository.areAllSelectedFavorited(selectedIds, selectedFolderIds),
+			[selectedIds, selectedFolderIds],
+		) ?? false;
 
 	const totalSelected = selectedIds.length + selectedFolderIds.length;
 
@@ -40,6 +50,24 @@ export function BulkActionBar() {
 		} catch (error) {
 			console.error("Failed to move items to Recycle Bin", error);
 			notify.error("Unable to remove items", { id: "bulk-delete-fail" });
+		}
+	};
+
+	const handleBulkFavorite = async (isFavorite: boolean) => {
+		try {
+			const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+			await BulkRepository.setFavoriteStatus(selectedIds, selectedFolderIds, isFavorite);
+			clearSelection();
+			clearFolderSelection();
+			notify.success(
+				isFavorite
+					? `Added ${totalSelected} items to Favorites`
+					: `Removed ${totalSelected} items from Favorites`,
+				{ id: "bulk-favorite" },
+			);
+		} catch (error) {
+			console.error("Failed to update favorite status", error);
+			notify.error("Unable to update favorites", { id: "bulk-favorite-fail" });
 		}
 	};
 
@@ -111,32 +139,56 @@ export function BulkActionBar() {
 						</Button>
 					</>
 				) : (
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={handleSoftDeleteSelected}
-						className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
-					>
-						<Trash2Icon className="h-4 w-4" />
-						<span className="hidden sm:inline">Delete Selected</span>
-						<span className="sr-only sm:hidden">Delete Selected</span>
-					</Button>
-				)}
-				{view !== "trash" && (
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() =>
-							useMoveStore
-								.getState()
-								.openMoveDialog({ itemIds: selectedIds, folderIds: selectedFolderIds })
-						}
-						className="h-8 gap-2 rounded-full! hover:bg-muted"
-					>
-						<FolderInputIcon className="h-4 w-4" />
-						<span className="hidden sm:inline">Move Selected</span>
-						<span className="sr-only sm:hidden">Move Selected</span>
-					</Button>
+					<>
+						{!allFavorited && view !== "favorites" && (
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => handleBulkFavorite(true)}
+								className="h-8 gap-2 rounded-full! hover:bg-muted"
+							>
+								<StarIcon className="h-4 w-4" />
+								<span className="hidden sm:inline">Favorite</span>
+								<span className="sr-only sm:hidden">Favorite Selected</span>
+							</Button>
+						)}
+						{(allFavorited || view === "favorites") && (
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => handleBulkFavorite(false)}
+								className="h-8 gap-2 rounded-full! hover:bg-muted"
+							>
+								<StarOffIcon className="h-4 w-4" />
+								<span className="hidden sm:inline">Unfavorite</span>
+								<span className="sr-only sm:hidden">Unfavorite Selected</span>
+							</Button>
+						)}
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={handleSoftDeleteSelected}
+							className="h-8 gap-2 rounded-full! hover:bg-destructive/10 hover:text-destructive"
+						>
+							<Trash2Icon className="h-4 w-4" />
+							<span className="hidden sm:inline">Delete</span>
+							<span className="sr-only sm:hidden">Delete Selected</span>
+						</Button>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() =>
+								useMoveStore
+									.getState()
+									.openMoveDialog({ itemIds: selectedIds, folderIds: selectedFolderIds })
+							}
+							className="h-8 gap-2 rounded-full! hover:bg-muted"
+						>
+							<FolderInputIcon className="h-4 w-4" />
+							<span className="hidden sm:inline">Move</span>
+							<span className="sr-only sm:hidden">Move Selected</span>
+						</Button>
+					</>
 				)}
 				<Button
 					variant="ghost"
