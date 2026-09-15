@@ -19,9 +19,9 @@ import {
 	Edit2Icon,
 	ExternalLinkIcon,
 	FolderInputIcon,
+	HeartIcon,
 	MoreVerticalIcon,
 	RotateCcwIcon,
-	StarIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -138,10 +138,10 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 								className="h-8 w-8"
 								onClick={handleToggleFavorite}
 							>
-								<StarIcon
+								<HeartIcon
 									className={cn(
 										"h-4 w-4 transition-colors",
-										item.isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground",
+										item.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground",
 									)}
 								/>
 								<span className="sr-only">
@@ -214,16 +214,14 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 										onClick={handleToggleFavorite}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<StarIcon
+										<HeartIcon
 											className={cn(
 												"mr-2 h-3.5 w-3.5",
-												item.isFavorite
-													? "fill-yellow-400 text-yellow-400"
-													: "text-muted-foreground/80",
+												item.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground/80",
 											)}
 										/>
-										<span className="text-[13px]">
-											{item.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+										<span className={cn(item.isFavorite && "text-red-500")}>
+											{item.isFavorite ? "Unfavorite" : "Favorite"}
 										</span>
 									</DropdownMenuItem>
 									<DropdownMenuItem

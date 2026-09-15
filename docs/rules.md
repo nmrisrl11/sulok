@@ -52,7 +52,7 @@
 - Single-column layout on mobile, expandable on desktop.
 - File tree structure for folder/link hierarchy.
 - Drag-and-drop for organization.
-- Sidebar navigation exists for the main file explorer (My Corner), keeping navigation structured.
+- Sidebar navigation exists for the main file explorer (Library), keeping navigation structured.
 
 ### Interaction
 
@@ -65,6 +65,7 @@
 - **Recycle Bin Context**:
   - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.
   - Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.
+
 - **Interactive Sounds**: Use `cuelume` for UI sound effects. Global interactions are handled automatically via `useGlobalSoundInteractions.ts`. To opt a specific element (and its children) out of hover/click sounds, add the `data-no-sound="true"` attribute to the element.
 - When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 
@@ -131,6 +132,7 @@ src/
 - The `@` symbol maps to the `src` directory (configured in both `tsconfig.app.json` and `vite.config.ts`).
 - Example: Use `import { Button } from "@/components/ui/button";` instead of `import { Button } from "../../../components/ui/button";`.
 - Relative imports should only be used for files within the same feature or deeply nested local folders (e.g., `./item-form` from `./item-dialog.tsx`).
+- **Barrel Files:** Core layers like `stores/`, `hooks/`, `schemas/`, and `components/icons/` use `index.ts` barrel files to serve as public APIs and prevent circular dependencies. Consumers must import from the directory root (e.g., `@/stores` or `@/components/icons`) rather than individual files.
 
 ### Component Patterns
 

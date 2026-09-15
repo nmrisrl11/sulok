@@ -11,7 +11,7 @@ import {
 	useMoveStore,
 } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
-import { FolderInputIcon, RotateCcwIcon, StarIcon, StarOffIcon, Trash2Icon } from "lucide-react";
+import { FolderInputIcon, HeartIcon, HeartOffIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function BulkActionBar() {
@@ -148,7 +148,7 @@ export function BulkActionBar() {
 								onClick={() => handleBulkFavorite(true)}
 								className="h-8 gap-2 rounded-full! hover:bg-muted"
 							>
-								<StarIcon className="h-4 w-4" />
+								<HeartIcon className="h-4 w-4" />
 								<span className="hidden sm:inline">Favorite</span>
 								<span className="sr-only sm:hidden">Favorite Selected</span>
 							</Button>
@@ -160,7 +160,7 @@ export function BulkActionBar() {
 								onClick={() => handleBulkFavorite(false)}
 								className="h-8 gap-2 rounded-full! hover:bg-muted"
 							>
-								<StarOffIcon className="h-4 w-4" />
+								<HeartOffIcon className="h-4 w-4" />
 								<span className="hidden sm:inline">Unfavorite</span>
 								<span className="sr-only sm:hidden">Unfavorite Selected</span>
 							</Button>

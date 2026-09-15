@@ -1,8 +1,7 @@
 import { APP_INFO } from "@/constants/app-info";
 import { useIsMobile } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { useLogoStore } from "@/stores";
-import { useSettingsStore } from "@/stores";
+import { useLogoStore, useSettingsStore } from "@/stores";
 import { combine } from "flubber";
 import { animate, AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -184,7 +183,7 @@ export function SulokLogo({ className }: { className?: string }) {
 					initial={{ opacity: 0, x: -10, scale: 0.95 }}
 					animate={{ opacity: 1, x: 0, scale: 1 }}
 					exit={{ opacity: 0, scale: 0.95 }}
-					className="pointer-events-none relative rounded-full bg-foreground px-3 py-1 font-mono text-[11px] tracking-tight whitespace-nowrap text-background shadow-md corner-squircle"
+					className="pointer-events-none relative rounded-full bg-foreground px-3 py-1 font-mono text-[11px] tracking-tight whitespace-nowrap text-background shadow-md corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 				>
 					{/* Small tail for the speech bubble effect pointing to Sulo */}
 					<div className="absolute top-1/2 -left-1 h-2 w-2 -translate-y-1/2 rotate-45 rounded-sm bg-foreground" />
