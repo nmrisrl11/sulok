@@ -18,12 +18,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { type Folder, type Item } from "@/db/db";
 import { ItemCard } from "@/features/items/components/item-card";
+import { ItemGridCard } from "@/features/items/components/item-grid-card";
 import { notify } from "@/lib/notify";
 import { folderIdParser, viewModeParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
 import { FolderIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { FolderGridCard } from "./folder-grid-card";
 function FolderCard({ folder }: { folder: Folder }) {
 	const [_, setFolderId] = useQueryState("folder", folderIdParser);
 	const { openEditDialog } = useFolderStore();
@@ -289,9 +291,6 @@ export function ExplorerMain({
 	isLoading: boolean;
 }) {
 	const [viewMode] = useQueryState("mode", viewModeParser);
-	const [_, setFolderId] = useQueryState("folder", folderIdParser);
-	const [view] = useQueryState("view", viewParser);
-	const { toggleSelection } = useFolderStore();
 
 	if (isLoading) {
 		return (
@@ -319,64 +318,10 @@ export function ExplorerMain({
 		return (
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 				{folders.map((folder) => (
-					<div
-						key={folder.id}
-						role="button"
-						tabIndex={0}
-						onClick={() => {
-							if (view === "trash") {
-								toggleSelection(folder.id);
-							} else {
-								setFolderId(folder.id);
-							}
-						}}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") {
-								e.preventDefault();
-								if (view === "trash") {
-									toggleSelection(folder.id);
-								} else {
-									setFolderId(folder.id);
-								}
-							}
-						}}
-						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl"
-					>
-						<FolderIcon className="size-12 fill-primary/20 text-primary" />
-						<div className="flex w-full items-center justify-center gap-1">
-							{folder.isFavorite && (
-								<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
-							)}
-							<span className="truncate text-center text-sm font-medium">{folder.name}</span>
-						</div>
-					</div>
+					<FolderGridCard key={folder.id} folder={folder} />
 				))}
 				{items.map((item) => (
-					<div
-						key={item.id}
-						role="button"
-						tabIndex={0}
-						onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") {
-								e.preventDefault();
-								window.open(item.url, "_blank", "noopener,noreferrer");
-							}
-						}}
-						className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl"
-					>
-						<div className="flex size-12 items-center justify-center rounded-full bg-muted/50">
-							<span className="text-xs text-muted-foreground">Link</span>
-						</div>
-						<div className="flex w-full items-center justify-center gap-1">
-							{item.isFavorite && (
-								<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
-							)}
-							<span className="truncate text-center text-sm font-medium">
-								{item.title || item.url}
-							</span>
-						</div>
-					</div>
+					<ItemGridCard key={item.id} item={item} />
 				))}
 			</div>
 		);
