@@ -167,7 +167,8 @@ export const BulkRepository = {
 		let foldersAllFav = true;
 		if (folderIds.length > 0) {
 			const folders = await db.folders.where("id").anyOf(folderIds).toArray();
-			foldersAllFav = folders.length === new Set(folderIds).size && folders.every((f) => f.isFavorite);
+			foldersAllFav =
+				folders.length === new Set(folderIds).size && folders.every((f) => f.isFavorite);
 		}
 
 		return itemsAllFav && foldersAllFav;

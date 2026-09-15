@@ -9,7 +9,13 @@ import {
 } from "@/components/ui/select";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { notify } from "@/lib/notify";
-import { SORT_OPTIONS } from "@/pages/home/hooks/use-home-management";
+import {
+	folderIdParser,
+	searchQueryParser,
+	sortOptionParser,
+	viewModeParser,
+	viewParser,
+} from "@/lib/search-params";
 import { useConfirmationStore, useFolderStore, useItemStore, useLogoStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
@@ -22,7 +28,7 @@ import {
 	SearchIcon,
 	TrashIcon,
 } from "lucide-react";
-import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { Fragment } from "react";
 
 export function ExplorerToolbar({
@@ -32,17 +38,11 @@ export function ExplorerToolbar({
 	hasItems?: boolean;
 	hasFolders?: boolean;
 }) {
-	const [folderId, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
-	const [viewMode, setViewMode] = useQueryState(
-		"mode",
-		parseAsStringEnum(["list", "grid", "compact"]).withDefault("list"),
-	);
-	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
-	const [view] = useQueryState("view", parseAsString.withDefault("all"));
-	const [sortOption, setSortOption] = useQueryState(
-		"sort",
-		parseAsStringEnum([...SORT_OPTIONS]).withDefault("date-desc"),
-	);
+	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
+	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [view] = useQueryState("view", viewParser);
+	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 
 	const { openCreateDialog } = useFolderStore();
 	const { openCreateDialog: openItemCreateDialog } = useItemStore();
@@ -167,7 +167,9 @@ export function ExplorerToolbar({
 					<div className="flex shrink-0 items-center gap-1 rounded-md border bg-card p-1">
 						<Select
 							value={sortOption}
-							onValueChange={(val) => setSortOption(val as (typeof SORT_OPTIONS)[number])}
+							onValueChange={(val) =>
+								setSortOption(val as "date-desc" | "date-asc" | "name-asc" | "name-desc")
+							}
 						>
 							<SelectTrigger
 								className="h-7 w-40 rounded-sm border-0 bg-transparent text-xs ring-offset-0 focus:ring-0 focus:ring-offset-0"

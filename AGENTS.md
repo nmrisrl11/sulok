@@ -46,7 +46,7 @@ Sulok is intentionally simple. Do not add AI-powered features (auto-tagging, sum
 
 ### Single Page App
 
-The app is a single-page React application. Uses `react-router-dom` for application routing (`/`, `/about`, etc). Use URL query params (via nuqs) for search/filter state.
+The app is a single-page React application. Uses `react-router-dom` for application routing (`/`, `/about`, etc). Use URL query params (via nuqs) for search/filter state. All `nuqs` parsers MUST be centralized in `src/lib/search-params.ts`. Do not define inline parsers inside components.
 
 ## File Structure
 

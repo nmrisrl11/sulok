@@ -1,14 +1,12 @@
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { FolderIcon, StarIcon, TrashIcon } from "lucide-react";
-import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 
 export function ExplorerSidebar() {
-	const [view, setView] = useQueryState(
-		"view",
-		parseAsStringEnum(["all", "favorites", "trash"]).withDefault("all"),
-	);
-	const [folderId, setFolderId] = useQueryState("folder", parseAsString.withDefault(""));
-	const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
+	const [view, setView] = useQueryState("view", viewParser);
+	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 
 	const handleNavigate = (newView: "all" | "favorites" | "trash") => {
 		setView(newView);
