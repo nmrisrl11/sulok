@@ -44,6 +44,7 @@
 - Use Fraunces for display fonts and Manrope for UI.
 - Components must use shadcn/ui primitives where available.
 - Custom components should follow shadcn/ui conventions (cn utility, cva variants).
+- **Mathematical Consistency**: Ensure perfect nesting aesthetics by subtracting the padding from the outer radius to find the inner radius (e.g. `rounded-md` inner + 6px padding = `rounded-xl` outer).
 - No decorative elements, illustrations, or gradients in the general UI (the Sulo mascot is an exception, used for contextual feedback, empty states, and error boundaries).
 
 ### Layout

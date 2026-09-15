@@ -5,6 +5,8 @@ interface UIState {
 	openQuickCustomize: () => void;
 	closeQuickCustomize: () => void;
 	toggleQuickCustomize: () => void;
+	isQuickLinkExpanded: boolean;
+	setQuickLinkExpanded: (expanded: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -13,4 +15,6 @@ export const useUIStore = create<UIState>((set) => ({
 	closeQuickCustomize: () => set({ isQuickCustomizeOpen: false }),
 	toggleQuickCustomize: () =>
 		set((state) => ({ isQuickCustomizeOpen: !state.isQuickCustomizeOpen })),
+	isQuickLinkExpanded: false,
+	setQuickLinkExpanded: (expanded: boolean) => set({ isQuickLinkExpanded: expanded }),
 }));

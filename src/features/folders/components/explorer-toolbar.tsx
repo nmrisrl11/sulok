@@ -1,3 +1,4 @@
+import { FolderPlusCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,29 +8,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { FolderRepository } from "@/db/repositories/folder-repository";
 import { notify } from "@/lib/notify";
 import {
-	folderIdParser,
 	searchQueryParser,
 	sortOptionParser,
 	viewModeParser,
 	viewParser,
 } from "@/lib/search-params";
-import { useConfirmationStore, useFolderStore, useItemStore, useLogoStore } from "@/stores";
-import { useLiveQuery } from "dexie-react-hooks";
-import {
-	ChevronRightIcon,
-	FolderPlusIcon,
-	HomeIcon,
-	LayoutGridIcon,
-	ListIcon,
-	PlusIcon,
-	SearchIcon,
-	TrashIcon,
-} from "lucide-react";
+import { useConfirmationStore, useFolderStore, useLogoStore, useUIStore } from "@/stores";
+import { LayoutGridIcon, ListIcon, PlusIcon, SearchIcon, TrashIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { Fragment } from "react";
+import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
 
 export function ExplorerToolbar({
 	hasItems = true,
@@ -38,15 +27,14 @@ export function ExplorerToolbar({
 	hasItems?: boolean;
 	hasFolders?: boolean;
 }) {
-	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [view] = useQueryState("view", viewParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 
 	const { openCreateDialog } = useFolderStore();
-	const { openCreateDialog: openItemCreateDialog } = useItemStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
+	const setQuickLinkExpanded = useUIStore((state) => state.setQuickLinkExpanded);
 
 	const handleEmptyTrash = () => {
 		confirm({
@@ -68,103 +56,79 @@ export function ExplorerToolbar({
 		});
 	};
 
-	// Breadcrumb logic
-	// We need to fetch the hierarchy. Since it's local, we can fetch all folders and build the path.
-	const allFolders = useLiveQuery(() => FolderRepository.getAll()) || [];
-
-	let breadcrumbs: { id: string; name: string }[] = [];
-	if (folderId) {
-		let currentFolder = allFolders.find((f) => f.id === folderId);
-		while (currentFolder) {
-			breadcrumbs.unshift({ id: currentFolder.id, name: currentFolder.name });
-			currentFolder = allFolders.find((f) => f.id === currentFolder!.parentId);
-		}
-	}
-
 	return (
 		<div className="mb-6 flex flex-col gap-4">
 			{/* Top row: Navigation & Actions */}
-			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-				<div className="no-scrollbar flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
-					<Button
-						variant="ghost"
-						size="sm"
-						className="px-2 text-muted-foreground hover:text-foreground"
-						onClick={() => setFolderId("")}
-					>
-						<HomeIcon className="size-4" />
-					</Button>
-
-					{view === "favorites" && !folderId && (
-						<>
-							<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/50" />
-							<span className="text-sm font-medium">Favorites</span>
-						</>
-					)}
-					{view === "trash" && !folderId && (
-						<>
-							<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/50" />
-							<span className="text-sm font-medium">Recycle Bin</span>
-						</>
-					)}
-
-					{breadcrumbs.map((crumb) => (
-						<Fragment key={crumb.id}>
-							<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/50" />
-							<Button
-								variant="ghost"
-								size="sm"
-								className="px-2"
-								onClick={() => setFolderId(crumb.id)}
-							>
-								{crumb.name}
-							</Button>
-						</Fragment>
-					))}
+			<div className="flex min-h-10 flex-row items-center justify-between gap-2 px-1">
+				<div className="flex min-w-0 flex-1 items-center overflow-x-auto">
+					<ExplorerBreadcrumb />
 				</div>
 
-				<div className="flex shrink-0 items-center gap-2">
+				<div className="flex shrink-0 items-center">
 					{view === "trash" ? (
 						(hasItems || hasFolders) && (
 							<Button
-								variant="outline"
+								variant="ghost"
 								size="sm"
 								onClick={handleEmptyTrash}
-								className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+								className="h-8 rounded-md px-2 text-sm font-medium text-destructive/80 hover:bg-destructive/10 hover:text-destructive supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
-								<TrashIcon className="mr-2 size-4" />
-								Empty Recycle Bin
+								<TrashIcon className="mr-0 size-4 sm:mr-2" />
+								<span className="hidden sm:inline">Empty Recycle Bin</span>
 							</Button>
 						)
 					) : view !== "favorites" ? (
-						<>
-							<Button variant="outline" size="sm" onClick={() => openCreateDialog()}>
-								<FolderPlusIcon className="mr-2 size-4" />
-								New Folder
+						<div className="flex items-center gap-1">
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => openCreateDialog()}
+								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
+							>
+								<FolderPlusCircleIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />
+								<span className="hidden sm:inline">New Folder</span>
 							</Button>
-							<Button size="sm" onClick={() => openItemCreateDialog()}>
-								<PlusIcon className="mr-2 size-4" />
-								Add Link
+							<div className="h-4 w-px bg-border/50" />
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => {
+									setQuickLinkExpanded(true);
+									setTimeout(() => {
+										document.getElementById("quick-link-input")?.focus();
+									}, 100);
+								}}
+								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
+							>
+								<PlusIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />
+								<span className="hidden sm:inline">Quick Link</span>
 							</Button>
-						</>
+						</div>
 					) : null}
 				</div>
 			</div>
 
 			{/* Bottom row: Search & View modes */}
 			{view !== "trash" && (
-				<div className="flex items-center justify-between gap-4">
-					<div className="relative w-full max-w-sm">
-						<SearchIcon className="absolute top-2.5 left-2.5 size-4 text-muted-foreground" />
+				<div className="flex flex-col gap-1.5 rounded-lg border border-border/40 bg-muted/30 p-1.5 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
+					{/* Search */}
+					<div className="relative flex w-full flex-1 items-center px-1 sm:p-0">
+						<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2" />
 						<Input
+							id="search-explorer"
 							type="search"
 							placeholder="Search in this view..."
-							className="bg-card pl-9"
+							className="h-8 rounded-md border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-md supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 						/>
 					</div>
-					<div className="flex shrink-0 items-center gap-1 rounded-md border bg-card p-1">
+
+					{/* Mobile Separator */}
+					<div className="mx-2 h-px bg-border/50 sm:hidden" />
+
+					{/* View Modes */}
+					<div className="flex w-full items-center justify-between gap-2 px-1 sm:w-auto sm:justify-end sm:gap-1 sm:p-0">
 						<Select
 							value={sortOption}
 							onValueChange={(val) =>
@@ -172,7 +136,7 @@ export function ExplorerToolbar({
 							}
 						>
 							<SelectTrigger
-								className="h-7 w-40 rounded-sm border-0 bg-transparent text-xs ring-offset-0 focus:ring-0 focus:ring-offset-0"
+								className="h-8 flex-1 rounded-md border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-md supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none"
 								aria-label="Sort items"
 							>
 								<SelectValue placeholder="Sort by" />
@@ -184,23 +148,25 @@ export function ExplorerToolbar({
 								<SelectItem value="name-desc">Name (Z-A)</SelectItem>
 							</SelectContent>
 						</Select>
-						<div className="mx-1 h-4 w-px bg-border" />
-						<Button
-							variant={viewMode === "list" ? "secondary" : "ghost"}
-							size="icon"
-							className="size-7"
-							onClick={() => setViewMode("list")}
-						>
-							<ListIcon className="size-4" />
-						</Button>
-						<Button
-							variant={viewMode === "grid" ? "secondary" : "ghost"}
-							size="icon"
-							className="size-7"
-							onClick={() => setViewMode("grid")}
-						>
-							<LayoutGridIcon className="size-4" />
-						</Button>
+						<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
+						<div className="flex shrink-0 items-center gap-1">
+							<Button
+								variant="ghost"
+								size="sm"
+								className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "bg-background shadow-sm hover:bg-background" : "hover:bg-background/50"}`}
+								onClick={() => setViewMode("list")}
+							>
+								<ListIcon className="size-4" />
+							</Button>
+							<Button
+								variant="ghost"
+								size="sm"
+								className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "bg-background shadow-sm hover:bg-background" : "hover:bg-background/50"}`}
+								onClick={() => setViewMode("grid")}
+							>
+								<LayoutGridIcon className="size-4" />
+							</Button>
+						</div>
 					</div>
 				</div>
 			)}

@@ -4,16 +4,15 @@ import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { itemSchema } from "@/schemas";
-import { useItemStore } from "@/stores";
 import type { SuloExpression } from "@/stores";
-import { useSettingsStore } from "@/stores";
+import { useItemStore, useSettingsStore, useUIStore } from "@/stores";
 import { CornerDownLeftIcon } from "lucide-react";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
-	const [isExpanded, setIsExpanded] = useState(false);
+	const { isQuickLinkExpanded: isExpanded, setQuickLinkExpanded: setIsExpanded } = useUIStore();
 	const [error, setError] = useState<string | null>(null);
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
 	const defaultExpression = useSettingsStore(
@@ -65,7 +64,7 @@ export function QuickLinkActionBar() {
 			document.removeEventListener("keydown", handleKeyDown);
 			document.removeEventListener("open-quick-link", handleOpenQuickLink);
 		};
-	}, [error, urlSchema]);
+	}, [error, urlSchema, setIsExpanded]);
 
 	const getExpression = (): SuloExpression => {
 		if (error) return "confused";
