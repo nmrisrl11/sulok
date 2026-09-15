@@ -17,7 +17,7 @@
 ### Changed
 
 - Redesigned the "Move to..." dialog to use an intuitive drill-down navigation system with interactive breadcrumb trails, making it much easier to move items deep into nested folders.
-- Centralized the breadcrumb navigation logic and components to ensure consistent rendering, truncation behavior, and styling across the main explorer and dialogs.
+- Improved breadcrumb navigation across the main explorer and dialogs for a clearer, more consistent experience when navigating through deep folder structures.
 
 - Implemented barrel files (`index.ts`) for the `stores`, `hooks`, and `schemas` directories to centralize public APIs, clean up imports project-wide, and prevent circular dependencies.
 - Refactored multiple actions (deleting, restoring, moving) to use a unified and more reliable background process, ensuring items and folders are handled seamlessly together.

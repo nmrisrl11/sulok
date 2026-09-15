@@ -27,7 +27,6 @@ export function ExplorerBreadcrumb() {
 	if (view === "favorites") {
 		rootLabel = "Favorites";
 		RootIcon = FollowFolderIcon;
-		hideDropdown = true;
 	} else if (view === "trash") {
 		rootLabel = "Recycle Bin";
 		RootIcon = RecycleBinIcon;

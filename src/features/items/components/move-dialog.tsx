@@ -7,6 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { FolderBreadcrumbs } from "@/features/folders/components/folder-breadcrumbs";
 import { notify } from "@/lib/notify";
@@ -20,18 +21,20 @@ export function MoveDialog() {
 	const [currentParentId, setCurrentParentId] = useState<string | null>(null);
 	const [isMoving, setIsMoving] = useState(false);
 
-	const allFolders = useLiveQuery(() => FolderRepository.getAll()) || [];
+	const allFolders = useLiveQuery(() => FolderRepository.getAll());
+	const isLoaded = allFolders !== undefined;
+	const resolvedFolders = allFolders || [];
 
 	// Filter out moving folders and their descendants to prevent circular moves
-	const filteredFolders = allFolders.filter((f) => {
+	const filteredFolders = resolvedFolders.filter((f) => {
 		// If it's one of the folders being moved, hide it
 		if (movingFolderIds.includes(f.id)) return false;
 
 		// If any ancestor is being moved, hide it
-		let current = allFolders.find((p) => p.id === f.parentId);
+		let current = resolvedFolders.find((p) => p.id === f.parentId);
 		while (current) {
 			if (movingFolderIds.includes(current.id)) return false;
-			current = allFolders.find((p) => p.id === current?.parentId);
+			current = resolvedFolders.find((p) => p.id === current?.parentId);
 		}
 
 		return true;
@@ -85,7 +88,7 @@ export function MoveDialog() {
 					<div className="bg-muted/30 px-3 py-2.5">
 						<FolderBreadcrumbs
 							currentFolderId={currentParentId}
-							allFolders={allFolders}
+							allFolders={resolvedFolders}
 							onNavigate={setCurrentParentId}
 							rootClassName="text-sm font-medium"
 							leafClassName="max-w-30 truncate text-sm sm:max-w-40 md:max-w-none"
@@ -95,7 +98,17 @@ export function MoveDialog() {
 
 					{/* Folder List */}
 					<div className="custom-scrollbar flex max-h-[45vh] min-h-64 flex-1 flex-col overflow-y-auto p-1">
-						{currentChildren.length === 0 ? (
+						{!isLoaded ? (
+							<div className="flex flex-col gap-1 p-1">
+								{Array.from({ length: 4 }).map((_, i) => (
+									<div key={i} className="flex items-center gap-3 px-3 py-2.5">
+										<Skeleton className="size-5 rounded-md" />
+										<Skeleton className="h-4 flex-1" />
+										<Skeleton className="size-4 rounded-sm" />
+									</div>
+								))}
+							</div>
+						) : currentChildren.length === 0 ? (
 							<div className="flex h-full flex-col items-center justify-center py-12 text-center">
 								<FolderIcon className="mb-3 size-12 text-muted/30" />
 								<p className="text-sm font-medium text-foreground">No folders here</p>

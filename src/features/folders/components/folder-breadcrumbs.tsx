@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
 import { cn } from "@/lib/utils";
-import { Fragment } from "react";
+import { Fragment, type ElementType } from "react";
 
 interface FolderBreadcrumbsProps {
 	currentFolderId: string | null;
@@ -24,7 +24,7 @@ interface FolderBreadcrumbsProps {
 	onNavigate: (folderId: string | null) => void;
 
 	rootLabel?: string;
-	rootIcon?: React.ElementType;
+	rootIcon?: ElementType;
 	rootClassName?: string;
 
 	itemsToDisplay?: number;
@@ -91,7 +91,7 @@ export function FolderBreadcrumbs({
 								<BreadcrumbSeparator />
 								<BreadcrumbItem>
 									<DropdownMenu>
-										<DropdownMenuTrigger className="flex items-center gap-1 focus:outline-none">
+										<DropdownMenuTrigger className="flex items-center gap-1 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
 											<BreadcrumbEllipsis className="size-4" />
 											<span className="sr-only">Toggle menu</span>
 										</DropdownMenuTrigger>
