@@ -46,10 +46,23 @@ export function ExplorerBreadcrumb() {
 			<BreadcrumbList className="flex-nowrap sm:flex-wrap">
 				{view === "favorites" ? (
 					<BreadcrumbItem>
-						<BreadcrumbPage className="flex items-center gap-1.5 text-base font-semibold">
-							<FollowFolderIcon className="size-4" />
-							Favorites
-						</BreadcrumbPage>
+						{!folderId ? (
+							<BreadcrumbPage className="flex items-center gap-1.5 text-base font-semibold">
+								<FollowFolderIcon className="size-4" />
+								Favorites
+							</BreadcrumbPage>
+						) : (
+							<BreadcrumbLink
+								asChild
+								className="cursor-pointer hover:text-foreground"
+								onClick={() => setFolderId(null)}
+							>
+								<button type="button" className="flex items-center gap-1.5">
+									<FollowFolderIcon className="size-4" />
+									Favorites
+								</button>
+							</BreadcrumbLink>
+						)}
 					</BreadcrumbItem>
 				) : view === "trash" ? (
 					<BreadcrumbItem>
@@ -74,10 +87,10 @@ export function ExplorerBreadcrumb() {
 									setView(null);
 								}}
 							>
-								<span className="flex items-center gap-1.5">
+								<button type="button" className="flex items-center gap-1.5">
 									<FolderLinkIcon className="size-4" />
 									Library
-								</span>
+								</button>
 							</BreadcrumbLink>
 						)}
 					</BreadcrumbItem>
@@ -108,26 +121,27 @@ export function ExplorerBreadcrumb() {
 					</>
 				)}
 
-				{visibleBreadcrumbs.map((crumb, index) => (
-					<Fragment key={crumb.id}>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							{index === visibleBreadcrumbs.length - 1 ? (
-								<BreadcrumbPage className="max-w-37.5 truncate sm:max-w-50 md:max-w-none">
-									{crumb.name}
-								</BreadcrumbPage>
-							) : (
-								<BreadcrumbLink
-									asChild
-									className="max-w-25 cursor-pointer truncate hover:text-foreground sm:max-w-none"
-									onClick={() => setFolderId(crumb.id)}
-								>
-									<span>{crumb.name}</span>
-								</BreadcrumbLink>
-							)}
-						</BreadcrumbItem>
-					</Fragment>
-				))}
+				{view !== "trash" &&
+					visibleBreadcrumbs.map((crumb, index) => (
+						<Fragment key={crumb.id}>
+							<BreadcrumbSeparator />
+							<BreadcrumbItem>
+								{index === visibleBreadcrumbs.length - 1 ? (
+									<BreadcrumbPage className="max-w-37.5 truncate sm:max-w-50 md:max-w-none">
+										{crumb.name}
+									</BreadcrumbPage>
+								) : (
+									<BreadcrumbLink
+										asChild
+										className="max-w-25 cursor-pointer truncate hover:text-foreground sm:max-w-none"
+										onClick={() => setFolderId(crumb.id)}
+									>
+										<button type="button">{crumb.name}</button>
+									</BreadcrumbLink>
+								)}
+							</BreadcrumbItem>
+						</Fragment>
+					))}
 			</BreadcrumbList>
 		</Breadcrumb>
 	);
