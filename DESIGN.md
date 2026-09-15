@@ -165,6 +165,14 @@ Minimal shadows. Prefer border/background differentiation.
 - Filter dropdowns (tags, type) inline or in a popover.
 - Sort toggle (name, date, manual).
 
+### Explorer Toolbar
+
+- Implements a "Title & Toolbar" pattern.
+- The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space.
+- Utility rows (Search & View modes) are placed in a floating pill container (`bg-muted/30 backdrop-blur-md`).
+- **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs (Search, Select) use a 6px radius (`rounded-md`) to perfectly nest inside the outer pill's 12px radius (`rounded-xl`).
+- **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
+
 ### Navigation Tabs
 
 - Use scrollable horizontal tabs for mobile viewports, wrapping gracefully or sticking to vertical layouts on desktop if appropriate.

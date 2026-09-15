@@ -23,6 +23,8 @@
 - Redesigned the Workspace Theme selection UI in the Appearance settings to be more compact and user-friendly across all devices.
 - Improved accessibility for the Accent Color picker by providing explicit labels for screen readers.
 - Refactored all internal UI components to strictly use named React imports, ensuring cleaner code and full compatibility with modern TypeScript build tools.
+- Redesigned the Explorer Toolbar for a cleaner aesthetic, separating the breadcrumb header from the search/sort utility pill.
+- Enhanced breadcrumb context to treat Favorites and Recycle Bin as independent top-level views rather than sub-folders of the Library, complete with explicit labels and corresponding icons.
 
 ### Fixed
 
