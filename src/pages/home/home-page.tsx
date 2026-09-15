@@ -4,8 +4,7 @@ import { ExplorerMain } from "@/features/folders/components/explorer-main";
 import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar";
 import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
 import { cn } from "@/lib/utils";
-import { useFolderStore } from "@/stores";
-import { useItemStore } from "@/stores";
+import { useFolderStore, useItemStore } from "@/stores";
 import { memo } from "react";
 import { useHomeData } from "./hooks/use-home-management";
 
@@ -85,8 +84,8 @@ export function HomePage({ className }: { className?: string }) {
 		<main className={cn("flex flex-col gap-10", className)}>
 			<div className="flex flex-col gap-4">
 				<MemoizedHomeHeaderArea />
-				<div className="flex flex-col items-start gap-8 md:flex-row">
-					<div className="w-full shrink-0 rounded-lg border bg-card/30 p-2 shadow-sm md:w-56">
+				<div className="flex flex-col items-start gap-6 md:flex-row md:gap-8">
+					<div className="sticky top-2 z-20 w-full shrink-0 rounded-xl border bg-card/80 p-1.5 shadow-sm backdrop-blur-md transition-all md:static md:z-auto md:w-56 md:rounded-lg md:bg-card/30 md:p-2 md:backdrop-blur-none">
 						<ExplorerSidebar />
 					</div>
 					<div className="flex w-full min-w-0 flex-1 flex-col">
