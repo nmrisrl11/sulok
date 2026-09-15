@@ -1,11 +1,19 @@
-import { TrashClockIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
+import {
+	CustomHeartFilledIcon,
+	CustomHeartIcon,
+	CustomHeartSlashIcon,
+	FolderEditIcon,
+	MoveToFolderIcon,
+	TrashClockIcon,
+	TrashUndoIcon,
+	TrashXMarkIcon,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type Folder, type Item } from "@/db/db";
@@ -14,7 +22,7 @@ import { notify } from "@/lib/notify";
 import { folderIdParser, viewModeParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
-import { Edit2Icon, FolderIcon, FolderInputIcon, HeartIcon, MoreVerticalIcon } from "lucide-react";
+import { FolderIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 function FolderCard({ folder }: { folder: Folder }) {
 	const [_, setFolderId] = useQueryState("folder", folderIdParser);
@@ -126,64 +134,73 @@ function FolderCard({ folder }: { folder: Folder }) {
 				className="flex shrink-0 items-center gap-1 sm:gap-2"
 				onClick={(e) => e.stopPropagation()}
 			>
-				<div className="hidden shrink-0 items-center opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 md:flex">
-					{view !== "trash" && (
-						<>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8"
-								onClick={handleToggleFavorite}
-							>
-								<HeartIcon
-									className={cn(
-										"h-4 w-4 transition-colors",
-										folder.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground",
-									)}
-								/>
-								<span className="sr-only">
-									{folder.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-								</span>
-							</Button>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8"
-								onClick={() => openEditDialog(folder)}
-							>
-								<Edit2Icon className="h-4 w-4 text-muted-foreground" />
-								<span className="sr-only">Rename</span>
-							</Button>
-						</>
-					)}
+				<div className="hidden shrink-0 items-center opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 md:block">
+					<div className="flex h-9 items-center rounded-lg border bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+						{view !== "trash" ? (
+							<>
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										className={cn(
+											"h-8 w-8 transition-colors",
+											folder.isFavorite
+												? "text-red-500 hover:bg-red-500/10 hover:text-red-600"
+												: "hover:text-foreground",
+										)}
+										onClick={handleToggleFavorite}
+									>
+										{folder.isFavorite ? (
+											<CustomHeartFilledIcon className="h-4 w-4" />
+										) : (
+											<CustomHeartIcon className="h-4 w-4" />
+										)}
+										<span className="sr-only">{folder.isFavorite ? "Unfavorite" : "Favorite"}</span>
+									</Button>
+								</div>
 
-					{view === "trash" ? (
-						<>
-							<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
-								<TrashUndoIcon className="h-4 w-4" />
-								<span className="sr-only">Restore</span>
-							</Button>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8 hover:text-destructive"
-								onClick={handleHardDelete}
-							>
-								<TrashXMarkIcon className="h-4 w-4" />
-								<span className="sr-only">Delete Forever</span>
-							</Button>
-						</>
-					) : (
-						<Button
-							variant="ghost"
-							size="icon"
-							className="h-8 w-8 hover:text-destructive"
-							onClick={handleSoftDelete}
-						>
-							<TrashClockIcon className="h-4 w-4" />
-							<span className="sr-only">Delete</span>
-						</Button>
-					)}
+								<div className="mx-0.5 h-4 w-px bg-border/50" />
+
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										className="h-8 w-8 hover:text-foreground"
+										onClick={() => openEditDialog(folder)}
+									>
+										<FolderEditIcon className="h-4 w-4" />
+										<span className="sr-only">Rename</span>
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										className="h-8 w-8 hover:text-destructive"
+										onClick={handleSoftDelete}
+									>
+										<TrashClockIcon className="h-4 w-4" />
+										<span className="sr-only">Delete</span>
+									</Button>
+								</div>
+							</>
+						) : (
+							<div className="flex items-center">
+								<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
+									<TrashUndoIcon className="h-4 w-4" />
+									<span className="sr-only">Restore</span>
+								</Button>
+								<div className="mx-0.5 h-4 w-px bg-border/50" />
+								<Button
+									variant="ghost"
+									size="icon"
+									className="h-8 w-8 hover:text-destructive"
+									onClick={handleHardDelete}
+								>
+									<TrashXMarkIcon className="h-4 w-4" />
+									<span className="sr-only">Delete Forever</span>
+								</Button>
+							</div>
+						)}
+					</div>
 				</div>
 
 				<div className="flex md:hidden">
@@ -201,16 +218,15 @@ function FolderCard({ folder }: { folder: Folder }) {
 										onClick={handleRestore}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<TrashUndoIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashUndoIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Restore</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={handleHardDelete}
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashXMarkIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
 									</DropdownMenuItem>
 								</>
@@ -220,43 +236,37 @@ function FolderCard({ folder }: { folder: Folder }) {
 										onClick={handleToggleFavorite}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<HeartIcon
-											className={cn(
-												"mr-2 h-3.5 w-3.5",
-												folder.isFavorite
-													? "fill-red-500 text-red-500"
-													: "text-muted-foreground/80",
-											)}
-										/>
-										<span className={cn(folder.isFavorite && "text-red-500")}>
+										{folder.isFavorite ? (
+											<CustomHeartSlashIcon className="mr-2 h-3.5 w-3.5 text-red-500" />
+										) : (
+											<CustomHeartIcon className="mr-2 h-3.5 w-3.5" />
+										)}
+										<span className={cn(folder.isFavorite && "text-red-500", "text-[13px]")}>
 											{folder.isFavorite ? "Unfavorite" : "Favorite"}
 										</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={() => openEditDialog(folder)}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<Edit2Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<FolderEditIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Rename</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={() =>
 											useMoveStore.getState().openMoveDialog({ folderIds: [folder.id] })
 										}
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<FolderInputIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+										<MoveToFolderIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Move to...</span>
 									</DropdownMenuItem>
-									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										onClick={handleSoftDelete}
 										variant="destructive"
 										className="cursor-pointer py-2.5 md:py-1.5"
 									>
-										<TrashClockIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+										<TrashClockIcon className="mr-2 h-3.5 w-3.5" />
 										<span className="text-[13px]">Delete</span>
 									</DropdownMenuItem>
 								</>
@@ -335,7 +345,7 @@ export function ExplorerMain({
 						<FolderIcon className="size-12 fill-primary/20 text-primary" />
 						<div className="flex w-full items-center justify-center gap-1">
 							{folder.isFavorite && (
-								<HeartIcon className="size-3.5 shrink-0 fill-red-500 text-red-500" />
+								<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
 							)}
 							<span className="truncate text-center text-sm font-medium">{folder.name}</span>
 						</div>
@@ -360,7 +370,7 @@ export function ExplorerMain({
 						</div>
 						<div className="flex w-full items-center justify-center gap-1">
 							{item.isFavorite && (
-								<HeartIcon className="size-3.5 shrink-0 fill-red-500 text-red-500" />
+								<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
 							)}
 							<span className="truncate text-center text-sm font-medium">
 								{item.title || item.url}

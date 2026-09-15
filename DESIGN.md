@@ -137,7 +137,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Compact padding (12px).
 - Favicon (24×24 rounded box) on the left.
 - Title + URL stacked on the right.
-- Action buttons (open, copy, edit, delete) visible on hover for desktop, or accessible via a 'More' dropdown menu on mobile. Do not use tooltips for these self-explanatory action icons.
+- Desktop hover action buttons are grouped inside a floating pill container (`bg-muted/40` frosted background, squircle corners, logical vertical dividers) to form a unified tool palette. Mobile actions remain accessible via a 'More' dropdown menu without horizontal separators. Do not use tooltips for these self-explanatory action icons.
 - Primary content (favicon and text) acts as a clickable link.
 
 ### Folder Tree
@@ -209,7 +209,10 @@ Minimal shadows. Prefer border/background differentiation.
 ### Icons
 
 - Use `lucide-react` for standard utility icons.
-- **Trash/Deletion Icons:** Always use the bespoke SVG icons for delete actions to provide clear visual distinction: `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete/empty), and `TrashUndoIcon` (restore).
+- **Action Icons:** Always use the bespoke custom icons from `@/components/icons` for item and folder actions to ensure brand consistency:
+  - `CopyIcon`, `ExternalLinkIcon`, `FileEditIcon`, `FolderEditIcon`, `MoveToFolderIcon`.
+  - `CustomHeartIcon` (outline), `CustomHeartFilledIcon` (solid), `CustomHeartSlashIcon` (unfavorite).
+  - `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete/empty), and `TrashUndoIcon` (restore).
 
 ---
 
