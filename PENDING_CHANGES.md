@@ -28,9 +28,11 @@
 - Redesigned the hover action menus on desktop to group all item and folder controls inside a sleek, frosted pill container for a premium feel.
 - Cleaned up the mobile dropdown menus by removing unnecessary horizontal separators, reducing visual noise.
 - Replaced generic action icons (Trash, Edit, Copy, External Link, Favorites) across the application with bespoke SVG designs to provide a more unified, branded visual language.
+- Streamlined the application by removing unused interface components and unused animation libraries, reducing the bundle size and improving overall app performance.
 
 ### Fixed
 
+- Fixed a visual glitch where the Quick Link action bar would rapidly stretch across the entire screen when repeatedly opened and closed.
 - Fixed a "Flash of Unstyled Content" (FOUC) issue where the screen would briefly flash white before applying custom dark themes like Mocha or Midnight on initial load.
 - Fixed a visual bug where the outer selection ring of the Accent Color picker was being clipped at the edges of the settings accordion.
 - Fixed an issue where the `Shift + C` Quick Customize shortcut would accidentally trigger while typing in rich text editors or content-editable areas.

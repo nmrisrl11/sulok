@@ -123,9 +123,9 @@ export function QuickLinkActionBar() {
 				}
 			}}
 			className={cn(
-				"mx-auto flex animate-in items-center gap-3 border border-border bg-card/80 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-300 slide-in-from-bottom-10 fade-in",
+				"mx-auto flex max-w-md animate-in items-center gap-3 border border-border bg-card/80 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-300 slide-in-from-bottom-10 fade-in",
 				isExpanded
-					? "w-full max-w-md rounded-full p-1.5 pr-2 corner-squircle focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background supports-[corner-shape:squircle]:rounded-2xl"
+					? "w-full rounded-full p-1.5 pr-2 corner-squircle focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background supports-[corner-shape:squircle]:rounded-2xl"
 					: "w-13 cursor-pointer rounded-full p-2 corner-squircle hover:scale-105 hover:bg-card/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
 			)}
 		>
