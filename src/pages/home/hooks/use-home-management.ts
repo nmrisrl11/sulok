@@ -55,8 +55,10 @@ export function useHomeData() {
 							? folderId || undefined
 							: undefined,
 				q: searchQuery,
+				sort: dbSort,
+				dir: dbDir,
 			}),
-		[view, folderId, searchQuery],
+		[view, folderId, searchQuery, dbSort, dbDir],
 	);
 
 	const totalItemsData = useLiveQuery(() => ItemRepository.count(), []);

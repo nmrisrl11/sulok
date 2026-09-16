@@ -9,14 +9,20 @@ import { APP_INFO } from "@/constants/app-info";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
 import type { ItemFormValues } from "@/schemas";
-import { useItemStore } from "@/stores";
-import { useLogoStore } from "@/stores";
+import { useItemStore, useLogoStore } from "@/stores";
 import { useState } from "react";
 import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
-	const { isDialogOpen, setDialogOpen, editingItem, initialUrl, addItem, updateItem } =
-		useItemStore();
+	const {
+		isDialogOpen,
+		setDialogOpen,
+		editingItem,
+		initialUrl,
+		initialFolderId,
+		addItem,
+		updateItem,
+	} = useItemStore();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -24,6 +30,7 @@ export function ItemDialog() {
 	// to prevent the form from resetting or flashing while animating out.
 	const [activeItem, setActiveItem] = useState(editingItem);
 	const [activeUrl, setActiveUrl] = useState(initialUrl);
+	const [activeFolderId, setActiveFolderId] = useState(initialFolderId);
 
 	// Derive state during render to avoid cascading renders from useEffect
 	if (isDialogOpen && activeItem !== editingItem) {
@@ -31,6 +38,9 @@ export function ItemDialog() {
 	}
 	if (isDialogOpen && activeUrl !== initialUrl) {
 		setActiveUrl(initialUrl);
+	}
+	if (isDialogOpen && activeFolderId !== initialFolderId) {
+		setActiveFolderId(initialFolderId);
 	}
 
 	const handleSubmit = async (data: ItemFormValues) => {
@@ -79,7 +89,12 @@ export function ItemDialog() {
 				</DialogHeader>
 
 				<ItemForm
-					defaultValues={activeItem || (activeUrl ? { url: activeUrl } : undefined)}
+					defaultValues={
+						activeItem || {
+							url: activeUrl || "",
+							folderId: activeFolderId || "unorganized",
+						}
+					}
 					isEditing={!!activeItem}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialogOpen(false)}

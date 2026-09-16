@@ -44,13 +44,17 @@ export function FolderEmptyState() {
 			<h3 className="mb-2 text-lg font-semibold tracking-tight text-foreground">{title}</h3>
 			<p className="mx-auto max-w-sm text-sm text-muted-foreground">{description}</p>
 
-			<Button
-				onClick={() => document.dispatchEvent(new CustomEvent("open-quick-link"))}
-				className="mt-6 gap-2"
-			>
-				<PlusIcon className="size-4" />
-				{ctaText}
-			</Button>
+			{!isTrash && !isFavorites && (
+				<Button
+					onClick={() =>
+						document.dispatchEvent(new CustomEvent("open-quick-link", { detail: { folderId } }))
+					}
+					className="mt-6 gap-2"
+				>
+					<PlusIcon className="size-4" />
+					{ctaText}
+				</Button>
+			)}
 		</div>
 	);
 }

@@ -10,10 +10,16 @@ export const FolderRepository = {
 	},
 
 	async query(
-		params: { view?: "all" | "favorites" | "trash"; parentId?: string | null; q?: string } = {},
+		params: {
+			view?: "all" | "favorites" | "trash";
+			parentId?: string | null;
+			q?: string;
+			sort?: string;
+			dir?: string;
+		} = {},
 	): Promise<Folder[]> {
-		const { view = "all", parentId, q = "" } = params;
-		let results = await db.folders.orderBy("order").toArray();
+		const { view = "all", parentId, q = "", sort = "createdAt", dir = "desc" } = params;
+		let results = await db.folders.toArray();
 
 		if (view === "trash") {
 			const deletedFolders = results.filter((f) => f.deletedAt);
@@ -24,7 +30,7 @@ export const FolderRepository = {
 		} else {
 			results = results.filter((f) => !f.deletedAt);
 
-			if (parentId !== undefined) {
+			if (parentId !== undefined && !q.trim()) {
 				results = results.filter((f) => f.parentId === parentId);
 			}
 		}
@@ -33,6 +39,27 @@ export const FolderRepository = {
 			const query = q.toLowerCase().trim();
 			results = results.filter((f) => f.name.toLowerCase().includes(query));
 		}
+
+		// Apply sorting
+		results.sort((a, b) => {
+			// Map "title" from Item sort to "name" for Folders
+			const sortField = sort === "title" ? "name" : (sort as keyof Folder);
+			let valA = a[sortField];
+			let valB = b[sortField];
+
+			if (valA === undefined || valA === null) valA = "";
+			if (valB === undefined || valB === null) valB = "";
+
+			if (typeof valA === "string" && typeof valB === "string") {
+				return dir === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+			}
+
+			if (typeof valA === "number" && typeof valB === "number") {
+				return dir === "asc" ? valA - valB : valB - valA;
+			}
+
+			return 0;
+		});
 
 		return results;
 	},
