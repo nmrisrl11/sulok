@@ -22,7 +22,6 @@
 ### Changed
 
 - Enhanced the Undo notification with a smooth morphing animation and contextual feedback (e.g., "Folder restored" or "Link restored") when restoring items from the Recycle Bin.
-- Abstracted heavy business logic (like deleting, favoriting, and moving items) from presentation components into dedicated, reusable hooks (`useFolderActions`, `useBulkActions`) for a much cleaner architecture.
 
 - The search bar now finds everything across your entire corner of the web, not just the folder you're currently viewing. Search is also heavily optimized behind the scenes for snappier performance.
 - Sorting options (like Name or Date Added) now intelligently group Folders and Links separately, making it much easier to scan and organize your content.

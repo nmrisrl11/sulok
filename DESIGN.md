@@ -218,7 +218,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Positioned at the `bottom-center` with no timestamps.
 - Default `goey-toast` styles are overridden in `src/index.css` to match the brand typography (Manrope) and primary colors.
 - Use friendly, branded copywriting (e.g., "Added to your corner", "Changes saved") instead of generic system terms (e.g., "Item saved", "Success").
-- For actionable notifications (like Undo), use the `successLabel` feature to provide a morphing animation with custom contextual feedback (e.g., "Folder restored", "Link restored") when clicked, rather than abruptly dismissing the toast.
+- For actionable notifications (like Undo), if the action is asynchronous, await the completion of the action inside the `onClick` handler. Explicitly call `notify.dismiss(originalToastId)` before triggering a new `notify.success` to prevent overlapping toasts and avoid reporting success prematurely.
 
 ### Icons
 

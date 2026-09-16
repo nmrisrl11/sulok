@@ -18,10 +18,17 @@ export function useItemActions(item: Item) {
 				hideReaction: true,
 				action: {
 					label: "Undo",
-					onClick: () => {
-						useItemStore.getState().restoreItems([item.id]);
+					onClick: async () => {
+						try {
+							await useItemStore.getState().restoreItems([item.id]);
+							notify.dismiss("item-soft-deleted");
+							notify.success("Link restored", { id: "item-restored" });
+						} catch (error) {
+							console.error("Failed to restore item", error);
+							notify.dismiss("item-soft-deleted");
+							notify.error("Unable to restore link", { id: "item-restore-fail" });
+						}
 					},
-					successLabel: "Link restored",
 				},
 			});
 		} catch (error) {

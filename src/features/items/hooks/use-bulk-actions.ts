@@ -5,8 +5,10 @@ import { useConfirmationStore, useFolderStore, useItemStore, useLogoStore } from
 import { useLiveQuery } from "dexie-react-hooks";
 
 export function useBulkActions() {
-	const { selectedIds, clearSelection } = useItemStore();
-	const { selectedFolderIds, clearSelection: clearFolderSelection } = useFolderStore();
+	const selectedIds = useItemStore((state) => state.selectedIds);
+	const clearSelection = useItemStore((state) => state.clearSelection);
+	const selectedFolderIds = useFolderStore((state) => state.selectedFolderIds);
+	const clearFolderSelection = useFolderStore((state) => state.clearSelection);
 	const confirm = useConfirmationStore((state) => state.confirm);
 
 	const allFavorited =
@@ -30,10 +32,17 @@ export function useBulkActions() {
 				action: {
 					label: "Undo",
 					onClick: async () => {
-						const { BulkRepository } = await import("@/db/repositories/bulk-repository");
-						await BulkRepository.restore(selectedIds, selectedFolderIds);
+						try {
+							const { BulkRepository } = await import("@/db/repositories/bulk-repository");
+							await BulkRepository.restore(selectedIds, selectedFolderIds);
+							notify.dismiss("bulk-soft-deleted");
+							notify.success("Selection restored", { id: "bulk-restored" });
+						} catch (error) {
+							console.error("Failed to restore selection", error);
+							notify.dismiss("bulk-soft-deleted");
+							notify.error("Unable to restore items", { id: "bulk-restore-fail" });
+						}
 					},
-					successLabel: "Selection restored",
 				},
 			});
 		} catch (error) {

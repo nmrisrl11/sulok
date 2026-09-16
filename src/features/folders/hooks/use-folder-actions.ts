@@ -15,10 +15,17 @@ export function useFolderActions(folder: Folder) {
 				hideReaction: true,
 				action: {
 					label: "Undo",
-					onClick: () => {
-						useFolderStore.getState().restoreFolders([folder.id]);
+					onClick: async () => {
+						try {
+							await useFolderStore.getState().restoreFolders([folder.id]);
+							notify.dismiss("folder-soft-deleted");
+							notify.success("Folder restored", { id: "folder-restored" });
+						} catch (error) {
+							console.error("Failed to restore folder", error);
+							notify.dismiss("folder-soft-deleted");
+							notify.error("Unable to restore folder", { id: "folder-restore-fail" });
+						}
 					},
-					successLabel: "Folder restored",
 				},
 			});
 		} catch (error) {
