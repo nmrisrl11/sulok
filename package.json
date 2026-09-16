@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"audit": "npx unlighthouse --site https://sulok-app.vercel.app",
+		"audit:mobile": "npx unlighthouse --site https://sulok-app.vercel.app",
+		"audit:desktop": "npx unlighthouse --site https://sulok-app.vercel.app --desktop",
 		"build": "oxlint --deny-warnings && tsc -b && vite build",
 		"lint": "oxlint",
 		"preview": "vite preview",

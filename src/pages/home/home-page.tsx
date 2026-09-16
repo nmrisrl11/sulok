@@ -5,7 +5,6 @@ import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar"
 import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
 import { cn } from "@/lib/utils";
 import { useFolderStore, useItemStore } from "@/stores";
-import { memo } from "react";
 import { useHomeData } from "./hooks/use-home-management";
 
 function SelectionHeader({
@@ -65,47 +64,35 @@ function SelectionHeader({
 	);
 }
 
-function HomeHeaderArea() {
-	return (
-		<div className="flex flex-col justify-between gap-4 px-2 sm:flex-row sm:items-center sm:px-0">
-			<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
-				Your Corner
-			</h2>
-		</div>
-	);
-}
-
-const MemoizedHomeHeaderArea = memo(HomeHeaderArea);
-
 export function HomePage({ className }: { className?: string }) {
 	const homeData = useHomeData();
 
 	return (
-		<main className={cn("flex flex-col gap-10", className)}>
+		<main className={cn("flex flex-col gap-6 md:gap-8", className)}>
 			<div className="flex flex-col gap-4">
-				<MemoizedHomeHeaderArea />
-				<div className="flex flex-col items-start gap-6 md:flex-row md:gap-8">
-					<div className="sticky top-2 z-20 w-full shrink-0 rounded-xl border bg-card/80 p-1.5 shadow-sm backdrop-blur-md transition-all md:static md:z-auto md:w-56 md:rounded-lg md:bg-card/30 md:p-2 md:backdrop-blur-none">
-						<ExplorerSidebar />
-					</div>
-					<div className="flex w-full min-w-0 flex-1 flex-col">
-						<ExplorerToolbar
-							hasItems={homeData.items.length > 0}
-							hasFolders={homeData.folders.length > 0}
-						/>
-						<SelectionHeader
-							items={homeData.items}
-							hasItems={homeData.items.length > 0}
+				<div className="flex flex-col gap-4 px-2 sm:flex-row sm:items-center sm:justify-between sm:px-0">
+					<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
+						Your Corner
+					</h2>
+					<ExplorerSidebar />
+				</div>
+				<div className="flex w-full min-w-0 flex-col">
+					<ExplorerToolbar
+						hasItems={homeData.items.length > 0}
+						hasFolders={homeData.folders.length > 0}
+					/>
+					<SelectionHeader
+						items={homeData.items}
+						hasItems={homeData.items.length > 0}
+						folders={homeData.folders}
+						hasFolders={homeData.folders.length > 0}
+					/>
+					<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
+						<ExplorerMain
 							folders={homeData.folders}
-							hasFolders={homeData.folders.length > 0}
+							items={homeData.items}
+							isLoading={homeData.isLoading}
 						/>
-						<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
-							<ExplorerMain
-								folders={homeData.folders}
-								items={homeData.items}
-								isLoading={homeData.isLoading}
-							/>
-						</div>
 					</div>
 				</div>
 			</div>
