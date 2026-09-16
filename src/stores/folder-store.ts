@@ -5,11 +5,12 @@ import { FolderRepository } from "../db/repositories/folder-repository";
 interface FolderState {
 	isDialogOpen: boolean;
 	editingFolder: Folder | null;
+	initialParentId: string | null;
 	selectedFolderIds: string[];
 
 	// Actions
 	setDialogOpen: (open: boolean) => void;
-	openCreateDialog: () => void;
+	openCreateDialog: (parentId?: string | null) => void;
 	openEditDialog: (folder: Folder) => void;
 
 	// DB Actions
@@ -34,17 +35,20 @@ interface FolderState {
 export const useFolderStore = create<FolderState>((set, get) => ({
 	isDialogOpen: false,
 	editingFolder: null,
+	initialParentId: null,
 	selectedFolderIds: [],
 
 	setDialogOpen: (open) =>
 		set(() => ({
 			isDialogOpen: open,
-			...(open === false && { editingFolder: null }),
+			...(open === false && { editingFolder: null, initialParentId: null }),
 		})),
 
-	openCreateDialog: () => set({ isDialogOpen: true, editingFolder: null }),
+	openCreateDialog: (parentId) =>
+		set({ isDialogOpen: true, editingFolder: null, initialParentId: parentId || null }),
 
-	openEditDialog: (folder) => set({ isDialogOpen: true, editingFolder: folder }),
+	openEditDialog: (folder) =>
+		set({ isDialogOpen: true, editingFolder: folder, initialParentId: null }),
 
 	addFolder: async (data) => {
 		await FolderRepository.save(data);

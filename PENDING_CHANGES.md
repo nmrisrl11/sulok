@@ -22,8 +22,10 @@
 ### Changed
 
 - The search bar now finds everything across your entire corner of the web, not just the folder you're currently viewing. Search is also heavily optimized behind the scenes for snappier performance.
-- Sorting options (like Name or Date Added) now intuitively organize both folders and links together.
+- Sorting options (like Name or Date Added) now intelligently group Folders and Links separately, making it much easier to scan and organize your content.
 - When you add a new link from an empty folder, it now intelligently saves directly into that folder instead of going to your unorganized space.
+- The bulk action bar is now strictly contextual, appearing only on the main explorer views and automatically clearing your selections when switching between spaces (like moving from Library to Favorites).
+- Redesigned the Empty Folder state to clarify that you can add both links and subfolders, adding a new quick-action button specifically for creating folders.
 - Automatically hides the Search and View Mode options in the toolbar when your Library or Favorites are completely empty, keeping the interface clean and focused.
 - Increased the spacing between items and folders in the main list view for a more breathable, easier-to-read layout.
 

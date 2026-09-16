@@ -17,19 +17,28 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function FolderDialog() {
-	const { isDialogOpen, setDialogOpen, editingFolder, addFolder, updateFolder } = useFolderStore();
+	const { isDialogOpen, setDialogOpen, editingFolder, initialParentId, addFolder, updateFolder } =
+		useFolderStore();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Derive state for smooth animations
 	const [activeFolder, setActiveFolder] = useState(editingFolder);
+	const [activeParentId, setActiveParentId] = useState(initialParentId);
 	const [prevIsDialogOpen, setPrevIsDialogOpen] = useState(isDialogOpen);
 	const [prevEditingFolder, setPrevEditingFolder] = useState(editingFolder);
+	const [prevInitialParentId, setPrevInitialParentId] = useState(initialParentId);
 
-	if (isDialogOpen !== prevIsDialogOpen || editingFolder !== prevEditingFolder) {
+	if (
+		isDialogOpen !== prevIsDialogOpen ||
+		editingFolder !== prevEditingFolder ||
+		initialParentId !== prevInitialParentId
+	) {
 		setPrevIsDialogOpen(isDialogOpen);
 		setPrevEditingFolder(editingFolder);
+		setPrevInitialParentId(initialParentId);
 		if (isDialogOpen) {
 			setActiveFolder(editingFolder);
+			setActiveParentId(initialParentId);
 		}
 	}
 
@@ -37,12 +46,13 @@ export function FolderDialog() {
 		register,
 		handleSubmit,
 		reset,
+		getValues,
 		formState: { errors },
 	} = useForm<FolderFormData>({
 		resolver: zodResolver(folderSchema),
 		defaultValues: activeFolder
 			? { name: activeFolder.name, parentId: activeFolder.parentId }
-			: { name: "", parentId: null },
+			: { name: "", parentId: activeParentId },
 	});
 
 	useEffect(() => {
@@ -50,19 +60,21 @@ export function FolderDialog() {
 			reset(
 				editingFolder
 					? { name: editingFolder.name, parentId: editingFolder.parentId }
-					: { name: "", parentId: null },
+					: { name: "", parentId: initialParentId },
 			);
 		}
-	}, [isDialogOpen, editingFolder, reset]);
+	}, [isDialogOpen, editingFolder, initialParentId, reset]);
 
 	const handleFormSubmit = async (data: FolderFormData) => {
 		setIsSubmitting(true);
 		try {
+			const finalParentId = getValues("parentId") || activeParentId || null;
+
 			if (activeFolder) {
-				await updateFolder(activeFolder.id, { ...data, parentId: data.parentId ?? null });
+				await updateFolder(activeFolder.id, { ...data, parentId: finalParentId });
 				notify.success("Folder updated");
 			} else {
-				await addFolder({ ...data, parentId: data.parentId ?? null });
+				await addFolder({ ...data, parentId: finalParentId });
 				notify.success("Folder created");
 			}
 			setDialogOpen(false);

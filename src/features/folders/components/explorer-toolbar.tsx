@@ -11,12 +11,13 @@ import {
 import { useDebouncedQuery } from "@/hooks";
 import { notify } from "@/lib/notify";
 import {
+	folderIdParser,
 	searchQueryParser,
 	sortOptionParser,
 	viewModeParser,
 	viewParser,
 } from "@/lib/search-params";
-import { useConfirmationStore, useFolderStore, useLogoStore, useUIStore } from "@/stores";
+import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
 import { LayoutGridIcon, ListIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
@@ -31,13 +32,13 @@ export function ExplorerToolbar({
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [view] = useQueryState("view", viewParser);
+	const [folderId] = useQueryState("folder", folderIdParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 
 	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
 
 	const { openCreateDialog } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
-	const setQuickLinkExpanded = useUIStore((state) => state.setQuickLinkExpanded);
 
 	const handleEmptyTrash = () => {
 		confirm({
@@ -85,7 +86,7 @@ export function ExplorerToolbar({
 							<Button
 								variant="ghost"
 								size="sm"
-								onClick={() => openCreateDialog()}
+								onClick={() => openCreateDialog(folderId)}
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
 								<FolderPlusCircleIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />
@@ -96,10 +97,9 @@ export function ExplorerToolbar({
 								variant="ghost"
 								size="sm"
 								onClick={() => {
-									setQuickLinkExpanded(true);
-									setTimeout(() => {
-										document.getElementById("quick-link-input")?.focus();
-									}, 100);
+									document.dispatchEvent(
+										new CustomEvent("open-quick-link", { detail: { folderId } }),
+									);
 								}}
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
