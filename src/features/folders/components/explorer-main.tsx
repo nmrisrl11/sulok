@@ -26,7 +26,9 @@ import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useMoveStore } from "@/stores";
 import { MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { FolderEmptyState } from "./folder-empty-state";
 import { FolderGridCard } from "./folder-grid-card";
+
 function FolderCard({ folder }: { folder: Folder }) {
 	const [_, setFolderId] = useQueryState("folder", folderIdParser);
 	const { openEditDialog } = useFolderStore();
@@ -94,7 +96,7 @@ function FolderCard({ folder }: { folder: Folder }) {
 			tabIndex={0}
 			className={cn(
 				"group flex cursor-pointer items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
-				isSelected && "bg-card/50 shadow-sm ring-1 ring-border",
+				isSelected && "border-border bg-card/50 shadow-sm",
 			)}
 			onClick={() => {
 				if (view === "trash") {
@@ -302,17 +304,7 @@ export function ExplorerMain({
 	const isEmpty = folders.length === 0 && items.length === 0;
 
 	if (isEmpty) {
-		return (
-			<div className="flex flex-col items-center justify-center py-20 text-center">
-				<div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
-					<FolderIcon className="size-8" />
-				</div>
-				<h3 className="mb-1 text-lg font-medium text-foreground">This folder is empty</h3>
-				<p className="text-sm text-muted-foreground">
-					Add links or create new folders to get started.
-				</p>
-			</div>
-		);
+		return <FolderEmptyState />;
 	}
 
 	if (viewMode === "grid") {
@@ -330,12 +322,12 @@ export function ExplorerMain({
 
 	// Default List View
 	return (
-		<div className="flex flex-col gap-1">
+		<div className="flex flex-col gap-2">
 			{folders.map((folder) => (
 				<FolderCard key={folder.id} folder={folder} />
 			))}
 
-			{folders.length > 0 && items.length > 0 && <div className="my-2 border-b border-border/50" />}
+			{folders.length > 0 && items.length > 0 && <div className="my-4 border-b border-border/50" />}
 
 			{items.map((item) => (
 				<ItemCard key={item.id} item={item} />

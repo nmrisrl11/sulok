@@ -101,7 +101,7 @@ export function ExplorerToolbar({
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
 								<PlusIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />
-								<span className="hidden sm:inline">Quick Link</span>
+								<span className="hidden sm:inline">Add to corner</span>
 							</Button>
 						</div>
 					) : null}
@@ -109,7 +109,7 @@ export function ExplorerToolbar({
 			</div>
 
 			{/* Bottom row: Search & View modes */}
-			{view !== "trash" && (
+			{view !== "trash" && (hasItems || hasFolders || !!searchQuery) && (
 				<div className="flex flex-col gap-1.5 rounded-lg border border-border/40 bg-muted/30 p-1.5 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
 					{/* Search */}
 					<div className="relative flex w-full flex-1 items-center px-1 sm:p-0">
