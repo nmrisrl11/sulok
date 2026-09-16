@@ -52,7 +52,7 @@ export const ItemCard = memo(function ItemCard({ item }: { item: Item }) {
 		<div
 			className={cn(
 				"group flex items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:border-border hover:bg-card/50 supports-[corner-shape:squircle]:rounded-xl",
-				isSelected && "bg-card/50 shadow-sm ring-1 ring-border",
+				isSelected && "border-border bg-card/50 shadow-sm",
 				view === "trash" && "cursor-pointer",
 			)}
 			onClick={(e) => {

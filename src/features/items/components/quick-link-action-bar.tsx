@@ -108,7 +108,7 @@ export function QuickLinkActionBar() {
 			noValidate
 			role={!isExpanded ? "button" : undefined}
 			tabIndex={!isExpanded ? 0 : undefined}
-			aria-label={!isExpanded ? "Expand quick link bar" : undefined}
+			aria-label={!isExpanded ? "Add to your corner" : undefined}
 			onClick={() => {
 				if (!isExpanded) {
 					setIsExpanded(true);

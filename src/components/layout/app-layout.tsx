@@ -84,7 +84,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 			<div className="mx-auto flex w-full max-w-4xl flex-1 flex-col">
 				<Header />
 
-				<main className="flex flex-1 flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>
+				<main className="flex flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>
 			</div>
 			{hasLoadedItemDialog && (
 				<ErrorBoundary>

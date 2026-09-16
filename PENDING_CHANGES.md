@@ -9,6 +9,7 @@
 
 ### Added
 
+- Redesigned the Empty State screens for the Library, Favorites, and Recycle Bin to feature a sleeker, more sophisticated card layout with refined copywriting and clear calls-to-action ("Add to your corner").
 - Redesigned the main navigation sidebar for mobile devices. It now transforms into a sleek, horizontal pill layout that smoothly sticks to the top of the screen as you scroll, complete with a beautiful frosted glass effect.
 - Brought complete feature parity to the Grid View mode. You can now individually select folders and links using checkboxes, and access all actions (Favorite, Edit, Delete, Move, etc.) via new three-dot dropdown menus right from the grid.
 - Grid View now beautifully displays the real website favicons for your saved links instead of a generic placeholder.
@@ -19,6 +20,9 @@
 - Added new curated Workspace Themes (Sepia, Sand, Midnight, Mocha) to fully personalize the lighting environment.
 
 ### Changed
+
+- Automatically hides the Search and View Mode options in the toolbar when your Library or Favorites are completely empty, keeping the interface clean and focused.
+- Increased the spacing between items and folders in the main list view for a more breathable, easier-to-read layout.
 
 - Redesigned the "Move to..." dialog to use an intuitive drill-down navigation system with interactive breadcrumb trails, making it much easier to move items deep into nested folders.
 - Prevented text overflow on mobile by strictly truncating lengthy file paths and labels within the breadcrumb navigation.
@@ -38,6 +42,9 @@
 - Streamlined the application by removing unused interface components and unused animation libraries, reducing the bundle size and improving overall app performance.
 
 ### Fixed
+
+- Fixed an issue where the main page would incorrectly show a vertical scrollbar on smaller screens by intelligently sizing the inner list container to exactly fill the remaining height.
+- Fixed a visual clipping issue where the selection outline on items and folders would get cut off at the edge of the scroll container.
 
 - Fixed an issue where clicking into a favorited folder from the Favorites view incorrectly hid its contents unless they were also individually favorited.
 - Fixed a visual glitch in the "Move to..." dialog where it would briefly display "No folders here" before finishing loading the folders.

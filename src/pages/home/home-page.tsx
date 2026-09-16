@@ -99,11 +99,13 @@ export function HomePage({ className }: { className?: string }) {
 							folders={homeData.folders}
 							hasFolders={homeData.folders.length > 0}
 						/>
-						<ExplorerMain
-							folders={homeData.folders}
-							items={homeData.items}
-							isLoading={homeData.isLoading}
-						/>
+						<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
+							<ExplorerMain
+								folders={homeData.folders}
+								items={homeData.items}
+								isLoading={homeData.isLoading}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
