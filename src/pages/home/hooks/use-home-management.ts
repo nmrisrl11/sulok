@@ -7,7 +7,7 @@ import {
 	viewModeParser,
 	viewParser,
 } from "@/lib/search-params";
-import { useItemStore } from "@/stores";
+import { useFolderStore, useItemStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
@@ -19,7 +19,8 @@ export function useHomeData() {
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 
-	const clearSelection = useItemStore((state) => state.clearSelection);
+	const clearItemSelection = useItemStore((state) => state.clearSelection);
+	const clearFolderSelection = useFolderStore((state) => state.clearSelection);
 
 	const isFiltersActive = searchQuery !== "" || sortOption !== "date-desc";
 
@@ -71,12 +72,18 @@ export function useHomeData() {
 	const folders = foldersData ?? [];
 	const totalItems = totalItemsData ?? 0;
 
-	// Clear selection when navigating away from home page
+	// Clear selection when navigating away from home page or switching views/folders
+	useEffect(() => {
+		clearItemSelection();
+		clearFolderSelection();
+	}, [view, folderId, clearItemSelection, clearFolderSelection]);
+
 	useEffect(() => {
 		return () => {
-			clearSelection();
+			clearItemSelection();
+			clearFolderSelection();
 		};
-	}, [clearSelection]);
+	}, [clearItemSelection, clearFolderSelection]);
 
 	return {
 		searchQuery,

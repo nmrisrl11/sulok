@@ -1,7 +1,7 @@
-import { QuickLinkActionBar } from "@/features/items/components/quick-link-action-bar";
-import { useFolderStore } from "@/stores";
-import { useItemStore } from "@/stores";
+import { useFolderStore, useItemStore } from "@/stores";
 import { lazy, Suspense, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { QuickLinkActionBar } from "./quick-link-action-bar";
 
 const BulkActionBar = lazy(() =>
 	import("@/features/items/components/bulk-action-bar").then((m) => ({ default: m.BulkActionBar })),
@@ -11,6 +11,9 @@ export function BottomActionSystem() {
 	const selectedIds = useItemStore((state) => state.selectedIds);
 	const selectedFolderIds = useFolderStore((state) => state.selectedFolderIds);
 	const isSelectionMode = selectedIds.length > 0 || selectedFolderIds.length > 0;
+	const location = useLocation();
+	const isHomePage = location.pathname === "/";
+
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -34,7 +37,7 @@ export function BottomActionSystem() {
 			className="pointer-events-none fixed right-0 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-0 z-50 flex w-full flex-col items-center px-4 md:bottom-6"
 		>
 			<div className="pointer-events-auto flex w-full max-w-full justify-center">
-				{isSelectionMode ? (
+				{isHomePage && isSelectionMode ? (
 					<Suspense fallback={null}>
 						<BulkActionBar />
 					</Suspense>

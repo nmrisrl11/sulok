@@ -62,7 +62,9 @@
 - Undo support for destructive actions (delete, move).
 - No confirmation modals for non-destructive actions.
 - Toast notifications for feedback, not alert dialogs. Always use `notify` from `src/lib/notify.ts` (powered by `goey-toast`), and never standard `sonner`.
-- **List UX**: Checkboxes on items and folders in the main explorer should be hidden on desktop by default, appearing only on hover or when focused/selected. On mobile/touch devices, keep them visible.
+- **List UX (Checkboxes)**: Checkboxes on items and folders in the main explorer should be hidden on desktop by default, appearing only on hover or when focused/selected. On mobile/touch devices, keep them visible.
+- **List UX (Folders vs Items)**: Folders and links must be distinctly separated in list views (Folders first, then Items). Sorting applies independently within these groups. Do not completely merge them.
+- **Contextual Action Bars**: Bulk action bars must be scoped to the page component they operate on (e.g., `HomePage`) rather than being rendered globally in the layout, to prevent them from persisting across unrelated views.
 - **Recycle Bin Context**:
   - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.
   - Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.

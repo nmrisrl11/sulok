@@ -1,12 +1,20 @@
-import { FolderIcon, FolderLinkIcon, FollowFolderIcon, RecycleBinIcon } from "@/components/icons";
+import {
+	FolderIcon,
+	FolderLinkIcon,
+	FolderPlusCircleIcon,
+	FollowFolderIcon,
+	RecycleBinIcon,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { folderIdParser, viewParser } from "@/lib/search-params";
+import { useFolderStore } from "@/stores";
 import { PlusIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function FolderEmptyState() {
 	const [view] = useQueryState("view", viewParser);
 	const [folderId] = useQueryState("folder", folderIdParser);
+	const { openCreateDialog } = useFolderStore();
 
 	const isTrash = view === "trash";
 	const isFavorites = view === "favorites";
@@ -14,8 +22,9 @@ export function FolderEmptyState() {
 
 	let icon = <FolderIcon className="size-6" />;
 	let title = "This folder is empty";
-	let description = "Fill this folder with interesting links, articles, and ideas.";
-	let ctaText = "Add to folder";
+	let description =
+		"Fill this space with interesting links or create subfolders to stay organized.";
+	let ctaText = "Add to corner";
 
 	if (isTrash) {
 		icon = <RecycleBinIcon className="size-6 text-muted-foreground" />;
@@ -31,7 +40,7 @@ export function FolderEmptyState() {
 		icon = <FolderLinkIcon className="size-6 text-muted-foreground" />;
 		title = "It's quiet in here...";
 		description =
-			"Your corner is waiting to be filled with interesting links, articles, and ideas from across the web.";
+			"Your corner is waiting to be filled with links, articles, and folders to organize your ideas.";
 		ctaText = "Add to your corner";
 	}
 
@@ -45,15 +54,21 @@ export function FolderEmptyState() {
 			<p className="mx-auto max-w-sm text-sm text-muted-foreground">{description}</p>
 
 			{!isTrash && !isFavorites && (
-				<Button
-					onClick={() =>
-						document.dispatchEvent(new CustomEvent("open-quick-link", { detail: { folderId } }))
-					}
-					className="mt-6 gap-2"
-				>
-					<PlusIcon className="size-4" />
-					{ctaText}
-				</Button>
+				<div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+					<Button variant="outline" onClick={() => openCreateDialog(folderId)} className="gap-2">
+						<FolderPlusCircleIcon className="size-4" />
+						New Folder
+					</Button>
+					<Button
+						onClick={() =>
+							document.dispatchEvent(new CustomEvent("open-quick-link", { detail: { folderId } }))
+						}
+						className="gap-2"
+					>
+						<PlusIcon className="size-4" />
+						{ctaText}
+					</Button>
+				</div>
 			)}
 		</div>
 	);

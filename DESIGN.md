@@ -200,11 +200,17 @@ Minimal shadows. Prefer border/background differentiation.
 - Features a subtle `<kbd>` shortcut badge for discoverability.
 - Integrates the Sulo mascot to provide interactive contextual feedback (e.g., sleeping, attentive, confused).
 
+### List Layouts (Main Explorer)
+
+- Folders and links must be visually separated into distinct groups (Folders first, then Items).
+- Sorting applies independently within these groups to maintain a predictable, standard file-manager UX (e.g. Google Drive, Terabox).
+- Do not use dense multi-column grids for content-heavy lists unless explicitly requested; rely on clean, vertical stacks with comfortable spacing.
+
 ### Empty States
 
 - Centered text with Fraunces heading.
 - Meaningful generic icon (e.g., from lucide-react) or Sulo mascot illustration.
-- Clear call-to-action button.
+- Clear call-to-action buttons. For empty containers (like folders), present the primary contextual actions (e.g., "Add to corner" and "New Folder") prominently.
 
 ### Notifications
 
