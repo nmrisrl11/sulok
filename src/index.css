@@ -202,8 +202,8 @@
 	--radius: 0.375rem;
 }
 :root.radius-standard .corner-squircle {
-	/* Disable squircles for standard corners by forcing the shape property to 0 or unsetting it, or doing nothing so it falls back to native border-radius */
-	--corner-shape: 0 !important;
+	/* Disable squircles for standard corners by forcing the shape property to round to fallback to native border-radius */
+	corner-shape: round !important;
 }
 
 :root.density-cozy {

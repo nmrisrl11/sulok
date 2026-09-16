@@ -204,8 +204,9 @@ Minimal shadows. Prefer border/background differentiation.
 
 ### List Layouts (Main Explorer)
 
-- Folders and links must be visually separated into distinct groups (Folders first, then Items).
+- When `mixData` is disabled, folders and links must be visually separated into distinct groups (Folders first, then Items).
 - Sorting applies independently within these groups to maintain a predictable, standard file-manager UX (e.g. Google Drive, Terabox).
+- When mixed mode is enabled, folders and links are rendered in one combined list with a single ordering.
 - Do not use dense multi-column grids for content-heavy lists unless explicitly requested; rely on clean, vertical stacks with comfortable spacing.
 
 ### Empty States
