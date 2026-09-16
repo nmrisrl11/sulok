@@ -35,7 +35,7 @@ export const ItemRepository = {
 			results = results.filter((item) => !item.deletedAt);
 		}
 
-		if (folderId !== undefined) {
+		if (folderId !== undefined && !q.trim()) {
 			if (folderId === "unorganized" || folderId === null) {
 				results = results.filter((item) => !item.folderId);
 			} else {

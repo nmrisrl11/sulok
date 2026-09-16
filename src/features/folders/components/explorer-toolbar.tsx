@@ -8,6 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useDebouncedQuery } from "@/hooks";
 import { notify } from "@/lib/notify";
 import {
 	searchQueryParser,
@@ -31,6 +32,8 @@ export function ExplorerToolbar({
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [view] = useQueryState("view", viewParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
+
+	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
 
 	const { openCreateDialog } = useFolderStore();
 	const confirm = useConfirmationStore((state) => state.confirm);
@@ -117,10 +120,10 @@ export function ExplorerToolbar({
 						<Input
 							id="search-explorer"
 							type="search"
-							placeholder="Search in this view..."
+							placeholder="Search your corner..."
 							className="h-8 rounded-md border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-md supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
+							value={localSearch}
+							onChange={(e) => setLocalSearch(e.target.value)}
 						/>
 					</div>
 

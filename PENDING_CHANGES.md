@@ -21,6 +21,9 @@
 
 ### Changed
 
+- The search bar now finds everything across your entire corner of the web, not just the folder you're currently viewing. Search is also heavily optimized behind the scenes for snappier performance.
+- Sorting options (like Name or Date Added) now intuitively organize both folders and links together.
+- When you add a new link from an empty folder, it now intelligently saves directly into that folder instead of going to your unorganized space.
 - Automatically hides the Search and View Mode options in the toolbar when your Library or Favorites are completely empty, keeping the interface clean and focused.
 - Increased the spacing between items and folders in the main list view for a more breathable, easier-to-read layout.
 
@@ -43,8 +46,8 @@
 
 ### Fixed
 
-- Fixed an issue where the main page would incorrectly show a vertical scrollbar on smaller screens by intelligently sizing the inner list container to exactly fill the remaining height.
-- Fixed a visual clipping issue where the selection outline on items and folders would get cut off at the edge of the scroll container.
+- Fixed an issue that caused the entire page to scroll awkwardly on smaller screens, keeping your main navigation comfortably in view while you scroll through your items.
+- Fixed a visual glitch where the highlighted selection border around items and folders would appear cut off at the edges.
 
 - Fixed an issue where clicking into a favorited folder from the Favorites view incorrectly hid its contents unless they were also individually favorited.
 - Fixed a visual glitch in the "Move to..." dialog where it would briefly display "No folders here" before finishing loading the folders.

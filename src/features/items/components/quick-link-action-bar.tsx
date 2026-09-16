@@ -12,6 +12,7 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
+	const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
 	const { isQuickLinkExpanded: isExpanded, setQuickLinkExpanded: setIsExpanded } = useUIStore();
 	const [error, setError] = useState<string | null>(null);
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
@@ -51,7 +52,12 @@ export function QuickLinkActionBar() {
 			}
 		};
 
-		const handleOpenQuickLink = () => {
+		const handleOpenQuickLink = (e: Event) => {
+			if (e instanceof CustomEvent && e.detail?.folderId) {
+				setActiveFolderId(e.detail.folderId);
+			} else {
+				setActiveFolderId(null);
+			}
 			setIsExpanded(true);
 			setTimeout(() => inputRef.current?.focus(), 50);
 		};
@@ -97,7 +103,7 @@ export function QuickLinkActionBar() {
 		}
 
 		setError(null);
-		openCreateDialog(result.data);
+		openCreateDialog(result.data, activeFolderId);
 		setUrl("");
 		setIsExpanded(false);
 	};
