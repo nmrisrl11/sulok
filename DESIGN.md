@@ -170,14 +170,16 @@ Minimal shadows. Prefer border/background differentiation.
 - Implements a "Title & Toolbar" pattern.
 - The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space.
 - Utility rows (Search & View modes) are placed in a floating pill container (`bg-muted/30 backdrop-blur-md`).
-- **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs (Search, Select) use a 6px radius (`rounded-md`) to perfectly nest inside the outer pill's 12px radius (`rounded-xl`).
+- On mobile, it utilizes a responsive 3-row grid structure (Search, Filter, Actions) to remain accessible without horizontal overflow.
+- **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.
 - **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
 
-### Explorer Sidebar
+### Explorer Sidebar (Navigation)
 
-- Radically responsive layout. On desktop, it is a vertical stack of links inside a static container.
-- On mobile devices, it transforms into a sleek, horizontal pill layout that groups the icons and text tightly (`[Icon] [Label]`).
-- On mobile, it utilizes `sticky top-2 z-20` and a frosted glass effect (`bg-card/80 backdrop-blur-md`) to remain beautifully accessible as the user scrolls down long lists.
+- Implemented as a sleek, horizontal tab layout alongside the main header (`Your Corner`) to maximize vertical and horizontal real estate for content in a single-column layout.
+- Groups the icons and text tightly (`[Icon] [Label]`).
+- Uses a frosted glass effect (`bg-card/80 backdrop-blur-md`).
+- Navigational tabs must use CSS scroll snap for smooth horizontal scrolling on smaller devices.
 
 ### Navigation Tabs
 
@@ -202,8 +204,9 @@ Minimal shadows. Prefer border/background differentiation.
 
 ### List Layouts (Main Explorer)
 
-- Folders and links must be visually separated into distinct groups (Folders first, then Items).
+- When `mixData` is disabled, folders and links must be visually separated into distinct groups (Folders first, then Items).
 - Sorting applies independently within these groups to maintain a predictable, standard file-manager UX (e.g. Google Drive, Terabox).
+- When mixed mode is enabled, folders and links are rendered in one combined list with a single ordering.
 - Do not use dense multi-column grids for content-heavy lists unless explicitly requested; rely on clean, vertical stacks with comfortable spacing.
 
 ### Empty States
@@ -227,10 +230,11 @@ Minimal shadows. Prefer border/background differentiation.
   - `--folder-color-back` (default: `#56b2e3`)
   - `--folder-color-paper` (default: `#ffffff`)
   - `--folder-color-front` (default: `#98cfef`)
-- **Action Icons:** Always use the bespoke custom icons from `@/components/icons` for item and folder actions to ensure brand consistency:
+- **Action Icons:** Always use the bespoke custom icons from `@/components/icons` for item and folder actions to ensure brand consistency. These are grouped into logical subdirectories (e.g., `/actions`, `/folders`, `/trash`) and exported via `index.ts`:
   - `CopyIcon`, `ExternalLinkIcon`, `FileEditIcon`, `FolderEditIcon`, `MoveToFolderIcon`.
   - `CustomHeartIcon` (outline), `CustomHeartFilledIcon` (solid), `CustomHeartSlashIcon` (unfavorite).
   - `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete/empty), and `TrashUndoIcon` (restore).
+  - `MergeIcon` for mixing/separating data views.
 
 ---
 

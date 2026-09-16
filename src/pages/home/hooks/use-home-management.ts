@@ -2,8 +2,10 @@ import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import {
 	folderIdParser,
+	mixDataParser,
 	searchQueryParser,
 	sortOptionParser,
+	typeFilterParser,
 	viewModeParser,
 	viewParser,
 } from "@/lib/search-params";
@@ -18,11 +20,13 @@ export function useHomeData() {
 	const [view, setView] = useQueryState("view", viewParser);
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
+	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
+	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
 
 	const clearItemSelection = useItemStore((state) => state.clearSelection);
 	const clearFolderSelection = useFolderStore((state) => state.clearSelection);
 
-	const isFiltersActive = searchQuery !== "" || sortOption !== "date-desc";
+	const isFiltersActive = searchQuery !== "" || sortOption !== "date-desc" || typeFilter !== "all";
 
 	// Parse sort option for DB query
 	const dbSort = sortOption.startsWith("name") ? "title" : "createdAt";
@@ -68,9 +72,15 @@ export function useHomeData() {
 		itemsData === undefined || totalItemsData === undefined || foldersData === undefined;
 	const isTotalLoading = totalItemsData === undefined;
 
-	const items = itemsData ?? [];
-	const folders = foldersData ?? [];
+	let items = itemsData ?? [];
+	let folders = foldersData ?? [];
 	const totalItems = totalItemsData ?? 0;
+
+	if (typeFilter === "folders") {
+		items = [];
+	} else if (typeFilter === "links") {
+		folders = [];
+	}
 
 	// Clear selection when navigating away from home page or switching views/folders
 	useEffect(() => {
@@ -96,6 +106,10 @@ export function useHomeData() {
 		setFolderId,
 		viewMode,
 		setViewMode,
+		mixData,
+		setMixData,
+		typeFilter,
+		setTypeFilter,
 		isFiltersActive,
 		items,
 		folders,

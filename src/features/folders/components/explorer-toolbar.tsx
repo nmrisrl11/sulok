@@ -1,4 +1,10 @@
-import { FolderPlusCircleIcon, GridIcon, ListIcon, TrashXMarkIcon } from "@/components/icons";
+import {
+	FolderPlusCircleIcon,
+	GridIcon,
+	ListIcon,
+	MergeIcon,
+	TrashXMarkIcon,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,11 +18,14 @@ import { useDebouncedQuery } from "@/hooks";
 import { notify } from "@/lib/notify";
 import {
 	folderIdParser,
+	mixDataParser,
 	searchQueryParser,
 	sortOptionParser,
+	typeFilterParser,
 	viewModeParser,
 	viewParser,
 } from "@/lib/search-params";
+import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
 import { PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -34,6 +43,8 @@ export function ExplorerToolbar({
 	const [view] = useQueryState("view", viewParser);
 	const [folderId] = useQueryState("folder", folderIdParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
+	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
+	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
 
 	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
 
@@ -58,6 +69,17 @@ export function ExplorerToolbar({
 				}
 			},
 		});
+	};
+
+	const hasFiltersActive =
+		!!searchQuery || typeFilter !== "all" || sortOption !== "date-desc" || mixData;
+
+	const handleResetFilters = () => {
+		setSearchQuery(null);
+		setLocalSearch("");
+		setTypeFilter("all");
+		setSortOption("date-desc");
+		setMixData(false);
 	};
 
 	return (
@@ -113,25 +135,43 @@ export function ExplorerToolbar({
 
 			{/* Bottom row: Search & View modes */}
 			{view !== "trash" && (hasItems || hasFolders || !!searchQuery) && (
-				<div className="flex flex-col gap-1.5 rounded-lg border border-border/40 bg-muted/30 p-1.5 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
-					{/* Search */}
-					<div className="relative flex w-full flex-1 items-center px-1 sm:p-0">
-						<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2" />
-						<Input
-							id="search-explorer"
-							type="search"
-							placeholder="Search your corner..."
-							className="h-8 rounded-md border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-md supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
-							value={localSearch}
-							onChange={(e) => setLocalSearch(e.target.value)}
-						/>
+				<div className="grid grid-cols-2 gap-2 rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
+					{/* Search & Reset */}
+					<div className="col-span-2 flex items-center gap-2 sm:col-span-1 sm:w-full sm:flex-1">
+						<div className="relative flex w-full flex-1 items-center">
+							<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2" />
+							<Input
+								id="search-explorer"
+								type="search"
+								placeholder="Search your corner..."
+								className="h-8 w-full rounded-lg border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
+								value={localSearch}
+								onChange={(e) => setLocalSearch(e.target.value)}
+							/>
+						</div>
 					</div>
 
-					{/* Mobile Separator */}
-					<div className="mx-2 h-px bg-border/50 sm:hidden" />
+					{/* Mobile Separator (Only on Desktop) */}
+					<div className="mx-2 hidden h-4 w-px bg-border/50 sm:block" />
 
-					{/* View Modes */}
-					<div className="flex w-full items-center justify-between gap-2 px-1 sm:w-auto sm:justify-end sm:gap-1 sm:p-0">
+					{/* Type & Sort Row */}
+					<div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:flex sm:w-auto sm:flex-none sm:items-center sm:gap-2">
+						<Select
+							value={typeFilter}
+							onValueChange={(val) => setTypeFilter(val as "all" | "folders" | "links")}
+						>
+							<SelectTrigger
+								className="h-8 w-full rounded-lg border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-32 sm:flex-none"
+								aria-label="Filter by type"
+							>
+								<SelectValue placeholder="All Types" />
+							</SelectTrigger>
+							<SelectContent position="popper" align="end">
+								<SelectItem value="all">All Types</SelectItem>
+								<SelectItem value="folders">Folders Only</SelectItem>
+								<SelectItem value="links">Links Only</SelectItem>
+							</SelectContent>
+						</Select>
 						<Select
 							value={sortOption}
 							onValueChange={(val) =>
@@ -139,7 +179,7 @@ export function ExplorerToolbar({
 							}
 						>
 							<SelectTrigger
-								className="h-8 flex-1 rounded-md border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-md supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none"
+								className="h-8 w-full rounded-lg border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none"
 								aria-label="Sort items"
 							>
 								<SelectValue placeholder="Sort by" />
@@ -151,25 +191,67 @@ export function ExplorerToolbar({
 								<SelectItem value="name-desc">Name (Z-A)</SelectItem>
 							</SelectContent>
 						</Select>
-						<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
-						<div className="flex shrink-0 items-center gap-1">
+					</div>
+
+					{/* Desktop Separator */}
+					<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
+
+					{/* Actions Row */}
+					<div className="col-span-2 flex items-center justify-between gap-2 sm:col-span-1 sm:w-auto sm:flex-none sm:justify-end sm:gap-1">
+						<div className="flex items-center gap-1">
 							<Button
 								variant="ghost"
 								size="sm"
-								className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "bg-background shadow-sm hover:bg-background" : "hover:bg-background/50"}`}
-								onClick={() => setViewMode("list")}
+								className={cn(
+									"h-8 rounded-lg px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:px-0",
+									mixData
+										? "bg-background text-foreground shadow-sm hover:bg-background"
+										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+								)}
+								onClick={() => setMixData(mixData ? false : true)}
+								title={mixData ? "Separate Folders and Links" : "Mix Folders and Links"}
 							>
-								<ListIcon className="size-4" />
+								<MergeIcon className="mr-2 size-4 sm:mr-0" />
+								<span className="sm:sr-only">{mixData ? "Separate Data" : "Mix Data"}</span>
 							</Button>
-							<Button
-								variant="ghost"
-								size="sm"
-								className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "bg-background shadow-sm hover:bg-background" : "hover:bg-background/50"}`}
-								onClick={() => setViewMode("grid")}
-							>
-								<GridIcon className="size-4" />
-							</Button>
+
+							<div className="mx-1 h-4 w-px bg-border/50" />
+
+							<div className="flex shrink-0 items-center gap-1">
+								<Button
+									variant="ghost"
+									size="sm"
+									title="List View"
+									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "bg-background text-foreground shadow-sm hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									onClick={() => setViewMode("list")}
+								>
+									<ListIcon className="size-4" />
+								</Button>
+								<Button
+									variant="ghost"
+									size="sm"
+									title="Grid View"
+									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "bg-background text-foreground shadow-sm hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									onClick={() => setViewMode("grid")}
+								>
+									<GridIcon className="size-4" />
+								</Button>
+							</div>
 						</div>
+
+						{hasFiltersActive && (
+							<div className="flex items-center gap-1">
+								<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={handleResetFilters}
+									className="h-8 shrink-0 rounded-lg px-3 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+								>
+									Clear
+								</Button>
+							</div>
+						)}
 					</div>
 				</div>
 			)}

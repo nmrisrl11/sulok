@@ -81,7 +81,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
 	return (
 		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
-			<div className="mx-auto flex w-full max-w-4xl flex-1 flex-col">
+			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
 				<Header />
 
 				<main className="flex flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>

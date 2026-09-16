@@ -41,7 +41,7 @@ export function ExplorerSidebar() {
 	];
 
 	return (
-		<nav className="flex w-full flex-row gap-1 md:flex-col md:gap-1.5">
+		<nav className="flex w-full flex-row gap-1 overflow-x-auto rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-auto sm:flex-wrap sm:overflow-visible">
 			{navItems.map((item) => {
 				const Icon = item.icon;
 				return (
@@ -49,16 +49,16 @@ export function ExplorerSidebar() {
 						key={item.id}
 						type="button"
 						className={cn(
-							"group flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-md p-2 text-center transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl md:flex-row md:justify-start md:gap-3 md:px-3 md:py-2 md:text-left",
+							"group flex flex-1 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:flex-none",
 							item.isActive
-								? "bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20"
-								: "text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm",
+								? "bg-background text-foreground shadow-sm ring-1 ring-border/50"
+								: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 						)}
 						onClick={item.onClick}
 					>
 						<Icon
 							className={cn(
-								"size-5 shrink-0 transition-colors md:size-4",
+								"size-4 shrink-0 transition-colors",
 								item.isActive
 									? "text-primary"
 									: "text-muted-foreground/80 group-hover:text-foreground",
@@ -66,8 +66,10 @@ export function ExplorerSidebar() {
 						/>
 						<span
 							className={cn(
-								"text-[10px] transition-colors md:text-sm",
-								item.isActive ? "font-semibold text-primary" : "font-medium text-foreground/80",
+								"text-xs font-medium transition-colors sm:text-sm",
+								item.isActive
+									? "text-foreground"
+									: "text-muted-foreground group-hover:text-foreground",
 							)}
 						>
 							{item.label}
