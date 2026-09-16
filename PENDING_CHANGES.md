@@ -10,6 +10,7 @@
 ### Added
 
 - Redesigned the Empty State screens for the Library, Favorites, and Recycle Bin to feature a sleeker, more sophisticated card layout with refined copywriting and clear calls-to-action ("Add to your corner").
+- Added smart, dynamic grid-mode loading skeletons that perfectly mirror the grid layout when refreshing the page, ensuring a seamless experience without layout shifts.
 - Redesigned the main navigation sidebar for mobile devices. It now transforms into a sleek, horizontal pill layout that smoothly sticks to the top of the screen as you scroll, complete with a beautiful frosted glass effect.
 - Brought complete feature parity to the Grid View mode. You can now individually select folders and links using checkboxes, and access all actions (Favorite, Edit, Delete, Move, etc.) via new three-dot dropdown menus right from the grid.
 - Grid View now beautifully displays the real website favicons for your saved links instead of a generic placeholder.

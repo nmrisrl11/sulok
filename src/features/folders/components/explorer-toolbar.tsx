@@ -1,4 +1,4 @@
-import { FolderPlusCircleIcon, TrashXMarkIcon } from "@/components/icons";
+import { FolderPlusCircleIcon, GridIcon, ListIcon, TrashXMarkIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,7 +18,7 @@ import {
 	viewParser,
 } from "@/lib/search-params";
 import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
-import { LayoutGridIcon, ListIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
 
@@ -167,7 +167,7 @@ export function ExplorerToolbar({
 								className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "bg-background shadow-sm hover:bg-background" : "hover:bg-background/50"}`}
 								onClick={() => setViewMode("grid")}
 							>
-								<LayoutGridIcon className="size-4" />
+								<GridIcon className="size-4" />
 							</Button>
 						</div>
 					</div>

@@ -7,11 +7,12 @@ import {
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { folderIdParser, viewParser } from "@/lib/search-params";
+import { cn } from "@/lib/utils";
 import { useFolderStore } from "@/stores";
 import { PlusIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-export function FolderEmptyState() {
+export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 	const [view] = useQueryState("view", viewParser);
 	const [folderId] = useQueryState("folder", folderIdParser);
 	const { openCreateDialog } = useFolderStore();
@@ -45,7 +46,12 @@ export function FolderEmptyState() {
 	}
 
 	return (
-		<div className="flex w-full animate-in flex-col items-center justify-center rounded-xl border bg-card p-8 py-12 text-center shadow-sm duration-300 zoom-in-95 corner-squircle fade-in supports-[corner-shape:squircle]:rounded-2xl">
+		<div
+			className={cn(
+				"flex w-full flex-col items-center justify-center rounded-xl border bg-card p-8 py-12 text-center shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
+				animate && "animate-in duration-300 zoom-in-95 fade-in",
+			)}
+		>
 			<div className="mb-5 flex size-12 items-center justify-center rounded-full bg-muted/50">
 				{icon}
 			</div>
