@@ -216,7 +216,9 @@ Minimal shadows. Prefer border/background differentiation.
 
 - Use `goey-toast` for all app notifications via `src/lib/notify.ts`.
 - Positioned at the `bottom-center` with no timestamps.
+- Default `goey-toast` styles are overridden in `src/index.css` to match the brand typography (Manrope) and primary colors.
 - Use friendly, branded copywriting (e.g., "Added to your corner", "Changes saved") instead of generic system terms (e.g., "Item saved", "Success").
+- For actionable notifications (like Undo), use the `successLabel` feature to provide a morphing animation with custom contextual feedback (e.g., "Folder restored", "Link restored") when clicked, rather than abruptly dismissing the toast.
 
 ### Icons
 

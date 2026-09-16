@@ -18,10 +18,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
-import { notify } from "@/lib/notify";
+import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
-import { useConfirmationStore, useFolderStore, useLogoStore, useMoveStore } from "@/stores";
+import { useFolderStore, useMoveStore } from "@/stores";
 import { MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
@@ -32,67 +32,10 @@ export const FolderGridCard = memo(function FolderGridCard({ folder }: { folder:
 	const [_, setFolderId] = useQueryState("folder", folderIdParser);
 	const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 	const toggleSelection = useFolderStore((state) => state.toggleSelection);
-	const hardDeleteFolder = useFolderStore((state) => state.hardDeleteFolder);
-	const restoreFolders = useFolderStore((state) => state.restoreFolders);
-	const openEditDialog = useFolderStore((state) => state.openEditDialog);
 	const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
-	const confirm = useConfirmationStore((state) => state.confirm);
 
-	const handleSoftDelete = async () => {
-		try {
-			await useFolderStore.getState().softDeleteFolders([folder.id]);
-			useLogoStore.getState().setTemporaryExpression("unimpressed");
-			notify.success("Folder moved to Recycle Bin", {
-				id: "folder-soft-deleted",
-				hideReaction: true,
-				action: {
-					label: "Undo",
-					onClick: () => useFolderStore.getState().restoreFolders([folder.id]),
-				},
-			});
-		} catch (error) {
-			console.error("Failed to move folder to Recycle Bin", error);
-			notify.error("Unable to remove folder", { id: "folder-delete-fail" });
-		}
-	};
-
-	const handleRestore = async () => {
-		try {
-			await restoreFolders([folder.id]);
-			notify.success("Folder restored");
-		} catch (error) {
-			console.error(error);
-			notify.error("Failed to restore folder");
-		}
-	};
-
-	const handleHardDelete = () => {
-		confirm({
-			title: "Delete Folder",
-			description: `Are you sure you want to permanently delete "${folder.name}"? This action cannot be undone.`,
-			confirmText: "Delete Forever",
-			onConfirm: async () => {
-				try {
-					await hardDeleteFolder(folder.id);
-					notify.success("Folder permanently deleted");
-				} catch (error) {
-					console.error(error);
-					notify.error("Failed to delete folder");
-				}
-			},
-		});
-	};
-
-	const handleToggleFavorite = async () => {
-		try {
-			const { FolderRepository } = await import("@/db/repositories/folder-repository");
-			const isFav = await FolderRepository.toggleFavorite(folder.id);
-			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
-		} catch (error) {
-			console.error("Failed to toggle favorite", error);
-			notify.error("Failed to update favorite status");
-		}
-	};
+	const { handleEdit, handleSoftDelete, handleRestore, handleHardDelete, handleToggleFavorite } =
+		useFolderActions(folder);
 
 	return (
 		<div
@@ -192,10 +135,7 @@ export const FolderGridCard = memo(function FolderGridCard({ folder }: { folder:
 										{folder.isFavorite ? "Unfavorite" : "Favorite"}
 									</span>
 								</DropdownMenuItem>
-								<DropdownMenuItem
-									onClick={() => openEditDialog(folder)}
-									className="cursor-pointer py-2.5 md:py-1.5"
-								>
+								<DropdownMenuItem onClick={handleEdit} className="cursor-pointer py-2.5 md:py-1.5">
 									<FolderEditIcon className="mr-2 h-3.5 w-3.5" />
 									<span className="text-[13px]">Rename</span>
 								</DropdownMenuItem>

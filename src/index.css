@@ -251,3 +251,23 @@
 		background-color: var(--muted-foreground);
 	}
 }
+
+[data-sonner-toaster],
+.gooey-wrapper {
+	font-family: var(--font-sans) !important;
+	z-index: 9999 !important;
+}
+
+.gooey-title,
+.gooey-actionButton {
+	font-weight: 600 !important;
+}
+
+.gooey-actionButton {
+	color: var(--primary-foreground) !important;
+	background-color: var(--primary) !important;
+}
+
+.gooey-description {
+	text-align: center !important;
+}

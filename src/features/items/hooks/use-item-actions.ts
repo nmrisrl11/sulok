@@ -18,7 +18,10 @@ export function useItemActions(item: Item) {
 				hideReaction: true,
 				action: {
 					label: "Undo",
-					onClick: () => useItemStore.getState().restoreItems([item.id]),
+					onClick: () => {
+						useItemStore.getState().restoreItems([item.id]);
+					},
+					successLabel: "Link restored",
 				},
 			});
 		} catch (error) {
