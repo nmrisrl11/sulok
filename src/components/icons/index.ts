@@ -16,6 +16,8 @@ export * from "./folder-icon";
 export * from "./folder-link-icon";
 export * from "./folder-plus-circle-icon";
 export * from "./follow-folder-icon";
+export * from "./grid-icon";
+export * from "./list-icon";
 export * from "./loading-icon";
 export * from "./move-to-folder-icon";
 export * from "./page-icon";
