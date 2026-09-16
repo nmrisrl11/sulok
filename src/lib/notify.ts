@@ -24,6 +24,7 @@ type ToastOptions = {
 	action?: {
 		label: string;
 		onClick: () => void;
+		successLabel?: string;
 	};
 	hideReaction?: boolean;
 };

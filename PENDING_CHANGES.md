@@ -21,6 +21,8 @@
 
 ### Changed
 
+- Enhanced the Undo notification with a smooth morphing animation and contextual feedback (e.g., "Folder restored" or "Link restored") when restoring items from the Recycle Bin.
+
 - The search bar now finds everything across your entire corner of the web, not just the folder you're currently viewing. Search is also heavily optimized behind the scenes for snappier performance.
 - Sorting options (like Name or Date Added) now intelligently group Folders and Links separately, making it much easier to scan and organize your content.
 - When you add a new link from an empty folder, it now intelligently saves directly into that folder instead of going to your unorganized space.

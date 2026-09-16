@@ -24,6 +24,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Zustand stores scaffolded (Item and Confirmation stores)
 - [x] Core layers (stores, hooks, schemas) use barrel files (`index.ts`) for clean public APIs and circular dependency prevention
 - [x] Item CRUD (Create, Read, Update, Delete, Bulk Delete) integrated with Dexie
+- [x] Business logic cleanly abstracted from components into feature-specific hooks (`useItemActions`, `useFolderActions`, `useBulkActions`)
 - [x] React Router DOM v7 integrated for application routing
 - [x] About page established with product branding
 - [x] Initial performance optimizations (route/dialog code-splitting, strict Zustand state isolation, React.memo list rendering)
