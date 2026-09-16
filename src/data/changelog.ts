@@ -14,6 +14,47 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.4.0",
+		date: "Sep 16, 2026",
+		title: "Folders, Grid View & Premium Redesign",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Redesigned Empty States & Navigation: A sleek new horizontal mobile sidebar and beautiful card layouts for empty screens across your library.",
+					"Grid View Upgrades: Grid mode now supports checkboxes, bulk actions, dropdown menus, and real website favicons.",
+					"New Workspace Themes & Customization: Added Sepia, Sand, Midnight, and Mocha themes, alongside a new Quick Customize sheet (`Shift + C`) to tweak settings instantly.",
+					"Smarter Icons & Favoriting: Enjoy a bespoke two-tone folder icon and the ability to instantly favorite multiple links and folders at once.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Universal Search & Smart Sorting: The search bar now explores your entire library, and sorting options intelligently group folders and links separately.",
+					"Intuitive Organization: The 'Move to...' dialog now features a deep-dive breadcrumb navigation system, making it incredibly easy to nest items.",
+					"Refined Interface & Spacing: Upgraded to custom-designed icons throughout the app, cleaned up the toolbar layout, grouped desktop hover actions into sleek floating pills, and improved spacing for better readability.",
+					"Context-Aware UX: The bulk action bar is now specific to your current view, new links automatically save to the folder you're browsing, and tapping items in the Recycle Bin safely selects them instead of opening.",
+					"Enhanced Undo Feedback: Replaced generic notifications with smooth, morphing animations that tell you exactly what you restored.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Resolved scrolling issues on mobile devices that caused the entire page to shift awkwardly.",
+					"Fixed multiple visual glitches, including cut-off selection borders, flashing white screens on dark themes, and stretching toolbars.",
+					"Fixed inconsistencies when managing or viewing contents inside deeply nested or Favorited folders.",
+					"Resolved keyboard accessibility bugs and prevented shortcuts from accidentally triggering while typing.",
+				],
+			},
+			{
+				category: "Removed",
+				items: [
+					"Removed the old light/dark mode switch in favor of the new Workspace Themes engine.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.3.0",
 		date: "Sep 10, 2026",
 		title: "Personalization & Performance",
