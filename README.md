@@ -1,8 +1,14 @@
 # Sulok
 
-> **Your corner of the web.**
+<div align="center">
+  <img src="public/og-image.png" alt="Sulok Cover" />
+</div>
 
-Sulok is a beautifully designed, local-first personal web library for saving, organizing, and rediscovering the links and bookmarks you find on the internet.
+## Overview
+
+**Sulok** is a beautifully designed, local-first personal web library for saving, organizing, and rediscovering the links and bookmarks you find on the internet.
+
+🔗 **Try it now**: [sulok-app.vercel.app](https://sulok-app.vercel.app)
 
 ---
 
@@ -24,7 +30,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar.
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, and custom scrollbars.
 - **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
-- **🌓 Theme Support**: Seamless switching between Dark and Light modes.
+- **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, and mascot customization via a Quick Customize menu.
 - **🚀 Local-First Performance**: Lightning-fast operations powered by IndexedDB, heavily optimized React state isolation, and zero-latency UI responses.
 - **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
 - **🌐 Offline Capable**: Designed to work offline for local data and existing items (metadata fetching requires network access; PWA support coming soon).
@@ -166,7 +172,7 @@ _(No `.env` file is required to run the application locally.)_
 We are currently focused on completing Phase 1 of our roadmap. Future plans include:
 
 - Drag-and-drop folder organization
-- Advanced search, sorting, and tag filtering
+- Item tags and categorization
 - Full Progressive Web App (PWA) installation support
 - Chrome Extension for quick-saving
 - Peer-to-peer (WebRTC) device synchronization without a backend
