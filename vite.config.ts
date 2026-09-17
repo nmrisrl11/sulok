@@ -14,7 +14,8 @@ const htmlPlugin = () => {
 				.replace(/%APP_KEYWORDS%/g, APP_INFO.keywords)
 				.replace(/%APP_THEME_COLOR%/g, APP_INFO.themeColor)
 				.replace(/%APP_NAME%/g, APP_INFO.name)
-				.replace(/%APP_AUTHOR%/g, APP_INFO.author);
+				.replace(/%APP_AUTHOR%/g, APP_INFO.author)
+				.replace(/%APP_URL%/g, APP_INFO.appUrl);
 		},
 	};
 };

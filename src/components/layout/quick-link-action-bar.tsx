@@ -113,7 +113,6 @@ export function QuickLinkActionBar() {
 		<form
 			onSubmit={handleSubmit}
 			noValidate
-			role={!isExpanded ? "button" : undefined}
 			tabIndex={!isExpanded ? 0 : undefined}
 			aria-label={!isExpanded ? "Add to your corner" : undefined}
 			onClick={() => {

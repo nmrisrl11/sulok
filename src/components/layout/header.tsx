@@ -23,6 +23,7 @@ export function Header() {
 						<NavLink
 							key={link.to}
 							to={link.to}
+							title={link.label}
 							onMouseEnter={() => setTemporaryExpression("shy", 10000)}
 							onMouseLeave={clearTemporaryExpression}
 							className={({ isActive }) =>

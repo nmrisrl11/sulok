@@ -83,7 +83,7 @@ The project is currently in the **core features implementation phase**.
 - [ ] Item tags and categorization
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
-- [x] SEO and Agentic Browsing foundations (robots.txt, sitemap.xml, llms.txt)
+- [x] SEO, Social Previews (Open Graph), and Agentic Browsing foundations (robots.txt, sitemap.xml, llms.txt)
 - [x] Expandable Quick Link Action Bar (FAB) at the bottom
 - [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`

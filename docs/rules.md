@@ -163,6 +163,8 @@ src/
   - Always use `role="alert"` for dynamically rendered error states or asynchronous fallbacks (e.g., metadata fetch failures) to ensure screen readers immediately announce them without requiring user focus.
   - Maintain sequentially-descending heading hierarchies (e.g., `h1` -> `h2` -> `h3`) and ensure all interactive elements, particularly icon-only buttons, have accessible names via `aria-label` or `.sr-only` text to pass strict Lighthouse audits.
 - **Metadata Fetching Optimization:** When editing an existing item, do not refetch metadata from external APIs (like `ogfetch`) unless the URL has explicitly changed. Utilize the locally stored metadata (`title`, `description`, `image`, `logo`) to populate the preview and form state to conserve API limits.
+- **SEO & Social Previews:** Open Graph (`og:image`, `twitter:image`) metadata in `index.html` must use absolute canonical URLs to work correctly on social platforms. The Vite configuration injects `%APP_URL%` during build.
+- **Agentic Browsing:** The `public/llms.txt` file must strictly follow the `llmstxt.org` standard format to ensure AI crawlers correctly parse the app's local-first architecture and available routes.
 - **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) so the hit area remains large enough for comfortable tapping, even if the internal icons or text are styled compactly.
 
 ---
