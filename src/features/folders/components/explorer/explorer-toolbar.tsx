@@ -29,9 +29,10 @@ import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
 import { PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { memo } from "react";
 import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
 
-export function ExplorerToolbar({
+export const ExplorerToolbar = memo(function ExplorerToolbar({
 	hasItems = true,
 	hasFolders = true,
 }: {
@@ -45,8 +46,6 @@ export function ExplorerToolbar({
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
 	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
-
-	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
 
 	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
 	const confirm = useConfirmationStore((state) => state.confirm);
@@ -76,7 +75,6 @@ export function ExplorerToolbar({
 
 	const handleResetFilters = () => {
 		setSearchQuery(null);
-		setLocalSearch("");
 		setTypeFilter("all");
 		setSortOption("date-desc");
 		setMixData(false);
@@ -139,18 +137,7 @@ export function ExplorerToolbar({
 					{/* Search & Reset */}
 					<div className="col-span-2 flex items-center gap-2 sm:col-span-1 sm:w-full sm:flex-1">
 						<div className="relative flex w-full flex-1 items-center">
-							<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2" />
-							<Input
-								id="search-explorer"
-								type="search"
-								autoComplete="off"
-								autoCorrect="off"
-								spellCheck="false"
-								placeholder="Search your corner..."
-								className="h-8 w-full rounded-lg border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
-								value={localSearch}
-								onChange={(e) => setLocalSearch(e.target.value)}
-							/>
+							<ExplorerSearchInput />
 						</div>
 					</div>
 
@@ -261,5 +248,27 @@ export function ExplorerToolbar({
 				</div>
 			)}
 		</div>
+	);
+});
+
+function ExplorerSearchInput() {
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
+
+	return (
+		<>
+			<SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2" />
+			<Input
+				id="search-explorer"
+				type="search"
+				autoComplete="off"
+				autoCorrect="off"
+				spellCheck="false"
+				placeholder="Search your corner..."
+				className="h-8 w-full rounded-lg border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
+				value={localSearch}
+				onChange={(e) => setLocalSearch(e.target.value)}
+			/>
+		</>
 	);
 }

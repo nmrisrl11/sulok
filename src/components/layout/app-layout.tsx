@@ -21,7 +21,7 @@ const ConfirmationDialog = lazy(() =>
 	})),
 );
 const FolderDialog = lazy(() =>
-	import("@/features/folders/components/folder-dialog").then((m) => ({
+	import("@/features/folders/components/folder/folder-dialog").then((m) => ({
 		default: m.FolderDialog,
 	})),
 );
@@ -31,7 +31,7 @@ const MoveDialog = lazy(() =>
 	})),
 );
 
-export function AppLayout({ children }: { children: ReactNode }) {
+function GlobalDialogs() {
 	const isItemDialogOpen = useItemStore((state) => state.isDialogOpen);
 	const isFolderDialogOpen = useFolderStore((state) => state.isDialogOpen);
 	const isConfirmationDialogOpen = useConfirmationStore((state) => state.isOpen);
@@ -59,33 +59,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
 		setHasLoadedMoveDialog(true);
 	}
 
-	const toggleQuickCustomize = useUIStore((state) => state.toggleQuickCustomize);
-
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key.toLowerCase() === "c" && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
-				// Don't trigger if user is typing in an input
-				if (
-					e.target instanceof HTMLInputElement ||
-					e.target instanceof HTMLTextAreaElement ||
-					(e.target instanceof HTMLElement && e.target.isContentEditable)
-				)
-					return;
-				e.preventDefault();
-				toggleQuickCustomize();
-			}
-		};
-		window.addEventListener("keydown", handleKeyDown);
-		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [toggleQuickCustomize]);
-
 	return (
-		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
-			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
-				<Header />
-
-				<main className="flex flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>
-			</div>
+		<>
 			{hasLoadedItemDialog && (
 				<ErrorBoundary>
 					<Suspense fallback={null}>
@@ -114,6 +89,39 @@ export function AppLayout({ children }: { children: ReactNode }) {
 					</Suspense>
 				</ErrorBoundary>
 			)}
+		</>
+	);
+}
+
+export function AppLayout({ children }: { children: ReactNode }) {
+	const toggleQuickCustomize = useUIStore((state) => state.toggleQuickCustomize);
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key.toLowerCase() === "c" && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
+				// Don't trigger if user is typing in an input
+				if (
+					e.target instanceof HTMLInputElement ||
+					e.target instanceof HTMLTextAreaElement ||
+					(e.target instanceof HTMLElement && e.target.isContentEditable)
+				)
+					return;
+				e.preventDefault();
+				toggleQuickCustomize();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [toggleQuickCustomize]);
+
+	return (
+		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
+			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
+				<Header />
+
+				<main className="flex flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>
+			</div>
+			<GlobalDialogs />
 			<BottomActionSystem />
 			<QuickCustomizeSheet />
 			<Toaster />

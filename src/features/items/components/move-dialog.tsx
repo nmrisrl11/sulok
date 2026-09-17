@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FolderRepository } from "@/db/repositories/folder-repository";
-import { FolderBreadcrumbs } from "@/features/folders/components/folder-breadcrumbs";
+import { FolderBreadcrumbs } from "@/features/folders/components/folder/folder-breadcrumbs";
 import { notify } from "@/lib/notify";
 import { useFolderStore, useItemStore, useMoveStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";

@@ -25,6 +25,8 @@
 
 ### Fixed
 
+- Fixed an issue where restoring deleted items from the Recycle Bin would sometimes cause an error.
+- Dramatically improved scrolling and clicking performance in the main library by optimizing how folders and links update on the screen.
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.
 - Fixed a bug where the Explorer toolbar would completely disappear (preventing users from clearing filters) if an active type filter resulted in 0 items.
 - Fixed accessibility warnings (missing aria-labels and invalid heading hierarchies) to ensure the app remains fully screen-reader friendly.
