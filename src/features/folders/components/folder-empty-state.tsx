@@ -15,7 +15,7 @@ import { useQueryState } from "nuqs";
 export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 	const [view] = useQueryState("view", viewParser);
 	const [folderId] = useQueryState("folder", folderIdParser);
-	const { openCreateDialog } = useFolderStore();
+	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
 
 	const isTrash = view === "trash";
 	const isFavorites = view === "favorites";

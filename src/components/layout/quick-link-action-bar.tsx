@@ -13,7 +13,8 @@ export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
 	const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
-	const { isQuickLinkExpanded: isExpanded, setQuickLinkExpanded: setIsExpanded } = useUIStore();
+	const isExpanded = useUIStore((state) => state.isQuickLinkExpanded);
+	const setIsExpanded = useUIStore((state) => state.setQuickLinkExpanded);
 	const [error, setError] = useState<string | null>(null);
 	const openCreateDialog = useItemStore((state) => state.openCreateDialog);
 	const defaultExpression = useSettingsStore(

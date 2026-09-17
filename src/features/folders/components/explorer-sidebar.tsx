@@ -51,7 +51,7 @@ export function ExplorerSidebar() {
 						className={cn(
 							"group flex flex-1 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:flex-none",
 							item.isActive
-								? "bg-background text-foreground shadow-sm ring-1 ring-border/50"
+								? "bg-background text-foreground shadow-engraved"
 								: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 						)}
 						onClick={item.onClick}

@@ -11,8 +11,7 @@ import {
 import { SettingsCard } from "@/features/settings/components/settings-card";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { EXPRESSIONS, type SuloExpression } from "@/stores";
-import { defaultSettings, useSettingsStore } from "@/stores";
+import { defaultSettings, EXPRESSIONS, useSettingsStore, type SuloExpression } from "@/stores";
 import type { SuloSettings } from "@/types/settings";
 import { memo, useCallback, useState } from "react";
 
@@ -31,6 +30,7 @@ const ExpressionSelect = memo(function ExpressionSelect({
 }) {
 	const value = useSettingsStore((state) => state.settings.suloSettings[id] as SuloExpression);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleExpressionChange = (val: SuloExpression) => {
 		const currentSettings = useSettingsStore.getState().settings.suloSettings;
@@ -59,24 +59,31 @@ const ExpressionSelect = memo(function ExpressionSelect({
 				<p className="text-sm text-muted-foreground">{description}</p>
 			</div>
 			<div className={cn("shrink-0", variant === "default" ? "sm:w-50" : "w-full")}>
-				<Select value={value} onValueChange={(v) => handleExpressionChange(v as SuloExpression)}>
+				<Select
+					value={value}
+					onValueChange={(v) => handleExpressionChange(v as SuloExpression)}
+					onOpenChange={setIsOpen}
+				>
 					<SelectTrigger
 						id={`expression-${id}`}
 						className="w-full capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 					>
-						<SelectValue />
+						<SelectValue>
+							<span className="capitalize">{value}</span>
+						</SelectValue>
 					</SelectTrigger>
 					<SelectContent position="popper" className="max-h-60" data-no-sound="true">
-						{EXPRESSIONS.map((expr) => (
-							<SelectItem
-								key={expr}
-								value={expr}
-								className="rounded-md px-3 py-2.5 capitalize"
-								onMouseEnter={() => setPreviewExpression(expr)}
-							>
-								{expr}
-							</SelectItem>
-						))}
+						{isOpen &&
+							EXPRESSIONS.map((expr) => (
+								<SelectItem
+									key={expr}
+									value={expr}
+									className="rounded-md px-3 py-2.5 capitalize"
+									onMouseEnter={() => setPreviewExpression(expr)}
+								>
+									{expr}
+								</SelectItem>
+							))}
 					</SelectContent>
 				</Select>
 			</div>

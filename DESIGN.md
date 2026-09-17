@@ -150,6 +150,7 @@ Minimal shadows. Prefer border/background differentiation.
 ### Quick Customize Sheet
 
 - Global contextual side sheet triggered via `Shift + C`.
+- The trigger icon (sparkles) is grouped alongside the main navigation links in the header, separated by a vertical divider, for a cohesive layout.
 - Renders without a backdrop filter to allow the user to view real-time changes applied to the underlying app layout.
 - Utilizes a `variant="compact"` prop for individual setting controls (Theme, Mascot, Audio) to switch from horizontal flowing layouts (used in full Settings) to vertically stacked, dense column structures.
 
@@ -168,7 +169,7 @@ Minimal shadows. Prefer border/background differentiation.
 ### Explorer Toolbar
 
 - Implements a "Title & Toolbar" pattern.
-- The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space.
+- The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space. Breadcrumbs intelligently adapt to screen size, displaying up to 6 items on desktop and strictly 3 items on mobile.
 - Utility rows (Search & View modes) are placed in a floating pill container (`bg-muted/30 backdrop-blur-md`).
 - On mobile, it utilizes a responsive 3-row grid structure (Search, Filter, Actions) to remain accessible without horizontal overflow.
 - **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.

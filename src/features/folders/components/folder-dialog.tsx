@@ -17,8 +17,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function FolderDialog() {
-	const { isDialogOpen, setDialogOpen, editingFolder, initialParentId, addFolder, updateFolder } =
-		useFolderStore();
+	const isDialogOpen = useFolderStore((state) => state.isDialogOpen);
+	const setDialogOpen = useFolderStore((state) => state.setDialogOpen);
+	const editingFolder = useFolderStore((state) => state.editingFolder);
+	const initialParentId = useFolderStore((state) => state.initialParentId);
+	const addFolder = useFolderStore((state) => state.addFolder);
+	const updateFolder = useFolderStore((state) => state.updateFolder);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Derive state for smooth animations
