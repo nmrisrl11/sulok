@@ -15,15 +15,18 @@ import {
 	CustomHeartSlashIcon,
 	ExternalLinkIcon,
 	FileEditIcon,
+	FolderIcon,
 	MoveToFolderIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
 	TrashXMarkIcon,
 } from "@/components/icons";
 import type { Item } from "@/db/db";
-import { viewParser } from "@/lib/search-params";
+import { FolderRepository } from "@/db/repositories/folder-repository";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
+import { useLiveQuery } from "dexie-react-hooks";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
@@ -38,6 +41,13 @@ export const ItemGridCard = memo(
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
 
 		const [view] = useQueryState("view", viewParser);
+		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+		const [, setFolderId] = useQueryState("folder", folderIdParser);
+
+		const parentFolder = useLiveQuery(
+			() => (item.folderId ? FolderRepository.getById(item.folderId) : undefined),
+			[item.folderId],
+		);
 
 		const {
 			isCopied,
@@ -204,9 +214,28 @@ export const ItemGridCard = memo(
 					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
 				</div>
 
-				<div className="flex w-full items-center justify-center gap-1">
-					{item.isFavorite && <CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />}
-					<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
+				<div className="flex w-full flex-col items-center justify-center gap-1">
+					<div className="flex items-center gap-1">
+						{item.isFavorite && (
+							<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
+						)}
+						<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
+					</div>
+					{searchQuery && view !== "trash" && (
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								setSearchQuery(null);
+								setFolderId(item.folderId || null);
+							}}
+							className="mt-1 flex max-w-[90%] items-center justify-center gap-1.5 rounded-md border border-border/50 bg-secondary/50 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground transition-colors corner-squircle hover:bg-secondary hover:text-foreground supports-[corner-shape:squircle]:rounded-xl"
+						>
+							<FolderIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+							<span className="truncate">{parentFolder?.name || "Library"}</span>
+						</button>
+					)}
 				</div>
 			</div>
 		);

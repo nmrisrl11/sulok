@@ -167,6 +167,12 @@ _(No `.env` file is required to run the application locally.)_
 
 ---
 
+## 🙌 Acknowledgements
+
+- **Sulo Mascot Blueprint**: The mascot's base shape, expressions, and initial concept were inspired by and based on [bloub.vercel.app](https://bloub.vercel.app). We built upon this blueprint by adding custom interactivity, dynamic animations, and state-driven behaviors tailored specifically for Sulok.
+
+---
+
 ## 🔮 Roadmap
 
 We are currently focused on completing Phase 1 of our roadmap. Future plans include:

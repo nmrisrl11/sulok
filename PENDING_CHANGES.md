@@ -9,6 +9,9 @@
 
 ### Added
 
+- Added an intelligent "Go to link" action button when attempting to save a duplicate link, instantly navigating to its existing folder.
+- Added a "Restore" action button when attempting to save a link that is currently in the recycle bin.
+- Added clickable folder badges to items displayed during search, allowing users to jump directly to the item's location.
 - Added bespoke `MergeIcon` for mixing/separating data view modes.
 
 ### Changed

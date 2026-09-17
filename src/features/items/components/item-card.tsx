@@ -15,15 +15,18 @@ import {
 	CustomHeartSlashIcon,
 	ExternalLinkIcon,
 	FileEditIcon,
+	FolderIcon,
 	MoveToFolderIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
 	TrashXMarkIcon,
 } from "@/components/icons";
 import type { Item } from "@/db/db";
-import { viewParser } from "@/lib/search-params";
+import { FolderRepository } from "@/db/repositories/folder-repository";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
+import { useLiveQuery } from "dexie-react-hooks";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
@@ -37,6 +40,13 @@ export const ItemCard = memo(
 		const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
 
 		const [view] = useQueryState("view", viewParser);
+		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+		const [, setFolderId] = useQueryState("folder", folderIdParser);
+
+		const parentFolder = useLiveQuery(
+			() => (item.folderId ? FolderRepository.getById(item.folderId) : undefined),
+			[item.folderId],
+		);
 
 		const {
 			isCopied,
@@ -101,6 +111,21 @@ export const ItemCard = memo(
 								<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
 									{item.url}
 								</span>
+							)}
+							{searchQuery && view !== "trash" && (
+								<button
+									type="button"
+									onClick={(e) => {
+										e.preventDefault();
+										e.stopPropagation();
+										setSearchQuery(null);
+										setFolderId(item.folderId || null);
+									}}
+									className="mt-1.5 flex w-fit items-center gap-1.5 rounded-md border border-border/50 bg-secondary/50 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground transition-colors corner-squircle hover:bg-secondary hover:text-foreground supports-[corner-shape:squircle]:rounded-xl"
+								>
+									<FolderIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+									<span className="truncate">{parentFolder?.name || "Library"}</span>
+								</button>
 							)}
 						</div>
 					</a>
