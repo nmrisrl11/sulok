@@ -2,8 +2,9 @@ import { FolderLinkIcon, FollowFolderIcon, RecycleBinIcon } from "@/components/i
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useQueryState } from "nuqs";
+import { memo } from "react";
 
-export function ExplorerSidebar() {
+export const ExplorerSidebar = memo(function ExplorerSidebar() {
 	const [view, setView] = useQueryState("view", viewParser);
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -79,4 +80,4 @@ export function ExplorerSidebar() {
 			})}
 		</nav>
 	);
-}
+});

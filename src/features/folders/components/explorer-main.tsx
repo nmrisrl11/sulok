@@ -6,7 +6,7 @@ import { ItemGridCardSkeleton } from "@/features/items/components/item-grid-card
 import { mixDataParser, sortOptionParser, viewModeParser } from "@/lib/search-params";
 import { getHasDataHint } from "@/lib/storage";
 import { useQueryState } from "nuqs";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { FolderCard } from "./folder-card";
 import { FolderCardSkeleton } from "./folder-card-skeleton";
 import { FolderEmptyState } from "./folder-empty-state";
@@ -45,7 +45,7 @@ export function ExplorerMainSkeleton() {
 	);
 }
 
-export function ExplorerMain({
+export const ExplorerMain = memo(function ExplorerMain({
 	folders,
 	items,
 	isLoading,
@@ -145,4 +145,4 @@ export function ExplorerMain({
 			))}
 		</div>
 	);
-}
+});

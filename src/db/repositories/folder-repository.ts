@@ -1,6 +1,7 @@
 import { generateUniqueName } from "@/lib/utils";
 import { folderSchema } from "@/schemas";
 import { db, type Folder } from "../db";
+import { ItemRepository } from "./item-repository";
 
 export const FolderRepository = {
 	async getAll(): Promise<Folder[]> {
@@ -253,7 +254,6 @@ export const FolderRepository = {
 				}
 
 				// Also restore items inside these folders
-				const { ItemRepository } = await import("./item-repository");
 				const itemsToRestore = await db.items.where("folderId").anyOf(folderIds).toArray();
 				const itemIds = itemsToRestore.map((i) => i.id);
 				if (itemIds.length > 0) {

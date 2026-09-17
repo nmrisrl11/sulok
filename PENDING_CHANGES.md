@@ -25,6 +25,8 @@
 
 ### Fixed
 
+- Fixed a `PrematureCommitError` in IndexedDB when restoring items from the Recycle Bin by removing a dynamic import that incorrectly yielded the active Dexie transaction event loop.
+- Fixed a massive cascading re-render issue across the main explorer library by isolating components, decoupling global state into dedicated hooks, and applying precise memoization (`React.memo`) with custom `updatedAt` comparators to ensure individual items/folders only re-render when strictly necessary (e.g., toggling a favorite).
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.
 - Fixed a bug where the Explorer toolbar would completely disappear (preventing users from clearing filters) if an active type filter resulted in 0 items.
 - Fixed accessibility warnings (missing aria-labels and invalid heading hierarchies) to ensure the app remains fully screen-reader friendly.
