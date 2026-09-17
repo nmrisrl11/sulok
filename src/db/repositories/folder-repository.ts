@@ -1,3 +1,4 @@
+import { generateUniqueName } from "@/lib/utils";
 import { folderSchema } from "@/schemas";
 import { db, type Folder } from "../db";
 
@@ -81,11 +82,24 @@ export const FolderRepository = {
 
 		await db.transaction("rw", db.folders, async () => {
 			const count = await db.folders.count();
+			const parentId = parsedData.parentId || null;
+			let finalName = parsedData.name.trim();
+
+			// Handle duplicate names in the same parent folder
+			const siblings = await db.folders
+				.filter((f) => f.parentId === parentId && !f.deletedAt)
+				.toArray();
+
+			const isDuplicate = siblings.some((f) => f.name.toLowerCase() === finalName.toLowerCase());
+			if (isDuplicate) {
+				const existingNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+				finalName = generateUniqueName(finalName, existingNames);
+			}
 
 			const record: Folder = {
 				id: crypto.randomUUID(),
-				parentId: parsedData.parentId || null,
-				name: parsedData.name,
+				parentId,
+				name: finalName,
 				createdAt: now,
 				updatedAt: now,
 				order: count,
@@ -98,6 +112,24 @@ export const FolderRepository = {
 		const parsedData = folderSchema.partial().parse(updates);
 
 		await db.transaction("rw", db.folders, async () => {
+			const existingFolder = await db.folders.get(id);
+			if (!existingFolder) return;
+
+			let finalName = parsedData.name?.trim();
+			const targetParentId =
+				parsedData.parentId !== undefined ? parsedData.parentId : existingFolder.parentId;
+
+			// Handle duplicate names if renaming or moving to a different parent
+			if (finalName && (finalName !== existingFolder.name || parsedData.parentId !== undefined)) {
+				const siblings = await db.folders
+					.filter((f) => f.parentId === targetParentId && !f.deletedAt && f.id !== id)
+					.toArray();
+
+				const existingNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+				finalName = generateUniqueName(finalName, existingNames);
+				parsedData.name = finalName;
+			}
+
 			const updateRecord = {
 				...parsedData,
 				updatedAt: Date.now(),
@@ -196,15 +228,37 @@ export const FolderRepository = {
 				}
 
 				const folderIds = Array.from(foldersToUpdate);
-				// In Dexie 3/4, passing undefined removes the property
-				await db.folders
-					.where("id")
-					.anyOf(folderIds)
-					.modify({ deletedAt: undefined, updatedAt: now });
-				await db.items
-					.where("folderId")
-					.anyOf(folderIds)
-					.modify({ deletedAt: undefined, updatedAt: now });
+
+				for (const fId of folderIds) {
+					const folder = await db.folders.get(fId);
+					if (!folder) continue;
+
+					// Check for name collisions among active (non-deleted) siblings in the target parent
+					const siblings = await db.folders
+						.filter((f) => f.parentId === folder.parentId && !f.deletedAt && f.id !== fId)
+						.toArray();
+
+					const reservedNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+					let finalName = folder.name;
+
+					if (reservedNames.has(finalName.toLowerCase())) {
+						finalName = generateUniqueName(finalName, reservedNames);
+					}
+
+					await db.folders.update(fId, {
+						name: finalName,
+						deletedAt: undefined,
+						updatedAt: now,
+					});
+				}
+
+				// Also restore items inside these folders
+				const { ItemRepository } = await import("./item-repository");
+				const itemsToRestore = await db.items.where("folderId").anyOf(folderIds).toArray();
+				const itemIds = itemsToRestore.map((i) => i.id);
+				if (itemIds.length > 0) {
+					await ItemRepository.restoreMany(itemIds);
+				}
 			}
 		});
 	},
@@ -212,10 +266,31 @@ export const FolderRepository = {
 	async moveMany(ids: string[], targetParentId: string | null): Promise<void> {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, async () => {
-			// Prevent circular references: targetParentId cannot be inside any of the `ids`
-			// We can do a quick check, but for a local UI it's usually blocked by the UI not showing them.
+			// Get all siblings in the target folder to resolve naming conflicts
+			const siblings = await db.folders
+				.filter((f) => f.parentId === targetParentId && !f.deletedAt && !ids.includes(f.id))
+				.toArray();
+
+			// We track new names we assign during this loop to handle conflicts within the moved batch itself
+			const reservedNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+
 			for (const id of ids) {
-				await db.folders.update(id, { parentId: targetParentId, updatedAt: now });
+				const folder = await db.folders.get(id);
+				if (!folder) continue;
+
+				let finalName = folder.name;
+
+				if (reservedNames.has(finalName.toLowerCase())) {
+					finalName = generateUniqueName(finalName, reservedNames);
+				}
+
+				reservedNames.add(finalName.toLowerCase());
+
+				await db.folders.update(id, {
+					parentId: targetParentId,
+					name: finalName,
+					updatedAt: now,
+				});
 			}
 		});
 	},
