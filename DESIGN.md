@@ -215,6 +215,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Centered text with Fraunces heading.
 - Meaningful generic icon (e.g., from lucide-react) or Sulo mascot illustration.
 - Clear call-to-action buttons. For empty containers (like folders), present the primary contextual actions (e.g., "Add to corner" and "New Folder") prominently.
+- Contextual state variations: The "No results found" state for searching/filtering uses brand-aligned copy ("Lost in your corner?") and provides a dedicated "Clear filters" action.
 
 ### Notifications
 

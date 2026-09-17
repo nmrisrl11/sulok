@@ -6,20 +6,28 @@ import {
 	RecycleBinIcon,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { folderIdParser, viewParser } from "@/lib/search-params";
+import {
+	folderIdParser,
+	searchQueryParser,
+	typeFilterParser,
+	viewParser,
+} from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useFolderStore } from "@/stores";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, SearchIcon, XIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 	const [view] = useQueryState("view", viewParser);
 	const [folderId] = useQueryState("folder", folderIdParser);
+	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
 	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
 
 	const isTrash = view === "trash";
 	const isFavorites = view === "favorites";
 	const isRoot = view === "all" && !folderId;
+	const isFiltering = !!searchQuery || typeFilter !== "all";
 
 	let icon = <FolderIcon className="size-6" />;
 	let title = "This folder is empty";
@@ -27,7 +35,11 @@ export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 		"Fill this space with interesting links or create subfolders to stay organized.";
 	let ctaText = "Add to corner";
 
-	if (isTrash) {
+	if (isFiltering) {
+		icon = <SearchIcon className="size-6 text-muted-foreground" />;
+		title = "Lost in your corner?";
+		description = "We couldn't find anything matching your current search or filters.";
+	} else if (isTrash) {
 		icon = <RecycleBinIcon className="size-6 text-muted-foreground" />;
 		title = "Recycle Bin is empty";
 		description = "Items you delete will safely rest here.";
@@ -59,7 +71,7 @@ export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 			<h3 className="mb-2 text-lg font-semibold tracking-tight text-foreground">{title}</h3>
 			<p className="mx-auto max-w-sm text-sm text-muted-foreground">{description}</p>
 
-			{!isTrash && !isFavorites && (
+			{!isTrash && !isFavorites && !isFiltering && (
 				<div className="mt-6 flex flex-wrap items-center justify-center gap-3">
 					<Button variant="outline" onClick={() => openCreateDialog(folderId)} className="gap-2">
 						<FolderPlusCircleIcon className="size-4" />
@@ -73,6 +85,22 @@ export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 					>
 						<PlusIcon className="size-4" />
 						{ctaText}
+					</Button>
+				</div>
+			)}
+
+			{isFiltering && (
+				<div className="mt-6 flex justify-center">
+					<Button
+						variant="outline"
+						onClick={() => {
+							setSearchQuery(null);
+							setTypeFilter("all");
+						}}
+						className="gap-2"
+					>
+						<XIcon className="size-4 text-muted-foreground" />
+						Clear filters
 					</Button>
 				</div>
 			)}

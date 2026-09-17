@@ -19,10 +19,13 @@
 - Re-integrated the Quick Customize button (sparkles icon) directly into the main navigation header for a cohesive layout.
 - Removed aggressive engraved shadow effects from Settings cards and About page, reverting to a cleaner, subtle shadow.
 - Enhanced breadcrumbs layout to intelligently display up to 6 items on desktop while maintaining a compact 3-item view on mobile.
+- Updated the empty state UI for search/filter operations to use a bespoke "Lost in your corner?" message with a Clear Filters button.
+- Disabled native browser autocomplete, autocorrect, and spellcheck on the Explorer search input to prevent annoying suggestions overlapping the UI.
 
 ### Fixed
 
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.
+- Fixed a bug where the Explorer toolbar would completely disappear (preventing users from clearing filters) if an active type filter resulted in 0 items.
 
 ### Removed
 
