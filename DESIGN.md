@@ -9,7 +9,7 @@
 - **Name:** Sulok
 - **Pronunciation:** /suː.lok/ (SOO-lok)
 - **Tagline:** Your corner of the web.
-- **Mascot:** Sulo. A subtle, flat 2D character that serves as the brand's playful identity. Sulo is responsive and expressive (e.g., sleepy, shy, confused) depending on app context and user interaction.
+- **Mascot:** Sulo. A subtle, flat 2D character that serves as the brand's playful identity. Sulo is responsive and expressive (e.g., sleepy, shy, confused) depending on app context and user interaction. The base design, shape, and initial concept for Sulo were inspired by and based on [bloub.vercel.app](https://bloub.vercel.app), which served as the blueprint for our enhanced, interactive version.
 - **Description:** A personal web library for saving, organizing, and rediscovering things you find on the internet.
 
 ---
@@ -137,6 +137,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Compact padding (12px).
 - Favicon (24×24 rounded box) on the left.
 - Title + URL stacked on the right.
+- During search, items display a clickable folder badge indicating their location.
 - Desktop hover action buttons are grouped inside a floating pill container (`bg-muted/40` frosted background, squircle corners, logical vertical dividers) to form a unified tool palette. Mobile actions remain accessible via a 'More' dropdown menu without horizontal separators. Do not use tooltips for these self-explanatory action icons.
 - Primary content (favicon and text) acts as a clickable link.
 

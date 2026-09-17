@@ -2,17 +2,21 @@ import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { itemSchema } from "@/schemas";
 import type { SuloExpression } from "@/stores";
 import { useItemStore, useSettingsStore, useUIStore } from "@/stores";
 import { CornerDownLeftIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
-	const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
+	const [activeFolderId, setFolderId] = useQueryState("folder", folderIdParser);
+	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [, setView] = useQueryState("view", viewParser);
 	const isExpanded = useUIStore((state) => state.isQuickLinkExpanded);
 	const setIsExpanded = useUIStore((state) => state.setQuickLinkExpanded);
 	const [error, setError] = useState<string | null>(null);
@@ -53,12 +57,7 @@ export function QuickLinkActionBar() {
 			}
 		};
 
-		const handleOpenQuickLink = (e: Event) => {
-			if (e instanceof CustomEvent && e.detail?.folderId) {
-				setActiveFolderId(e.detail.folderId);
-			} else {
-				setActiveFolderId(null);
-			}
+		const handleOpenQuickLink = (_e: Event) => {
 			setIsExpanded(true);
 			setTimeout(() => inputRef.current?.focus(), 50);
 		};
@@ -96,7 +95,35 @@ export function QuickLinkActionBar() {
 			const existingItem = await ItemRepository.findByUrl(result.data);
 			if (existingItem) {
 				setError("Duplicate");
-				notify.warning("This link is already in your corner.", { id: "quick-link-duplicate" });
+				if (existingItem.deletedAt) {
+					notify.warning("This link is in your recycle bin.", {
+						id: "quick-link-duplicate",
+						action: {
+							label: "Restore",
+							onClick: async () => {
+								await useItemStore.getState().restoreItems([existingItem.id]);
+								notify.dismiss("quick-link-duplicate");
+								notify.success("Link restored from trash", { id: "quick-link-restored" });
+								setUrl("");
+								setIsExpanded(false);
+							},
+						},
+					});
+				} else {
+					notify.warning("This link is already in your corner.", {
+						id: "quick-link-duplicate",
+						action: {
+							label: "Go to link",
+							onClick: () => {
+								setFolderId(existingItem.folderId || null);
+								setSearchQuery(null);
+								setView("all");
+								setUrl("");
+								setIsExpanded(false);
+							},
+						},
+					});
+				}
 				return;
 			}
 		} catch (err) {

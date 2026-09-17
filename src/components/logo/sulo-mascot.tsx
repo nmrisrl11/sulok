@@ -1,3 +1,11 @@
+/**
+ * Sulo Mascot
+ *
+ * The mascot's base shape, expressions, and initial concept were inspired by
+ * and based on https://bloub.vercel.app. We built upon this blueprint by adding
+ * custom interactivity, dynamic animations, and state-driven behaviors tailored
+ * specifically for Sulok.
+ */
 import { cn } from "@/lib/utils";
 import type { SuloExpression } from "@/stores";
 import { useEffect, useState } from "react";

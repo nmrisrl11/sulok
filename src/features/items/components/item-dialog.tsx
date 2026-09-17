@@ -8,12 +8,18 @@ import {
 import { APP_INFO } from "@/constants/app-info";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { notify } from "@/lib/notify";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import type { ItemFormValues } from "@/schemas";
 import { useItemStore, useLogoStore } from "@/stores";
+import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
+	const [, setFolderId] = useQueryState("folder", folderIdParser);
+	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const [, setView] = useQueryState("view", viewParser);
+
 	const isDialogOpen = useItemStore((state) => state.isDialogOpen);
 	const setDialogOpen = useItemStore((state) => state.setDialogOpen);
 	const editingItem = useItemStore((state) => state.editingItem);
@@ -48,7 +54,32 @@ export function ItemDialog() {
 			// Check for duplicates
 			const existingItem = await ItemRepository.findByUrl(data.url);
 			if (existingItem && (!editingItem || existingItem.id !== editingItem.id)) {
-				setSubmitError("This link is already in your corner.");
+				setDialogOpen(false);
+				if (existingItem.deletedAt) {
+					notify.warning("This link is in your recycle bin.", {
+						id: "item-dialog-duplicate",
+						action: {
+							label: "Restore",
+							onClick: async () => {
+								await useItemStore.getState().restoreItems([existingItem.id]);
+								notify.dismiss("item-dialog-duplicate");
+								notify.success("Link restored from trash", { id: "item-restored" });
+							},
+						},
+					});
+				} else {
+					notify.warning("This link is already in your corner.", {
+						id: "item-dialog-duplicate",
+						action: {
+							label: "Go to link",
+							onClick: () => {
+								setFolderId(existingItem.folderId || null);
+								setSearchQuery(null);
+								setView("all");
+							},
+						},
+					});
+				}
 				setIsSubmitting(false);
 				return; // Stop submission
 			}

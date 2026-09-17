@@ -15,15 +15,18 @@ import {
 	CustomHeartSlashIcon,
 	ExternalLinkIcon,
 	FileEditIcon,
+	FolderIcon,
 	MoveToFolderIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
 	TrashXMarkIcon,
 } from "@/components/icons";
 import type { Item } from "@/db/db";
-import { viewParser } from "@/lib/search-params";
+import { FolderRepository } from "@/db/repositories/folder-repository";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
+import { useLiveQuery } from "dexie-react-hooks";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
@@ -38,6 +41,13 @@ export const ItemGridCard = memo(
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
 
 		const [view] = useQueryState("view", viewParser);
+		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+		const [, setFolderId] = useQueryState("folder", folderIdParser);
+
+		const parentFolder = useLiveQuery(
+			() => (item.folderId ? FolderRepository.getById(item.folderId) : undefined),
+			[item.folderId],
+		);
 
 		const {
 			isCopied,
@@ -52,34 +62,11 @@ export const ItemGridCard = memo(
 
 		return (
 			<div
-				role="button"
-				tabIndex={0}
-				onClick={(e) => {
-					if (view === "trash") {
-						const target = e.target as HTMLElement;
-						if (target.closest(".item-actions")) return;
-						toggleSelection(item.id);
-					} else {
-						window.open(item.url, "_blank", "noopener,noreferrer");
-					}
-				}}
-				onKeyDown={(e) => {
-					if (e.target !== e.currentTarget) return;
-					if (e.key === "Enter" || e.key === " ") {
-						e.preventDefault();
-						if (view === "trash") {
-							toggleSelection(item.id);
-						} else {
-							window.open(item.url, "_blank", "noopener,noreferrer");
-						}
-					}
-				}}
 				className={cn(
-					"group relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
+					"group relative flex flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:border-border hover:bg-card/50 supports-[corner-shape:squircle]:rounded-2xl",
 					isSelected
 						? "border-primary/20 bg-card/50 shadow-sm"
 						: "border-transparent bg-transparent",
-					view === "trash" && "cursor-pointer",
 				)}
 			>
 				{/* Checkbox (Top Left) */}
@@ -200,13 +187,65 @@ export const ItemGridCard = memo(
 					</DropdownMenu>
 				</div>
 
-				<div className="flex size-12 items-center justify-center overflow-hidden rounded-full bg-muted/50">
+				<div
+					role="button"
+					tabIndex={-1}
+					aria-hidden="true"
+					onClick={() => {
+						if (view === "trash") {
+							toggleSelection(item.id);
+						} else {
+							window.open(item.url, "_blank", "noopener,noreferrer");
+						}
+					}}
+					className="flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-muted/50 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+				>
 					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
 				</div>
 
-				<div className="flex w-full items-center justify-center gap-1">
-					{item.isFavorite && <CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />}
-					<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
+				<div className="flex w-full flex-col items-center justify-center gap-1">
+					<div
+						role="button"
+						tabIndex={0}
+						onClick={() => {
+							if (view === "trash") {
+								toggleSelection(item.id);
+							} else {
+								window.open(item.url, "_blank", "noopener,noreferrer");
+							}
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								if (view === "trash") {
+									toggleSelection(item.id);
+								} else {
+									window.open(item.url, "_blank", "noopener,noreferrer");
+								}
+							}
+						}}
+						className="flex cursor-pointer items-center gap-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					>
+						{item.isFavorite && (
+							<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
+						)}
+						<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
+					</div>
+					{searchQuery && view !== "trash" && (
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								setSearchQuery(null);
+								setFolderId(item.folderId || null);
+							}}
+							className="mt-1 flex max-w-[90%] items-center justify-center gap-1.5 rounded-md border border-border/50 bg-secondary/50 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground transition-colors corner-squircle hover:bg-secondary hover:text-foreground supports-[corner-shape:squircle]:rounded-xl"
+						>
+							<FolderIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+							<span className="truncate">{parentFolder?.name || "Library"}</span>
+						</button>
+					)}
 				</div>
 			</div>
 		);
@@ -215,5 +254,6 @@ export const ItemGridCard = memo(
 		prev.item.title === next.item.title &&
 		prev.item.url === next.item.url &&
 		prev.item.logo === next.item.logo &&
-		prev.item.isFavorite === next.item.isFavorite,
+		prev.item.isFavorite === next.item.isFavorite &&
+		prev.item.folderId === next.item.folderId,
 );
