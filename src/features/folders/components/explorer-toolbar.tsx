@@ -225,6 +225,7 @@ export function ExplorerToolbar({
 									variant="ghost"
 									size="sm"
 									title="List View"
+									aria-label="List View"
 									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("list")}
 								>
@@ -234,6 +235,7 @@ export function ExplorerToolbar({
 									variant="ghost"
 									size="sm"
 									title="Grid View"
+									aria-label="Grid View"
 									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("grid")}
 								>

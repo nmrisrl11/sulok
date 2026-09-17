@@ -48,7 +48,7 @@ function ExportOptionButton({
 				{icon}
 			</div>
 			<div>
-				<h4 className="text-sm font-medium text-foreground">{title}</h4>
+				<h3 className="text-sm font-medium text-foreground">{title}</h3>
 				<p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
 					{description}
 				</p>
@@ -185,7 +185,7 @@ export function DataStorageSection() {
 							<UploadCloudIcon className="h-5 w-5" />
 						</div>
 						<div>
-							<h4 className="text-sm font-medium text-foreground">Select backup file</h4>
+							<h3 className="text-sm font-medium text-foreground">Select backup file</h3>
 							<p className="mt-0.5 text-xs text-muted-foreground">
 								Supports .json, .csv, and .txt files
 							</p>

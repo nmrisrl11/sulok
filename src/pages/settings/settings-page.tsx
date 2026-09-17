@@ -92,7 +92,7 @@ export function SettingsPage() {
 				return (
 					<div className="flex flex-col items-center justify-center py-20 text-center">
 						<SettingsIcon className="mb-4 h-12 w-12 text-muted-foreground/50" />
-						<h3 className="font-heading text-lg font-medium">Coming Soon</h3>
+						<h2 className="font-heading text-lg font-medium">Coming Soon</h2>
 						<p className="mt-1 max-w-sm text-sm text-muted-foreground">
 							These settings are currently under development. Please check back later.
 						</p>
