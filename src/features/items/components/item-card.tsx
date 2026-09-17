@@ -84,34 +84,51 @@ export const ItemCard = memo(
 								"group-focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-coarse:opacity-100",
 						)}
 					/>
-					<a
-						href={view === "trash" ? undefined : item.url}
-						target={view === "trash" ? undefined : "_blank"}
-						rel={view === "trash" ? undefined : "noopener noreferrer"}
-						onClick={(e) => {
-							if (view === "trash") e.preventDefault();
-						}}
-						className={cn(
-							"flex min-w-0 flex-1 items-center gap-3 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
-							view === "trash" && "cursor-pointer",
-						)}
-					>
-						<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6 shrink-0" />
-						<div className="flex flex-col overflow-hidden">
-							<span
+					<div className="flex min-w-0 flex-1 items-center gap-3">
+						<a
+							href={view === "trash" ? undefined : item.url}
+							target={view === "trash" ? undefined : "_blank"}
+							rel={view === "trash" ? undefined : "noopener noreferrer"}
+							onClick={(e) => {
+								if (view === "trash") e.preventDefault();
+							}}
+							className={cn(
+								"shrink-0 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
+								view === "trash" && "cursor-pointer",
+							)}
+							tabIndex={-1}
+							aria-hidden="true"
+						>
+							<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
+						</a>
+						<div className="flex flex-col items-start overflow-hidden">
+							<a
+								href={view === "trash" ? undefined : item.url}
+								target={view === "trash" ? undefined : "_blank"}
+								rel={view === "trash" ? undefined : "noopener noreferrer"}
+								onClick={(e) => {
+									if (view === "trash") e.preventDefault();
+								}}
 								className={cn(
-									"line-clamp-2 text-sm font-medium text-foreground",
-									view !== "trash" &&
-										"decoration-muted-foreground/30 underline-offset-4 hover:underline",
+									"flex flex-col overflow-hidden rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
+									view === "trash" && "cursor-pointer",
 								)}
 							>
-								{titleToDisplay}
-							</span>
-							{item.title && item.title !== item.url && (
-								<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
-									{item.url}
+								<span
+									className={cn(
+										"line-clamp-2 text-sm font-medium text-foreground",
+										view !== "trash" &&
+											"decoration-muted-foreground/30 underline-offset-4 hover:underline",
+									)}
+								>
+									{titleToDisplay}
 								</span>
-							)}
+								{item.title && item.title !== item.url && (
+									<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+										{item.url}
+									</span>
+								)}
+							</a>
 							{searchQuery && view !== "trash" && (
 								<button
 									type="button"
@@ -128,7 +145,7 @@ export const ItemCard = memo(
 								</button>
 							)}
 						</div>
-					</a>
+					</div>
 				</div>
 
 				<div className="flex shrink-0 items-center gap-1 sm:gap-2">
@@ -324,5 +341,6 @@ export const ItemCard = memo(
 		prev.item.title === next.item.title &&
 		prev.item.url === next.item.url &&
 		prev.item.logo === next.item.logo &&
-		prev.item.isFavorite === next.item.isFavorite,
+		prev.item.isFavorite === next.item.isFavorite &&
+		prev.item.folderId === next.item.folderId,
 );

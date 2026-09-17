@@ -62,34 +62,11 @@ export const ItemGridCard = memo(
 
 		return (
 			<div
-				role="button"
-				tabIndex={0}
-				onClick={(e) => {
-					if (view === "trash") {
-						const target = e.target as HTMLElement;
-						if (target.closest(".item-actions")) return;
-						toggleSelection(item.id);
-					} else {
-						window.open(item.url, "_blank", "noopener,noreferrer");
-					}
-				}}
-				onKeyDown={(e) => {
-					if (e.target !== e.currentTarget) return;
-					if (e.key === "Enter" || e.key === " ") {
-						e.preventDefault();
-						if (view === "trash") {
-							toggleSelection(item.id);
-						} else {
-							window.open(item.url, "_blank", "noopener,noreferrer");
-						}
-					}
-				}}
 				className={cn(
-					"group relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
+					"group relative flex flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:border-border hover:bg-card/50 supports-[corner-shape:squircle]:rounded-2xl",
 					isSelected
 						? "border-primary/20 bg-card/50 shadow-sm"
 						: "border-transparent bg-transparent",
-					view === "trash" && "cursor-pointer",
 				)}
 			>
 				{/* Checkbox (Top Left) */}
@@ -210,12 +187,45 @@ export const ItemGridCard = memo(
 					</DropdownMenu>
 				</div>
 
-				<div className="flex size-12 items-center justify-center overflow-hidden rounded-full bg-muted/50">
+				<div
+					role="button"
+					tabIndex={-1}
+					aria-hidden="true"
+					onClick={() => {
+						if (view === "trash") {
+							toggleSelection(item.id);
+						} else {
+							window.open(item.url, "_blank", "noopener,noreferrer");
+						}
+					}}
+					className="flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-muted/50 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+				>
 					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
 				</div>
 
 				<div className="flex w-full flex-col items-center justify-center gap-1">
-					<div className="flex items-center gap-1">
+					<div
+						role="button"
+						tabIndex={0}
+						onClick={() => {
+							if (view === "trash") {
+								toggleSelection(item.id);
+							} else {
+								window.open(item.url, "_blank", "noopener,noreferrer");
+							}
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								if (view === "trash") {
+									toggleSelection(item.id);
+								} else {
+									window.open(item.url, "_blank", "noopener,noreferrer");
+								}
+							}
+						}}
+						className="flex cursor-pointer items-center gap-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					>
 						{item.isFavorite && (
 							<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
 						)}
@@ -244,5 +254,6 @@ export const ItemGridCard = memo(
 		prev.item.title === next.item.title &&
 		prev.item.url === next.item.url &&
 		prev.item.logo === next.item.logo &&
-		prev.item.isFavorite === next.item.isFavorite,
+		prev.item.isFavorite === next.item.isFavorite &&
+		prev.item.folderId === next.item.folderId,
 );
