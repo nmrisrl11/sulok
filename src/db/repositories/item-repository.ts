@@ -1,4 +1,5 @@
 import { setHasDataHint } from "@/lib/storage";
+import { generateUniqueName } from "@/lib/utils";
 import { itemSchema } from "@/schemas";
 import { db, type Item } from "../db";
 
@@ -122,6 +123,24 @@ export const ItemRepository = {
 				throw new Error("This link is already in your corner.");
 			}
 
+			let finalTitle = parsedData.title?.trim() || "";
+			const folderId = parsedData.folderId || null;
+
+			if (finalTitle) {
+				const siblings = await db.items
+					.filter((item) => (item.folderId || null) === folderId && !item.deletedAt)
+					.toArray();
+
+				const isDuplicate = siblings.some(
+					(item) => (item.title || "").toLowerCase() === finalTitle.toLowerCase(),
+				);
+				if (isDuplicate) {
+					const existingNames = new Set(siblings.map((i) => (i.title || "").toLowerCase()));
+					finalTitle = generateUniqueName(finalTitle, existingNames);
+					parsedData.title = finalTitle;
+				}
+			}
+
 			const record: Item = {
 				id: crypto.randomUUID(),
 				...parsedData,
@@ -177,11 +196,35 @@ export const ItemRepository = {
 		} = parsedData as Partial<Item>;
 
 		await db.transaction("rw", db.items, async () => {
+			const existingItem = await db.items.get(id);
+			if (!existingItem) return;
+
 			if (safeUpdates.url) {
-				const existing = await ItemRepository.findByUrl(safeUpdates.url);
-				if (existing && existing.id !== id) {
+				const existingUrl = await ItemRepository.findByUrl(safeUpdates.url);
+				if (existingUrl && existingUrl.id !== id) {
 					throw new Error("This link is already in your corner.");
 				}
+			}
+
+			let finalTitle =
+				safeUpdates.title !== undefined ? safeUpdates.title?.trim() : existingItem.title;
+			const targetFolderId =
+				safeUpdates.folderId !== undefined ? safeUpdates.folderId : existingItem.folderId;
+
+			// Handle duplicate titles if renaming or moving to a different folder
+			if (finalTitle && (finalTitle !== existingItem.title || safeUpdates.folderId !== undefined)) {
+				const siblings = await db.items
+					.filter(
+						(item) =>
+							(item.folderId || null) === (targetFolderId || null) &&
+							!item.deletedAt &&
+							item.id !== id,
+					)
+					.toArray();
+
+				const existingNames = new Set(siblings.map((i) => (i.title || "").toLowerCase()));
+				finalTitle = generateUniqueName(finalTitle, existingNames);
+				safeUpdates.title = finalTitle;
 			}
 
 			const updateRecord = {
@@ -227,11 +270,32 @@ export const ItemRepository = {
 		await db.transaction("rw", db.items, async () => {
 			for (const id of ids) {
 				const item = await db.items.get(id);
-				if (item) {
-					// We can't just set to undefined, Dexie update might ignore it.
-					// Actually, passing `undefined` to update removes the property in IndexedDB, which is what we want.
-					await db.items.update(id, { deletedAt: undefined, updatedAt: now });
+				if (!item) continue;
+
+				let finalTitle = item.title || "";
+				if (finalTitle) {
+					// Check for name collisions among active (non-deleted) siblings in the target folder
+					const siblings = await db.items
+						.filter(
+							(i) =>
+								(i.folderId || null) === (item.folderId || null) &&
+								!i.deletedAt &&
+								!ids.includes(i.id),
+						)
+						.toArray();
+
+					const reservedTitles = new Set(siblings.map((i) => (i.title || "").toLowerCase()));
+
+					if (reservedTitles.has(finalTitle.toLowerCase())) {
+						finalTitle = generateUniqueName(finalTitle, reservedTitles);
+					}
 				}
+
+				await db.items.update(id, {
+					title: finalTitle,
+					deletedAt: undefined,
+					updatedAt: now,
+				});
 			}
 		});
 	},
@@ -239,8 +303,34 @@ export const ItemRepository = {
 	async moveMany(ids: string[], targetFolderId: string | null): Promise<void> {
 		const now = Date.now();
 		await db.transaction("rw", db.items, async () => {
+			// Get all siblings in the target folder to resolve naming conflicts
+			const siblings = await db.items
+				.filter(
+					(item) =>
+						(item.folderId || null) === targetFolderId && !item.deletedAt && !ids.includes(item.id),
+				)
+				.toArray();
+
+			const reservedTitles = new Set(siblings.map((item) => (item.title || "").toLowerCase()));
+
 			for (const id of ids) {
-				await db.items.update(id, { folderId: targetFolderId ?? undefined, updatedAt: now });
+				const item = await db.items.get(id);
+				if (!item) continue;
+
+				let finalTitle = item.title || "";
+				if (finalTitle) {
+					if (reservedTitles.has(finalTitle.toLowerCase())) {
+						finalTitle = generateUniqueName(finalTitle, reservedTitles);
+					}
+
+					reservedTitles.add(finalTitle.toLowerCase());
+				}
+
+				await db.items.update(id, {
+					folderId: targetFolderId ?? undefined,
+					title: finalTitle,
+					updatedAt: now,
+				});
 			}
 		});
 	},

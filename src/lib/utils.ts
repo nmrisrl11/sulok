@@ -24,3 +24,17 @@ export function formatUrl(url: string): string {
 
 	return formatted;
 }
+
+export function generateUniqueName(name: string, existingNames: Set<string>): string {
+	let finalName = name;
+	if (existingNames.has(finalName.toLowerCase())) {
+		const match = name.match(/^(.*?)(?:\s+\(\d+\))?$/);
+		const baseName = match ? match[1] : name;
+		let counter = 1;
+		while (existingNames.has(finalName.toLowerCase())) {
+			finalName = `${baseName} (${counter})`;
+			counter++;
+		}
+	}
+	return finalName;
+}

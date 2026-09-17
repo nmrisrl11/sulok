@@ -34,35 +34,16 @@ export const BulkRepository = {
 	},
 
 	async restore(itemIds: string[], folderIds: string[]): Promise<void> {
-		const now = Date.now();
+		const { FolderRepository } = await import("./folder-repository");
+		const { ItemRepository } = await import("./item-repository");
+
 		await db.transaction("rw", db.folders, db.items, async () => {
 			if (folderIds.length > 0) {
-				for (const id of folderIds) {
-					const foldersToUpdate = new Set<string>([id]);
-					let queue = [id];
-
-					while (queue.length > 0) {
-						const currentId = queue.shift()!;
-						const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
-						for (const child of children) {
-							foldersToUpdate.add(child.id);
-							queue.push(child.id);
-						}
-					}
-
-					const fIds = Array.from(foldersToUpdate);
-					await db.folders.where("id").anyOf(fIds).modify({ deletedAt: undefined, updatedAt: now });
-					await db.items
-						.where("folderId")
-						.anyOf(fIds)
-						.modify({ deletedAt: undefined, updatedAt: now });
-				}
+				await FolderRepository.restore(folderIds);
 			}
 
 			if (itemIds.length > 0) {
-				for (const id of itemIds) {
-					await db.items.update(id, { deletedAt: undefined, updatedAt: now });
-				}
+				await ItemRepository.restoreMany(itemIds);
 			}
 		});
 	},
@@ -118,18 +99,16 @@ export const BulkRepository = {
 	},
 
 	async move(itemIds: string[], folderIds: string[], targetFolderId: string | null): Promise<void> {
-		const now = Date.now();
+		const { FolderRepository } = await import("./folder-repository");
+		const { ItemRepository } = await import("./item-repository");
+
 		await db.transaction("rw", db.folders, db.items, async () => {
 			if (folderIds.length > 0) {
-				for (const id of folderIds) {
-					await db.folders.update(id, { parentId: targetFolderId, updatedAt: now });
-				}
+				await FolderRepository.moveMany(folderIds, targetFolderId);
 			}
 
 			if (itemIds.length > 0) {
-				for (const id of itemIds) {
-					await db.items.update(id, { folderId: targetFolderId ?? undefined, updatedAt: now });
-				}
+				await ItemRepository.moveMany(itemIds, targetFolderId);
 			}
 		});
 	},

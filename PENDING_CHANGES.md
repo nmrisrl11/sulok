@@ -21,6 +21,7 @@
 - Enhanced breadcrumbs layout to intelligently display up to 6 items on desktop while maintaining a compact 3-item view on mobile.
 - Updated the empty state UI for search/filter operations to use a bespoke "Lost in your corner?" message with a Clear Filters button.
 - Disabled native browser autocomplete, autocorrect, and spellcheck on the Explorer search input to prevent annoying suggestions overlapping the UI.
+- Rewrote the naming collision engine (used when creating, renaming, moving, and restoring folders or links) to behave like a native operating system. It now intelligently extracts numerical suffixes (e.g. `Test (1)`) and increments them correctly to `Test (2)`, rather than blindly stacking counters like `Test (1) (1)`.
 
 ### Fixed
 
