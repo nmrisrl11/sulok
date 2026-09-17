@@ -235,9 +235,7 @@ export const FolderRepository = {
 
 					// Check for name collisions among active (non-deleted) siblings in the target parent
 					const siblings = await db.folders
-						.filter(
-							(f) => f.parentId === folder.parentId && !f.deletedAt && !folderIds.includes(f.id),
-						)
+						.filter((f) => f.parentId === folder.parentId && !f.deletedAt && f.id !== fId)
 						.toArray();
 
 					const reservedNames = new Set(siblings.map((f) => f.name.toLowerCase()));
@@ -255,10 +253,12 @@ export const FolderRepository = {
 				}
 
 				// Also restore items inside these folders
-				await db.items
-					.where("folderId")
-					.anyOf(folderIds)
-					.modify({ deletedAt: undefined, updatedAt: now });
+				const { ItemRepository } = await import("./item-repository");
+				const itemsToRestore = await db.items.where("folderId").anyOf(folderIds).toArray();
+				const itemIds = itemsToRestore.map((i) => i.id);
+				if (itemIds.length > 0) {
+					await ItemRepository.restoreMany(itemIds);
+				}
 			}
 		});
 	},

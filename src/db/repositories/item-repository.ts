@@ -171,6 +171,23 @@ export const ItemRepository = {
 				throw new Error("This link is already in your corner.");
 			}
 
+			let finalTitle = parsedData.title?.trim();
+			if (finalTitle) {
+				const folderId = parsedData.folderId || null;
+				const siblings = await db.items
+					.filter((i) => (i.folderId || null) === folderId && !i.deletedAt)
+					.toArray();
+
+				const isDuplicate = siblings.some(
+					(i) => (i.title || "").toLowerCase() === finalTitle!.toLowerCase(),
+				);
+				if (isDuplicate) {
+					const existingNames = new Set(siblings.map((i) => (i.title || "").toLowerCase()));
+					finalTitle = generateUniqueName(finalTitle, existingNames);
+					parsedData.title = finalTitle;
+				}
+			}
+
 			const record: Item = {
 				id: item.id || crypto.randomUUID(),
 				...parsedData,
@@ -278,9 +295,7 @@ export const ItemRepository = {
 					const siblings = await db.items
 						.filter(
 							(i) =>
-								(i.folderId || null) === (item.folderId || null) &&
-								!i.deletedAt &&
-								!ids.includes(i.id),
+								(i.folderId || null) === (item.folderId || null) && !i.deletedAt && i.id !== id,
 						)
 						.toArray();
 
