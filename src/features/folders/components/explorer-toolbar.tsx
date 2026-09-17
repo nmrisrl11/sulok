@@ -134,7 +134,7 @@ export function ExplorerToolbar({
 			</div>
 
 			{/* Bottom row: Search & View modes */}
-			{view !== "trash" && (hasItems || hasFolders || !!searchQuery) && (
+			{view !== "trash" && (hasItems || hasFolders || hasFiltersActive) && (
 				<div className="grid grid-cols-2 gap-2 rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
 					{/* Search & Reset */}
 					<div className="col-span-2 flex items-center gap-2 sm:col-span-1 sm:w-full sm:flex-1">
@@ -143,6 +143,9 @@ export function ExplorerToolbar({
 							<Input
 								id="search-explorer"
 								type="search"
+								autoComplete="off"
+								autoCorrect="off"
+								spellCheck="false"
 								placeholder="Search your corner..."
 								className="h-8 w-full rounded-lg border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
 								value={localSearch}
