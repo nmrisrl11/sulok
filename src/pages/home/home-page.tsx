@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { type Folder, type Item } from "@/db/db";
-import { ExplorerMain } from "@/features/folders/components/explorer-main";
-import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar";
-import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
+import { ExplorerMain } from "@/features/folders/components/explorer/explorer-main";
+import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer-sidebar";
+import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
 import { cn } from "@/lib/utils";
 import { useFolderStore, useItemStore } from "@/stores";
 import { memo } from "react";

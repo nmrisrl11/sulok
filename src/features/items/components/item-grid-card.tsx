@@ -64,6 +64,7 @@ export const ItemGridCard = memo(
 					}
 				}}
 				onKeyDown={(e) => {
+					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
 						if (view === "trash") {
@@ -210,5 +211,9 @@ export const ItemGridCard = memo(
 			</div>
 		);
 	},
-	(prev, next) => prev.item.updatedAt === next.item.updatedAt,
+	(prev, next) =>
+		prev.item.title === next.item.title &&
+		prev.item.url === next.item.url &&
+		prev.item.logo === next.item.logo &&
+		prev.item.isFavorite === next.item.isFavorite,
 );

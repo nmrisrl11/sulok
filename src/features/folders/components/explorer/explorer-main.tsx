@@ -7,11 +7,11 @@ import { mixDataParser, sortOptionParser, viewModeParser } from "@/lib/search-pa
 import { getHasDataHint } from "@/lib/storage";
 import { useQueryState } from "nuqs";
 import { memo, useMemo } from "react";
-import { FolderCard } from "./folder-card";
-import { FolderCardSkeleton } from "./folder-card-skeleton";
-import { FolderEmptyState } from "./folder-empty-state";
-import { FolderGridCard } from "./folder-grid-card";
-import { FolderGridCardSkeleton } from "./folder-grid-card-skeleton";
+import { FolderCard } from "../folder/folder-card";
+import { FolderCardSkeleton } from "../folder/folder-card-skeleton";
+import { FolderEmptyState } from "../folder/folder-empty-state";
+import { FolderGridCard } from "../folder/folder-grid-card";
+import { FolderGridCardSkeleton } from "../folder/folder-grid-card-skeleton";
 
 export function ExplorerMainSkeleton() {
 	const [viewMode] = useQueryState("mode", viewModeParser);

@@ -52,6 +52,7 @@ export const FolderCard = memo(
 					}
 				}}
 				onKeyDown={(e) => {
+					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
 						if (view === "trash") {
@@ -231,5 +232,6 @@ export const FolderCard = memo(
 			</div>
 		);
 	},
-	(prev, next) => prev.folder.updatedAt === next.folder.updatedAt,
+	(prev, next) =>
+		prev.folder.name === next.folder.name && prev.folder.isFavorite === next.folder.isFavorite,
 );

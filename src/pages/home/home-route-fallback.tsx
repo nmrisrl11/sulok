@@ -1,6 +1,6 @@
-import { ExplorerSidebar } from "@/features/folders/components/explorer-sidebar";
-import { ExplorerToolbar } from "@/features/folders/components/explorer-toolbar";
-import { FolderEmptyState } from "@/features/folders/components/folder-empty-state";
+import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer-sidebar";
+import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
+import { FolderEmptyState } from "@/features/folders/components/folder/folder-empty-state";
 import { getHasDataHint } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { HomeSkeleton } from "./home-skeleton";

@@ -295,5 +295,9 @@ export const ItemCard = memo(
 			</div>
 		);
 	},
-	(prev, next) => prev.item.updatedAt === next.item.updatedAt,
+	(prev, next) =>
+		prev.item.title === next.item.title &&
+		prev.item.url === next.item.url &&
+		prev.item.logo === next.item.logo &&
+		prev.item.isFavorite === next.item.isFavorite,
 );

@@ -21,7 +21,7 @@ const ConfirmationDialog = lazy(() =>
 	})),
 );
 const FolderDialog = lazy(() =>
-	import("@/features/folders/components/folder-dialog").then((m) => ({
+	import("@/features/folders/components/folder/folder-dialog").then((m) => ({
 		default: m.FolderDialog,
 	})),
 );

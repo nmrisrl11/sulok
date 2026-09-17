@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExplorerMainSkeleton } from "@/features/folders/components/explorer-main";
+import { ExplorerMainSkeleton } from "@/features/folders/components/explorer/explorer-main";
 import { cn } from "@/lib/utils";
 
 export function HomeSkeleton({ className }: { className?: string }) {

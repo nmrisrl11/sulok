@@ -3,7 +3,7 @@ import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { FolderBreadcrumbs } from "./folder-breadcrumbs";
+import { FolderBreadcrumbs } from "../folder/folder-breadcrumbs";
 
 export function ExplorerBreadcrumb() {
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
