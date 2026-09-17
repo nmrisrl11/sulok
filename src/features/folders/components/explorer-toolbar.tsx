@@ -48,7 +48,7 @@ export function ExplorerToolbar({
 
 	const [localSearch, setLocalSearch] = useDebouncedQuery(searchQuery, setSearchQuery);
 
-	const { openCreateDialog } = useFolderStore();
+	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
 	const confirm = useConfirmationStore((state) => state.confirm);
 
 	const handleEmptyTrash = () => {
@@ -205,7 +205,7 @@ export function ExplorerToolbar({
 								className={cn(
 									"h-8 rounded-lg px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:px-0",
 									mixData
-										? "bg-background text-foreground shadow-sm hover:bg-background"
+										? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 								)}
 								onClick={() => setMixData(mixData ? false : true)}
@@ -222,7 +222,7 @@ export function ExplorerToolbar({
 									variant="ghost"
 									size="sm"
 									title="List View"
-									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "bg-background text-foreground shadow-sm hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("list")}
 								>
 									<ListIcon className="size-4" />
@@ -231,7 +231,7 @@ export function ExplorerToolbar({
 									variant="ghost"
 									size="sm"
 									title="Grid View"
-									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "bg-background text-foreground shadow-sm hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("grid")}
 								>
 									<GridIcon className="size-4" />

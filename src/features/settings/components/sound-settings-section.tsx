@@ -88,6 +88,7 @@ function AudioSignatureSelect({
 	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const { playSound } = useSoundEffects();
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleMappingChange = (val: SoundName) => {
 		const currentSettings = useSettingsStore.getState().settings.soundSettings;
@@ -110,32 +111,39 @@ function AudioSignatureSelect({
 			<Label htmlFor={`sound-${id}`} className="text-sm font-medium text-foreground">
 				{label}
 			</Label>
-			<Select value={value} onValueChange={(val: string) => handleMappingChange(val as SoundName)}>
+			<Select
+				value={value}
+				onValueChange={(val: string) => handleMappingChange(val as SoundName)}
+				onOpenChange={setIsOpen}
+			>
 				<SelectTrigger
 					id={`sound-${id}`}
 					className="w-full corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 				>
-					<SelectValue placeholder="Select sound" />
+					<SelectValue>
+						<span className="capitalize">{value || "Select sound"}</span>
+					</SelectValue>
 				</SelectTrigger>
 				<SelectContent position="popper" className="max-h-75" data-no-sound="true">
-					{sounds.map((sound) => {
-						const Icon = SOUND_ICONS[sound];
-						return (
-							<SelectItem
-								key={sound}
-								value={sound}
-								onPointerEnter={() => handlePreviewSound(sound)}
-								className="rounded-md px-3 py-2.5"
-							>
-								<div className="flex items-center gap-3">
-									<div className="flex w-5 shrink-0 items-center justify-center">
-										<Icon className="h-4 w-4 text-muted-foreground" />
+					{isOpen &&
+						sounds.map((sound) => {
+							const Icon = SOUND_ICONS[sound];
+							return (
+								<SelectItem
+									key={sound}
+									value={sound}
+									onPointerEnter={() => handlePreviewSound(sound)}
+									className="rounded-md px-3 py-2.5"
+								>
+									<div className="flex items-center gap-3">
+										<div className="flex w-5 shrink-0 items-center justify-center">
+											<Icon className="h-4 w-4 text-muted-foreground" />
+										</div>
+										<span className="capitalize">{sound}</span>
 									</div>
-									<span className="capitalize">{sound}</span>
-								</div>
-							</SelectItem>
-						);
-					})}
+								</SelectItem>
+							);
+						})}
 				</SelectContent>
 			</Select>
 		</div>

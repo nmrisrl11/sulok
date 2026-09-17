@@ -18,7 +18,10 @@ import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 
 export function MoveDialog() {
-	const { isOpen, movingItemIds, movingFolderIds, closeMoveDialog } = useMoveStore();
+	const isOpen = useMoveStore((state) => state.isOpen);
+	const movingItemIds = useMoveStore((state) => state.movingItemIds);
+	const movingFolderIds = useMoveStore((state) => state.movingFolderIds);
+	const closeMoveDialog = useMoveStore((state) => state.closeMoveDialog);
 	const [currentParentId, setCurrentParentId] = useState<string | null>(null);
 	const [isMoving, setIsMoving] = useState(false);
 

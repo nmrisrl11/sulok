@@ -15,6 +15,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
+import { useIsMobile } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Fragment, type ElementType } from "react";
 
@@ -42,12 +43,15 @@ export function FolderBreadcrumbs({
 	rootLabel = "Library",
 	rootIcon: RootIcon = FolderLinkIcon,
 	rootClassName = "text-base font-semibold",
-	itemsToDisplay = 3,
+	itemsToDisplay,
 	hideBreadcrumbs = false,
 	hideDropdown = false,
 	leafClassName = "max-w-37.5 sm:max-w-50 md:max-w-none",
 	linkClassName = "max-w-25 sm:max-w-none",
 }: FolderBreadcrumbsProps) {
+	const isMobile = useIsMobile();
+	const displayCount = itemsToDisplay ?? (isMobile ? 3 : 6);
+
 	let breadcrumbs: { id: string; name: string }[] = [];
 	if (currentFolderId) {
 		let currentFolder = allFolders.find((f) => f.id === currentFolderId);
@@ -57,9 +61,9 @@ export function FolderBreadcrumbs({
 		}
 	}
 
-	const isTruncated = breadcrumbs.length > itemsToDisplay;
-	const visibleBreadcrumbs = isTruncated ? breadcrumbs.slice(-itemsToDisplay) : breadcrumbs;
-	const hiddenBreadcrumbs = isTruncated ? breadcrumbs.slice(0, -itemsToDisplay) : [];
+	const isTruncated = breadcrumbs.length > displayCount;
+	const visibleBreadcrumbs = isTruncated ? breadcrumbs.slice(-displayCount) : breadcrumbs;
+	const hiddenBreadcrumbs = isTruncated ? breadcrumbs.slice(0, -displayCount) : [];
 
 	return (
 		<Breadcrumb>

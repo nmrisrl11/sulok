@@ -74,6 +74,9 @@
 	--radius-2xl: calc(var(--radius) * 1.8);
 	--radius-3xl: calc(var(--radius) * 2.2);
 	--radius-4xl: calc(var(--radius) * 2.6);
+	--shadow-engraved:
+		0px 0px 0px 1px var(--engraved-border), inset 0px 1px 0px 0px var(--engraved-highlight-top),
+		inset 0px 0px 0px 1px var(--engraved-highlight-all);
 }
 
 :root {
@@ -109,6 +112,9 @@
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
+	--engraved-border: oklch(0 0 0 / 0.1);
+	--engraved-highlight-top: oklch(1 0 0 / 0.5);
+	--engraved-highlight-all: oklch(1 0 0 / 0.2);
 }
 
 .dark {
@@ -143,6 +149,9 @@
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(0.269 0 0);
 	--sidebar-ring: oklch(0.439 0 0);
+	--engraved-border: oklch(0 0 0 / 0.4);
+	--engraved-highlight-top: oklch(1 0 0 / 0.1);
+	--engraved-highlight-all: oklch(1 0 0 / 0.06);
 }
 
 .theme-sepia {
@@ -156,6 +165,9 @@
 	--muted-foreground: #7c6f64;
 	--border: #dbcdb0;
 	--input: #dbcdb0;
+	--engraved-border: oklch(0 0 0 / 0.1);
+	--engraved-highlight-top: oklch(1 0 0 / 0.5);
+	--engraved-highlight-all: oklch(1 0 0 / 0.2);
 }
 
 .theme-sand {
@@ -169,6 +181,9 @@
 	--muted-foreground: #78746d;
 	--border: #cfc9bd;
 	--input: #cfc9bd;
+	--engraved-border: oklch(0 0 0 / 0.1);
+	--engraved-highlight-top: oklch(1 0 0 / 0.5);
+	--engraved-highlight-all: oklch(1 0 0 / 0.2);
 }
 
 .theme-midnight {
@@ -182,6 +197,9 @@
 	--muted-foreground: #94a3b8;
 	--border: #334155;
 	--input: #334155;
+	--engraved-border: oklch(0 0 0 / 0.4);
+	--engraved-highlight-top: oklch(1 0 0 / 0.1);
+	--engraved-highlight-all: oklch(1 0 0 / 0.06);
 }
 
 .theme-mocha {
@@ -195,6 +213,9 @@
 	--muted-foreground: #a49288;
 	--border: #5c4a42;
 	--input: #5c4a42;
+	--engraved-border: oklch(0 0 0 / 0.4);
+	--engraved-highlight-top: oklch(1 0 0 / 0.1);
+	--engraved-highlight-all: oklch(1 0 0 / 0.06);
 }
 
 /* Overrides for Corner Style and Density */

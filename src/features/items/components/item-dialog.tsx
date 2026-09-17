@@ -14,15 +14,13 @@ import { useState } from "react";
 import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
-	const {
-		isDialogOpen,
-		setDialogOpen,
-		editingItem,
-		initialUrl,
-		initialFolderId,
-		addItem,
-		updateItem,
-	} = useItemStore();
+	const isDialogOpen = useItemStore((state) => state.isDialogOpen);
+	const setDialogOpen = useItemStore((state) => state.setDialogOpen);
+	const editingItem = useItemStore((state) => state.editingItem);
+	const initialUrl = useItemStore((state) => state.initialUrl);
+	const initialFolderId = useItemStore((state) => state.initialFolderId);
+	const addItem = useItemStore((state) => state.addItem);
+	const updateItem = useItemStore((state) => state.updateItem);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 

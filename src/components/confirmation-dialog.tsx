@@ -12,7 +12,11 @@ import { useConfirmationStore } from "@/stores";
 import { type MouseEvent, useState } from "react";
 
 export function ConfirmationDialog() {
-	const { isOpen, options, isConfirming, close, setConfirming } = useConfirmationStore();
+	const isOpen = useConfirmationStore((state) => state.isOpen);
+	const options = useConfirmationStore((state) => state.options);
+	const isConfirming = useConfirmationStore((state) => state.isConfirming);
+	const close = useConfirmationStore((state) => state.close);
+	const setConfirming = useConfirmationStore((state) => state.setConfirming);
 	const [error, setError] = useState<string | null>(null);
 
 	const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
