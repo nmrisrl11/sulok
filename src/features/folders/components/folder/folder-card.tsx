@@ -18,7 +18,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
-import { useActiveDrag } from "@/features/folders/components/dnd/active-drag-context";
+import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
@@ -61,10 +61,15 @@ export const FolderCard = memo(
 			setDropNodeRef(node);
 		};
 
-		const activeDrag = useActiveDrag();
-		const isEffectivelyDragging =
-			isDragging ||
-			(!isOverlay && activeDrag?.isBulk && activeDrag?.folderIds?.includes(folder.id));
+		const isActiveBulk = useActiveDragStore(
+			(state) =>
+				!!(
+					!isOverlay &&
+					state.activeData?.isBulk &&
+					state.activeData?.folderIds?.includes(folder.id)
+				),
+		);
+		const isEffectivelyDragging = isDragging || isActiveBulk;
 
 		return (
 			<div
@@ -87,6 +92,7 @@ export const FolderCard = memo(
 					}
 				}}
 				onKeyDown={(e) => {
+					listeners?.onKeyDown?.(e);
 					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();

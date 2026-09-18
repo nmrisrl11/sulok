@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
-import { useActiveDrag } from "@/features/folders/components/dnd/active-drag-context";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
@@ -31,6 +30,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
+import { useActiveDragStore } from "../../folders/components/dnd/active-drag-store";
 import { useItemActions } from "../hooks/use-item-actions";
 
 export const ItemGridCard = memo(
@@ -67,9 +67,11 @@ export const ItemGridCard = memo(
 			disabled: view === "trash",
 		});
 
-		const activeDrag = useActiveDrag();
-		const isEffectivelyDragging =
-			isDragging || (!isOverlay && activeDrag?.isBulk && activeDrag?.itemIds?.includes(item.id));
+		const isActiveBulk = useActiveDragStore(
+			(state) =>
+				!!(!isOverlay && state.activeData?.isBulk && state.activeData?.itemIds?.includes(item.id)),
+		);
+		const isEffectivelyDragging = isDragging || isActiveBulk;
 
 		return (
 			<div
@@ -87,12 +89,16 @@ export const ItemGridCard = memo(
 				)}
 				onClick={(e) => {
 					const target = e.target as HTMLElement;
-					if (
-						target.closest("button") ||
-						target.closest('[role="checkbox"]') ||
-						target.closest(".item-actions")
-					)
-						return;
+					if (e.target !== e.currentTarget) {
+						if (
+							target.closest("button") ||
+							target.closest('[role="checkbox"]') ||
+							target.closest('[role="button"]') ||
+							target.closest(".item-actions")
+						) {
+							return;
+						}
+					}
 
 					if (view === "trash") {
 						toggleSelection(item.id);
@@ -101,6 +107,7 @@ export const ItemGridCard = memo(
 					}
 				}}
 				onKeyDown={(e) => {
+					listeners?.onKeyDown?.(e);
 					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();

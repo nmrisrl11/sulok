@@ -59,6 +59,12 @@ export default defineConfig({
 						) {
 							return "vendor-db";
 						}
+						if (packageName.startsWith("@dnd-kit/")) {
+							return "vendor-dnd";
+						}
+						if (["react-joyride", "react-floater"].includes(packageName)) {
+							return "vendor-onboarding";
+						}
 						return "vendor-core";
 					}
 				},

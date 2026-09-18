@@ -41,6 +41,8 @@
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.
 - Fixed a bug where the Explorer toolbar would completely disappear (preventing users from clearing filters) if an active type filter resulted in 0 items.
 - Fixed accessibility warnings (missing aria-labels and invalid heading hierarchies) to ensure the app remains fully screen-reader friendly.
+- Fixed an issue where the drag-and-drop system lacked keyboard accessibility and sometimes conflicted with nested button clicks.
+- Fixed a bug that allowed users to move a folder into itself or its subfolders, which could corrupt the folder structure.
 
 ### Removed
 

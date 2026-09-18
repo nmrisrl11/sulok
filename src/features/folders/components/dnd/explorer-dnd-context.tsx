@@ -8,9 +8,10 @@ import { useFolderStore, useItemStore } from "@/stores";
 import {
 	DndContext,
 	DragOverlay,
+	KeyboardSensor,
 	PointerSensor,
-	pointerWithin,
 	TouchSensor,
+	closestCenter,
 	useDndContext,
 	useSensor,
 	useSensors,
@@ -19,10 +20,10 @@ import {
 	type Modifier,
 } from "@dnd-kit/core";
 import { useQueryState } from "nuqs";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { FolderCard } from "../folder/folder-card";
 import { FolderGridCard } from "../folder/folder-grid-card";
-import { ActiveDragContext } from "./active-drag-context";
+import { useActiveDragStore } from "./active-drag-store";
 
 export type DragData = {
 	type: "folder" | "item";
@@ -40,7 +41,7 @@ export type DropData = {
 
 export function ExplorerDndContext({ children }: { children: ReactNode }) {
 	const [viewMode] = useQueryState("mode", viewModeParser);
-	const [activeData, setActiveData] = useState<DragData | null>(null);
+	const setActiveData = useActiveDragStore((state) => state.setActiveData);
 
 	const wasDragging = useRef(false);
 	const isPointerDown = useRef(false);
@@ -94,6 +95,7 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				tolerance: 5,
 			},
 		}),
+		useSensor(KeyboardSensor),
 	);
 
 	const handleDragStart = (event: DragStartEvent) => {
@@ -166,11 +168,6 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				const itemsToMove = isSelected ? itemSelectedIds : [];
 				const foldersToMove = isSelected ? folderSelectedIds : [];
 
-				if (targetFolderId && foldersToMove.includes(targetFolderId)) {
-					notify.error("Cannot move a folder into itself", { id: "move-folder-into-itself" });
-					return;
-				}
-
 				await BulkRepository.move(itemsToMove, foldersToMove, targetFolderId);
 				useItemStore.getState().clearSelection();
 				useFolderStore.getState().clearSelection();
@@ -184,7 +181,9 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 			notify.success("Moved successfully", { id: "dnd-moved" });
 		} catch (error) {
 			console.error("Failed to move:", error);
-			notify.error("Failed to move");
+			notify.error(error instanceof Error ? error.message : "Failed to move", {
+				id: "move-error",
+			});
 		}
 	};
 
@@ -226,15 +225,17 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 		setActiveData(null);
 	};
 
+	const activeData = useActiveDragStore((state) => state.activeData);
+
 	return (
 		<DndContext
 			sensors={sensors}
-			collisionDetection={pointerWithin}
+			collisionDetection={closestCenter}
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
 			onDragCancel={handleDragCancel}
 		>
-			<ActiveDragContext.Provider value={activeData}>{children}</ActiveDragContext.Provider>
+			{children}
 			<DragOverlay dropAnimation={null} modifiers={[clampToOverlayBoundsModifier]}>
 				{activeData ? <DragOverlayContent activeData={activeData} viewMode={viewMode} /> : null}
 			</DragOverlay>
