@@ -9,6 +9,9 @@
 
 ### Added
 
+- Added an interactive onboarding tour (using react-joyride) for new users to explain the app's layout and core features.
+- Added a default "Welcome to Sulok 👋" folder and sample link for new users upon initialization.
+- Added intelligent Skeleton loading states that seamlessly swap out empty states during asynchronous database initialization, preventing UI flashes.
 - Added an intelligent "Go to link" action button when attempting to save a duplicate link, instantly navigating to its existing folder.
 - Added a "Restore" action button when attempting to save a link that is currently in the recycle bin.
 - Added clickable folder badges to items displayed during search, allowing users to jump directly to the item's location.
@@ -16,6 +19,7 @@
 
 ### Changed
 
+- Standardized the "Restart App Tour" settings card to use the unified `ResetButton` component and match the layout of other settings sections.
 - Completely redesigned the `HomePage` layout to a single-column layout, transforming the `ExplorerSidebar` into horizontal navigation tabs alongside the header.
 - Refined the `ExplorerToolbar` responsive layout (3-row grid on mobile) and enhanced the squircle border-radius computation for perfect nesting.
 - Reorganized all custom SVG icons in `src/components/icons` into logical domain subdirectories (e.g. `/actions`, `/folders`, `/view`) utilizing a unified barrel export.
@@ -28,6 +32,9 @@
 
 ### Fixed
 
+- Fixed an edge case where navigating away from the home page during the onboarding tour would crash the UI by attempting to locate non-existent elements; the tour now gracefully pauses on other pages.
+- Fixed a bug where restarting the tour from the Settings page would not redirect the user back to the home page, resulting in missing targets.
+- Fixed `hasDataHint` synchronization when generating default data to prevent the route fallback from flashing an empty state inappropriately.
 - Fixed an issue where restoring deleted items from the Recycle Bin would sometimes cause an error.
 - Dramatically improved scrolling and clicking performance in the main library by optimizing how folders and links update on the screen.
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.

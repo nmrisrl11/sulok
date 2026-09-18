@@ -122,7 +122,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 
 	if (viewMode === "grid") {
 		return (
-			<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+			<div id="explorer-main" className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 				{folders.map((folder) => (
 					<FolderGridCard key={folder.id} folder={folder} />
 				))}
@@ -135,7 +135,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 
 	// Default List View (Separated)
 	return (
-		<div className="flex flex-col gap-2">
+		<div id="explorer-main" className="flex flex-col gap-2">
 			{folders.map((folder) => (
 				<FolderCard key={folder.id} folder={folder} />
 			))}

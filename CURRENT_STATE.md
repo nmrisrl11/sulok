@@ -40,9 +40,9 @@ The project is currently in the **core features implementation phase**.
 
 ### Next Steps
 
-1. Implement item tags, categories, and filter capabilities.
+1. Implement item filter capabilities.
 2. [x] Refine overall UI polish for mobile responsiveness.
-3. Finalize the "Library" default UX (e.g., handling new users and default folders).
+3. [x] Finalize the "Library" default UX (e.g., handling new users, default folders, and interactive onboarding tour).
 
 ---
 
@@ -79,8 +79,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [ ] Drag-and-drop organization
 - [x] Open / Copy link buttons
-- [x] Search and Sort controls (Filters pending tag implementation; Pagination intentionally omitted for local-first scroll)
-- [ ] Item tags and categorization
+- [x] Search and Sort controls (Pagination intentionally omitted for local-first scroll)
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
 - [x] SEO, Social Previews (Open Graph), and Agentic Browsing foundations (robots.txt, sitemap.xml, llms.txt)
