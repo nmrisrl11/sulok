@@ -9,7 +9,7 @@ import {
 	DndContext,
 	DragOverlay,
 	KeyboardSensor,
-	PointerSensor,
+	MouseSensor,
 	TouchSensor,
 	closestCenter,
 	pointerWithin,
@@ -86,7 +86,7 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 
 	// Configure sensors for touch and mouse
 	const sensors = useSensors(
-		useSensor(PointerSensor, {
+		useSensor(MouseSensor, {
 			activationConstraint: {
 				distance: 5, // 5px movement before dragging starts (prevents accidental clicks)
 			},
