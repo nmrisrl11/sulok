@@ -214,4 +214,9 @@ src/
 - Keep PRs small and focused.
 - Update `CURRENT_STATE.md` after completing a feature.
 - Update `PENDING_CHANGES.md` for user-facing changes.
-- **Changelog Workflow**: When releasing a new version, extract user-facing changes from `PENDING_CHANGES.md`, translate them into friendly copywriting, add them to `src/data/changelog.ts`, and then clear the `Unreleased` section in `PENDING_CHANGES.md`.
+- **Changelog Workflow**:
+  - `PENDING_CHANGES.md` acts as a staging area. It tracks raw, atomic, bulleted updates as they are developed.
+  - When releasing a new version, DO NOT blindly copy the raw bullet points from `PENDING_CHANGES.md` into `src/data/changelog.ts`.
+  - Instead, you MUST intelligently group related raw bullets into cohesive, user-facing feature paragraphs (e.g., merge multiple UI fixes into one "Polished UI Details" bullet).
+  - Write them with a friendly, marketing-style tone focusing on user impact and value (e.g., "Drag-and-Drop Organization: You can now...").
+  - Finally, add them to `src/data/changelog.ts` and empty the `Unreleased` section in `PENDING_CHANGES.md`.

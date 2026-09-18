@@ -14,6 +14,40 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.5.0",
+		date: "Sep 18, 2026",
+		title: "Drag & Drop, Onboarding, and Seamless UX",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Drag-and-Drop Organization: You can now effortlessly move links, folders, or even bulk selections around your library by dragging and dropping them into folders or directly onto the breadcrumb navigation.",
+					"Interactive Onboarding: New to Sulok? We've added a helpful onboarding tour and a default 'Welcome to Sulok' folder packed with tips to help you get started.",
+					"Smarter Link Saving: When you try to save a link you already have, Sulok now instantly detects it and offers a handy 'Go to link' button (or 'Restore' if it's in the recycle bin) to save you time.",
+					"Seamless Loading Experience: We've polished the initial app load to feel significantly smoother, eliminating jarring empty screens when opening the app.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Sleeker Navigation & Layout: We completely redesigned the main library view into a spacious single-column layout, replacing the old sidebar with intuitive horizontal navigation tabs alongside the header.",
+					"Refined Search & Filtering: The search experience is now cleaner, with disabled autocorrect noise, clickable folder badges to easily locate search results, and a beautiful 'Lost in your corner?' screen if no matches are found.",
+					"Intelligent Naming Engine: When creating or copying folders with the same name, Sulok now gracefully handles the numbering exactly like your computer's native operating system (e.g., properly numbering from (1) to (2)).",
+					"Polished UI Details: We refined the spacing and styling across the app, including adaptive breadcrumbs that look great on any screen size, perfectly nested toolbars, and softer shadows on the settings pages.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Performance Boosts: We've dramatically improved scrolling and clicking responsiveness in your main library, and eliminated the lag when switching tabs in Settings.",
+					"Bulletproof Organization: Fixed a critical bug that allowed folders to be accidentally moved inside themselves, preventing potential library corruption.",
+					"Accessibility Enhancements: The drag-and-drop system is now fully accessible via keyboard, and we've ensured the app remains strictly screen-reader friendly.",
+					"Squashed Bugs: Addressed several glitches including UI flashes on startup, crashing during the app tour, errors when restoring from the recycle bin, and disappearing toolbars.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.4.0",
 		date: "Sep 16, 2026",
 		title: "Folders, Grid View & Premium Redesign",

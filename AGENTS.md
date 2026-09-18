@@ -142,8 +142,14 @@ sulok/
 - **Vite Chunking:** Always use `rollupOptions.output.manualChunks` as a function in `vite.config.ts` to logically group dependencies into domain-specific chunks (e.g., `vendor-react`, `vendor-db`) to prevent massive bundle sizes.
 - **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) to ensure the hit area is large enough for comfortable tapping, even if internal icons/text are styled compactly.
 - **Pagination:** Avoid traditional table pagination. Since the app is local-first (Dexie), rely on native page scrolling for lists, and upgrade to virtualization only when rendering performance degrades.
-- **Changelog Copywriting & Structure:** Entries in `PENDING_CHANGES.md` and `src/data/changelog.ts` MUST be written for users, not developers. Group related changes logically. Absolutely **NO** technical jargon (e.g., do not mention `oxlint`, `Zustand selectors`, `LCP`, `DOM`, `React Fast Refresh`, `robots.txt`). Focus on the _value_ and _impact_ on the user experience (e.g., "Snappier Performance: We completely overhauled how the app renders behind the scenes").
-- **Strict Markdown Rules:** Do NOT use emojis in Markdown documentation (especially `PENDING_CHANGES.md`). Furthermore, `PENDING_CHANGES.md` is strictly for tracking **unreleased** work. Once a release is shipped, the changelog data moves entirely to `src/data/changelog.ts` and the historical release must be completely removed from `PENDING_CHANGES.md`.
+- **Changelog Copywriting & Release Workflow:**
+  - `PENDING_CHANGES.md` acts as a staging area for raw, atomic bullet points as features are built.
+  - When migrating entries from `PENDING_CHANGES.md` to `src/data/changelog.ts` during a release, you MUST NOT copy the raw bullet points verbatim.
+  - You MUST intelligently group related changes together (e.g., merge 5 small UI fixes into a single "Polished UI Details" paragraph).
+  - You MUST rewrite them for users, not developers. Absolutely **NO** technical jargon (e.g., do not mention `oxlint`, `Zustand selectors`, `LCP`, `DOM`, `React Fast Refresh`, `robots.txt`).
+  - Focus on the _value_ and _impact_ on the user experience (e.g., "Snappier Performance: We completely overhauled how the app renders behind the scenes").
+  - Once a release is shipped and the grouped entries are added to `src/data/changelog.ts`, the historical unreleased items must be completely removed from `PENDING_CHANGES.md`.
+- **Strict Markdown Rules:** Do NOT use emojis in Markdown documentation (especially `PENDING_CHANGES.md`).
 
 ## What NOT To Do
 
