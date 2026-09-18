@@ -9,6 +9,7 @@
 
 ### Added
 
+- Added robust drag-and-drop organization allowing you to effortlessly move individual links, folders, or bulk selections directly into other folders or via the breadcrumb navigation.
 - Added an interactive onboarding tour for new users to explain the app's layout and core features.
 - Added a default "Welcome to Sulok" folder and sample link for new users to explore.
 - Improved the initial loading experience to feel seamless and prevent jarring empty screens when the app first opens.

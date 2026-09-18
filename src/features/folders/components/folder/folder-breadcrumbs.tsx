@@ -17,7 +17,39 @@ import {
 import type { Folder } from "@/db/db";
 import { useIsMobile } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Fragment, type ElementType } from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { forwardRef, Fragment, type ElementType } from "react";
+
+const DroppableBreadcrumbNode = forwardRef<
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement> & { folderId: string | null }
+>(({ folderId, className, children, ...props }, ref) => {
+	const { setNodeRef, isOver } = useDroppable({
+		id: `drop-breadcrumb-${folderId ?? "root"}`,
+		data: { type: "breadcrumb", folderId },
+	});
+
+	return (
+		<button
+			type="button"
+			ref={(node) => {
+				setNodeRef(node);
+				if (typeof ref === "function") ref(node);
+				else if (ref) ref.current = node;
+			}}
+			className={cn(
+				"flex items-center gap-1.5 transition-colors outline-none",
+				"focus-visible:text-foreground focus-visible:underline focus-visible:decoration-ring focus-visible:decoration-2 focus-visible:underline-offset-4",
+				isOver && "text-primary underline decoration-primary decoration-2 underline-offset-4",
+				className,
+			)}
+			{...props}
+		>
+			{children}
+		</button>
+	);
+});
+DroppableBreadcrumbNode.displayName = "DroppableBreadcrumbNode";
 
 interface FolderBreadcrumbsProps {
 	currentFolderId: string | null;
@@ -75,15 +107,11 @@ export function FolderBreadcrumbs({
 							{rootLabel}
 						</BreadcrumbPage>
 					) : (
-						<BreadcrumbLink
-							asChild
-							className="cursor-pointer hover:text-foreground"
-							onClick={() => onNavigate(null)}
-						>
-							<button type="button" className="flex items-center gap-1.5">
+						<BreadcrumbLink asChild className="cursor-pointer hover:text-foreground">
+							<DroppableBreadcrumbNode folderId={null} onClick={() => onNavigate(null)}>
 								<RootIcon className="size-4 shrink-0" />
-								{rootLabel}
-							</button>
+								<span>{rootLabel}</span>
+							</DroppableBreadcrumbNode>
 						</BreadcrumbLink>
 					)}
 				</BreadcrumbItem>
@@ -127,9 +155,13 @@ export function FolderBreadcrumbs({
 										<BreadcrumbLink
 											asChild
 											className={cn("cursor-pointer truncate hover:text-foreground", linkClassName)}
-											onClick={() => onNavigate(crumb.id)}
 										>
-											<button type="button">{crumb.name}</button>
+											<DroppableBreadcrumbNode
+												folderId={crumb.id}
+												onClick={() => onNavigate(crumb.id)}
+											>
+												{crumb.name}
+											</DroppableBreadcrumbNode>
 										</BreadcrumbLink>
 									)}
 								</BreadcrumbItem>
