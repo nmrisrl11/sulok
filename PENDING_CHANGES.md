@@ -18,7 +18,7 @@
 
 ### Fixed
 
-- Fixed an issue where drag-and-drop operations on mobile devices would clash with native text selection and long-press context menus.
+- Fixed an issue where drag-and-drop operations on mobile devices would clash with native text selection, long-press context menus, and page scrolling.
 
 ### Removed
 
