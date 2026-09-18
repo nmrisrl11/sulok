@@ -71,13 +71,17 @@ db.version(5)
 	});
 
 db.on("populate", (transaction) => {
+	transaction.on("abort", () => {
+		setHasDataHint(false);
+	});
+
 	const now = Date.now();
 	const welcomeFolderId = crypto.randomUUID();
 
 	transaction.table("folders").add({
 		id: welcomeFolderId,
 		parentId: null,
-		name: "Welcome to Sulok 👋",
+		name: `Welcome to ${APP_INFO.name}`,
 		createdAt: now,
 		updatedAt: now,
 		order: 0,

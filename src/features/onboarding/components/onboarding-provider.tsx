@@ -1,3 +1,4 @@
+import { APP_INFO } from "@/constants/app-info";
 import { useTheme } from "@/hooks";
 import { useSettingsStore } from "@/stores";
 import { type ReactNode } from "react";
@@ -8,7 +9,7 @@ import { CustomTooltip } from "./custom-tooltip";
 const TOUR_STEPS: Step[] = [
 	{
 		target: "body",
-		title: "Welcome to Sulok",
+		title: `Welcome to ${APP_INFO.name}`,
 		content:
 			"Your local-first corner of the web. Save, organize, and rediscover your favorite links without sacrificing privacy. Let's show you around!",
 		placement: "center",
