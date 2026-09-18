@@ -1,5 +1,6 @@
+import { APP_INFO } from "@/constants/app-info";
+import { setHasDataHint } from "@/lib/storage";
 import Dexie, { type EntityTable } from "dexie";
-
 export interface Item {
 	id: string; // UUID
 	folderId?: string; // Relation to Folder
@@ -68,5 +69,37 @@ db.version(5)
 	.upgrade((_trans) => {
 		// Add soft delete and favorite indexes
 	});
+
+db.on("populate", (transaction) => {
+	transaction.on("abort", () => {
+		setHasDataHint(false);
+	});
+
+	const now = Date.now();
+	const welcomeFolderId = crypto.randomUUID();
+
+	transaction.table("folders").add({
+		id: welcomeFolderId,
+		parentId: null,
+		name: `Welcome to ${APP_INFO.name}`,
+		createdAt: now,
+		updatedAt: now,
+		order: 0,
+	});
+
+	transaction.table("items").add({
+		id: crypto.randomUUID(),
+		folderId: welcomeFolderId,
+		url: `https://${APP_INFO.appUrl}`,
+		title: APP_INFO.title,
+		description: APP_INFO.description,
+		image: `https://${APP_INFO.appUrl}/og-image.png`,
+		logo: `https://${APP_INFO.appUrl}/favicon.svg`,
+		createdAt: now,
+		updatedAt: now,
+	});
+
+	setHasDataHint(true);
+});
 
 export { db };

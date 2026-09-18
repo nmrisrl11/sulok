@@ -1,3 +1,4 @@
+import { ResetButton } from "@/components/reset-button";
 import { db } from "@/db/db";
 import { ImportPreviewDialog } from "@/features/settings/components/import-preview-dialog";
 import { SettingsCard } from "@/features/settings/components/settings-card";
@@ -5,6 +6,7 @@ import { exportData } from "@/features/settings/utils/export-utils";
 import { parseImportFile, type ParsedImportData } from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
+import { useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
 	AlertCircleIcon,
@@ -16,6 +18,7 @@ import {
 	UploadIcon,
 } from "lucide-react";
 import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ExportOptionButtonProps {
 	icon: ReactNode;
@@ -58,6 +61,8 @@ function ExportOptionButton({
 }
 
 export function DataStorageSection() {
+	const navigate = useNavigate();
+	const { updateSettings } = useSettingsStore();
 	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
 	const [parsedData, setParsedData] = useState<ParsedImportData | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -191,6 +196,25 @@ export function DataStorageSection() {
 							</p>
 						</div>
 					</button>
+				</SettingsCard>
+
+				<SettingsCard>
+					<div className="flex flex-col gap-1">
+						<div className="flex items-center justify-between gap-4">
+							<h3 className="text-sm font-medium text-foreground">Restart App Tour</h3>
+							<ResetButton
+								onClick={() => {
+									updateSettings({ onboardingStatus: "in_progress", onboardingStep: 0 });
+									navigate("/");
+								}}
+								label="Restart App Tour"
+								className="shrink-0 corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+							/>
+						</div>
+						<p className="text-xs text-muted-foreground">
+							Reset the onboarding state and restart the interactive tour from the beginning.
+						</p>
+					</div>
 				</SettingsCard>
 			</div>
 

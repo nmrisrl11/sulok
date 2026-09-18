@@ -5,6 +5,7 @@ import { AppearanceProvider } from "./components/appearance-provider";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
+import { OnboardingProvider } from "./features/onboarding/components/onboarding-provider";
 import { useGlobalSoundInteractions } from "./hooks";
 import { AboutSkeleton } from "./pages/about/about-skeleton";
 import { HomeRouteFallback } from "./pages/home/home-route-fallback";
@@ -41,48 +42,50 @@ function App() {
 					<NuqsAdapter>
 						<AppLayout>
 							<ErrorBoundary>
-								<Routes>
-									<Route
-										path="/"
-										element={
-											<Suspense fallback={<HomeRouteFallback />}>
-												<HomePage />
-											</Suspense>
-										}
-									/>
-									<Route
-										path="/about"
-										element={
-											<Suspense fallback={<AboutSkeleton />}>
-												<AboutPage />
-											</Suspense>
-										}
-									/>
-									<Route
-										path="/updates"
-										element={
-											<Suspense fallback={<UpdatesSkeleton />}>
-												<UpdatesPage />
-											</Suspense>
-										}
-									/>
-									<Route
-										path="/settings"
-										element={
-											<Suspense fallback={<SettingsSkeleton />}>
-												<SettingsPage />
-											</Suspense>
-										}
-									/>
-									<Route
-										path="*"
-										element={
-											<Suspense fallback={null}>
-												<NotFoundPage />
-											</Suspense>
-										}
-									/>
-								</Routes>
+								<OnboardingProvider>
+									<Routes>
+										<Route
+											path="/"
+											element={
+												<Suspense fallback={<HomeRouteFallback />}>
+													<HomePage />
+												</Suspense>
+											}
+										/>
+										<Route
+											path="/about"
+											element={
+												<Suspense fallback={<AboutSkeleton />}>
+													<AboutPage />
+												</Suspense>
+											}
+										/>
+										<Route
+											path="/updates"
+											element={
+												<Suspense fallback={<UpdatesSkeleton />}>
+													<UpdatesPage />
+												</Suspense>
+											}
+										/>
+										<Route
+											path="/settings"
+											element={
+												<Suspense fallback={<SettingsSkeleton />}>
+													<SettingsPage />
+												</Suspense>
+											}
+										/>
+										<Route
+											path="*"
+											element={
+												<Suspense fallback={null}>
+													<NotFoundPage />
+												</Suspense>
+											}
+										/>
+									</Routes>
+								</OnboardingProvider>
 							</ErrorBoundary>
 						</AppLayout>
 					</NuqsAdapter>

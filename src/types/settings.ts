@@ -44,5 +44,7 @@ export interface Settings {
 	appearanceSettings: AppearanceSettings;
 	soundSettings: SoundSettings;
 	suloSettings: SuloSettings;
+	onboardingStatus?: "idle" | "in_progress" | "completed";
+	onboardingStep?: number;
 	// Sync settings (placeholders for future)
 }

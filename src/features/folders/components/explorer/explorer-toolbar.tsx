@@ -106,6 +106,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 							<Button
 								variant="ghost"
 								size="sm"
+								id="new-folder-btn"
 								onClick={() => openCreateDialog(folderId)}
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
@@ -116,6 +117,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 							<Button
 								variant="ghost"
 								size="sm"
+								id="add-to-corner-btn"
 								onClick={() => {
 									document.dispatchEvent(
 										new CustomEvent("open-quick-link", { detail: { folderId } }),

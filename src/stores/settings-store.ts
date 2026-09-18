@@ -23,6 +23,8 @@ export const defaultSettings: Settings = {
 		expressionError: "sad",
 		whispers: WHISPER_PHRASES,
 	},
+	onboardingStatus: "in_progress",
+	onboardingStep: 0,
 };
 
 interface SettingsState {
@@ -146,6 +148,20 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 				}
 			}
 		}
+	}
+
+	const validStatuses = ["idle", "in_progress", "completed"];
+	if (
+		safeSettings.onboardingStatus !== undefined &&
+		!validStatuses.includes(safeSettings.onboardingStatus as string)
+	) {
+		delete safeSettings.onboardingStatus;
+	}
+	if (
+		safeSettings.onboardingStep !== undefined &&
+		typeof safeSettings.onboardingStep !== "number"
+	) {
+		delete safeSettings.onboardingStep;
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

@@ -33,7 +33,7 @@ export function ExplorerMainSkeleton() {
 
 	return (
 		<div role="alert" aria-label="Loading items" className="contents">
-			<div className="flex flex-col gap-2">
+			<div id="explorer-main" className="flex flex-col gap-2">
 				<FolderCardSkeleton />
 				<FolderCardSkeleton />
 				<div className="my-4 border-b border-border/50" />
@@ -84,7 +84,11 @@ export const ExplorerMain = memo(function ExplorerMain({
 		// If we know there's no data (or undefined for a new user), skip the skeleton
 		// and immediately show the empty state to prevent UI flicker.
 		if (!hasDataHint) {
-			return <FolderEmptyState animate={false} />;
+			return (
+				<div id="explorer-main" className="flex h-full flex-col">
+					<FolderEmptyState animate={false} />
+				</div>
+			);
 		}
 		return <ExplorerMainSkeleton />;
 	}
@@ -92,13 +96,17 @@ export const ExplorerMain = memo(function ExplorerMain({
 	const isEmpty = folders.length === 0 && items.length === 0;
 
 	if (isEmpty) {
-		return <FolderEmptyState animate={false} />;
+		return (
+			<div id="explorer-main" className="flex h-full flex-col">
+				<FolderEmptyState animate={false} />
+			</div>
+		);
 	}
 
 	if (mixData) {
 		if (viewMode === "grid") {
 			return (
-				<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+				<div id="explorer-main" className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 					{mixedData.map((entity) => {
 						if (!("url" in entity)) {
 							return <FolderGridCard key={entity.id} folder={entity as Folder} />;
@@ -109,7 +117,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 			);
 		}
 		return (
-			<div className="flex flex-col gap-2">
+			<div id="explorer-main" className="flex flex-col gap-2">
 				{mixedData.map((entity) => {
 					if (!("url" in entity)) {
 						return <FolderCard key={entity.id} folder={entity as Folder} />;
@@ -122,7 +130,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 
 	if (viewMode === "grid") {
 		return (
-			<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+			<div id="explorer-main" className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 				{folders.map((folder) => (
 					<FolderGridCard key={folder.id} folder={folder} />
 				))}
@@ -135,7 +143,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 
 	// Default List View (Separated)
 	return (
-		<div className="flex flex-col gap-2">
+		<div id="explorer-main" className="flex flex-col gap-2">
 			{folders.map((folder) => (
 				<FolderCard key={folder.id} folder={folder} />
 			))}

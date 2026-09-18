@@ -41,6 +41,7 @@ export function Header() {
 					<div className="mx-0.5 h-4 w-px bg-border/50" />
 					<button
 						type="button"
+						id="quick-customize-btn"
 						onClick={() => useUIStore.getState().toggleQuickCustomize()}
 						className={cn(
 							"flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-8 sm:w-8",

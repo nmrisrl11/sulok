@@ -42,7 +42,10 @@ export const ExplorerSidebar = memo(function ExplorerSidebar() {
 	];
 
 	return (
-		<nav className="flex w-full flex-row gap-1 overflow-x-auto rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-auto sm:flex-wrap sm:overflow-visible">
+		<nav
+			id="explorer-sidebar"
+			className="flex w-full flex-row gap-1 overflow-x-auto rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-auto sm:flex-wrap sm:overflow-visible"
+		>
 			{navItems.map((item) => {
 				const Icon = item.icon;
 				return (
