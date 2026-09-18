@@ -51,6 +51,33 @@ const DroppableBreadcrumbNode = forwardRef<
 });
 DroppableBreadcrumbNode.displayName = "DroppableBreadcrumbNode";
 
+function DroppableLeafNode({
+	folderId,
+	children,
+	className,
+}: {
+	folderId: string | null;
+	children: React.ReactNode;
+	className?: string;
+}) {
+	const { setNodeRef, isOver } = useDroppable({
+		id: `drop-breadcrumb-${folderId ?? "root"}`,
+		data: { type: "breadcrumb", folderId },
+	});
+
+	return (
+		<span
+			ref={setNodeRef}
+			className={cn(
+				isOver && "text-primary underline decoration-primary decoration-2 underline-offset-4",
+				className,
+			)}
+		>
+			{children}
+		</span>
+	);
+}
+
 interface FolderBreadcrumbsProps {
 	currentFolderId: string | null;
 	allFolders: Folder[];
@@ -102,9 +129,11 @@ export function FolderBreadcrumbs({
 			<BreadcrumbList className="flex-nowrap sm:flex-wrap">
 				<BreadcrumbItem>
 					{!currentFolderId ? (
-						<BreadcrumbPage className={cn("flex items-center gap-1.5", rootClassName)}>
-							<RootIcon className="size-4 shrink-0" />
-							{rootLabel}
+						<BreadcrumbPage className={rootClassName}>
+							<DroppableLeafNode folderId={null} className="flex items-center gap-1.5">
+								<RootIcon className="size-4 shrink-0" />
+								{rootLabel}
+							</DroppableLeafNode>
 						</BreadcrumbPage>
 					) : (
 						<BreadcrumbLink asChild className="cursor-pointer hover:text-foreground">
@@ -149,7 +178,7 @@ export function FolderBreadcrumbs({
 								<BreadcrumbItem>
 									{index === visibleBreadcrumbs.length - 1 ? (
 										<BreadcrumbPage className={cn("truncate", leafClassName)}>
-											{crumb.name}
+											<DroppableLeafNode folderId={crumb.id}>{crumb.name}</DroppableLeafNode>
 										</BreadcrumbPage>
 									) : (
 										<BreadcrumbLink

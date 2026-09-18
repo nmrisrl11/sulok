@@ -99,7 +99,7 @@ export const FolderGridCard = memo(
 					}
 				}}
 				className={cn(
-					"group relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:border-ring focus-visible:bg-card/50 focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
+					"group touch-callout-none relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border p-4 transition-colors select-none corner-squircle hover:border-border hover:bg-card/50 focus-visible:border-ring focus-visible:bg-card/50 focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
 					isSelected
 						? "border-primary/20 bg-card/50 shadow-sm"
 						: "border-transparent bg-transparent",

@@ -69,7 +69,10 @@
 - **Recycle Bin Context**:
   - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.
   - Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.
-
+- **Drag & Drop UX**:
+  - Ensure `pointerWithin` collision is used to prevent elements from snapping to distant drop zones.
+  - Apply `select-none touch-callout-none` to all draggable items to prevent mobile long-press context menus and text selection from interrupting the drag flow.
+  - Avoid visual noise during drag operations. Do not aggressively change the UI of invalid drop targets in the main grid; prefer silent returns for invalid drops (like Google Drive), saving explicit error feedback for edge cases like bulk moving a folder into itself.
 - **Interactive Sounds**: Use `cuelume` for UI sound effects. Global interactions are handled automatically via `useGlobalSoundInteractions.ts`. To opt a specific element (and its children) out of hover/click sounds, add the `data-no-sound="true"` attribute to the element.
 - When positioning global overlays (like `GooeyToaster`) above persistent floating UI elements (like `BottomActionSystem`), use dynamic CSS variables (`--bottom-action-height`) powered by `ResizeObserver` instead of hard-coded offset values. Note: `sonner` enforces `--mobile-offset-bottom` on mobile viewports (< 600px), which must be explicitly overridden via a global `<style>` tag to support custom dynamic offsets on mobile.
 
