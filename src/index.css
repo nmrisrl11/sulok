@@ -271,6 +271,9 @@
 	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
 		background-color: var(--muted-foreground);
 	}
+	.touch-callout-none {
+		-webkit-touch-callout: none;
+	}
 }
 
 [data-sonner-toaster],

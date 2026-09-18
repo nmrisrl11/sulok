@@ -79,7 +79,7 @@ export const FolderCard = memo(
 				role="button"
 				tabIndex={0}
 				className={cn(
-					"group flex cursor-pointer items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors corner-squircle hover:border-border hover:bg-card/50 focus-visible:border-ring focus-visible:bg-card/50 focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
+					"group touch-callout-none flex cursor-pointer items-center justify-between gap-3 rounded-md border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors select-none corner-squircle hover:border-border hover:bg-card/50 focus-visible:border-ring focus-visible:bg-card/50 focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
 					isSelected ? "border-border bg-card/50 shadow-sm" : "border-transparent bg-transparent",
 					isEffectivelyDragging && "opacity-50",
 					isOver && "border-primary bg-primary/10 shadow-sm",

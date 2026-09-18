@@ -11,7 +11,7 @@ import {
 	KeyboardSensor,
 	PointerSensor,
 	TouchSensor,
-	closestCenter,
+	pointerWithin,
 	useDndContext,
 	useSensor,
 	useSensors,
@@ -19,6 +19,7 @@ import {
 	type DragStartEvent,
 	type Modifier,
 } from "@dnd-kit/core";
+import { BanIcon, InfoIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useEffect, useRef, type ReactNode } from "react";
 import { FolderCard } from "../folder/folder-card";
@@ -159,6 +160,16 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				const item = dragData.entity as Item;
 				if ((item.folderId || null) === targetFolderId) return;
 			}
+		} else {
+			if (folderSelectedIds.includes(targetFolderId ?? "")) {
+				notify.error("Cannot move a folder into itself", { id: "move-error" });
+				return;
+			}
+			const isSameFolder =
+				dragData.type === "folder"
+					? (dragData.entity as Folder).parentId === targetFolderId
+					: ((dragData.entity as Item).folderId || null) === targetFolderId;
+			if (isSameFolder) return;
 		}
 
 		try {
@@ -230,7 +241,7 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 	return (
 		<DndContext
 			sensors={sensors}
-			collisionDetection={closestCenter}
+			collisionDetection={pointerWithin}
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
 			onDragCancel={handleDragCancel}
@@ -251,9 +262,43 @@ function DragOverlayContent({
 	viewMode: "compact" | "grid" | "list";
 }) {
 	const { over } = useDndContext();
-	const isOverBreadcrumb = over?.data?.current?.type === "breadcrumb";
+	const overData = over?.data?.current as DropData | undefined;
+
+	let dropStatus: "valid" | "same-folder" | "self" = "valid";
+	if (overData) {
+		const targetFolderId = overData.folderId;
+		const entity = activeData.entity;
+		if (activeData.type === "folder") {
+			const folder = entity as Folder;
+			if (folder.id === targetFolderId) dropStatus = "self";
+			else if (folder.parentId === targetFolderId) dropStatus = "same-folder";
+			else if (activeData.isBulk && activeData.folderIds?.includes(targetFolderId ?? ""))
+				dropStatus = "self";
+		} else {
+			const item = entity as Item;
+			if ((item.folderId || null) === targetFolderId) dropStatus = "same-folder";
+		}
+	}
+
+	const isOverBreadcrumb = overData?.type === "breadcrumb";
 
 	if (isOverBreadcrumb) {
+		if (dropStatus === "self") {
+			return (
+				<div className="text-destructive-foreground pointer-events-none flex w-max items-center gap-2 rounded-md border border-destructive/20 bg-destructive/90 px-3 py-1.5 text-sm font-medium shadow-lg backdrop-blur-md corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+					<BanIcon className="size-4" />
+					Cannot move into itself
+				</div>
+			);
+		}
+		if (dropStatus === "same-folder") {
+			return (
+				<div className="pointer-events-none flex w-max items-center gap-2 rounded-md border border-border bg-muted/95 px-3 py-1.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-md corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+					<InfoIcon className="size-4 text-muted-foreground" />
+					Already in this folder
+				</div>
+			);
+		}
 		return (
 			<div className="pointer-events-none flex w-max items-center gap-2 rounded-md border border-border bg-card/80 px-3 py-1.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-md corner-squircle supports-[corner-shape:squircle]:rounded-xl">
 				<MoveToFolderIcon className="size-4" />
