@@ -266,6 +266,21 @@ export const FolderRepository = {
 	async moveMany(ids: string[], targetParentId: string | null): Promise<void> {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, async () => {
+			// Validate that targetParentId is not one of the moving folders, or a descendant of them
+			if (targetParentId) {
+				let currentTarget = await db.folders.get(targetParentId);
+				while (currentTarget) {
+					if (ids.includes(currentTarget.id)) {
+						throw new Error("Cannot move a folder into itself or its subfolders.");
+					}
+					if (currentTarget.parentId) {
+						currentTarget = await db.folders.get(currentTarget.parentId);
+					} else {
+						break;
+					}
+				}
+			}
+
 			// Get all siblings in the target folder to resolve naming conflicts
 			const siblings = await db.folders
 				.filter((f) => f.parentId === targetParentId && !f.deletedAt && !ids.includes(f.id))

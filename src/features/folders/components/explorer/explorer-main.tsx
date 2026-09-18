@@ -54,6 +54,18 @@ export const ExplorerMain = memo(function ExplorerMain({
 	items: Item[];
 	isLoading: boolean;
 }) {
+	return <ExplorerMainContent folders={folders} items={items} isLoading={isLoading} />;
+});
+
+function ExplorerMainContent({
+	folders,
+	items,
+	isLoading,
+}: {
+	folders: Folder[];
+	items: Item[];
+	isLoading: boolean;
+}) {
 	const [viewMode] = useQueryState("mode", viewModeParser);
 	const [mixData] = useQueryState("mix", mixDataParser);
 	const [sortOption] = useQueryState("sort", sortOptionParser);
@@ -153,4 +165,4 @@ export const ExplorerMain = memo(function ExplorerMain({
 			))}
 		</div>
 	);
-});
+}

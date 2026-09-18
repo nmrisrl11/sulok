@@ -9,6 +9,7 @@
 
 ### Added
 
+- Added robust drag-and-drop organization allowing you to effortlessly move individual links, folders, or bulk selections directly into other folders or via the breadcrumb navigation.
 - Added an interactive onboarding tour for new users to explain the app's layout and core features.
 - Added a default "Welcome to Sulok" folder and sample link for new users to explore.
 - Improved the initial loading experience to feel seamless and prevent jarring empty screens when the app first opens.
@@ -40,6 +41,8 @@
 - Fixed a significant performance lag when navigating settings tabs (specifically Sound FX and Sulo Customization) by optimizing how Radix UI dropdown menus render their internal items.
 - Fixed a bug where the Explorer toolbar would completely disappear (preventing users from clearing filters) if an active type filter resulted in 0 items.
 - Fixed accessibility warnings (missing aria-labels and invalid heading hierarchies) to ensure the app remains fully screen-reader friendly.
+- Fixed an issue where the drag-and-drop system lacked keyboard accessibility and sometimes conflicted with nested button clicks.
+- Fixed a bug that allowed users to move a folder into itself or its subfolders, which could corrupt the folder structure.
 
 ### Removed
 

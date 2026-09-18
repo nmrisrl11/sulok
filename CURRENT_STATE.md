@@ -77,7 +77,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Enhanced Empty State UI design
 - [x] Co-located feature-level loading Skeletons
 - [x] Route-specific loading architecture (Suspense fallbacks)
-- [ ] Drag-and-drop organization
+- [x] Drag-and-drop organization
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls (Pagination intentionally omitted for local-first scroll)
 - [x] Favicon fetching

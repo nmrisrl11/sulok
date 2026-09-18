@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { type Folder, type Item } from "@/db/db";
+import { ExplorerDndContext } from "@/features/folders/components/dnd/explorer-dnd-context";
 import { ExplorerMain } from "@/features/folders/components/explorer/explorer-main";
 import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer-sidebar";
 import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
@@ -77,25 +78,27 @@ export function HomePage({ className }: { className?: string }) {
 					</h2>
 					<ExplorerSidebar />
 				</div>
-				<div className="flex w-full min-w-0 flex-col">
-					<ExplorerToolbar
-						hasItems={homeData.items.length > 0}
-						hasFolders={homeData.folders.length > 0}
-					/>
-					<SelectionHeader
-						items={homeData.items}
-						hasItems={homeData.items.length > 0}
-						folders={homeData.folders}
-						hasFolders={homeData.folders.length > 0}
-					/>
-					<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
-						<ExplorerMain
-							folders={homeData.folders}
-							items={homeData.items}
-							isLoading={homeData.isLoading}
+				<ExplorerDndContext>
+					<div className="flex w-full min-w-0 flex-col">
+						<ExplorerToolbar
+							hasItems={homeData.items.length > 0}
+							hasFolders={homeData.folders.length > 0}
 						/>
+						<SelectionHeader
+							items={homeData.items}
+							hasItems={homeData.items.length > 0}
+							folders={homeData.folders}
+							hasFolders={homeData.folders.length > 0}
+						/>
+						<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
+							<ExplorerMain
+								folders={homeData.folders}
+								items={homeData.items}
+								isLoading={homeData.isLoading}
+							/>
+						</div>
 					</div>
-				</div>
+				</ExplorerDndContext>
 			</div>
 		</main>
 	);
