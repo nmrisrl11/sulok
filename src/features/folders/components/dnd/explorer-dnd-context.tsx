@@ -11,6 +11,7 @@ import {
 	KeyboardSensor,
 	PointerSensor,
 	TouchSensor,
+	closestCenter,
 	pointerWithin,
 	useDndContext,
 	useSensor,
@@ -241,7 +242,12 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 	return (
 		<DndContext
 			sensors={sensors}
-			collisionDetection={pointerWithin}
+			collisionDetection={(args) => {
+				if (args.pointerCoordinates) {
+					return pointerWithin(args);
+				}
+				return closestCenter(args);
+			}}
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
 			onDragCancel={handleDragCancel}
@@ -268,12 +274,12 @@ function DragOverlayContent({
 	if (overData) {
 		const targetFolderId = overData.folderId;
 		const entity = activeData.entity;
-		if (activeData.type === "folder") {
+		if (activeData.isBulk && activeData.folderIds?.includes(targetFolderId ?? "")) {
+			dropStatus = "self";
+		} else if (activeData.type === "folder") {
 			const folder = entity as Folder;
 			if (folder.id === targetFolderId) dropStatus = "self";
 			else if (folder.parentId === targetFolderId) dropStatus = "same-folder";
-			else if (activeData.isBulk && activeData.folderIds?.includes(targetFolderId ?? ""))
-				dropStatus = "self";
 		} else {
 			const item = entity as Item;
 			if ((item.folderId || null) === targetFolderId) dropStatus = "same-folder";
