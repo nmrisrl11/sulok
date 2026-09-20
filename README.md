@@ -177,10 +177,10 @@ _(No `.env` file is required to run the application locally.)_
 
 We are currently focused on completing Phase 1 of our roadmap. Future plans include:
 
-- Drag-and-drop folder organization
-- Item tags and categorization
-- Full Progressive Web App (PWA) installation support
-- Chrome Extension for quick-saving
-- Peer-to-peer (WebRTC) device synchronization without a backend
+- [x] Drag-and-drop folder organization
+- [ ] Item tags and categorization
+- [ ] Full Progressive Web App (PWA) installation support
+- [ ] Chrome Extension for quick-saving
+- [ ] Peer-to-peer (WebRTC) device synchronization without a backend
 
 _(Check `CURRENT_STATE.md` for detailed tracking)._
