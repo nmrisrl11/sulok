@@ -1,30 +1,13 @@
-import {
-	CustomHeartFilledIcon,
-	CustomHeartIcon,
-	CustomHeartSlashIcon,
-	FolderEditIcon,
-	FolderIcon,
-	MoveToFolderIcon,
-	TrashClockIcon,
-	TrashUndoIcon,
-	TrashXMarkIcon,
-} from "@/components/icons";
+import { CustomHeartFilledIcon, FolderIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
 import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
-import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useFolderStore, useMoveStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useFolderStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
-import { MoreVerticalIcon } from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
 
@@ -43,11 +26,7 @@ export const FolderGridCard = memo(
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
-		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
 		const today = useTimeStore((state) => state.today);
-
-		const { handleEdit, handleSoftDelete, handleRestore, handleHardDelete, handleToggleFavorite } =
-			useFolderActions(folder);
 
 		const {
 			attributes,
@@ -148,81 +127,15 @@ export const FolderGridCard = memo(
 						)}
 						onClick={(e) => e.stopPropagation()}
 					>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant="ghost"
-									size="icon"
-									className="h-8 w-8 text-muted-foreground hover:text-foreground"
-								>
-									<MoreVerticalIcon className="h-4 w-4" />
-									<span className="sr-only">Actions</span>
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent
-								align="end"
-								className="w-40"
-								onClick={(e) => e.stopPropagation()}
-							>
-								{view === "trash" ? (
-									<>
-										<DropdownMenuItem
-											onClick={handleRestore}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashUndoIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Restore</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleHardDelete}
-											variant="destructive"
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashXMarkIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
-										</DropdownMenuItem>
-									</>
-								) : (
-									<>
-										<DropdownMenuItem
-											onClick={handleToggleFavorite}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											{folder.isFavorite ? (
-												<CustomHeartSlashIcon className="mr-2 h-3.5 w-3.5 text-red-500" />
-											) : (
-												<CustomHeartIcon className="mr-2 h-3.5 w-3.5" />
-											)}
-											<span className={cn(folder.isFavorite && "text-red-500", "text-[13px]")}>
-												{folder.isFavorite ? "Unfavorite" : "Favorite"}
-											</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleEdit}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<FolderEditIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Rename</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => openMoveDialog({ folderIds: [folder.id] })}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<MoveToFolderIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Move to...</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleSoftDelete}
-											variant="destructive"
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashClockIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Delete</span>
-										</DropdownMenuItem>
-									</>
-								)}
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<Button
+							variant="ghost"
+							size="icon"
+							className="h-8 w-8 text-muted-foreground hover:text-foreground"
+							onClick={() => useActionDrawerStore.getState().openFolderDrawer(folder)}
+						>
+							<MoreHorizontalIcon className="h-4 w-4" />
+							<span className="sr-only">Actions</span>
+						</Button>
 					</div>
 				)}
 
