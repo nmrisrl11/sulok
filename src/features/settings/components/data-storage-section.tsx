@@ -69,10 +69,14 @@ export function DataStorageSection() {
 	const importIdRef = useRef(0);
 	const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const itemCount = useLiveQuery(() => db.items.count()) ?? 0;
+	const folderCount = useLiveQuery(() => db.folders.count()) ?? 0;
+	const hasData = itemCount > 0 || folderCount > 0;
 
 	const handleExport = (format: "json" | "csv" | "txt") => {
 		exportData(format).catch((error) => {
-			notify.error(error instanceof Error ? error.message : "Failed to export data");
+			notify.error(error instanceof Error ? error.message : "Failed to export data", {
+				id: "export-error",
+			});
 		});
 	};
 
@@ -133,24 +137,24 @@ export function DataStorageSection() {
 							title="JSON"
 							description="Full backup with complete metadata"
 							onClick={() => handleExport("json")}
-							disabled={itemCount === 0}
+							disabled={!hasData}
 						/>
 						<ExportOptionButton
 							icon={<TableIcon className="h-5 w-5" />}
 							title="CSV"
 							description="Spreadsheet compatible format"
 							onClick={() => handleExport("csv")}
-							disabled={itemCount === 0}
+							disabled={!hasData}
 						/>
 						<ExportOptionButton
 							icon={<FileTextIcon className="h-5 w-5" />}
 							title="TXT"
 							description="Simple plain text list of links"
 							onClick={() => handleExport("txt")}
-							disabled={itemCount === 0}
+							disabled={!hasData}
 						/>
 					</div>
-					{itemCount === 0 && (
+					{!hasData && (
 						<div className="flex items-start gap-2 rounded-xl bg-amber-500/10 p-3 text-amber-500 corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 							<AlertCircleIcon className="mt-0.5 h-4 w-4 shrink-0" />
 							<p className="text-xs leading-relaxed font-medium">

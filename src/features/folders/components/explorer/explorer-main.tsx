@@ -103,11 +103,8 @@ const VirtualRow = memo(function VirtualRow({
 		<div
 			ref={measureElement}
 			data-index={index}
+			className="absolute top-0 left-0 w-full"
 			style={{
-				position: "absolute",
-				top: 0,
-				left: 0,
-				width: "100%",
 				transform: `translate3d(0, ${start}px, 0)`,
 				willChange: "transform",
 				paddingBottom: viewMode === "grid" ? "1rem" : "0.5rem",

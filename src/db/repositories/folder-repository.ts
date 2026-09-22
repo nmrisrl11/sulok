@@ -110,6 +110,57 @@ export const FolderRepository = {
 		});
 	},
 
+	async importFolder(
+		folder: Omit<Folder, "id" | "createdAt" | "updatedAt" | "order"> & {
+			id?: string;
+			createdAt?: number;
+			updatedAt?: number;
+			order?: number;
+		},
+	): Promise<string> {
+		const parsedData = folderSchema.parse(folder);
+		const now = Date.now();
+		let importedId = "";
+
+		await db.transaction("rw", db.folders, async () => {
+			const count = await db.folders.count();
+			const parentId = parsedData.parentId || null;
+			let finalName = parsedData.name.trim();
+
+			// Handle duplicate names in the same parent folder
+			const siblings = await db.folders
+				.filter((f) => f.parentId === parentId && !f.deletedAt)
+				.toArray();
+
+			const isDuplicate = siblings.some((f) => f.name.toLowerCase() === finalName.toLowerCase());
+			if (isDuplicate) {
+				const existingNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+				finalName = generateUniqueName(finalName, existingNames);
+			}
+
+			let newId = folder.id || crypto.randomUUID();
+			if (folder.id) {
+				const existing = await db.folders.get(folder.id);
+				if (existing) {
+					newId = crypto.randomUUID();
+				}
+			}
+			importedId = newId;
+
+			const record: Folder = {
+				id: newId,
+				parentId,
+				name: finalName,
+				createdAt: folder.createdAt ?? now,
+				updatedAt: folder.updatedAt ?? now,
+				order: folder.order ?? count,
+			};
+			await db.folders.add(record);
+		});
+
+		return importedId;
+	},
+
 	async update(id: string, updates: Partial<Folder>): Promise<void> {
 		const parsedData = folderSchema.partial().parse(updates);
 

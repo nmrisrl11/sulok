@@ -95,7 +95,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Global Settings Page (tabbed layout)
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization
 - [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, colors, and layout density)
-- [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata preservation (images, logos, creation dates)
+- [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI
 - [ ] PWA/offline support
