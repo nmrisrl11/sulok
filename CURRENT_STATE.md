@@ -79,7 +79,8 @@ The project is currently in the **core features implementation phase**.
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [x] Drag-and-drop organization
 - [x] Open / Copy link buttons
-- [x] Search and Sort controls (Pagination intentionally omitted for local-first scroll)
+- [x] Search and Sort controls
+- [x] High-performance list virtualization (TanStack Virtual) for massive local datasets
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
 - [x] SEO, Social Previews (Open Graph), and Agentic Browsing foundations (robots.txt, sitemap.xml, llms.txt)

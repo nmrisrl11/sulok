@@ -20,18 +20,19 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Item } from "@/db/db";
+import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
-import { useLiveQuery } from "dexie-react-hooks";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { useActiveDragStore } from "../../folders/components/dnd/active-drag-store";
 import { useItemActions } from "../hooks/use-item-actions";
+
+const folderCache = new Map<string, Folder | null>();
 
 export const ItemCard = memo(
 	function ItemCard({ item, isOverlay }: { item: Item; isOverlay?: boolean }) {
@@ -44,10 +45,22 @@ export const ItemCard = memo(
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 
-		const parentFolder = useLiveQuery(
-			() => (item.folderId ? FolderRepository.getById(item.folderId) : undefined),
-			[item.folderId],
+		const [parentFolder, setParentFolder] = useState<Folder | null>(() =>
+			item.folderId ? folderCache.get(item.folderId) || null : null,
 		);
+
+		useEffect(() => {
+			if (!item.folderId) return;
+			if (folderCache.has(item.folderId)) return;
+			let isMounted = true;
+			FolderRepository.getById(item.folderId).then((folder) => {
+				folderCache.set(item.folderId!, folder || null);
+				if (isMounted) setParentFolder(folder || null);
+			});
+			return () => {
+				isMounted = false;
+			};
+		}, [item.folderId]);
 
 		const {
 			isCopied,

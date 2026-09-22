@@ -58,6 +58,8 @@ export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProp
 					src={logo}
 					alt="favicon"
 					className="h-3/4 w-3/4 object-contain"
+					loading="lazy"
+					decoding="async"
 					onError={() => setLogoError(true)}
 				/>
 			) : (
@@ -65,6 +67,8 @@ export function SiteFavicon({ url, logo, className, size = 64 }: SiteFaviconProp
 					src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
 					alt="favicon"
 					className="h-3/4 w-3/4 object-contain"
+					loading="lazy"
+					decoding="async"
 					onError={() => setError(true)}
 				/>
 			)}
