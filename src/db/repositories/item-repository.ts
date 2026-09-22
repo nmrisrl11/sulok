@@ -1,3 +1,4 @@
+import { TRASH_RETENTION_DAYS } from "@/constants/app-info";
 import { setHasDataHint } from "@/lib/storage";
 import { generateUniqueName } from "@/lib/utils";
 import { itemSchema } from "@/schemas";
@@ -367,6 +368,23 @@ export const ItemRepository = {
 			const trashItems = await db.items.filter((item) => !!item.deletedAt).toArray();
 			const ids = trashItems.map((item) => item.id);
 			await db.items.bulkDelete(ids);
+		});
+		const count = await db.items.count();
+		if (count === 0) {
+			setHasDataHint(false);
+		}
+	},
+
+	async emptyExpiredTrash(): Promise<void> {
+		const expiryTime = Date.now() - TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+		await db.transaction("rw", db.items, async () => {
+			const expiredItems = await db.items
+				.filter((item) => !!item.deletedAt && item.deletedAt < expiryTime)
+				.toArray();
+			const ids = expiredItems.map((item) => item.id);
+			if (ids.length > 0) {
+				await db.items.bulkDelete(ids);
+			}
 		});
 		const count = await db.items.count();
 		if (count === 0) {

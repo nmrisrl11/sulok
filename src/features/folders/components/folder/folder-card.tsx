@@ -22,7 +22,7 @@ import { useActiveDragStore } from "@/features/folders/components/dnd/active-dra
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useFolderStore, useMoveStore } from "@/stores";
+import { useFolderStore, useMoveStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -35,6 +35,7 @@ export const FolderCard = memo(
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 		const [view] = useQueryState("view", viewParser);
+		const today = useTimeStore((state) => state.today);
 
 		const { handleEdit, handleSoftDelete, handleRestore, handleHardDelete, handleToggleFavorite } =
 			useFolderActions(folder);
@@ -126,7 +127,7 @@ export const FolderCard = memo(
 						<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
 						{view === "trash" && folder.deletedAt && (
 							<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
-								{getTrashRetentionText(folder.deletedAt)}
+								{getTrashRetentionText(folder.deletedAt, today)}
 							</span>
 						)}
 					</div>

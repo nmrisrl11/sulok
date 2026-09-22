@@ -40,10 +40,10 @@ export function generateUniqueName(name: string, existingNames: Set<string>): st
 	return finalName;
 }
 
-export function getTrashRetentionText(deletedAt?: number): string | null {
+export function getTrashRetentionText(deletedAt?: number, nowTimestamp?: number): string | null {
 	if (!deletedAt) return null;
 	const expiryDate = new Date(deletedAt + TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000);
-	const now = new Date();
+	const now = nowTimestamp ? new Date(nowTimestamp) : new Date();
 
 	const diffTime = expiryDate.getTime() - now.getTime();
 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
