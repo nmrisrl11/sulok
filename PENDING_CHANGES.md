@@ -9,6 +9,7 @@
 
 ### Added
 
+- Added a visual indicator in the Recycle Bin showing how many days are left before items and folders are permanently deleted.
 - Added contextual status hints (e.g. "Already in this folder") when dragging items over the active folder path in the breadcrumb bar.
 
 ### Changed

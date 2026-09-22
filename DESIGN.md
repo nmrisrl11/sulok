@@ -140,6 +140,7 @@ Minimal shadows. Prefer border/background differentiation.
 - During search, items display a clickable folder badge indicating their location.
 - Desktop hover action buttons are grouped inside a floating pill container (`bg-muted/40` frosted background, squircle corners, logical vertical dividers) to form a unified tool palette. Mobile actions remain accessible via a 'More' dropdown menu without horizontal separators. Do not use tooltips for these self-explanatory action icons.
 - Primary content (favicon and text) acts as a clickable link.
+- **Trash State:** When viewed in the Recycle Bin, items and folders display their permanent deletion countdown as subtle, icon-less monospace text (`font-mono text-muted-foreground`) to avoid drawing unnecessary attention.
 
 ### Folder Tree
 

@@ -23,7 +23,7 @@ import {
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
-import { cn } from "@/lib/utils";
+import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
@@ -302,6 +302,11 @@ export const ItemGridCard = memo(
 						)}
 						<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
 					</div>
+					{view === "trash" && item.deletedAt && (
+						<span className="mt-0.5 truncate text-center font-mono text-[10px] text-muted-foreground">
+							{getTrashRetentionText(item.deletedAt)}
+						</span>
+					)}
 					{searchQuery && view !== "trash" && (
 						<button
 							type="button"

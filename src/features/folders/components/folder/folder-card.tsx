@@ -21,7 +21,7 @@ import type { Folder } from "@/db/db";
 import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
-import { cn } from "@/lib/utils";
+import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useFolderStore, useMoveStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreVerticalIcon } from "lucide-react";
@@ -122,7 +122,14 @@ export const FolderCard = memo(
 						</div>
 					)}
 					<FolderIcon className="size-6 shrink-0" />
-					<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
+					<div className="flex flex-col items-start overflow-hidden">
+						<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
+						{view === "trash" && folder.deletedAt && (
+							<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+								{getTrashRetentionText(folder.deletedAt)}
+							</span>
+						)}
+					</div>
 				</div>
 
 				{!isOverlay && (
