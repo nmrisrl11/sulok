@@ -9,7 +9,7 @@ export const stressTest = async (count: number) => {
 	for (let i = 0; i < count; i++) {
 		if (i % 2 === 0) {
 			folders.push({
-				id: crypto.randomUUID(),
+				id: `stress_${crypto.randomUUID()}`,
 				parentId: null,
 				name: `Stress Folder ${i}`,
 				createdAt: now + i,
@@ -18,7 +18,7 @@ export const stressTest = async (count: number) => {
 			});
 		} else {
 			items.push({
-				id: crypto.randomUUID(),
+				id: `stress_${crypto.randomUUID()}`,
 				url: `https://example.com/${i}`,
 				title: `Stress Item ${i}`,
 				createdAt: now + i,
@@ -43,11 +43,9 @@ export const stressTest = async (count: number) => {
 export const clearStressTest = async () => {
 	await db.transaction("rw", db.folders, db.items, async () => {
 		const foldersToDelete = await db.folders
-			.filter((f) => f.name.startsWith("Stress Folder"))
+			.filter((f) => f.id.startsWith("stress_"))
 			.primaryKeys();
-		const itemsToDelete = await db.items
-			.filter((i) => i.title?.startsWith("Stress Item") ?? false)
-			.primaryKeys();
+		const itemsToDelete = await db.items.filter((i) => i.id.startsWith("stress_")).primaryKeys();
 
 		await db.folders.bulkDelete(foldersToDelete);
 		await db.items.bulkDelete(itemsToDelete);

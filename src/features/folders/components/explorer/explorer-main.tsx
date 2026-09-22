@@ -91,14 +91,17 @@ const VirtualRow = memo(function VirtualRow({
 	start,
 	chunk,
 	viewMode,
+	measureElement,
 }: {
 	index: number;
 	start: number;
 	chunk: EntityRow[];
 	viewMode: string;
+	measureElement: (node: HTMLElement | null) => void;
 }) {
 	return (
 		<div
+			ref={measureElement}
 			data-index={index}
 			style={{
 				position: "absolute",
@@ -249,6 +252,7 @@ function ExplorerMainContent({
 						start={virtualRow.start}
 						chunk={chunk}
 						viewMode={viewMode}
+						measureElement={rowVirtualizer.measureElement}
 					/>
 				);
 			})}

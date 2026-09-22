@@ -45,13 +45,22 @@ export const ItemCard = memo(
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 
+		const [prevFolderId, setPrevFolderId] = useState<string | undefined>(item.folderId);
 		const [parentFolder, setParentFolder] = useState<Folder | null>(() =>
 			item.folderId ? folderCache.get(item.folderId) || null : null,
 		);
 
+		if (item.folderId !== prevFolderId) {
+			setPrevFolderId(item.folderId);
+			if (!item.folderId) {
+				setParentFolder(null);
+			} else if (folderCache.has(item.folderId)) {
+				setParentFolder(folderCache.get(item.folderId) || null);
+			}
+		}
+
 		useEffect(() => {
-			if (!item.folderId) return;
-			if (folderCache.has(item.folderId)) return;
+			if (!item.folderId || folderCache.has(item.folderId)) return;
 			let isMounted = true;
 			FolderRepository.getById(item.folderId).then((folder) => {
 				folderCache.set(item.folderId!, folder || null);

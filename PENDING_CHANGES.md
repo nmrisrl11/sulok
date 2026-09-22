@@ -21,8 +21,9 @@
 
 ### Fixed
 
-- Fixed an issue where drag-and-drop operations on mobile devices would clash with native text selection, long-press context menus, and page scrolling.
+- Fixed a severe rendering crash ("Too many re-renders") caused by a strict equality type mismatch (`undefined !== null`) when dynamically deriving component state during the render phase.
 - Fixed a rendering crash ("Cannot read properties of undefined (reading 'map')") that occurred when switching between List and Grid views while heavily scrolled down.
+- Fixed an issue where drag-and-drop operations on mobile devices would clash with native text selection, long-press context menus, and page scrolling.
 
 ### Removed
 
