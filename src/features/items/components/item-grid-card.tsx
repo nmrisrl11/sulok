@@ -1,32 +1,14 @@
-import {
-	CopyIcon,
-	CustomHeartFilledIcon,
-	CustomHeartIcon,
-	CustomHeartSlashIcon,
-	ExternalLinkIcon,
-	FileEditIcon,
-	FolderIcon,
-	MoveToFolderIcon,
-	TrashClockIcon,
-	TrashUndoIcon,
-	TrashXMarkIcon,
-} from "@/components/icons";
+import { CustomHeartFilledIcon, FolderIcon } from "@/components/icons";
 import { SiteFavicon } from "@/components/site-favicon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useItemStore, useMoveStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useItemStore, useTimeStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
-import { CheckIcon, MoreVerticalIcon } from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo, useEffect, useState } from "react";
 import { useActiveDragStore } from "../../folders/components/dnd/active-drag-store";
@@ -40,7 +22,6 @@ export const ItemGridCard = memo(
 
 		const toggleSelection = useItemStore((state) => state.toggleSelection);
 		const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
-		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
 
 		const [view] = useQueryState("view", viewParser);
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -73,17 +54,7 @@ export const ItemGridCard = memo(
 			};
 		}, [item.folderId]);
 
-		const {
-			isCopied,
-			handleCopy,
-			handleEdit,
-			handleSoftDelete,
-			handleRestore,
-			handleHardDelete,
-			handleOpenLink,
-			handleToggleFavorite,
-			targetUrl,
-		} = useItemActions(item);
+		const { targetUrl } = useItemActions(item);
 
 		const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
 			id: `drag-${item.id}`,
@@ -173,99 +144,15 @@ export const ItemGridCard = memo(
 						)}
 						onClick={(e) => e.stopPropagation()}
 					>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant="ghost"
-									size="icon"
-									className="h-8 w-8 text-muted-foreground hover:text-foreground"
-								>
-									<MoreVerticalIcon className="h-4 w-4" />
-									<span className="sr-only">Actions</span>
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent
-								align="end"
-								className="w-40"
-								onClick={(e) => e.stopPropagation()}
-							>
-								{view === "trash" ? (
-									<>
-										<DropdownMenuItem
-											onClick={handleRestore}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashUndoIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Restore</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleHardDelete}
-											variant="destructive"
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashXMarkIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px] whitespace-nowrap">Delete Forever</span>
-										</DropdownMenuItem>
-									</>
-								) : (
-									<>
-										<DropdownMenuItem
-											onClick={handleCopy}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											{isCopied ? (
-												<CheckIcon className="mr-2 h-3.5 w-3.5 text-green-500" />
-											) : (
-												<CopyIcon className="mr-2 h-3.5 w-3.5" />
-											)}
-											<span className="text-[13px]">{isCopied ? "Copied" : "Copy URL"}</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleOpenLink}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<ExternalLinkIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Open Link</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleToggleFavorite}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											{item.isFavorite ? (
-												<CustomHeartSlashIcon className="mr-2 h-3.5 w-3.5 text-red-500" />
-											) : (
-												<CustomHeartIcon className="mr-2 h-3.5 w-3.5" />
-											)}
-											<span className={cn(item.isFavorite && "text-red-500", "text-[13px]")}>
-												{item.isFavorite ? "Unfavorite" : "Favorite"}
-											</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleEdit}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<FileEditIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Edit</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => openMoveDialog({ itemIds: [item.id] })}
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<MoveToFolderIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Move to...</span>
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={handleSoftDelete}
-											variant="destructive"
-											className="cursor-pointer py-2.5 md:py-1.5"
-										>
-											<TrashClockIcon className="mr-2 h-3.5 w-3.5" />
-											<span className="text-[13px]">Delete</span>
-										</DropdownMenuItem>
-									</>
-								)}
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<Button
+							variant="ghost"
+							size="icon"
+							className="h-8 w-8 text-muted-foreground hover:text-foreground"
+							onClick={() => useActionDrawerStore.getState().openItemDrawer(item)}
+						>
+							<MoreHorizontalIcon className="h-4 w-4" />
+							<span className="sr-only">Actions for {titleToDisplay}</span>
+						</Button>
 					</div>
 				)}
 

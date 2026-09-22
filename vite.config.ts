@@ -46,10 +46,15 @@ export default defineConfig({
 							return "vendor-animation";
 						}
 						if (
-							["lucide-react", "@radix-ui", "clsx", "tailwind-merge"].includes(packageName) ||
+							["lucide-react", "@radix-ui", "clsx", "tailwind-merge", "vaul"].includes(
+								packageName,
+							) ||
 							packageName.startsWith("@radix-ui/")
 						) {
 							return "vendor-ui";
+						}
+						if (packageName.startsWith("@tanstack/")) {
+							return "vendor-virtual";
 						}
 						if (
 							["dexie", "dexie-react-hooks", "zod", "react-hook-form", "@hookform"].includes(

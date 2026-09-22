@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import {
+	useActionDrawerStore,
 	useConfirmationStore,
 	useFolderStore,
 	useItemStore,
@@ -28,6 +29,11 @@ const FolderDialog = lazy(() =>
 const MoveDialog = lazy(() =>
 	import("@/features/items/components/move-dialog").then((m) => ({
 		default: m.MoveDialog,
+	})),
+);
+const GlobalActionDrawers = lazy(() =>
+	import("./global-action-drawers").then((m) => ({
+		default: m.GlobalActionDrawers,
 	})),
 );
 
@@ -93,6 +99,28 @@ function GlobalDialogs() {
 	);
 }
 
+function GlobalDrawers() {
+	const isItemDrawerOpen = useActionDrawerStore((state) => state.isItemDrawerOpen);
+	const isFolderDrawerOpen = useActionDrawerStore((state) => state.isFolderDrawerOpen);
+	const [hasLoaded, setHasLoaded] = useState(isItemDrawerOpen || isFolderDrawerOpen);
+
+	if ((isItemDrawerOpen || isFolderDrawerOpen) && !hasLoaded) {
+		setHasLoaded(true);
+	}
+
+	return (
+		<>
+			{hasLoaded && (
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<GlobalActionDrawers />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+		</>
+	);
+}
+
 export function AppLayout({ children }: { children: ReactNode }) {
 	const toggleQuickCustomize = useUIStore((state) => state.toggleQuickCustomize);
 
@@ -122,6 +150,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 				<main className="flex flex-col gap-12 p-4 md:gap-16 md:py-6">{children}</main>
 			</div>
 			<GlobalDialogs />
+			<GlobalDrawers />
 			<BottomActionSystem />
 			<QuickCustomizeSheet />
 			<Toaster />
