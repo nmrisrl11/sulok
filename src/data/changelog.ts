@@ -14,6 +14,35 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.6.0",
+		date: "Sep 22, 2026",
+		title: "Automated Cleanups, Smoother Scrolling & Refinements",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Automated Recycle Bin: Items in your Recycle Bin are now automatically and permanently deleted after 30 days. We've also added a live visual countdown so you know exactly when an item will disappear.",
+					'Smart Drag-and-Drop Hints: When organizing your library, hovering over folders in the breadcrumb navigation now shows helpful status hints (like "Already in this folder") to guide you.',
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Buttery Smooth Scrolling: We've completely overhauled how lists are rendered. You can now scroll through hundreds of items—even grabbing the scrollbar handle at high speed—without any lag or frame drops.",
+					"Refined Drag-and-Drop: Moving items around is now much more precise. We've improved collision detection and ensured invalid drops (like dropping an item into its current location) fail silently instead of showing distracting errors.",
+					"Fluid Interactions: Quick actions like toggling favorites are now smarter. This prevents visual flickering and notification spam if you click rapidly, while keeping your library perfectly safe.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Mobile Enhancements: Fixed an issue where organizing items on mobile devices would awkwardly clash with native text selection and long-press context menus.",
+					"Squashed Bugs: Addressed critical rendering crashes that could occur when rapidly switching between List and Grid views or when heavily interacting with the UI.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.5.0",
 		date: "Sep 18, 2026",
 		title: "Drag & Drop, Onboarding, and Seamless UX",
