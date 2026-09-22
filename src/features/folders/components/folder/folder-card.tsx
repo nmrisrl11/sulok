@@ -29,7 +29,15 @@ import { useQueryState } from "nuqs";
 import { memo } from "react";
 
 export const FolderCard = memo(
-	function FolderCard({ folder, isOverlay }: { folder: Folder; isOverlay?: boolean }) {
+	function FolderCard({
+		folder,
+		isOverlay,
+		onNavigate,
+	}: {
+		folder: Folder;
+		isOverlay?: boolean;
+		onNavigate?: (id: string) => void;
+	}) {
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
@@ -89,7 +97,8 @@ export const FolderCard = memo(
 					if (view === "trash") {
 						toggleSelection(folder.id);
 					} else {
-						setFolderId(folder.id);
+						if (onNavigate) onNavigate(folder.id);
+						else setFolderId(folder.id);
 					}
 				}}
 				onKeyDown={(e) => {
@@ -100,7 +109,8 @@ export const FolderCard = memo(
 						if (view === "trash") {
 							toggleSelection(folder.id);
 						} else {
-							setFolderId(folder.id);
+							if (onNavigate) onNavigate(folder.id);
+							else setFolderId(folder.id);
 						}
 					}
 				}}
@@ -286,5 +296,6 @@ export const FolderCard = memo(
 	(prev, next) =>
 		prev.folder.name === next.folder.name &&
 		prev.folder.isFavorite === next.folder.isFavorite &&
-		prev.isOverlay === next.isOverlay,
+		prev.isOverlay === next.isOverlay &&
+		prev.onNavigate === next.onNavigate,
 );

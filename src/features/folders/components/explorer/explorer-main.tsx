@@ -3,11 +3,17 @@ import { ItemCard } from "@/features/items/components/item-card";
 import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton";
 import { ItemGridCard } from "@/features/items/components/item-grid-card";
 import { ItemGridCardSkeleton } from "@/features/items/components/item-grid-card-skeleton";
-import { mixDataParser, sortOptionParser, viewModeParser } from "@/lib/search-params";
+import {
+	folderIdParser,
+	mixDataParser,
+	searchQueryParser,
+	sortOptionParser,
+	viewModeParser,
+} from "@/lib/search-params";
 import { getHasDataHint } from "@/lib/storage";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useQueryState } from "nuqs";
-import { memo, useDeferredValue, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { FolderCard } from "../folder/folder-card";
 import { FolderCardSkeleton } from "../folder/folder-card-skeleton";
 import { FolderEmptyState } from "../folder/folder-empty-state";
@@ -92,12 +98,14 @@ const VirtualRow = memo(function VirtualRow({
 	chunk,
 	viewMode,
 	measureElement,
+	onFolderNavigate,
 }: {
 	index: number;
 	start: number;
 	chunk: EntityRow[];
 	viewMode: string;
 	measureElement: (node: HTMLElement | null) => void;
+	onFolderNavigate: (id: string) => void;
 }) {
 	return (
 		<div
@@ -114,7 +122,13 @@ const VirtualRow = memo(function VirtualRow({
 				<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 					{chunk.map((entity) => {
 						if (!("url" in entity)) {
-							return <FolderGridCard key={entity.id} folder={entity as Folder} />;
+							return (
+								<FolderGridCard
+									key={entity.id}
+									folder={entity as Folder}
+									onNavigate={onFolderNavigate}
+								/>
+							);
 						}
 						return <ItemGridCard key={entity.id} item={entity as Item} />;
 					})}
@@ -126,7 +140,13 @@ const VirtualRow = memo(function VirtualRow({
 							return <div key="divider" className="my-2 border-b border-border/50" />;
 						}
 						if (!("url" in entity)) {
-							return <FolderCard key={entity.id} folder={entity as Folder} />;
+							return (
+								<FolderCard
+									key={entity.id}
+									folder={entity as Folder}
+									onNavigate={onFolderNavigate}
+								/>
+							);
 						}
 						return <ItemCard key={entity.id} item={entity as Item} />;
 					})}
@@ -150,6 +170,16 @@ function ExplorerMainContent({
 	const [viewMode] = useQueryState("mode", viewModeParser);
 	const [mixData] = useQueryState("mix", mixDataParser);
 	const [sortOption] = useQueryState("sort", sortOptionParser);
+	const [, setFolderId] = useQueryState("folder", folderIdParser);
+	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
+
+	const handleFolderNavigate = useCallback(
+		(id: string) => {
+			setFolderId(id);
+			setSearchQuery(null);
+		},
+		[setFolderId, setSearchQuery],
+	);
 
 	const gridCols = useGridCols();
 	const columns = viewMode === "grid" ? gridCols : 1;
@@ -250,6 +280,7 @@ function ExplorerMainContent({
 						chunk={chunk}
 						viewMode={viewMode}
 						measureElement={rowVirtualizer.measureElement}
+						onFolderNavigate={handleFolderNavigate}
 					/>
 				);
 			})}
