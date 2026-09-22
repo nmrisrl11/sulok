@@ -6,7 +6,7 @@ import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer
 import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
 import { cn } from "@/lib/utils";
 import { useFolderStore, useItemStore } from "@/stores";
-import { memo } from "react";
+import { memo, useRef } from "react";
 import { useHomeData } from "./hooks/use-home-management";
 
 const SelectionHeader = memo(function SelectionHeader({
@@ -68,6 +68,7 @@ const SelectionHeader = memo(function SelectionHeader({
 
 export function HomePage({ className }: { className?: string }) {
 	const homeData = useHomeData();
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<main className={cn("flex flex-col gap-6 md:gap-8", className)}>
@@ -90,11 +91,15 @@ export function HomePage({ className }: { className?: string }) {
 							folders={homeData.folders}
 							hasFolders={homeData.folders.length > 0}
 						/>
-						<div className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4">
+						<div
+							ref={scrollRef}
+							className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4"
+						>
 							<ExplorerMain
 								folders={homeData.folders}
 								items={homeData.items}
 								isLoading={homeData.isLoading}
+								scrollRef={scrollRef}
 							/>
 						</div>
 					</div>

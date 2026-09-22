@@ -1,4 +1,5 @@
 import { APP_INFO } from "@/constants/app-info";
+import { useRef } from "react";
 import type { Item } from "@/db/db";
 import { useCopyToClipboard } from "@/hooks";
 import { notify } from "@/lib/notify";
@@ -69,14 +70,22 @@ export function useItemActions(item: Item) {
 		window.open(item.url, "_blank", "noopener,noreferrer");
 	};
 
+	const isTogglingFavorite = useRef(false);
+
 	const handleToggleFavorite = async () => {
+		if (isTogglingFavorite.current) return;
+		isTogglingFavorite.current = true;
 		try {
 			const { ItemRepository } = await import("@/db/repositories/item-repository");
 			const isFav = await ItemRepository.toggleFavorite(item.id);
-			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
+			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites", {
+				id: `item-fav-${item.id}`,
+			});
 		} catch (error) {
 			console.error("Failed to toggle favorite", error);
-			notify.error("Failed to update favorite status");
+			notify.error("Failed to update favorite status", { id: `item-fav-fail-${item.id}` });
+		} finally {
+			isTogglingFavorite.current = false;
 		}
 	};
 

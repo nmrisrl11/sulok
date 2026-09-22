@@ -164,7 +164,7 @@ Minimal shadows. Prefer border/background differentiation.
 ### Search / Filter Bar
 
 - Full-width input with search icon.
-- Filter dropdowns (tags, type) inline or in a popover.
+- Filter dropdowns (type, sort) inline or in a popover.
 - Sort toggle (name, date, manual).
 
 ### Explorer Toolbar

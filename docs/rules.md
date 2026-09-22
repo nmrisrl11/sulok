@@ -118,7 +118,7 @@ src/
 - **Hooks:** camelCase with `use` prefix (`useFolders`, `useItems`)
 - **Stores:** camelCase with `Store` suffix (`useFolderStore`, `useItemStore`)
 - **Types:** PascalCase (`Folder`, `Item`, `ItemType`)
-- **Constants:** SCREAMING_SNAKE_CASE (`DEFAULT_FOLDER_NAME`, `MAX_TAGS`)
+- **Constants:** SCREAMING_SNAKE_CASE (`DEFAULT_FOLDER_NAME`, `MAX_ITEMS`)
 - **Icons:** When importing icons from `lucide-react`, ALWAYS import the version with the `Icon` suffix directly instead of using the `as` alias (e.g., `import { SettingsIcon } from "lucide-react";`, NOT `import { Settings as SettingsIcon }`). For deletion actions, ALWAYS use the bespoke custom icons from `@/components/icons`: `TrashClockIcon` (soft delete), `TrashXMarkIcon` (permanent delete), and `TrashUndoIcon` (restore), instead of generic lucide trash icons.
 
 ### TypeScript
@@ -180,7 +180,7 @@ src/
 - All entities must have `id` (string, nanoid), `createdAt`, and `updatedAt` timestamps.
 - Folders have a `parentId` for tree structure (null = root).
 - Items belong to a folder via `folderId`.
-- Tags are stored as string arrays on the item entity.
+- URLs are unique.
 - Sort order is maintained via an `order` field (number).
 
 ### Repository Pattern

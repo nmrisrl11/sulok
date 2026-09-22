@@ -1,6 +1,7 @@
 import type { Folder } from "@/db/db";
 import { notify } from "@/lib/notify";
 import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
+import { useRef } from "react";
 
 export function useFolderActions(folder: Folder) {
 	const openEditDialog = useFolderStore((state) => state.openEditDialog);
@@ -65,14 +66,22 @@ export function useFolderActions(folder: Folder) {
 		});
 	};
 
+	const isTogglingFavorite = useRef(false);
+
 	const handleToggleFavorite = async () => {
+		if (isTogglingFavorite.current) return;
+		isTogglingFavorite.current = true;
 		try {
 			const { FolderRepository } = await import("@/db/repositories/folder-repository");
 			const isFav = await FolderRepository.toggleFavorite(folder.id);
-			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites");
+			notify.success(isFav ? "Added to Favorites" : "Removed from Favorites", {
+				id: `folder-fav-${folder.id}`,
+			});
 		} catch (error) {
 			console.error("Failed to toggle favorite", error);
-			notify.error("Failed to update favorite status");
+			notify.error("Failed to update favorite status", { id: `folder-fav-fail-${folder.id}` });
+		} finally {
+			isTogglingFavorite.current = false;
 		}
 	};
 
