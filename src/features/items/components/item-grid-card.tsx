@@ -82,6 +82,7 @@ export const ItemGridCard = memo(
 			handleHardDelete,
 			handleOpenLink,
 			handleToggleFavorite,
+			targetUrl,
 		} = useItemActions(item);
 
 		const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -126,7 +127,7 @@ export const ItemGridCard = memo(
 					if (view === "trash") {
 						toggleSelection(item.id);
 					} else {
-						window.open(item.url, "_blank", "noopener,noreferrer");
+						window.open(targetUrl, "_blank", "noopener,noreferrer");
 					}
 				}}
 				onKeyDown={(e) => {
@@ -137,7 +138,7 @@ export const ItemGridCard = memo(
 						if (view === "trash") {
 							toggleSelection(item.id);
 						} else {
-							window.open(item.url, "_blank", "noopener,noreferrer");
+							window.open(targetUrl, "_blank", "noopener,noreferrer");
 						}
 					}
 				}}
@@ -276,7 +277,7 @@ export const ItemGridCard = memo(
 						if (view === "trash") {
 							toggleSelection(item.id);
 						} else {
-							window.open(item.url, "_blank", "noopener,noreferrer");
+							window.open(targetUrl, "_blank", "noopener,noreferrer");
 						}
 					}}
 					className="flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-muted/50 outline-none focus-visible:outline-none"
@@ -293,7 +294,7 @@ export const ItemGridCard = memo(
 							if (view === "trash") {
 								toggleSelection(item.id);
 							} else {
-								window.open(item.url, "_blank", "noopener,noreferrer");
+								window.open(targetUrl, "_blank", "noopener,noreferrer");
 							}
 						}}
 						className="flex w-full min-w-0 cursor-pointer items-center justify-center gap-1 rounded-sm px-1 outline-none focus-visible:outline-none"

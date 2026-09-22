@@ -1,9 +1,9 @@
 import { APP_INFO } from "@/constants/app-info";
-import { useRef } from "react";
 import type { Item } from "@/db/db";
 import { useCopyToClipboard } from "@/hooks";
 import { notify } from "@/lib/notify";
-import { useConfirmationStore, useItemStore, useLogoStore } from "@/stores";
+import { useConfirmationStore, useItemStore, useLogoStore, useSettingsStore } from "@/stores";
+import { useRef } from "react";
 
 export function useItemActions(item: Item) {
 	const openEditDialog = useItemStore((state) => state.openEditDialog);
@@ -66,8 +66,23 @@ export function useItemActions(item: Item) {
 		});
 	};
 
+	const isReferralTrackingEnabled = useSettingsStore(
+		(state) => state.settings.privacySettings?.enableReferralTracking,
+	);
+
+	let targetUrl = item.url;
+	if (isReferralTrackingEnabled) {
+		try {
+			const url = new URL(item.url);
+			url.searchParams.set("ref", APP_INFO.name.toLowerCase());
+			targetUrl = url.toString();
+		} catch {
+			// Ignore invalid URLs, fallback to original
+		}
+	}
+
 	const handleOpenLink = () => {
-		window.open(item.url, "_blank", "noopener,noreferrer");
+		window.open(targetUrl, "_blank", "noopener,noreferrer");
 	};
 
 	const isTogglingFavorite = useRef(false);
@@ -106,5 +121,6 @@ export function useItemActions(item: Item) {
 		handleHardDelete,
 		handleOpenLink,
 		handleToggleFavorite,
+		targetUrl,
 	};
 }

@@ -14,6 +14,7 @@
 - Added TanStack Virtualization to the Move Items Dialog.
 - Added Recycle Bin retention text (days remaining before auto-deletion) to Trash items and folders.
 - Added Data Storage settings (showing DB usage metrics).
+- Added an optional Referral Tracking setting to anonymously let websites know you discovered them via Sulok.
 
 ### Changed
 
@@ -29,6 +30,8 @@
 - Fixed a rendering bug in the Import Preview tree where folders with missing parent references were excluded rather than falling back to the root level.
 
 ### Removed
+
+- Removed the redundant external link button from grid cards to keep the UI cleaner (clicking the card itself opens the link).
 
 ---
 
