@@ -9,7 +9,8 @@
 
 ### Added
 
-- Added a visual indicator in the Recycle Bin showing how many days are left before items and folders are permanently deleted.
+- Added a visual indicator in the Recycle Bin showing how many days are left before items and folders are permanently deleted, which updates automatically at midnight without refreshing.
+- Added an automated background cleanup process to permanently delete items and folders in the Recycle Bin once their 30-day retention period expires.
 - Added contextual status hints (e.g. "Already in this folder") when dragging items over the active folder path in the breadcrumb bar.
 
 ### Changed

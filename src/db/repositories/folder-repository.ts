@@ -1,3 +1,4 @@
+import { TRASH_RETENTION_DAYS } from "@/constants/app-info";
 import { generateUniqueName } from "@/lib/utils";
 import { folderSchema } from "@/schemas";
 import { db, type Folder } from "../db";
@@ -327,6 +328,19 @@ export const FolderRepository = {
 			const trashFolders = await db.folders.filter((f) => !!f.deletedAt).toArray();
 			const ids = trashFolders.map((f) => f.id);
 			await db.folders.bulkDelete(ids);
+		});
+	},
+
+	async emptyExpiredTrash(): Promise<void> {
+		const expiryTime = Date.now() - TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+		await db.transaction("rw", db.folders, async () => {
+			const expiredFolders = await db.folders
+				.filter((f) => !!f.deletedAt && f.deletedAt < expiryTime)
+				.toArray();
+			const ids = expiredFolders.map((f) => f.id);
+			if (ids.length > 0) {
+				await db.folders.bulkDelete(ids);
+			}
 		});
 	},
 };

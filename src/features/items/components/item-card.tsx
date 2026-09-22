@@ -24,7 +24,7 @@ import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useItemStore, useMoveStore } from "@/stores";
+import { useItemStore, useMoveStore, useTimeStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -44,6 +44,7 @@ export const ItemCard = memo(
 		const [view] = useQueryState("view", viewParser);
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
+		const today = useTimeStore((state) => state.today);
 
 		const [prevFolderId, setPrevFolderId] = useState<string | undefined>(item.folderId);
 		const [parentFolder, setParentFolder] = useState<Folder | null>(() =>
@@ -189,7 +190,7 @@ export const ItemCard = memo(
 								)}
 								{view === "trash" && item.deletedAt && (
 									<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
-										{getTrashRetentionText(item.deletedAt)}
+										{getTrashRetentionText(item.deletedAt, today)}
 									</span>
 								)}
 							</a>

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppearanceProvider } from "./components/appearance-provider";
 import { ErrorBoundary } from "./components/error-boundary";
 import { AppLayout } from "./components/layout/app-layout";
+import { TrashManager } from "./components/managers/trash-manager";
 import { ThemeProvider } from "./components/theme-provider";
 import { OnboardingProvider } from "./features/onboarding/components/onboarding-provider";
 import { useGlobalSoundInteractions } from "./hooks";
@@ -37,6 +38,7 @@ function App() {
 	return (
 		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
 			<AppearanceProvider>
+				<TrashManager />
 				<GlobalSoundInteractions />
 				<BrowserRouter>
 					<NuqsAdapter>
