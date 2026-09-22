@@ -20,7 +20,7 @@ import {
 import type { Folder } from "@/db/db";
 import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
-import { folderIdParser, viewParser } from "@/lib/search-params";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useFolderStore, useMoveStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
@@ -33,6 +33,7 @@ export const FolderGridCard = memo(
 		const [view] = useQueryState("view", viewParser);
 
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
+		const [, setSearchQuery] = useQueryState("q", searchQueryParser);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
@@ -85,6 +86,7 @@ export const FolderGridCard = memo(
 						toggleSelection(folder.id);
 					} else {
 						setFolderId(folder.id);
+						setSearchQuery(null);
 					}
 				}}
 				onKeyDown={(e) => {
@@ -96,6 +98,7 @@ export const FolderGridCard = memo(
 							toggleSelection(folder.id);
 						} else {
 							setFolderId(folder.id);
+							setSearchQuery(null);
 						}
 					}
 				}}

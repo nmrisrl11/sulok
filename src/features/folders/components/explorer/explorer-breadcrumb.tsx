@@ -1,12 +1,13 @@
 import { FolderLinkIcon, FollowFolderIcon, RecycleBinIcon } from "@/components/icons";
 import { FolderRepository } from "@/db/repositories/folder-repository";
-import { folderIdParser, viewParser } from "@/lib/search-params";
+import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
 import { FolderBreadcrumbs } from "../folder/folder-breadcrumbs";
 
 export function ExplorerBreadcrumb() {
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
+	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [view, setView] = useQueryState("view", viewParser);
 
 	// We need to fetch the hierarchy. Since it's local, we can fetch all folders and build the path.
@@ -14,6 +15,7 @@ export function ExplorerBreadcrumb() {
 
 	const handleNavigate = (id: string | null) => {
 		setFolderId(id);
+		setSearchQuery(null);
 		if (id === null && view !== "favorites" && view !== "trash") {
 			setView(null);
 		}

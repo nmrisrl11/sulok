@@ -13,9 +13,92 @@ import { FolderRepository } from "@/db/repositories/folder-repository";
 import { FolderBreadcrumbs } from "@/features/folders/components/folder/folder-breadcrumbs";
 import { notify } from "@/lib/notify";
 import { useFolderStore, useItemStore, useMoveStore } from "@/stores";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useLiveQuery } from "dexie-react-hooks";
 import { ChevronRightIcon } from "lucide-react";
-import { useState } from "react";
+import { memo, useDeferredValue, useMemo, useState } from "react";
+
+type Folder = Awaited<ReturnType<typeof FolderRepository.getAll>>[0];
+
+const MoveDialogList = memo(function MoveDialogList({
+	isLoaded,
+	currentChildren,
+	onNavigate,
+}: {
+	isLoaded: boolean;
+	currentChildren: Folder[];
+	onNavigate: (id: string) => void;
+}) {
+	const [parentEl, setParentEl] = useState<HTMLDivElement | null>(null);
+
+	// eslint-disable-next-line react/incompatible-library
+	const rowVirtualizer = useVirtualizer({
+		count: currentChildren.length,
+		getScrollElement: () => parentEl,
+		estimateSize: () => 44, // ~44px per item height
+		overscan: 5,
+	});
+
+	const virtualItems = rowVirtualizer.getVirtualItems();
+	const deferredVirtualItems = useDeferredValue(virtualItems);
+
+	return (
+		<div
+			ref={setParentEl}
+			className="custom-scrollbar flex max-h-[45vh] min-h-64 flex-1 flex-col overflow-y-auto p-1"
+		>
+			{!isLoaded ? (
+				<div className="flex flex-col gap-1 p-1">
+					{Array.from({ length: 4 }).map((_, i) => (
+						<div key={i} className="flex items-center gap-3 px-3 py-2.5">
+							<Skeleton className="size-5 rounded-md" />
+							<Skeleton className="h-4 flex-1" />
+							<Skeleton className="size-4 rounded-sm" />
+						</div>
+					))}
+				</div>
+			) : currentChildren.length === 0 ? (
+				<div className="flex h-full flex-col items-center justify-center py-12 text-center">
+					<FolderIcon className="mb-3 size-12 opacity-50 grayscale" />
+					<p className="text-sm font-medium text-foreground">No folders here</p>
+					<p className="mt-1 text-xs text-muted-foreground">
+						Click "Move Here" to move items to this location.
+					</p>
+				</div>
+			) : (
+				<div className="relative w-full" style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
+					{deferredVirtualItems.map((virtualRow) => {
+						const folder = currentChildren[virtualRow.index];
+						if (!folder) return null;
+
+						return (
+							<div
+								key={virtualRow.key}
+								data-index={virtualRow.index}
+								ref={rowVirtualizer.measureElement}
+								className="absolute top-0 left-0 w-full"
+								style={{
+									transform: `translate3d(0, ${virtualRow.start}px, 0)`,
+									willChange: "transform",
+								}}
+							>
+								<button
+									type="button"
+									className="group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+									onClick={() => onNavigate(folder.id)}
+								>
+									<FolderIcon className="size-5 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
+									<span className="flex-1 truncate">{folder.name}</span>
+									<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5" />
+								</button>
+							</div>
+						);
+					})}
+				</div>
+			)}
+		</div>
+	);
+});
 
 export function MoveDialog() {
 	const isOpen = useMoveStore((state) => state.isOpen);
@@ -27,27 +110,31 @@ export function MoveDialog() {
 
 	const allFolders = useLiveQuery(() => FolderRepository.getAll());
 	const isLoaded = allFolders !== undefined;
-	const resolvedFolders = allFolders || [];
+	const resolvedFolders = useMemo(() => allFolders || [], [allFolders]);
 
 	// Filter out moving folders and their descendants to prevent circular moves
-	const filteredFolders = resolvedFolders.filter((f) => {
-		// If it's one of the folders being moved, hide it
-		if (movingFolderIds.includes(f.id)) return false;
+	const filteredFolders = useMemo(() => {
+		return resolvedFolders.filter((f) => {
+			// If it's one of the folders being moved, hide it
+			if (movingFolderIds.includes(f.id)) return false;
 
-		// If any ancestor is being moved, hide it
-		let current = resolvedFolders.find((p) => p.id === f.parentId);
-		while (current) {
-			if (movingFolderIds.includes(current.id)) return false;
-			current = resolvedFolders.find((p) => p.id === current?.parentId);
-		}
+			// If any ancestor is being moved, hide it
+			let current = resolvedFolders.find((p) => p.id === f.parentId);
+			while (current) {
+				if (movingFolderIds.includes(current.id)) return false;
+				current = resolvedFolders.find((p) => p.id === current?.parentId);
+			}
 
-		return true;
-	});
+			return true;
+		});
+	}, [resolvedFolders, movingFolderIds]);
 
 	// Get immediate children of the currently viewed folder
-	const currentChildren = filteredFolders
-		.filter((f) => f.parentId === currentParentId)
-		.sort((a, b) => a.order - b.order);
+	const currentChildren = useMemo(() => {
+		return filteredFolders
+			.filter((f) => f.parentId === currentParentId)
+			.sort((a, b) => a.order - b.order);
+	}, [filteredFolders, currentParentId]);
 
 	const handleClose = () => {
 		setCurrentParentId(null);
@@ -101,40 +188,11 @@ export function MoveDialog() {
 					</div>
 
 					{/* Folder List */}
-					<div className="custom-scrollbar flex max-h-[45vh] min-h-64 flex-1 flex-col overflow-y-auto p-1">
-						{!isLoaded ? (
-							<div className="flex flex-col gap-1 p-1">
-								{Array.from({ length: 4 }).map((_, i) => (
-									<div key={i} className="flex items-center gap-3 px-3 py-2.5">
-										<Skeleton className="size-5 rounded-md" />
-										<Skeleton className="h-4 flex-1" />
-										<Skeleton className="size-4 rounded-sm" />
-									</div>
-								))}
-							</div>
-						) : currentChildren.length === 0 ? (
-							<div className="flex h-full flex-col items-center justify-center py-12 text-center">
-								<FolderIcon className="mb-3 size-12 opacity-50 grayscale" />
-								<p className="text-sm font-medium text-foreground">No folders here</p>
-								<p className="mt-1 text-xs text-muted-foreground">
-									Click "Move Here" to move items to this location.
-								</p>
-							</div>
-						) : (
-							currentChildren.map((folder) => (
-								<button
-									key={folder.id}
-									type="button"
-									className="group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-									onClick={() => setCurrentParentId(folder.id)}
-								>
-									<FolderIcon className="size-5 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
-									<span className="flex-1 truncate">{folder.name}</span>
-									<ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5" />
-								</button>
-							))
-						)}
-					</div>
+					<MoveDialogList
+						isLoaded={isLoaded}
+						currentChildren={currentChildren}
+						onNavigate={setCurrentParentId}
+					/>
 				</div>
 
 				<DialogFooter className="m-0 sm:justify-end">

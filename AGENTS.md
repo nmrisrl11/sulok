@@ -148,6 +148,7 @@ sulok/
 - **Development Tools & Mock Data:** When including tools or scripts meant only for local testing (like database seeders or stress tests), do not manually comment/uncomment imports. Instead, wrap the import in `if (import.meta.env.DEV) { import(...) }`. This ensures Vite completely strips the dead code from the production bundle while keeping it automatically available during local development.
 - **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) to ensure the hit area is large enough for comfortable tapping, even if internal icons/text are styled compactly.
 - **Pagination:** Avoid traditional table pagination. Since the app is local-first (Dexie), rely on native page scrolling for lists, and upgrade to virtualization only when rendering performance degrades.
+- **Search Scope Clearance:** When navigating into a folder from a search result or breadcrumb, always explicitly clear the search query parameter (e.g., `setSearchQuery(null)`) to ensure the UI successfully exits "Search Mode" and displays the destination folder's normal contents.
 - **Changelog Copywriting & Release Workflow:**
   - `PENDING_CHANGES.md` acts as a staging area for raw, atomic bullet points as features are built.
   - When migrating entries from `PENDING_CHANGES.md` to `src/data/changelog.ts` during a release, you MUST NOT copy the raw bullet points verbatim.
