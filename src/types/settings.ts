@@ -5,6 +5,10 @@ export type AccentColor = string;
 export type CornerStyle = "squircle" | "standard" | "custom";
 export type LayoutDensity = "compact" | "cozy" | "custom";
 
+export interface PrivacySettings {
+	enableReferralTracking: boolean;
+}
+
 export interface AppearanceSettings {
 	accentColor: AccentColor;
 	cornerStyle: CornerStyle;
@@ -44,6 +48,7 @@ export interface Settings {
 	appearanceSettings: AppearanceSettings;
 	soundSettings: SoundSettings;
 	suloSettings: SuloSettings;
+	privacySettings: PrivacySettings;
 	onboardingStatus?: "idle" | "in_progress" | "completed";
 	onboardingStep?: number;
 	// Sync settings (placeholders for future)

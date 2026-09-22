@@ -23,6 +23,9 @@ export const defaultSettings: Settings = {
 		expressionError: "sad",
 		whispers: WHISPER_PHRASES,
 	},
+	privacySettings: {
+		enableReferralTracking: false,
+	},
 	onboardingStatus: "in_progress",
 	onboardingStep: 0,
 };
@@ -147,6 +150,19 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 					}
 				}
 			}
+		}
+	}
+
+	// Validate privacy settings
+	if (!isObject(safeSettings.privacySettings)) {
+		delete safeSettings.privacySettings;
+	} else {
+		const privacy = safeSettings.privacySettings as unknown as Record<string, unknown>;
+		if (
+			privacy.enableReferralTracking !== undefined &&
+			typeof privacy.enableReferralTracking !== "boolean"
+		) {
+			delete privacy.enableReferralTracking;
 		}
 	}
 

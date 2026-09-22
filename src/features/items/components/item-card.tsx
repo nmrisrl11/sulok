@@ -81,6 +81,7 @@ export const ItemCard = memo(
 			handleHardDelete,
 			handleOpenLink,
 			handleToggleFavorite,
+			targetUrl,
 		} = useItemActions(item);
 
 		const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -115,7 +116,7 @@ export const ItemCard = memo(
 					if (view === "trash") {
 						toggleSelection(item.id);
 					} else {
-						window.open(item.url, "_blank", "noopener,noreferrer");
+						window.open(targetUrl, "_blank", "noopener,noreferrer");
 					}
 				}}
 				onKeyDown={(e) => {
@@ -126,7 +127,7 @@ export const ItemCard = memo(
 						if (view === "trash") {
 							toggleSelection(item.id);
 						} else {
-							window.open(item.url, "_blank", "noopener,noreferrer");
+							window.open(targetUrl, "_blank", "noopener,noreferrer");
 						}
 					}
 				}}
@@ -145,7 +146,7 @@ export const ItemCard = memo(
 					)}
 					<div className="flex min-w-0 flex-1 items-center gap-3">
 						<a
-							href={view === "trash" ? undefined : item.url}
+							href={view === "trash" ? undefined : targetUrl}
 							target={view === "trash" ? undefined : "_blank"}
 							rel={view === "trash" ? undefined : "noopener noreferrer"}
 							onClick={(e) => {
@@ -162,7 +163,7 @@ export const ItemCard = memo(
 						</a>
 						<div className="flex flex-col items-start overflow-hidden">
 							<a
-								href={view === "trash" ? undefined : item.url}
+								href={view === "trash" ? undefined : targetUrl}
 								target={view === "trash" ? undefined : "_blank"}
 								rel={view === "trash" ? undefined : "noopener noreferrer"}
 								onClick={(e) => {
@@ -240,7 +241,7 @@ export const ItemCard = memo(
 											</Button>
 
 											<Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-												<a href={item.url} target="_blank" rel="noopener noreferrer">
+												<a href={targetUrl} target="_blank" rel="noopener noreferrer">
 													<ExternalLinkIcon className="h-4 w-4" />
 													<span className="sr-only">Open Link</span>
 												</a>
