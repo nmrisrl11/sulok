@@ -29,6 +29,7 @@
 - Fixed a bug where importing items correctly placed in folders could fail or display incorrectly.
 - Fixed an issue where importing folders with conflicting IDs would fail instead of assigning new safe IDs.
 - Fixed a rendering bug in the Import Preview tree where folders with missing parent references were excluded rather than falling back to the root level.
+- Fixed various accessibility and layout issues found during code review, including making screen reader labels entity-specific and properly labeling action drawers.
 
 ### Removed
 

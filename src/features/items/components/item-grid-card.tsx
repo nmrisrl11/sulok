@@ -151,7 +151,7 @@ export const ItemGridCard = memo(
 							onClick={() => useActionDrawerStore.getState().openItemDrawer(item)}
 						>
 							<MoreHorizontalIcon className="h-4 w-4" />
-							<span className="sr-only">Actions</span>
+							<span className="sr-only">Actions for {titleToDisplay}</span>
 						</Button>
 					</div>
 				)}

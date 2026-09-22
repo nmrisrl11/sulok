@@ -12,7 +12,7 @@ import {
 	TrashXMarkIcon,
 } from "@/components/icons";
 import { SiteFavicon } from "@/components/site-favicon";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import type { Folder, Item } from "@/db/db";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { useItemActions } from "@/features/items/hooks/use-item-actions";
@@ -80,7 +80,9 @@ function ItemActionDrawerContent({ item, onClose }: { item: Item; onClose: () =>
 					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
 				</div>
 				<div className="flex min-w-0 flex-col">
-					<span className="line-clamp-2 text-sm font-medium text-foreground">{titleToDisplay}</span>
+					<DrawerTitle className="line-clamp-2 text-sm font-medium text-foreground">
+						{titleToDisplay}
+					</DrawerTitle>
 					{item.title && item.title !== item.url && (
 						<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
 							{item.url}
@@ -164,7 +166,9 @@ function FolderActionDrawerContent({ folder, onClose }: { folder: Folder; onClos
 					<FolderIcon className="h-8 w-8 text-muted-foreground" />
 				</div>
 				<div className="flex min-w-0 flex-col">
-					<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
+					<DrawerTitle className="truncate text-sm font-medium text-foreground">
+						{folder.name}
+					</DrawerTitle>
 					{view === "trash" && folder.deletedAt && (
 						<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
 							{getTrashRetentionText(folder.deletedAt, today)}

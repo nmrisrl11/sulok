@@ -111,9 +111,11 @@ function GlobalDrawers() {
 	return (
 		<>
 			{hasLoaded && (
-				<Suspense fallback={null}>
-					<GlobalActionDrawers />
-				</Suspense>
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<GlobalActionDrawers />
+					</Suspense>
+				</ErrorBoundary>
 			)}
 		</>
 	);

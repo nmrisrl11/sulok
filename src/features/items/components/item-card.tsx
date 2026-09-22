@@ -228,13 +228,15 @@ export const ItemCard = memo(
 												) : (
 													<CopyIcon className="h-4 w-4" aria-hidden="true" />
 												)}
-												<span className="sr-only">{isCopied ? "Copied" : "Copy URL"}</span>
+												<span className="sr-only">
+													{isCopied ? `Copied ${titleToDisplay}` : `Copy URL for ${titleToDisplay}`}
+												</span>
 											</Button>
 
 											<Button variant="ghost" size="icon" className="h-8 w-8" asChild>
 												<a href={targetUrl} target="_blank" rel="noopener noreferrer">
 													<ExternalLinkIcon className="h-4 w-4" />
-													<span className="sr-only">Open Link</span>
+													<span className="sr-only">Open {titleToDisplay}</span>
 												</a>
 											</Button>
 										</div>
@@ -259,7 +261,9 @@ export const ItemCard = memo(
 													<CustomHeartIcon className="h-4 w-4" />
 												)}
 												<span className="sr-only">
-													{item.isFavorite ? "Unfavorite" : "Favorite"}
+													{item.isFavorite
+														? `Unfavorite ${titleToDisplay}`
+														: `Favorite ${titleToDisplay}`}
 												</span>
 											</Button>
 										</div>
@@ -274,7 +278,7 @@ export const ItemCard = memo(
 												onClick={handleEdit}
 											>
 												<FileEditIcon className="h-4 w-4" />
-												<span className="sr-only">Edit</span>
+												<span className="sr-only">Edit {titleToDisplay}</span>
 											</Button>
 											<Button
 												variant="ghost"
@@ -283,7 +287,7 @@ export const ItemCard = memo(
 												onClick={handleSoftDelete}
 											>
 												<TrashClockIcon className="h-4 w-4" />
-												<span className="sr-only">Delete</span>
+												<span className="sr-only">Delete {titleToDisplay}</span>
 											</Button>
 										</div>
 									</>
@@ -291,7 +295,7 @@ export const ItemCard = memo(
 									<div className="flex items-center">
 										<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
 											<TrashUndoIcon className="h-4 w-4" />
-											<span className="sr-only">Restore</span>
+											<span className="sr-only">Restore {titleToDisplay}</span>
 										</Button>
 										<div className="mx-0.5 h-4 w-px bg-border/50" />
 										<Button
@@ -301,7 +305,7 @@ export const ItemCard = memo(
 											onClick={handleHardDelete}
 										>
 											<TrashXMarkIcon className="h-4 w-4" />
-											<span className="sr-only">Delete Forever</span>
+											<span className="sr-only">Delete {titleToDisplay} forever</span>
 										</Button>
 									</div>
 								)}
@@ -316,7 +320,7 @@ export const ItemCard = memo(
 								onClick={() => useActionDrawerStore.getState().openItemDrawer(item)}
 							>
 								<MoreHorizontalIcon className="h-4 w-4" />
-								<span className="sr-only">Actions</span>
+								<span className="sr-only">Actions for {titleToDisplay}</span>
 							</Button>
 						</div>
 					</div>

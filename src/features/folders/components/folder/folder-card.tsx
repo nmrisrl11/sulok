@@ -161,7 +161,9 @@ export const FolderCard = memo(
 													<CustomHeartIcon className="h-4 w-4" />
 												)}
 												<span className="sr-only">
-													{folder.isFavorite ? "Unfavorite" : "Favorite"}
+													{folder.isFavorite
+														? `Unfavorite ${folder.name}`
+														: `Favorite ${folder.name}`}
 												</span>
 											</Button>
 										</div>
@@ -176,7 +178,7 @@ export const FolderCard = memo(
 												onClick={handleEdit}
 											>
 												<FolderEditIcon className="h-4 w-4" />
-												<span className="sr-only">Rename</span>
+												<span className="sr-only">Rename {folder.name}</span>
 											</Button>
 											<Button
 												variant="ghost"
@@ -185,7 +187,7 @@ export const FolderCard = memo(
 												onClick={handleSoftDelete}
 											>
 												<TrashClockIcon className="h-4 w-4" />
-												<span className="sr-only">Delete</span>
+												<span className="sr-only">Delete {folder.name}</span>
 											</Button>
 										</div>
 									</>
@@ -193,7 +195,7 @@ export const FolderCard = memo(
 									<div className="flex items-center">
 										<Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleRestore}>
 											<TrashUndoIcon className="h-4 w-4" />
-											<span className="sr-only">Restore</span>
+											<span className="sr-only">Restore {folder.name}</span>
 										</Button>
 										<div className="mx-0.5 h-4 w-px bg-border/50" />
 										<Button
@@ -203,7 +205,7 @@ export const FolderCard = memo(
 											onClick={handleHardDelete}
 										>
 											<TrashXMarkIcon className="h-4 w-4" />
-											<span className="sr-only">Delete Forever</span>
+											<span className="sr-only">Delete {folder.name} forever</span>
 										</Button>
 									</div>
 								)}
@@ -218,7 +220,7 @@ export const FolderCard = memo(
 								onClick={() => useActionDrawerStore.getState().openFolderDrawer(folder)}
 							>
 								<MoreHorizontalIcon className="h-4 w-4" />
-								<span className="sr-only">Actions</span>
+								<span className="sr-only">Actions for {folder.name}</span>
 							</Button>
 						</div>
 					</div>

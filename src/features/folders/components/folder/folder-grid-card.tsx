@@ -134,7 +134,7 @@ export const FolderGridCard = memo(
 							onClick={() => useActionDrawerStore.getState().openFolderDrawer(folder)}
 						>
 							<MoreHorizontalIcon className="h-4 w-4" />
-							<span className="sr-only">Actions</span>
+							<span className="sr-only">Actions for {folder.name}</span>
 						</Button>
 					</div>
 				)}
