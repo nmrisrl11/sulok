@@ -1,3 +1,4 @@
+import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
 
 function formatDate(timestamp: number | undefined): string | undefined {
@@ -33,8 +34,9 @@ function formatDate(timestamp: number | undefined): string | undefined {
 
 export async function exportData(format: "json" | "csv" | "txt") {
 	const items = await ItemRepository.getAll();
+	const folders = await FolderRepository.getAll();
 
-	if (items.length === 0) {
+	if (items.length === 0 && folders.length === 0) {
 		throw new Error("No data to export");
 	}
 
@@ -48,28 +50,47 @@ export async function exportData(format: "json" | "csv" | "txt") {
 			createdAt: formatDate(item.createdAt),
 			updatedAt: formatDate(item.updatedAt),
 		}));
-		content = JSON.stringify(formattedItems, null, 2);
+		const formattedFolders = folders.map((folder) => ({
+			...folder,
+			createdAt: formatDate(folder.createdAt),
+			updatedAt: formatDate(folder.updatedAt),
+		}));
+		content = JSON.stringify({ folders: formattedFolders, items: formattedItems }, null, 2);
 		mimeType = "application/json";
 	} else if (format === "csv") {
 		const headers = [
+			"type",
 			"id",
-			"url",
+			"url_or_name",
 			"title",
 			"description",
 			"image",
 			"logo",
+			"folderId_or_parentId",
 			"createdAt",
 			"updatedAt",
 		];
-		const rows = items.map((item) => {
-			return headers
-				.map((header) => {
-					let val = item[header as keyof typeof item];
-					if (header === "createdAt" || header === "updatedAt") {
-						val = val ? formatDate(val as number) || "" : "";
+
+		const folderRows = folders.map((folder) => {
+			return [
+				"folder",
+				folder.id,
+				folder.name,
+				"",
+				"",
+				"",
+				"",
+				folder.parentId || "",
+				folder.createdAt,
+				folder.updatedAt,
+			]
+				.map((val, index) => {
+					let finalVal = val;
+					if (index === 8 || index === 9) {
+						// createdAt, updatedAt
+						finalVal = val ? formatDate(val as number) || "" : "";
 					}
-					// Escape quotes, handle undefined/null, and protect against CSV injection
-					let strVal = val === undefined || val === null ? "" : String(val);
+					let strVal = finalVal === undefined || finalVal === null ? "" : String(finalVal);
 					if (/^\s*[=+\-@]/.test(strVal)) {
 						strVal = "'" + strVal;
 					}
@@ -78,21 +99,60 @@ export async function exportData(format: "json" | "csv" | "txt") {
 				})
 				.join(",");
 		});
-		content = [headers.join(","), ...rows].join("\n");
+
+		const itemRows = items.map((item) => {
+			return [
+				"item",
+				item.id,
+				item.url,
+				item.title || "",
+				item.description || "",
+				item.image || "",
+				item.logo || "",
+				item.folderId || "",
+				item.createdAt,
+				item.updatedAt,
+			]
+				.map((val, index) => {
+					let finalVal = val;
+					if (index === 8 || index === 9) {
+						// createdAt, updatedAt
+						finalVal = val ? formatDate(val as number) || "" : "";
+					}
+					let strVal = finalVal === undefined || finalVal === null ? "" : String(finalVal);
+					if (/^\s*[=+\-@]/.test(strVal)) {
+						strVal = "'" + strVal;
+					}
+					strVal = strVal.replace(/"/g, '""');
+					return `"${strVal}"`;
+				})
+				.join(",");
+		});
+
+		content = [headers.join(","), ...folderRows, ...itemRows].join("\n");
 		mimeType = "text/csv";
 	} else if (format === "txt") {
-		content = items
-			.map((item) => {
-				let block = `ID: ${item.id}\nURL: ${item.url}`;
-				if (item.title) block += `\nTitle: ${item.title}`;
-				if (item.description) block += `\nDescription: ${item.description}`;
-				if (item.image) block += `\nImage: ${item.image}`;
-				if (item.logo) block += `\nLogo: ${item.logo}`;
-				if (item.createdAt) block += `\nCreatedAt: ${formatDate(item.createdAt)}`;
-				if (item.updatedAt) block += `\nUpdatedAt: ${formatDate(item.updatedAt)}`;
-				return block;
-			})
-			.join("\n---\n");
+		const folderBlocks = folders.map((folder) => {
+			let block = `Type: Folder\nID: ${folder.id}\nName: ${folder.name}`;
+			if (folder.parentId) block += `\nParentId: ${folder.parentId}`;
+			if (folder.createdAt) block += `\nCreatedAt: ${formatDate(folder.createdAt)}`;
+			if (folder.updatedAt) block += `\nUpdatedAt: ${formatDate(folder.updatedAt)}`;
+			return block;
+		});
+
+		const itemBlocks = items.map((item) => {
+			let block = `Type: Item\nID: ${item.id}\nURL: ${item.url}`;
+			if (item.title) block += `\nTitle: ${item.title}`;
+			if (item.description) block += `\nDescription: ${item.description}`;
+			if (item.image) block += `\nImage: ${item.image}`;
+			if (item.logo) block += `\nLogo: ${item.logo}`;
+			if (item.folderId) block += `\nFolderId: ${item.folderId}`;
+			if (item.createdAt) block += `\nCreatedAt: ${formatDate(item.createdAt)}`;
+			if (item.updatedAt) block += `\nUpdatedAt: ${formatDate(item.updatedAt)}`;
+			return block;
+		});
+
+		content = [...folderBlocks, ...itemBlocks].join("\n---\n");
 		mimeType = "text/plain";
 	}
 

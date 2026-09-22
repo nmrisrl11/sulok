@@ -31,6 +31,33 @@ export const importItemSchema = z.object({
 	description: z.string().optional(),
 	image: z.string().optional(),
 	logo: z.string().optional(),
+	folderId: z.string().optional(),
+	createdAt: z
+		.union([z.number(), z.string()])
+		.optional()
+		.transform((val) => {
+			if (typeof val === "string") {
+				const time = new Date(val).getTime();
+				return isNaN(time) ? undefined : time;
+			}
+			return val;
+		}),
+	updatedAt: z
+		.union([z.number(), z.string()])
+		.optional()
+		.transform((val) => {
+			if (typeof val === "string") {
+				const time = new Date(val).getTime();
+				return isNaN(time) ? undefined : time;
+			}
+			return val;
+		}),
+});
+
+export const importFolderSchema = z.object({
+	id: z.string().optional(),
+	name: z.string().min(1, { message: "Name is required" }),
+	parentId: z.string().optional().nullable(),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()
@@ -54,3 +81,4 @@ export const importItemSchema = z.object({
 });
 
 export type ImportItem = z.infer<typeof importItemSchema>;
+export type ImportFolder = z.infer<typeof importFolderSchema>;

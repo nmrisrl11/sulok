@@ -169,6 +169,35 @@ export const ItemRepository = {
 		await db.transaction("rw", db.items, async () => {
 			const existing = await ItemRepository.findByUrl(url);
 			if (existing) {
+				if (existing.deletedAt) {
+					// The item is in the recycle bin. Let's restore it with the imported data!
+					let finalTitle = parsedData.title?.trim();
+					if (finalTitle) {
+						const folderId = parsedData.folderId || null;
+						const siblings = await db.items
+							.filter(
+								(i) => (i.folderId || null) === folderId && !i.deletedAt && i.id !== existing.id,
+							)
+							.toArray();
+
+						const isDuplicate = siblings.some(
+							(i) => (i.title || "").toLowerCase() === finalTitle!.toLowerCase(),
+						);
+						if (isDuplicate) {
+							const existingNames = new Set(siblings.map((i) => (i.title || "").toLowerCase()));
+							finalTitle = generateUniqueName(finalTitle, existingNames);
+							parsedData.title = finalTitle;
+						}
+					}
+
+					await db.items.update(existing.id, {
+						...parsedData,
+						deletedAt: undefined,
+						updatedAt: now,
+					});
+					return;
+				}
+
 				throw new Error("This link is already in your corner.");
 			}
 
