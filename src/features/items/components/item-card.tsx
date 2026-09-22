@@ -23,7 +23,7 @@ import {
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
-import { cn } from "@/lib/utils";
+import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useItemStore, useMoveStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
 import { CheckIcon, MoreVerticalIcon } from "lucide-react";
@@ -185,6 +185,11 @@ export const ItemCard = memo(
 								{item.title && item.title !== item.url && (
 									<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
 										{item.url}
+									</span>
+								)}
+								{view === "trash" && item.deletedAt && (
+									<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+										{getTrashRetentionText(item.deletedAt)}
 									</span>
 								)}
 							</a>

@@ -15,3 +15,5 @@ export const APP_INFO = {
 	author: "Sulok",
 	appUrl: "sulok-app.vercel.app",
 };
+
+export const TRASH_RETENTION_DAYS = 30;

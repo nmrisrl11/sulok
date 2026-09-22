@@ -1,3 +1,4 @@
+import { TRASH_RETENTION_DAYS } from "@/constants/app-info";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -37,4 +38,17 @@ export function generateUniqueName(name: string, existingNames: Set<string>): st
 		}
 	}
 	return finalName;
+}
+
+export function getTrashRetentionText(deletedAt?: number): string | null {
+	if (!deletedAt) return null;
+	const expiryDate = new Date(deletedAt + TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000);
+	const now = new Date();
+
+	const diffTime = expiryDate.getTime() - now.getTime();
+	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+	if (diffDays <= 0) return `Deletes today`;
+	if (diffDays === 1) return `1 day left`;
+	return `${diffDays} days left`;
 }

@@ -21,7 +21,7 @@ import type { Folder } from "@/db/db";
 import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { folderIdParser, viewParser } from "@/lib/search-params";
-import { cn } from "@/lib/utils";
+import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useFolderStore, useMoveStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreVerticalIcon } from "lucide-react";
@@ -216,11 +216,18 @@ export const FolderGridCard = memo(
 				)}
 
 				<FolderIcon className="size-12" />
-				<div className="flex w-full min-w-0 items-center justify-center gap-1 px-1">
-					{folder.isFavorite && (
-						<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
+				<div className="flex w-full min-w-0 flex-col items-center justify-center gap-1">
+					<div className="flex w-full min-w-0 items-center justify-center gap-1 px-1">
+						{folder.isFavorite && (
+							<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
+						)}
+						<span className="truncate text-center text-sm font-medium">{folder.name}</span>
+					</div>
+					{view === "trash" && folder.deletedAt && (
+						<span className="mt-0.5 truncate text-center font-mono text-[10px] text-muted-foreground">
+							{getTrashRetentionText(folder.deletedAt)}
+						</span>
 					)}
-					<span className="truncate text-center text-sm font-medium">{folder.name}</span>
 				</div>
 			</div>
 		);
