@@ -1,5 +1,6 @@
 import { formatUrl } from "@/lib/utils";
 import { z } from "zod";
+import { folderSchema } from "./folder.schema";
 
 export const importItemSchema = z.object({
 	id: z.string().optional(),
@@ -56,7 +57,7 @@ export const importItemSchema = z.object({
 
 export const importFolderSchema = z.object({
 	id: z.string().optional(),
-	name: z.string().min(1, { message: "Name is required" }),
+	name: folderSchema.shape.name,
 	parentId: z.string().optional().nullable(),
 	createdAt: z
 		.union([z.number(), z.string()])

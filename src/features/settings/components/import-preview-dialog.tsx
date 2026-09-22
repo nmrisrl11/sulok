@@ -169,7 +169,8 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 		const importedFolderIds = new Set(data.validFolders?.map((f) => f.id) || []);
 
 		for (const folder of data.validFolders || []) {
-			const pId = folder.parentId || "root";
+			const pId =
+				folder.parentId && importedFolderIds.has(folder.parentId) ? folder.parentId : "root";
 			if (!foldersByParent.has(pId)) foldersByParent.set(pId, []);
 			foldersByParent.get(pId)!.push(folder);
 		}
@@ -206,16 +207,33 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 
 		setIsImporting(true);
 		try {
-			// Import folders first so parentId references are valid (best effort)
-			const folderPromises = foldersToImport.map((folder) => {
-				const { isDuplicate: _isDuplicate, parentId, ...folderData } = folder;
-				return FolderRepository.importFolder({ ...folderData, parentId: parentId || null });
-			});
-			const folderResults = await Promise.allSettled(folderPromises);
+			// Import folders sequentially to maintain ID mapping
+			const idMap = new Map<string, string>();
+			const folderResults: PromiseSettledResult<string>[] = [];
+
+			for (const folder of foldersToImport) {
+				try {
+					const { isDuplicate: _isDuplicate, parentId, ...folderData } = folder;
+					const resolvedParentId =
+						parentId && idMap.has(parentId) ? (idMap.get(parentId) ?? null) : null;
+					const newId = await FolderRepository.importFolder({
+						...folderData,
+						parentId: resolvedParentId,
+					});
+					if (folder.id) {
+						idMap.set(folder.id, newId);
+					}
+					folderResults.push({ status: "fulfilled", value: newId });
+				} catch (error) {
+					folderResults.push({ status: "rejected", reason: error });
+				}
+			}
 
 			const itemPromises = itemsToImport.map((item) => {
-				const { isDuplicate: _isDuplicate, ...itemData } = item;
-				return ItemRepository.importItem(itemData);
+				const { isDuplicate: _isDuplicate, folderId, ...itemData } = item;
+				const resolvedFolderId =
+					folderId && idMap.has(folderId) ? (idMap.get(folderId) ?? undefined) : undefined;
+				return ItemRepository.importItem({ ...itemData, folderId: resolvedFolderId });
 			});
 			const itemResults = await Promise.allSettled(itemPromises);
 

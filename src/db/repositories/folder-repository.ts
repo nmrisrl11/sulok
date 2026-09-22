@@ -117,9 +117,10 @@ export const FolderRepository = {
 			updatedAt?: number;
 			order?: number;
 		},
-	): Promise<void> {
+	): Promise<string> {
 		const parsedData = folderSchema.parse(folder);
 		const now = Date.now();
+		let importedId = "";
 
 		await db.transaction("rw", db.folders, async () => {
 			const count = await db.folders.count();
@@ -137,16 +138,27 @@ export const FolderRepository = {
 				finalName = generateUniqueName(finalName, existingNames);
 			}
 
+			let newId = folder.id || crypto.randomUUID();
+			if (folder.id) {
+				const existing = await db.folders.get(folder.id);
+				if (existing) {
+					newId = crypto.randomUUID();
+				}
+			}
+			importedId = newId;
+
 			const record: Folder = {
-				id: folder.id || crypto.randomUUID(),
+				id: newId,
 				parentId,
 				name: finalName,
 				createdAt: folder.createdAt ?? now,
 				updatedAt: folder.updatedAt ?? now,
 				order: folder.order ?? count,
 			};
-			await db.folders.put(record);
+			await db.folders.add(record);
 		});
+
+		return importedId;
 	},
 
 	async update(id: string, updates: Partial<Folder>): Promise<void> {
