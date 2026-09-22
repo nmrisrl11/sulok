@@ -20,7 +20,7 @@ import {
 import type { Folder } from "@/db/db";
 import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
-import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
+import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useFolderStore, useMoveStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
@@ -29,11 +29,18 @@ import { useQueryState } from "nuqs";
 import { memo } from "react";
 
 export const FolderGridCard = memo(
-	function FolderGridCard({ folder, isOverlay }: { folder: Folder; isOverlay?: boolean }) {
+	function FolderGridCard({
+		folder,
+		isOverlay,
+		onNavigate,
+	}: {
+		folder: Folder;
+		isOverlay?: boolean;
+		onNavigate?: (id: string) => void;
+	}) {
 		const [view] = useQueryState("view", viewParser);
 
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
-		const [, setSearchQuery] = useQueryState("q", searchQueryParser);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
 		const openMoveDialog = useMoveStore((state) => state.openMoveDialog);
@@ -85,8 +92,8 @@ export const FolderGridCard = memo(
 					if (view === "trash") {
 						toggleSelection(folder.id);
 					} else {
-						setFolderId(folder.id);
-						setSearchQuery(null);
+						if (onNavigate) onNavigate(folder.id);
+						else setFolderId(folder.id);
 					}
 				}}
 				onKeyDown={(e) => {
@@ -97,8 +104,8 @@ export const FolderGridCard = memo(
 						if (view === "trash") {
 							toggleSelection(folder.id);
 						} else {
-							setFolderId(folder.id);
-							setSearchQuery(null);
+							if (onNavigate) onNavigate(folder.id);
+							else setFolderId(folder.id);
 						}
 					}
 				}}
@@ -239,5 +246,6 @@ export const FolderGridCard = memo(
 	(prev, next) =>
 		prev.folder.name === next.folder.name &&
 		prev.folder.isFavorite === next.folder.isFavorite &&
-		prev.isOverlay === next.isOverlay,
+		prev.isOverlay === next.isOverlay &&
+		prev.onNavigate === next.onNavigate,
 );

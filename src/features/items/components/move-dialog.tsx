@@ -48,7 +48,11 @@ const MoveDialogList = memo(function MoveDialogList({
 			className="custom-scrollbar flex max-h-[45vh] min-h-64 flex-1 flex-col overflow-y-auto p-1"
 		>
 			{!isLoaded ? (
-				<div className="flex flex-col gap-1 p-1">
+				<div
+					role="alert"
+					aria-label="Loading destination folders"
+					className="flex flex-col gap-1 p-1"
+				>
 					{Array.from({ length: 4 }).map((_, i) => (
 						<div key={i} className="flex items-center gap-3 px-3 py-2.5">
 							<Skeleton className="size-5 rounded-md" />
