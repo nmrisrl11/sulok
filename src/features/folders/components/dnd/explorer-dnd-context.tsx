@@ -238,8 +238,8 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 		// Prevent the overlay from clipping outside the screen edges
 		if (activeNodeRect && overlayNodeRect && windowRect) {
 			const PADDING = 16;
-			const projectedX = activeNodeRect.left + newTransform.x;
-			const projectedY = activeNodeRect.top + newTransform.y;
+			const projectedX = overlayNodeRect.left + newTransform.x;
+			const projectedY = overlayNodeRect.top + newTransform.y;
 
 			if (projectedX < PADDING) {
 				newTransform.x += PADDING - projectedX;
@@ -349,7 +349,7 @@ function DragOverlayContent({
 	return (
 		<div
 			className="pointer-events-none relative overflow-visible rounded-xl border border-border bg-background shadow-2xl transition-all"
-			style={{ width: viewMode === "grid" ? "auto" : 350 }}
+			style={{ width: viewMode === "grid" ? "auto" : "min(350px, calc(100vw - 32px))" }}
 		>
 			{activeData.type === "folder" ? (
 				viewMode === "grid" ? (
