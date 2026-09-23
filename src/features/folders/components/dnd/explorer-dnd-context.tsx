@@ -205,7 +205,10 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 		activeNodeRect,
 		overlayNodeRect,
 		transform,
+		windowRect,
 	}) => {
+		let newTransform = { ...transform };
+
 		if (activatorEvent && activeNodeRect && overlayNodeRect) {
 			const isTouchEvent = "touches" in activatorEvent;
 			const clientX = isTouchEvent
@@ -225,13 +228,33 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 			const shiftX = offsetX - clampedOffsetX;
 			const shiftY = offsetY - clampedOffsetY;
 
-			return {
-				...transform,
-				x: transform.x + shiftX,
-				y: transform.y + shiftY,
+			newTransform = {
+				...newTransform,
+				x: newTransform.x + shiftX,
+				y: newTransform.y + shiftY,
 			};
 		}
-		return transform;
+
+		// Prevent the overlay from clipping outside the screen edges
+		if (activeNodeRect && overlayNodeRect && windowRect) {
+			const PADDING = 16;
+			const projectedX = activeNodeRect.left + newTransform.x;
+			const projectedY = activeNodeRect.top + newTransform.y;
+
+			if (projectedX < PADDING) {
+				newTransform.x += PADDING - projectedX;
+			} else if (projectedX + overlayNodeRect.width > windowRect.width - PADDING) {
+				newTransform.x -= projectedX + overlayNodeRect.width - (windowRect.width - PADDING);
+			}
+
+			if (projectedY < PADDING) {
+				newTransform.y += PADDING - projectedY;
+			} else if (projectedY + overlayNodeRect.height > windowRect.height - PADDING) {
+				newTransform.y -= projectedY + overlayNodeRect.height - (windowRect.height - PADDING);
+			}
+		}
+
+		return newTransform;
 	};
 
 	const handleDragCancel = () => {
