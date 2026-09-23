@@ -8,9 +8,17 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerHeader,
+	DrawerTitle,
+} from "@/components/ui/drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { FolderBreadcrumbs } from "@/features/folders/components/folder/folder-breadcrumbs";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { notify } from "@/lib/notify";
 import { useFolderStore, useItemStore, useMoveStore } from "@/stores";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -105,6 +113,7 @@ const MoveDialogList = memo(function MoveDialogList({
 });
 
 export function MoveDialog() {
+	const isMobile = useIsMobile();
 	const isOpen = useMoveStore((state) => state.isOpen);
 	const movingItemIds = useMoveStore((state) => state.movingItemIds);
 	const movingFolderIds = useMoveStore((state) => state.movingFolderIds);
@@ -166,47 +175,65 @@ export function MoveDialog() {
 	};
 
 	const totalItems = movingItemIds.length + movingFolderIds.length;
+	const title = "Move Items";
+	const description = `Select a destination for the ${totalItems} selected ${totalItems === 1 ? "item" : "items"}.`;
+
+	const content = (
+		<>
+			<div className="flex flex-col border-y border-border">
+				{/* Breadcrumb Header */}
+				<div className="bg-muted/30 px-3 py-2.5">
+					<FolderBreadcrumbs
+						currentFolderId={currentParentId}
+						allFolders={resolvedFolders}
+						onNavigate={setCurrentParentId}
+						rootClassName="text-sm font-medium"
+						leafClassName="max-w-30 truncate text-sm sm:max-w-40 md:max-w-none"
+						linkClassName="max-w-25 cursor-pointer truncate text-sm hover:text-foreground sm:max-w-none"
+					/>
+				</div>
+
+				{/* Folder List */}
+				<MoveDialogList
+					isLoaded={isLoaded}
+					currentChildren={currentChildren}
+					onNavigate={setCurrentParentId}
+				/>
+			</div>
+
+			<DialogFooter className="m-0 sm:justify-end">
+				<Button variant="ghost" onClick={handleClose} disabled={isMoving}>
+					Cancel
+				</Button>
+				<Button onClick={handleMove} disabled={isMoving}>
+					Move Here
+				</Button>
+			</DialogFooter>
+		</>
+	);
+
+	if (isMobile) {
+		return (
+			<Drawer open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+				<DrawerContent className="flex max-h-[90vh] flex-col gap-0 p-0">
+					<DrawerHeader className="p-4 pb-3 text-left">
+						<DrawerTitle>{title}</DrawerTitle>
+						<DrawerDescription>{description}</DrawerDescription>
+					</DrawerHeader>
+					{content}
+				</DrawerContent>
+			</Drawer>
+		);
+	}
 
 	return (
 		<Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
 			<DialogContent className="flex max-h-[85vh] flex-col gap-0 p-0 sm:max-w-md">
 				<DialogHeader className="p-4 pb-3">
-					<DialogTitle>Move Items</DialogTitle>
-					<DialogDescription>
-						Select a destination for the {totalItems} selected {totalItems === 1 ? "item" : "items"}
-						.
-					</DialogDescription>
+					<DialogTitle>{title}</DialogTitle>
+					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
-
-				<div className="flex flex-col border-y border-border">
-					{/* Breadcrumb Header */}
-					<div className="bg-muted/30 px-3 py-2.5">
-						<FolderBreadcrumbs
-							currentFolderId={currentParentId}
-							allFolders={resolvedFolders}
-							onNavigate={setCurrentParentId}
-							rootClassName="text-sm font-medium"
-							leafClassName="max-w-30 truncate text-sm sm:max-w-40 md:max-w-none"
-							linkClassName="max-w-25 cursor-pointer truncate text-sm hover:text-foreground sm:max-w-none"
-						/>
-					</div>
-
-					{/* Folder List */}
-					<MoveDialogList
-						isLoaded={isLoaded}
-						currentChildren={currentChildren}
-						onNavigate={setCurrentParentId}
-					/>
-				</div>
-
-				<DialogFooter className="m-0 sm:justify-end">
-					<Button variant="ghost" onClick={handleClose} disabled={isMoving}>
-						Cancel
-					</Button>
-					<Button onClick={handleMove} disabled={isMoving}>
-						Move Here
-					</Button>
-				</DialogFooter>
+				{content}
 			</DialogContent>
 		</Dialog>
 	);

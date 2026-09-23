@@ -5,8 +5,16 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerHeader,
+	DrawerTitle,
+} from "@/components/ui/drawer";
 import { APP_INFO } from "@/constants/app-info";
 import { ItemRepository } from "@/db/repositories/item-repository";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { notify } from "@/lib/notify";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import type { ItemFormValues } from "@/schemas";
@@ -16,6 +24,7 @@ import { useState } from "react";
 import { ItemForm } from "./item-form";
 
 export function ItemDialog() {
+	const isMobile = useIsMobile();
 	const [, setFolderId] = useQueryState("folder", folderIdParser);
 	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [, setView] = useQueryState("view", viewParser);
@@ -105,31 +114,50 @@ export function ItemDialog() {
 		}
 	};
 
+	const title = editingItem ? "Edit Item" : `Add to ${APP_INFO.name}`;
+	const description = editingItem
+		? "Update the details of your saved item."
+		: "Save a new find to your corner.";
+
+	const content = (
+		<ItemForm
+			defaultValues={
+				activeItem || {
+					url: activeUrl || "",
+					folderId: activeFolderId || "unorganized",
+				}
+			}
+			isEditing={!!activeItem}
+			onSubmit={handleSubmit}
+			onCancel={() => setDialogOpen(false)}
+			isSubmitting={isSubmitting}
+			submitError={submitError}
+		/>
+	);
+
+	if (isMobile) {
+		return (
+			<Drawer open={isDialogOpen} onOpenChange={setDialogOpen}>
+				<DrawerContent className="flex max-h-[90vh] flex-col gap-0 p-0">
+					<DrawerHeader className="border-b p-4 text-left">
+						<DrawerTitle>{title}</DrawerTitle>
+						<DrawerDescription>{description}</DrawerDescription>
+					</DrawerHeader>
+					{content}
+				</DrawerContent>
+			</Drawer>
+		);
+	}
+
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
 			<DialogContent className="flex max-h-[90vh] flex-col gap-0 p-0 sm:max-w-sm">
 				<DialogHeader className="border-b p-4 pb-2">
-					<DialogTitle>{editingItem ? "Edit Item" : `Add to ${APP_INFO.name}`}</DialogTitle>
-					<DialogDescription>
-						{editingItem
-							? "Update the details of your saved item."
-							: "Save a new find to your corner."}
-					</DialogDescription>
+					<DialogTitle>{title}</DialogTitle>
+					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
 
-				<ItemForm
-					defaultValues={
-						activeItem || {
-							url: activeUrl || "",
-							folderId: activeFolderId || "unorganized",
-						}
-					}
-					isEditing={!!activeItem}
-					onSubmit={handleSubmit}
-					onCancel={() => setDialogOpen(false)}
-					isSubmitting={isSubmitting}
-					submitError={submitError}
-				/>
+				{content}
 			</DialogContent>
 		</Dialog>
 	);

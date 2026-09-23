@@ -162,6 +162,11 @@ Minimal shadows. Prefer border/background differentiation.
 - When rendering multiple options that include descriptions, use a clean vertical list layout (with `divide-y`) — title/description on the left, control on the right.
 - Avoid dense multi-column grids for content-heavy controls to prevent a claustrophobic UI.
 
+### Dialogs & Drawers
+
+- Use the responsive Dialog/Drawer pattern for forms and configurations (e.g., `ItemDialog`, `FolderDialog`, `MoveDialog`).
+- Render as a centered `Dialog` on desktop and a bottom `Drawer` on mobile breakpoints to maximize touch accessibility.
+
 ### Search / Filter Bar
 
 - Full-width input with search icon.
