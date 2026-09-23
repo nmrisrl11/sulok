@@ -23,6 +23,7 @@
 - Prevented UI re-rendering cascades during list scrolling by properly isolating and memoizing virtualized components.
 - Refined duplicate detection during import to safely ignore items already in the Recycle Bin.
 - Smart selection: Clicking an item or folder while already in selection mode now toggles its selection instead of opening the link or navigating into the folder.
+- Updated Add Link, New Folder, and Move Items dialogs to be fully responsive. They now display as ergonomic bottom drawers on mobile devices and standard dialogs on desktop.
 
 ### Fixed
 
@@ -31,6 +32,8 @@
 - Fixed an issue where importing folders with conflicting IDs would fail instead of assigning new safe IDs.
 - Fixed a rendering bug in the Import Preview tree where folders with missing parent references were excluded rather than falling back to the root level.
 - Fixed various accessibility and layout issues found during code review, including making screen reader labels entity-specific and properly labeling action drawers.
+- Fixed browser autofill warnings on forms by ensuring hidden select elements contain the correct name attributes.
+- Resolved an issue with Favorites drag-and-drop to ensure they reorder and behave correctly.
 
 ### Removed
 
