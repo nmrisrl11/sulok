@@ -88,7 +88,13 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				tolerance: 5,
 			},
 		}),
-		useSensor(KeyboardSensor),
+		useSensor(KeyboardSensor, {
+			keyboardCodes: {
+				start: ["Space"],
+				cancel: ["Escape"],
+				end: ["Space", "Enter"],
+			},
+		}),
 	);
 
 	const handleDragStart = (event: DragStartEvent) => {

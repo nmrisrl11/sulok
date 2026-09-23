@@ -114,6 +114,13 @@ export const ItemCard = memo(
 				onKeyDown={(e) => {
 					listeners?.onKeyDown?.(e);
 					if (e.target !== e.currentTarget) return;
+
+					// Ignore Enter if actively dragging
+					if (e.key === "Enter" && isEffectivelyDragging) return;
+
+					// Reserve Space for drag activation outside trash
+					if (e.key === " " && view !== "trash") return;
+
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
 						if (isSelectionMode || view === "trash") {
