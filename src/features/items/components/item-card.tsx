@@ -14,14 +14,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
+import { useIsSelectionMode } from "@/hooks";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useActionDrawerStore, useItemStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useActiveDragStore, useItemStore, useTimeStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
 import { CheckIcon, MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo, useEffect, useState } from "react";
-import { useActiveDragStore } from "../../folders/components/dnd/active-drag-store";
 import { useItemActions } from "../hooks/use-item-actions";
 
 const folderCache = new Map<string, Folder | null>();
@@ -32,6 +32,7 @@ export const ItemCard = memo(
 
 		const toggleSelection = useItemStore((state) => state.toggleSelection);
 		const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
+		const isSelectionMode = useIsSelectionMode();
 
 		const [view] = useQueryState("view", viewParser);
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -102,9 +103,9 @@ export const ItemCard = memo(
 				onClick={(e) => {
 					const target = e.target as HTMLElement;
 					if (target.closest("button") || target.closest('[role="checkbox"]')) return;
-					if (view !== "trash" && target.closest("a")) return;
+					if (!isSelectionMode && view !== "trash" && target.closest("a")) return;
 
-					if (view === "trash") {
+					if (isSelectionMode || view === "trash") {
 						toggleSelection(item.id);
 					} else {
 						window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -115,7 +116,7 @@ export const ItemCard = memo(
 					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
-						if (view === "trash") {
+						if (isSelectionMode || view === "trash") {
 							toggleSelection(item.id);
 						} else {
 							window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -137,11 +138,11 @@ export const ItemCard = memo(
 					)}
 					<div className="flex min-w-0 flex-1 items-center gap-3">
 						<a
-							href={view === "trash" ? undefined : targetUrl}
-							target={view === "trash" ? undefined : "_blank"}
-							rel={view === "trash" ? undefined : "noopener noreferrer"}
+							href={view === "trash" || isSelectionMode ? undefined : targetUrl}
+							target={view === "trash" || isSelectionMode ? undefined : "_blank"}
+							rel={view === "trash" || isSelectionMode ? undefined : "noopener noreferrer"}
 							onClick={(e) => {
-								if (view === "trash") e.preventDefault();
+								if (view === "trash" || isSelectionMode) e.preventDefault();
 							}}
 							className={cn(
 								"shrink-0 rounded-sm focus-visible:outline-none",
@@ -154,11 +155,11 @@ export const ItemCard = memo(
 						</a>
 						<div className="flex flex-col items-start overflow-hidden">
 							<a
-								href={view === "trash" ? undefined : targetUrl}
-								target={view === "trash" ? undefined : "_blank"}
-								rel={view === "trash" ? undefined : "noopener noreferrer"}
+								href={view === "trash" || isSelectionMode ? undefined : targetUrl}
+								target={view === "trash" || isSelectionMode ? undefined : "_blank"}
+								rel={view === "trash" || isSelectionMode ? undefined : "noopener noreferrer"}
 								onClick={(e) => {
-									if (view === "trash") e.preventDefault();
+									if (view === "trash" || isSelectionMode) e.preventDefault();
 								}}
 								className={cn(
 									"flex flex-col rounded-sm focus-visible:outline-none",

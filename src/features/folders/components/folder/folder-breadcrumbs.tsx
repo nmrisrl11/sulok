@@ -22,11 +22,14 @@ import { forwardRef, Fragment, type ElementType } from "react";
 
 const DroppableBreadcrumbNode = forwardRef<
 	HTMLButtonElement,
-	React.ButtonHTMLAttributes<HTMLButtonElement> & { folderId: string | null }
->(({ folderId, className, children, ...props }, ref) => {
+	React.ButtonHTMLAttributes<HTMLButtonElement> & {
+		folderId: string | null;
+		isVirtualRoot?: string;
+	}
+>(({ folderId, isVirtualRoot, className, children, ...props }, ref) => {
 	const { setNodeRef, isOver } = useDroppable({
 		id: `drop-breadcrumb-${folderId ?? "root"}`,
-		data: { type: "breadcrumb", folderId },
+		data: { type: "breadcrumb", folderId, isVirtualRoot },
 	});
 
 	return (
@@ -55,14 +58,16 @@ function DroppableLeafNode({
 	folderId,
 	children,
 	className,
+	isVirtualRoot,
 }: {
 	folderId: string | null;
 	children: React.ReactNode;
 	className?: string;
+	isVirtualRoot?: string;
 }) {
 	const { setNodeRef, isOver } = useDroppable({
 		id: `drop-breadcrumb-${folderId ?? "root"}`,
-		data: { type: "breadcrumb", folderId },
+		data: { type: "breadcrumb", folderId, isVirtualRoot },
 	});
 
 	return (
@@ -86,6 +91,7 @@ interface FolderBreadcrumbsProps {
 	rootLabel?: string;
 	rootIcon?: ElementType;
 	rootClassName?: string;
+	disableRootDrop?: string;
 
 	itemsToDisplay?: number;
 	hideBreadcrumbs?: boolean;
@@ -102,6 +108,7 @@ export function FolderBreadcrumbs({
 	rootLabel = "Library",
 	rootIcon: RootIcon = FolderLinkIcon,
 	rootClassName = "text-base font-semibold",
+	disableRootDrop,
 	itemsToDisplay,
 	hideBreadcrumbs = false,
 	hideDropdown = false,
@@ -130,14 +137,22 @@ export function FolderBreadcrumbs({
 				<BreadcrumbItem>
 					{!currentFolderId ? (
 						<BreadcrumbPage className={rootClassName}>
-							<DroppableLeafNode folderId={null} className="flex items-center gap-1.5">
+							<DroppableLeafNode
+								folderId={null}
+								isVirtualRoot={disableRootDrop}
+								className="flex items-center gap-1.5"
+							>
 								<RootIcon className="size-4 shrink-0" />
 								{rootLabel}
 							</DroppableLeafNode>
 						</BreadcrumbPage>
 					) : (
 						<BreadcrumbLink asChild className="cursor-pointer hover:text-foreground">
-							<DroppableBreadcrumbNode folderId={null} onClick={() => onNavigate(null)}>
+							<DroppableBreadcrumbNode
+								folderId={null}
+								isVirtualRoot={disableRootDrop}
+								onClick={() => onNavigate(null)}
+							>
 								<RootIcon className="size-4 shrink-0" />
 								<span>{rootLabel}</span>
 							</DroppableBreadcrumbNode>

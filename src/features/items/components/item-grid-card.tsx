@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
+import { useIsSelectionMode } from "@/hooks";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useActionDrawerStore, useItemStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useActiveDragStore, useItemStore, useTimeStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo, useEffect, useState } from "react";
-import { useActiveDragStore } from "../../folders/components/dnd/active-drag-store";
 import { useItemActions } from "../hooks/use-item-actions";
 
 const folderCache = new Map<string, Folder | null>();
@@ -22,6 +22,7 @@ export const ItemGridCard = memo(
 
 		const toggleSelection = useItemStore((state) => state.toggleSelection);
 		const isSelected = useItemStore((state) => state.selectedIds.includes(item.id));
+		const isSelectionMode = useIsSelectionMode();
 
 		const [view] = useQueryState("view", viewParser);
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -95,7 +96,7 @@ export const ItemGridCard = memo(
 						}
 					}
 
-					if (view === "trash") {
+					if (isSelectionMode || view === "trash") {
 						toggleSelection(item.id);
 					} else {
 						window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -106,7 +107,7 @@ export const ItemGridCard = memo(
 					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
-						if (view === "trash") {
+						if (isSelectionMode || view === "trash") {
 							toggleSelection(item.id);
 						} else {
 							window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -161,7 +162,7 @@ export const ItemGridCard = memo(
 					tabIndex={-1}
 					aria-hidden="true"
 					onClick={() => {
-						if (view === "trash") {
+						if (isSelectionMode || view === "trash") {
 							toggleSelection(item.id);
 						} else {
 							window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -178,7 +179,7 @@ export const ItemGridCard = memo(
 						tabIndex={-1}
 						aria-hidden="true"
 						onClick={() => {
-							if (view === "trash") {
+							if (isSelectionMode || view === "trash") {
 								toggleSelection(item.id);
 							} else {
 								window.open(targetUrl, "_blank", "noopener,noreferrer");

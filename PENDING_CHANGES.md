@@ -22,6 +22,7 @@
 - Replaced all per-item dropdown menus with a unified global Action Drawer for both items and folders. This dramatically reduces DOM nodes and improves scrolling performance in virtualized lists. On desktop, the drawer elegantly adapts into a centered floating action sheet.
 - Prevented UI re-rendering cascades during list scrolling by properly isolating and memoizing virtualized components.
 - Refined duplicate detection during import to safely ignore items already in the Recycle Bin.
+- Smart selection: Clicking an item or folder while already in selection mode now toggles its selection instead of opening the link or navigating into the folder.
 
 ### Fixed
 

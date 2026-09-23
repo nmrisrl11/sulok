@@ -2,10 +2,10 @@ import { CustomHeartFilledIcon, FolderIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder } from "@/db/db";
-import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
+import { useIsSelectionMode } from "@/hooks";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useActionDrawerStore, useFolderStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useActiveDragStore, useFolderStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -26,6 +26,7 @@ export const FolderGridCard = memo(
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
+		const isSelectionMode = useIsSelectionMode();
 		const today = useTimeStore((state) => state.today);
 
 		const {
@@ -68,7 +69,7 @@ export const FolderGridCard = memo(
 				role="button"
 				tabIndex={0}
 				onClick={() => {
-					if (view === "trash") {
+					if (isSelectionMode || view === "trash") {
 						toggleSelection(folder.id);
 					} else {
 						if (onNavigate) onNavigate(folder.id);
@@ -80,7 +81,7 @@ export const FolderGridCard = memo(
 					if (e.target !== e.currentTarget) return;
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
-						if (view === "trash") {
+						if (isSelectionMode || view === "trash") {
 							toggleSelection(folder.id);
 						} else {
 							if (onNavigate) onNavigate(folder.id);
