@@ -49,6 +49,8 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 
 	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
 	const confirm = useConfirmationStore((state) => state.confirm);
+	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
+	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
 
 	const handleEmptyTrash = () => {
 		confirm({
@@ -108,6 +110,8 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 								size="sm"
 								id="new-folder-btn"
 								onClick={() => openCreateDialog(folderId)}
+								onMouseEnter={() => setTemporaryExpression("excited", 10000)}
+								onMouseLeave={clearTemporaryExpression}
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
 								<FolderPlusCircleIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />
@@ -123,6 +127,8 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 										new CustomEvent("open-quick-link", { detail: { folderId } }),
 									);
 								}}
+								onMouseEnter={() => setTemporaryExpression("happy", 10000)}
+								onMouseLeave={clearTemporaryExpression}
 								className="h-8 rounded-md px-2 text-sm font-medium hover:bg-background hover:shadow-sm supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:px-3"
 							>
 								<PlusIcon className="mr-0 size-4 text-muted-foreground sm:mr-2" />

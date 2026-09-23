@@ -88,6 +88,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`
 - [x] Responsive global action drawers (centered action sheet on desktop vs bottom drawer on mobile)
+- [x] Smart Selection UX (clicking items/folders in selection mode toggles selection)
 - [x] Favorites feature for folders and items (list/grid view & bulk actions)
 - [x] Recycle Bin auto-cleanup and retention UI (30 days)
 - [x] Updates page (Changelog integration)

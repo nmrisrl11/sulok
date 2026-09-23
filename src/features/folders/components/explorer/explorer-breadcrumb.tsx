@@ -45,6 +45,9 @@ export function ExplorerBreadcrumb() {
 			rootClassName="text-base font-semibold"
 			hideBreadcrumbs={hideBreadcrumbs}
 			hideDropdown={hideDropdown}
+			disableRootDrop={
+				view === "favorites" ? "Favorites" : view === "trash" ? "Recycle Bin" : undefined
+			}
 			leafClassName="max-w-37.5 sm:max-w-50 md:max-w-none"
 			linkClassName="max-w-25 sm:max-w-none"
 		/>

@@ -1,4 +1,5 @@
 export * from "./action-drawer-store";
+export * from "./active-drag-store";
 export * from "./confirmation-store";
 export * from "./folder-store";
 export * from "./item-store";

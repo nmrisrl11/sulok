@@ -10,15 +10,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder } from "@/db/db";
-import { useActiveDragStore } from "@/features/folders/components/dnd/active-drag-store";
-import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
+import { useIsSelectionMode } from "@/hooks";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
-import { useActionDrawerStore, useFolderStore, useTimeStore } from "@/stores";
+import { useActionDrawerStore, useActiveDragStore, useFolderStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
+import { useFolderActions } from "../../hooks/use-folder-actions";
 
 export const FolderCard = memo(
 	function FolderCard({
@@ -32,6 +32,7 @@ export const FolderCard = memo(
 	}) {
 		const toggleSelection = useFolderStore((state) => state.toggleSelection);
 		const isSelected = useFolderStore((state) => state.selectedFolderIds.includes(folder.id));
+		const isSelectionMode = useIsSelectionMode();
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 		const [view] = useQueryState("view", viewParser);
 		const today = useTimeStore((state) => state.today);
@@ -85,7 +86,7 @@ export const FolderCard = memo(
 					isOver && "border-primary bg-primary/10 shadow-sm",
 				)}
 				onClick={() => {
-					if (view === "trash") {
+					if (isSelectionMode || view === "trash") {
 						toggleSelection(folder.id);
 					} else {
 						if (onNavigate) onNavigate(folder.id);
@@ -95,9 +96,16 @@ export const FolderCard = memo(
 				onKeyDown={(e) => {
 					listeners?.onKeyDown?.(e);
 					if (e.target !== e.currentTarget) return;
+
+					// Ignore Enter if actively dragging
+					if (e.key === "Enter" && isEffectivelyDragging) return;
+
+					// Reserve Space for drag activation outside trash
+					if (e.key === " " && view !== "trash") return;
+
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
-						if (view === "trash") {
+						if (isSelectionMode || view === "trash") {
 							toggleSelection(folder.id);
 						} else {
 							if (onNavigate) onNavigate(folder.id);

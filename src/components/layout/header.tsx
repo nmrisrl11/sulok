@@ -1,6 +1,6 @@
 import { SulokLogo } from "@/components/logo/sulok-logo";
 import { cn } from "@/lib/utils";
-import { useLogoStore, useUIStore } from "@/stores";
+import { useLogoStore, useUIStore, type SuloExpression } from "@/stores";
 import { WandSparklesIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -8,10 +8,10 @@ export function Header() {
 	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
 
-	const navLinks = [
-		{ to: "/about", label: "About" },
-		{ to: "/updates", label: "Updates" },
-		{ to: "/settings", label: "Settings" },
+	const navLinks: { to: string; label: string; expression: SuloExpression }[] = [
+		{ to: "/about", label: "About", expression: "shy" },
+		{ to: "/updates", label: "Updates", expression: "excited" },
+		{ to: "/settings", label: "Settings", expression: "attentive" },
 	];
 
 	return (
@@ -24,7 +24,7 @@ export function Header() {
 							key={link.to}
 							to={link.to}
 							title={link.label}
-							onMouseEnter={() => setTemporaryExpression("shy", 10000)}
+							onMouseEnter={() => setTemporaryExpression(link.expression, 10000)}
 							onMouseLeave={clearTemporaryExpression}
 							className={({ isActive }) =>
 								cn(
@@ -43,6 +43,8 @@ export function Header() {
 						type="button"
 						id="quick-customize-btn"
 						onClick={() => useUIStore.getState().toggleQuickCustomize()}
+						onMouseEnter={() => setTemporaryExpression("curious", 10000)}
+						onMouseLeave={clearTemporaryExpression}
 						className={cn(
 							"flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-8 sm:w-8",
 							useUIStore((state) => state.isQuickCustomizeOpen)

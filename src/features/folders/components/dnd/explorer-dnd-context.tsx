@@ -4,7 +4,7 @@ import { ItemCard } from "@/features/items/components/item-card";
 import { ItemGridCard } from "@/features/items/components/item-grid-card";
 import { notify } from "@/lib/notify";
 import { viewModeParser } from "@/lib/search-params";
-import { useFolderStore, useItemStore } from "@/stores";
+import { useActiveDragStore, useFolderStore, useItemStore, type DragData } from "@/stores";
 import {
 	DndContext,
 	DragOverlay,
@@ -25,20 +25,11 @@ import { useQueryState } from "nuqs";
 import { useEffect, useRef, type ReactNode } from "react";
 import { FolderCard } from "../folder/folder-card";
 import { FolderGridCard } from "../folder/folder-grid-card";
-import { useActiveDragStore } from "./active-drag-store";
-
-export type DragData = {
-	type: "folder" | "item";
-	entity: Folder | Item;
-	isBulk?: boolean;
-	itemIds?: string[];
-	folderIds?: string[];
-	totalCount?: number;
-};
 
 export type DropData = {
 	type: "folder" | "breadcrumb";
 	folderId: string | null;
+	isVirtualRoot?: string;
 };
 
 export function ExplorerDndContext({ children }: { children: ReactNode }) {
@@ -97,7 +88,13 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				tolerance: 5,
 			},
 		}),
-		useSensor(KeyboardSensor),
+		useSensor(KeyboardSensor, {
+			keyboardCodes: {
+				start: ["Space"],
+				cancel: ["Escape"],
+				end: ["Space", "Enter"],
+			},
+		}),
 	);
 
 	const handleDragStart = (event: DragStartEvent) => {
@@ -138,6 +135,10 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 		if (!dragData || !dropData) return;
 
 		const targetFolderId = dropData.folderId;
+
+		if (dropData.isVirtualRoot) {
+			return;
+		}
 
 		const itemSelectedIds = useItemStore.getState().selectedIds;
 		const folderSelectedIds = useFolderStore.getState().selectedFolderIds;
@@ -289,6 +290,14 @@ function DragOverlayContent({
 	const isOverBreadcrumb = overData?.type === "breadcrumb";
 
 	if (isOverBreadcrumb) {
+		if (overData?.isVirtualRoot) {
+			return (
+				<div className="pointer-events-none flex w-max items-center gap-2 rounded-md border border-border bg-muted/95 px-3 py-1.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-md corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+					<InfoIcon className="size-4 text-muted-foreground" />
+					Already in {overData.isVirtualRoot}
+				</div>
+			);
+		}
 		if (dropStatus === "self") {
 			return (
 				<div className="text-destructive-foreground pointer-events-none flex w-max items-center gap-2 rounded-md border border-destructive/20 bg-destructive/90 px-3 py-1.5 text-sm font-medium shadow-lg backdrop-blur-md corner-squircle supports-[corner-shape:squircle]:rounded-xl">
