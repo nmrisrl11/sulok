@@ -11,7 +11,6 @@ import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ErrorBoundary } from "../error-boundary";
 import { BottomActionSystem } from "./bottom-action-system";
 import { Header } from "./header";
-import { QuickCustomizeSheet } from "./quick-customize-sheet";
 
 const ItemDialog = lazy(() =>
 	import("@/features/items/components/item-dialog").then((m) => ({ default: m.ItemDialog })),
@@ -34,6 +33,11 @@ const MoveDialog = lazy(() =>
 const GlobalActionDrawers = lazy(() =>
 	import("./global-action-drawers").then((m) => ({
 		default: m.GlobalActionDrawers,
+	})),
+);
+const QuickCustomizeDrawer = lazy(() =>
+	import("./quick-customize-drawer").then((m) => ({
+		default: m.QuickCustomizeDrawer,
 	})),
 );
 
@@ -102,18 +106,34 @@ function GlobalDialogs() {
 function GlobalDrawers() {
 	const isItemDrawerOpen = useActionDrawerStore((state) => state.isItemDrawerOpen);
 	const isFolderDrawerOpen = useActionDrawerStore((state) => state.isFolderDrawerOpen);
-	const [hasLoaded, setHasLoaded] = useState(isItemDrawerOpen || isFolderDrawerOpen);
+	const isQuickCustomizeOpen = useUIStore((state) => state.isQuickCustomizeOpen);
 
-	if ((isItemDrawerOpen || isFolderDrawerOpen) && !hasLoaded) {
-		setHasLoaded(true);
+	const [hasLoadedActionDrawers, setHasLoadedActionDrawers] = useState(
+		isItemDrawerOpen || isFolderDrawerOpen,
+	);
+	const [hasLoadedQuickCustomize, setHasLoadedQuickCustomize] = useState(isQuickCustomizeOpen);
+
+	if ((isItemDrawerOpen || isFolderDrawerOpen) && !hasLoadedActionDrawers) {
+		setHasLoadedActionDrawers(true);
+	}
+
+	if (isQuickCustomizeOpen && !hasLoadedQuickCustomize) {
+		setHasLoadedQuickCustomize(true);
 	}
 
 	return (
 		<>
-			{hasLoaded && (
+			{hasLoadedActionDrawers && (
 				<ErrorBoundary>
 					<Suspense fallback={null}>
 						<GlobalActionDrawers />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+			{hasLoadedQuickCustomize && (
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<QuickCustomizeDrawer />
 					</Suspense>
 				</ErrorBoundary>
 			)}
@@ -152,7 +172,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
 			<GlobalDialogs />
 			<GlobalDrawers />
 			<BottomActionSystem />
-			<QuickCustomizeSheet />
 			<Toaster />
 		</div>
 	);

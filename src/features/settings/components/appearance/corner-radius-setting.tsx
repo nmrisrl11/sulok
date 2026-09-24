@@ -12,7 +12,7 @@ const CORNER_STYLES = [
 	{ id: "custom", label: "Custom", icon: Settings2Icon },
 ] as const;
 
-export function CornerRadiusControl() {
+export function CornerRadiusControl({ variant = "default" }: { variant?: "default" | "compact" }) {
 	const cornerStyle = useSettingsStore((state) => state.settings.appearanceSettings.cornerStyle);
 	const customCornerRadius = useSettingsStore(
 		(state) => state.settings.appearanceSettings.customCornerRadius,
@@ -39,7 +39,14 @@ export function CornerRadiusControl() {
 
 	return (
 		<div className="flex w-full flex-col gap-4">
-			<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+			<div
+				className={cn(
+					"grid grid-cols-3",
+					variant === "compact"
+						? "gap-1 rounded-xl bg-muted/40 p-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
+						: "gap-2 sm:gap-3",
+				)}
+			>
 				{CORNER_STYLES.map((style) => {
 					const Icon = style.icon;
 					const isActive = cornerStyle === style.id;
@@ -49,15 +56,23 @@ export function CornerRadiusControl() {
 							type="button"
 							onClick={() => handleUpdate(style.id)}
 							className={cn(
-								"group flex min-w-0 items-center gap-2 rounded-xl p-2 pr-3 text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+								"group flex min-w-0 items-center justify-center text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+								variant === "compact"
+									? "flex-col gap-1.5 rounded-lg py-2.5 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+									: "gap-1.5 rounded-xl p-2 hover:bg-muted/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-2",
 								isActive
-									? "bg-background text-foreground shadow-engraved"
-									: "border border-border/40 bg-muted/20",
+									? variant === "compact"
+										? "bg-background text-foreground shadow-engraved"
+										: "bg-background text-foreground shadow-engraved"
+									: variant === "compact"
+										? "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+										: "border border-border/40 bg-muted/20",
 							)}
 						>
 							<Icon
 								className={cn(
-									"size-4 shrink-0 transition-colors sm:size-4",
+									"shrink-0 transition-colors",
+									variant === "compact" ? "size-5" : "size-4 sm:size-4",
 									isActive
 										? "text-primary"
 										: "text-muted-foreground/80 group-hover:text-foreground",
@@ -65,7 +80,8 @@ export function CornerRadiusControl() {
 							/>
 							<span
 								className={cn(
-									"text-xs font-medium transition-colors sm:text-sm",
+									"font-medium transition-colors",
+									variant === "compact" ? "text-[11px] leading-tight" : "text-xs sm:text-sm",
 									isActive
 										? "text-foreground"
 										: "text-muted-foreground group-hover:text-foreground",
