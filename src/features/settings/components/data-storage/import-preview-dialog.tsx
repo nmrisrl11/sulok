@@ -11,11 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
+import type {
+	ParsedImportData,
+	ParsedImportFolder,
+	ParsedImportItem,
+} from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { AlertCircleIcon, InfoIcon } from "lucide-react";
 import { memo, useDeferredValue, useMemo, useState } from "react";
-import type { ParsedImportData, ParsedImportFolder, ParsedImportItem } from "../utils/import-utils";
 
 interface ImportPreviewDialogProps {
 	isOpen: boolean;

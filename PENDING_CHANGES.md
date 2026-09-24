@@ -11,13 +11,15 @@
 
 - Polished Settings UI: Upgraded Theme and Interface layout controls with beautifully animated segmented buttons, replacing standard dropdowns for a more premium feel.
 - Sulo Customization: Redesigned the Expressions and Whispers settings to match the premium, cohesive card layout used in the rest of the app.
-- Settings Architecture: Code-split and modularized the Appearance, Sound FX, and Sulo Customization settings sections into dedicated, isolated component folders (using an `index.tsx` convention) for better maintainability.
+- Data & Storage UI: Redesigned the Data & Storage settings layout to match the premium, cohesive card layout used across other settings tabs, and improved responsive text scaling.
+- Settings Architecture: Code-split and modularized the Appearance, Sound FX, Sulo Customization, and Data & Storage settings sections into dedicated, isolated component folders (using an `index.tsx` convention) for better maintainability. Furthermore, heavy components like the Import Preview Dialog are now lazily loaded to reduce the initial bundle size.
 - Accessibility: Updated settings toggles to use native Label components, properly generated unique IDs via `useId()`, and added accessible names to reset buttons and dropdown triggers for improved screen reader support.
 - Folder Customization: Added new preset, complementary, and custom folder color options to further personalize your workspace.
 - Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.
 
 ### Fixed
 
+- Settings Layout Shifts: Fixed a layout shift issue where the initial loading skeleton for the Settings page did not correctly mirror the new modular tab architecture and card layout.
 - Sulo Customization: Fixed a bug where resetting Sulo Whispers or global settings wouldn't immediately clear unsaved edits from the form.
 - Accessibility: Fixed missing ARIA labels on Sulo Expressions dropdown controls.
 
