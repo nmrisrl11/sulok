@@ -42,8 +42,14 @@ export function FolderColorControl() {
 		const currentSettings = useSettingsStore.getState().settings.appearanceSettings;
 
 		if (currentSettings.folderColorMode === "complement" && val === "custom") {
+			// Commit any pending DebouncedColorPicker base-color value
+			let baseHex = currentSettings.folderColorBack;
+			const basePicker = document.getElementById("fc-base") as HTMLInputElement | null;
+			if (basePicker && basePicker.value !== baseHex) {
+				baseHex = basePicker.value;
+			}
+
 			// Calculate the 70% color-mix equivalent in hex to ensure a smooth transition
-			const baseHex = currentSettings.folderColorBack;
 			let frontColor = baseHex;
 
 			if (/^#[0-9A-Fa-f]{6}$/i.test(baseHex)) {
@@ -64,6 +70,7 @@ export function FolderColorControl() {
 				appearanceSettings: {
 					...currentSettings,
 					folderColorMode: val,
+					folderColorBack: baseHex,
 					folderColorFront: frontColor,
 					folderColorPaper: "#ffffff",
 				},
@@ -191,6 +198,7 @@ export function FolderColorControl() {
 							<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 								<DebouncedColorPicker
 									id="fc-base"
+									aria-label="Base Color"
 									value={folderColorBack}
 									onChange={(val) => handleColorChange("folderColorBack", val)}
 									className="absolute inset-0 h-full w-full"
@@ -225,6 +233,7 @@ export function FolderColorControl() {
 									<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 										<DebouncedColorPicker
 											id={picker.id}
+											aria-label={picker.label}
 											value={value}
 											onChange={(val) => handleColorChange(picker.key, val)}
 											className="absolute inset-0 h-full w-full"

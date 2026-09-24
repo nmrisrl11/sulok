@@ -11,7 +11,7 @@
 			{
 				"patterns": [
 					{
-						"group": ["../../*"],
+						"group": ["../../**"],
 						"message": "Deep relative imports (../../) are banned. Use absolute paths with the @/ alias instead."
 					}
 				]

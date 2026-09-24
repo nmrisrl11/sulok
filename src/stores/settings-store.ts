@@ -127,11 +127,13 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 			delete appearance.folderColorMode;
 		}
 		for (const key of ["folderColorBack", "folderColorFront", "folderColorPaper"]) {
-			if (
-				appearance[key] !== undefined &&
-				!/^#([0-9A-Fa-f]{3}){1,2}$/i.test(appearance[key] as string)
-			) {
-				delete appearance[key];
+			if (appearance[key] !== undefined) {
+				if (
+					typeof appearance[key] !== "string" ||
+					!/^#([0-9A-Fa-f]{3}){1,2}$/i.test(appearance[key] as string)
+				) {
+					delete appearance[key];
+				}
 			}
 		}
 	}
