@@ -13,15 +13,13 @@ export function SuloCustomizationSection() {
 	};
 
 	return (
-		<div className="flex animate-in flex-col gap-12 duration-300 fade-in slide-in-from-bottom-2">
-			{/* Header */}
+		<div className="animate-in space-y-8 duration-300 fade-in slide-in-from-bottom-2">
 			<div className="flex flex-col gap-1">
 				<div className="flex items-center justify-between gap-4">
 					<h2 className="font-heading text-xl font-semibold">Sulo Customization</h2>
-
 					<ResetButton
 						onClick={handleRestoreAll}
-						label="Reset All"
+						label="Reset All Settings"
 						className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 					/>
 				</div>
@@ -31,12 +29,10 @@ export function SuloCustomizationSection() {
 				</p>
 			</div>
 
-			{/* Isolated Sub-sections */}
-			<SuloExpressionsSection />
-
-			<div className="border-t border-border/50" />
-
-			<SuloWhispersSection />
+			<div className="space-y-10">
+				<SuloExpressionsSection />
+				<SuloWhispersSection />
+			</div>
 		</div>
 	);
 }

@@ -5,7 +5,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, lazy, useEffect, useRef } from "react";
 
 const AppearanceSection = lazy(() =>
-	import("@/features/settings/components/appearance/appearance-section").then((m) => ({
+	import("@/features/settings/components/appearance").then((m) => ({
 		default: m.AppearanceSection,
 	})),
 );
@@ -15,12 +15,12 @@ const DataStorageSection = lazy(() =>
 	})),
 );
 const SoundFxSection = lazy(() =>
-	import("@/features/settings/components/sound-fx/sound-fx-section").then((m) => ({
+	import("@/features/settings/components/sound-fx").then((m) => ({
 		default: m.SoundFxSection,
 	})),
 );
 const SuloCustomizationSection = lazy(() =>
-	import("@/features/settings/components/sulo-customization-section").then((m) => ({
+	import("@/features/settings/components/sulo-customization").then((m) => ({
 		default: m.SuloCustomizationSection,
 	})),
 );

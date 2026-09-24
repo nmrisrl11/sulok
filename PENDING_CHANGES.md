@@ -10,7 +10,8 @@
 ### Changed
 
 - Polished Settings UI: Upgraded Theme and Interface layout controls with beautifully animated segmented buttons, replacing standard dropdowns for a more premium feel.
-- Settings Architecture: Code-split and modularized the Sound FX settings section into dedicated, isolated components for better maintainability.
+- Sulo Customization: Redesigned the Expressions and Whispers settings to match the premium, cohesive card layout used in the rest of the app.
+- Settings Architecture: Code-split and modularized the Appearance, Sound FX, and Sulo Customization settings sections into dedicated, isolated component folders (using an `index.tsx` convention) for better maintainability.
 - Accessibility: Updated settings toggles to use native Label components, properly generated unique IDs via `useId()`, and added accessible names to reset buttons and dropdown triggers for improved screen reader support.
 - Folder Customization: Added new preset, complementary, and custom folder color options to further personalize your workspace.
 - Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.

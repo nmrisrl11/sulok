@@ -16,11 +16,11 @@ import {
 	CornerRadiusControl,
 	LayoutDensityControl,
 	WorkspaceThemeControl,
-} from "@/features/settings/components/appearance-section";
+} from "@/features/settings/components/appearance/controls";
 import { AudioSignaturesControl } from "@/features/settings/components/sound-fx/audio-signatures-setting";
 import { VolumeControl } from "@/features/settings/components/sound-fx/master-volume-setting";
 import { SoundSettingsControl } from "@/features/settings/components/sound-fx/play-interaction-sounds-setting";
-import { SuloExpressionsControl } from "@/features/settings/components/sulo-expressions-section";
+import { SuloExpressionsControl } from "@/features/settings/components/sulo-customization/sulo-expressions-section";
 import { useSoundEffects } from "@/hooks";
 import { useSettingsStore, useUIStore, type SuloExpression } from "@/stores";
 import { WandSparklesIcon } from "lucide-react";
