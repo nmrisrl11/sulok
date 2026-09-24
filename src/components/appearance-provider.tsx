@@ -76,6 +76,23 @@ export function AppearanceProvider({ children }: { children: ReactNode }) {
 			root.classList.remove("density-compact", "density-cozy");
 			root.classList.add(`density-${appearanceSettings.layoutDensity}`);
 		}
+
+		// 4. Folder Colors
+		if (
+			appearanceSettings.folderColorMode === "preset" ||
+			appearanceSettings.folderColorMode === "custom"
+		) {
+			root.style.setProperty("--folder-color-back", appearanceSettings.folderColorBack);
+			root.style.setProperty("--folder-color-front", appearanceSettings.folderColorFront);
+			root.style.setProperty("--folder-color-paper", appearanceSettings.folderColorPaper);
+		} else if (appearanceSettings.folderColorMode === "complement") {
+			root.style.setProperty("--folder-color-back", appearanceSettings.folderColorBack);
+			root.style.setProperty(
+				"--folder-color-front",
+				`color-mix(in srgb, ${appearanceSettings.folderColorBack} 70%, white)`,
+			);
+			root.style.setProperty("--folder-color-paper", "#ffffff");
+		}
 	}, [appearanceSettings]);
 
 	return <>{children}</>;

@@ -7,7 +7,10 @@
 
 ## Unreleased
 
-*(No pending changes yet)*
+### Changed
+
+- Polished Settings UI: Upgraded Theme and Interface layout controls with beautifully animated segmented buttons, replacing standard dropdowns for a more premium feel.
+- Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.
 
 ---
 

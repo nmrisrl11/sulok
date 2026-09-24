@@ -12,6 +12,10 @@ export const defaultSettings: Settings = {
 		customCornerRadius: 16,
 		layoutDensity: "compact",
 		customLayoutDensity: 12,
+		folderColorMode: "preset",
+		folderColorBack: "#56b2e3",
+		folderColorFront: "#98cfef",
+		folderColorPaper: "#ffffff",
 	},
 	soundSettings: DEFAULT_SOUND_SETTINGS,
 	suloSettings: {
@@ -112,6 +116,22 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 			const val = appearance.customLayoutDensity as number;
 			if (!Number.isFinite(val) || val < 4 || val > 32) {
 				delete appearance.customLayoutDensity;
+			}
+		}
+
+		const validFolderModes = ["preset", "complement", "custom"];
+		if (
+			appearance.folderColorMode !== undefined &&
+			!validFolderModes.includes(appearance.folderColorMode as string)
+		) {
+			delete appearance.folderColorMode;
+		}
+		for (const key of ["folderColorBack", "folderColorFront", "folderColorPaper"]) {
+			if (
+				appearance[key] !== undefined &&
+				!/^#([0-9A-Fa-f]{3}){1,2}$/i.test(appearance[key] as string)
+			) {
+				delete appearance[key];
 			}
 		}
 	}

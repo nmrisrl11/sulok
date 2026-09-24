@@ -23,16 +23,16 @@ export const CHANGELOG_DATA: ChangelogRelease[] = [
 				items: [
 					"Advanced Import Capabilities: Your folder structures are now perfectly preserved when exporting and importing data. We've also added a beautiful visual tree in the Import Preview screen so you can review exactly where everything goes.",
 					"Privacy & Storage Tools: A new Data Storage setting lets you track exactly how much space your library is taking up on your device. We also added an optional 'Referral Tracking' setting so you can anonymously support the websites you discover through Sulok.",
-					"Recycle Bin Clarity: Items in the Recycle Bin now clearly display exactly how many days are left before they are permanently deleted."
-				]
+					"Recycle Bin Clarity: Items in the Recycle Bin now clearly display exactly how many days are left before they are permanently deleted.",
+				],
 			},
 			{
 				category: "Changed",
 				items: [
 					"Blazing Fast Scrolling: We completely re-engineered how the app displays items. Whether you have 50 or 5,000 links, scrolling through your library, previewing imports, or moving items is now lightning fast and buttery smooth.",
 					"Ergonomic Mobile Design: Managing your library on a phone feels more native than ever. Menus, link additions, and folder creation now elegantly slide up from the bottom of your screen as easy-to-reach drawers, while staying as floating panels on desktop.",
-					"Smart Selection Mode: When you're selecting multiple items, tapping an item now intuitively selects it rather than accidentally opening the link or navigating away."
-				]
+					"Smart Selection Mode: When you're selecting multiple items, tapping an item now intuitively selects it rather than accidentally opening the link or navigating away.",
+				],
 			},
 			{
 				category: "Fixed",
@@ -40,10 +40,10 @@ export const CHANGELOG_DATA: ChangelogRelease[] = [
 					"Bulletproof Imports: Fixed a handful of edge cases during data import, ensuring folders merge gracefully and duplicate links are handled correctly—even if they're sitting in the Recycle Bin.",
 					"Smoother Drag and Drop: Resolved an issue where dragging items on your phone would awkwardly clip at the edge of the screen, and ensured Favorites reorder perfectly every time.",
 					"Accessibility & Navigation Glitches: Fixed annoying bugs where clicking folders from search results wouldn't properly clear the search, and tightened up screen-reader support across the app.",
-					"Streamlined UI: Removed the redundant external link button from grid cards to keep the interface cleaner (clicking the card itself opens the link)."
-				]
-			}
-		]
+					"Streamlined UI: Removed the redundant external link button from grid cards to keep the interface cleaner (clicking the card itself opens the link).",
+				],
+			},
+		],
 	},
 	{
 		version: "0.6.0",

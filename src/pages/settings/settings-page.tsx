@@ -5,7 +5,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, lazy, useEffect, useRef } from "react";
 
 const AppearanceSection = lazy(() =>
-	import("@/features/settings/components/appearance-section").then((m) => ({
+	import("@/features/settings/components/appearance/appearance-section").then((m) => ({
 		default: m.AppearanceSection,
 	})),
 );

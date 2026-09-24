@@ -125,7 +125,7 @@ src/
 ### TypeScript
 
 - **Strict mode enabled. NEVER use `any` or bypass types.**
-  - This rule is strict and heavily enforced by `oxlint`. The production build will explicitly fail on any warnings (`oxlint --deny-warnings`) or if `@ts-ignore`/`@ts-expect-error` bypasses are used.
+  - This rule is strict and heavily enforced by `oxlint`. Additionally, deep relative imports (`../../`) are actively blocked by a custom `no-restricted-imports` oxlint rule. The production build will explicitly fail on any warnings (`oxlint --deny-warnings`) or if `@ts-ignore`/`@ts-expect-error` bypasses are used.
   - Do not use `any`, `any[]`, `Record<string, any>`, or bypass types with `as any`.
   - Use `unknown` for unpredictable structures, then type guard or narrow them.
   - `verbatimModuleSyntax` is enabled in `tsconfig.app.json`. You MUST import types using the `type` modifier for external and internal types (e.g., `import { type ReactNode, type ComponentProps } from "react";`).
@@ -136,11 +136,11 @@ src/
 
 ### Import Aliases
 
-- Always use the `@` alias for absolute imports instead of relative deep imports (e.g., `../../../`).
+- **NEVER use deep relative imports** (e.g., `../../` or `../../../`). You MUST always use the `@` alias for absolute imports when importing from outside the current feature module or from global directories.
 - The `@` symbol maps to the `src` directory (configured in both `tsconfig.app.json` and `vite.config.ts`).
 - Example: Use `import { Button } from "@/components/ui/button";` instead of `import { Button } from "../../../components/ui/button";`.
-- Relative imports should only be used for files within the same feature or deeply nested local folders (e.g., `./item-form` from `./item-dialog.tsx`).
-- **Barrel Files:** Core layers like `stores/`, `hooks/`, `schemas/`, and `components/icons/` use `index.ts` barrel files to serve as public APIs and prevent circular dependencies. Consumers must import from the directory root (e.g., `@/stores` or `@/components/icons`) rather than individual files.
+- Relative imports (e.g., `./` or `../`) are **ONLY permitted for co-located files within the exact same feature boundary** to preserve module cohesion (e.g., importing `./item-form` from `./item-dialog.tsx`).
+- **Barrel Files:** Core layers like `stores/`, `hooks/`, `schemas/`, and `components/icons/` use `index.ts` barrel files to serve as public APIs and prevent circular dependencies. Consumers must import from the directory root (e.g., `@/stores` or `@/components/icons`) rather than directly importing individual files.
 
 ### Component Patterns
 
