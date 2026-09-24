@@ -1,7 +1,7 @@
 import { parseImportFile, type ParsedImportData } from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { UploadCloudIcon, UploadIcon } from "lucide-react";
+import { LoaderIcon, UploadCloudIcon, UploadIcon } from "lucide-react";
 import { Suspense, lazy, useRef, useState, type ChangeEvent } from "react";
 
 const ImportPreviewDialog = lazy(() =>
@@ -85,7 +85,13 @@ export function RestoreLibrarySetting() {
 			</button>
 
 			{parsedData && (
-				<Suspense fallback={null}>
+				<Suspense
+					fallback={
+						<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+							<LoaderIcon className="h-6 w-6 animate-spin text-muted-foreground" />
+						</div>
+					}
+				>
 					<ImportPreviewDialog
 						isOpen={isImportPreviewOpen}
 						onClose={() => {
