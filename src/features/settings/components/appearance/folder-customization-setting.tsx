@@ -32,7 +32,7 @@ const SEGMENTS = [
 	{ id: "custom", label: "Custom", icon: PipetteIcon },
 ] as const;
 
-export function FolderColorControl() {
+export function FolderColorControl({ variant = "default" }: { variant?: "default" | "compact" }) {
 	const { folderColorMode, folderColorBack, folderColorFront, folderColorPaper } = useSettingsStore(
 		(state) => state.settings.appearanceSettings,
 	);
@@ -105,7 +105,14 @@ export function FolderColorControl() {
 	return (
 		<div className="flex w-full flex-col gap-4">
 			{/* Segmented Control */}
-			<div className="flex w-full flex-row gap-1 overflow-x-auto rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex-nowrap sm:overflow-visible">
+			<div
+				className={cn(
+					"flex w-full flex-row gap-1 rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+					variant === "compact"
+						? "flex-wrap sm:flex-wrap"
+						: "overflow-x-auto sm:flex-nowrap sm:overflow-visible",
+				)}
+			>
 				{SEGMENTS.map((segment) => {
 					const Icon = segment.icon;
 					const isActive = folderColorMode === segment.id;
@@ -115,7 +122,8 @@ export function FolderColorControl() {
 							type="button"
 							onClick={() => handleModeChange(segment.id)}
 							className={cn(
-								"group flex flex-1 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg px-2 py-2 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:flex-row sm:gap-2 sm:px-3 sm:py-1.5",
+								"group flex flex-1 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg px-2 py-2 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:gap-2 sm:px-3 sm:py-1.5",
+								variant === "compact" ? "flex-col" : "sm:flex-row",
 								isActive
 									? "bg-background text-foreground shadow-engraved"
 									: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
@@ -131,7 +139,8 @@ export function FolderColorControl() {
 							/>
 							<span
 								className={cn(
-									"text-xs font-medium transition-colors sm:text-sm",
+									"text-xs font-medium transition-colors",
+									variant === "compact" ? "text-[10px] sm:text-[10px]" : "sm:text-sm",
 									isActive
 										? "text-foreground"
 										: "text-muted-foreground group-hover:text-foreground",
@@ -146,7 +155,14 @@ export function FolderColorControl() {
 
 			<div className="pt-2">
 				{folderColorMode === "preset" && (
-					<div className="grid animate-in grid-cols-2 gap-3 fade-in sm:grid-cols-3 md:grid-cols-4">
+					<div
+						className={cn(
+							"grid animate-in fade-in",
+							variant === "compact"
+								? "grid-cols-1 gap-2 sm:grid-cols-5 sm:gap-1.5"
+								: "grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4",
+						)}
+					>
 						{FOLDER_PRESETS.map((preset) => {
 							const isActive =
 								folderColorMode === "preset" &&
@@ -157,14 +173,23 @@ export function FolderColorControl() {
 									key={preset.id}
 									type="button"
 									onClick={() => applyPreset(preset)}
+									title={preset.label}
 									className={cn(
-										"group flex min-w-0 items-center gap-2 rounded-xl p-2 pr-3 text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+										"group flex min-w-0 items-center transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+										variant === "compact"
+											? "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:aspect-square sm:justify-center sm:gap-0 sm:rounded-lg sm:pr-2 sm:supports-[corner-shape:squircle]:rounded-xl"
+											: "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
 										isActive
 											? "bg-background text-foreground shadow-engraved"
 											: "border border-border/40 bg-muted/20",
 									)}
 								>
-									<div className="flex h-8 w-8 shrink-0 items-center justify-center transition-transform group-hover:scale-105 sm:h-9 sm:w-9">
+									<div
+										className={cn(
+											"flex shrink-0 items-center justify-center transition-transform group-hover:scale-105",
+											variant === "compact" ? "h-8 w-8" : "h-8 w-8 sm:h-9 sm:w-9",
+										)}
+									>
 										<FolderIcon
 											className="h-full w-full drop-shadow-sm"
 											style={
@@ -179,6 +204,7 @@ export function FolderColorControl() {
 									<span
 										className={cn(
 											"truncate text-sm font-medium transition-colors",
+											variant === "compact" && "sm:hidden",
 											isActive
 												? "text-foreground"
 												: "text-muted-foreground group-hover:text-foreground",
@@ -193,8 +219,18 @@ export function FolderColorControl() {
 				)}
 
 				{folderColorMode === "complement" && (
-					<div className="flex w-full animate-in flex-col fade-in sm:flex-row">
-						<div className="group relative flex w-full items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-[calc(33.333%-0.5rem)]">
+					<div
+						className={cn(
+							"flex w-full animate-in flex-col fade-in",
+							variant === "compact" ? "gap-3" : "sm:flex-row",
+						)}
+					>
+						<div
+							className={cn(
+								"group relative flex w-full items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+								variant !== "compact" && "sm:w-[calc(33.333%-0.5rem)]",
+							)}
+						>
 							<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 								<DebouncedColorPicker
 									id="fc-base"
@@ -216,7 +252,12 @@ export function FolderColorControl() {
 				)}
 
 				{folderColorMode === "custom" && (
-					<div className="flex w-full animate-in flex-col gap-3 fade-in sm:flex-row">
+					<div
+						className={cn(
+							"grid w-full animate-in gap-3 fade-in",
+							variant === "compact" ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-3",
+						)}
+					>
 						{CUSTOM_PICKERS.map((picker) => {
 							const colorValues = {
 								folderColorBack,
@@ -228,7 +269,7 @@ export function FolderColorControl() {
 							return (
 								<div
 									key={picker.id}
-									className="group relative flex flex-1 items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
+									className="group relative flex items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
 								>
 									<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 										<DebouncedColorPicker
@@ -240,10 +281,10 @@ export function FolderColorControl() {
 										/>
 									</div>
 									<div
-										className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+										className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-10 sm:w-10"
 										style={{ backgroundColor: value }}
 									/>
-									<span className="text-sm font-medium whitespace-nowrap text-foreground">
+									<span className="truncate text-xs font-medium text-foreground sm:text-sm">
 										{picker.label}
 									</span>
 								</div>
@@ -254,23 +295,29 @@ export function FolderColorControl() {
 			</div>
 
 			{/* Dedicated Live Preview Section */}
-			<div className="mt-2 flex flex-col items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex-row sm:gap-6 sm:p-5">
-				<div className="flex flex-col items-center gap-1.5 text-center sm:items-start sm:text-left">
-					<span className="text-sm font-semibold text-primary">Live Preview</span>
-					<span className="max-w-70 text-xs leading-relaxed text-muted-foreground">
-						This is how your folders will look across your library. A little touch of
-						personalization makes your workspace truly yours.
-					</span>
+			{variant !== "compact" && (
+				<div className="mt-2 flex flex-col items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex-row sm:gap-6 sm:p-5">
+					<div className="flex flex-col items-center gap-1.5 text-center sm:items-start sm:text-left">
+						<span className="text-sm font-semibold text-primary">Live Preview</span>
+						<span className="max-w-70 text-xs leading-relaxed text-muted-foreground">
+							This is how your folders will look across your library. A little touch of
+							personalization makes your workspace truly yours.
+						</span>
+					</div>
+					<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-background/50 shadow-inner ring-1 ring-border/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:h-24 sm:w-24">
+						<FolderIcon className="size-12 drop-shadow-md transition-all sm:size-16" />
+					</div>
 				</div>
-				<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-background/50 shadow-inner ring-1 ring-border/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:h-24 sm:w-24">
-					<FolderIcon className="size-12 drop-shadow-md transition-all sm:size-16" />
-				</div>
-			</div>
+			)}
 		</div>
 	);
 }
 
-export function FolderCustomizationSetting() {
+export function FolderCustomizationSetting({
+	variant = "default",
+}: {
+	variant?: "default" | "compact";
+}) {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
 	const handleReset = () => {
@@ -286,6 +333,10 @@ export function FolderCustomizationSetting() {
 		});
 	};
 
+	if (variant === "compact") {
+		return <FolderColorControl variant="compact" />;
+	}
+
 	return (
 		<div className="flex flex-col gap-4 py-5 first:pt-0 last:pb-0 sm:py-6 sm:first:pt-0 sm:last:pb-0">
 			<div className="space-y-1">
@@ -298,7 +349,7 @@ export function FolderCustomizationSetting() {
 				</p>
 			</div>
 			<div className="flex w-full shrink-0 flex-col gap-4 pt-2">
-				<FolderColorControl />
+				<FolderColorControl variant="default" />
 			</div>
 		</div>
 	);

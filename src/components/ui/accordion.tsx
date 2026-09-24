@@ -1,7 +1,7 @@
-import { type ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import { Accordion as AccordionPrimitive } from "radix-ui";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { Accordion as AccordionPrimitive } from "radix-ui";
+import { type ComponentProps } from "react";
 
 function Accordion({ className, ...props }: ComponentProps<typeof AccordionPrimitive.Root>) {
 	return (
@@ -65,7 +65,7 @@ function AccordionContent({
 		>
 			<div
 				className={cn(
-					"h-(--radix-accordion-content-height) pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+					"pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
 					className,
 				)}
 			>
@@ -75,4 +75,4 @@ function AccordionContent({
 	);
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };

@@ -21,8 +21,10 @@ const ACCENT_PRESETS: AccentPreset[] = [
 ];
 export function AccentColorControl({
 	"aria-label": ariaLabel,
+	variant = "default",
 }: {
 	"aria-label"?: string;
+	variant?: "default" | "compact";
 } = {}) {
 	const accentColor = useSettingsStore((state) => state.settings.appearanceSettings.accentColor);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
@@ -46,7 +48,13 @@ export function AccentColorControl({
 		!ACCENT_PRESETS.some((p) => p.id === accentColor) && accentColor !== "foreground";
 
 	return (
-		<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+		<div
+			className={cn(
+				variant === "default"
+					? "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
+					: "grid grid-cols-6 gap-2",
+			)}
+		>
 			{ACCENT_PRESETS.map((preset) => {
 				const displayColor = preset.color ?? defaultForeground;
 
@@ -56,7 +64,10 @@ export function AccentColorControl({
 						type="button"
 						onClick={() => handleUpdate(preset.id)}
 						className={cn(
-							"group flex min-w-0 items-center gap-2 rounded-xl p-2 pr-3 text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+							"group flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+							variant === "default"
+								? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4"
+								: "aspect-square w-full justify-center p-1",
 							accentColor === preset.id
 								? "bg-background text-foreground shadow-engraved"
 								: "border border-border/40 bg-muted/20",
@@ -64,7 +75,8 @@ export function AccentColorControl({
 					>
 						<div
 							className={cn(
-								"flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-9 sm:w-9",
+								"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+								variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "h-full w-full",
 								accentColor === preset.id ? "ring-primary/50" : "ring-border/50 hover:ring-border",
 							)}
 							style={{ backgroundColor: displayColor }}
@@ -79,23 +91,28 @@ export function AccentColorControl({
 								/>
 							)}
 						</div>
-						<span
-							className={cn(
-								"truncate text-sm font-medium transition-colors",
-								accentColor === preset.id
-									? "text-foreground"
-									: "text-muted-foreground group-hover:text-foreground",
-							)}
-						>
-							{preset.label}
-						</span>
+						{variant === "default" && (
+							<span
+								className={cn(
+									"truncate text-sm font-medium transition-colors",
+									accentColor === preset.id
+										? "text-foreground"
+										: "text-muted-foreground group-hover:text-foreground",
+								)}
+							>
+								{preset.label}
+							</span>
+						)}
 					</button>
 				);
 			})}
 
 			<div
 				className={cn(
-					"group relative flex min-w-0 items-center gap-2 rounded-xl p-2 pr-3 text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+					"group relative flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+					variant === "default"
+						? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4"
+						: "aspect-square w-full justify-center p-1",
 					isCustom
 						? "bg-background text-foreground shadow-engraved"
 						: "border border-border/40 bg-muted/20",
@@ -112,7 +129,8 @@ export function AccentColorControl({
 				</div>
 				<div
 					className={cn(
-						"flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-9 sm:w-9",
+						"flex shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+						variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "h-full w-full",
 						isCustom ? "ring-primary/50" : "ring-border/50 hover:ring-border",
 					)}
 					style={{ backgroundColor: isCustom ? resolvedColor : "transparent" }}
@@ -121,14 +139,16 @@ export function AccentColorControl({
 						<PlusIcon className="h-4 w-4 text-muted-foreground group-hover:text-foreground sm:h-5 sm:w-5" />
 					)}
 				</div>
-				<span
-					className={cn(
-						"truncate text-sm font-medium transition-colors",
-						isCustom ? "text-foreground" : "text-muted-foreground group-hover:text-foreground",
-					)}
-				>
-					Custom
-				</span>
+				{variant === "default" && (
+					<span
+						className={cn(
+							"truncate text-sm font-medium transition-colors",
+							isCustom ? "text-foreground" : "text-muted-foreground group-hover:text-foreground",
+						)}
+					>
+						Custom
+					</span>
+				)}
 			</div>
 		</div>
 	);

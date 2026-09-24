@@ -29,7 +29,7 @@ export function WorkspaceThemeControl({
 			className={cn(
 				variant === "default"
 					? "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
-					: "grid grid-cols-4 gap-x-2 gap-y-6 sm:grid-cols-5",
+					: "grid grid-cols-6 gap-2",
 			)}
 		>
 			{WORKSPACE_THEMES.map((t) => (
@@ -38,7 +38,10 @@ export function WorkspaceThemeControl({
 					type="button"
 					onClick={() => setTheme(t.id as Theme)}
 					className={cn(
-						"group flex min-w-0 items-center gap-2 rounded-xl  p-2 pr-3 text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+						"group flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+						variant === "default"
+							? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4"
+							: "aspect-square w-full justify-center p-1",
 						theme === t.id
 							? "bg-background text-foreground shadow-engraved"
 							: "border bg-muted/20 not-first:border-border/40",
@@ -46,7 +49,8 @@ export function WorkspaceThemeControl({
 				>
 					<div
 						className={cn(
-							"flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-9 sm:w-9",
+							"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+							variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "h-full w-full",
 							theme === t.id ? "ring-primary/50" : "ring-border/50 hover:ring-border",
 						)}
 						style={{ background: t.bg }}
@@ -55,16 +59,18 @@ export function WorkspaceThemeControl({
 							<CheckIcon className="h-4 w-4 drop-shadow-sm sm:h-5 sm:w-5" style={{ color: t.fg }} />
 						)}
 					</div>
-					<span
-						className={cn(
-							"truncate text-sm font-medium transition-colors",
-							theme === t.id
-								? "text-foreground"
-								: "text-muted-foreground group-hover:text-foreground",
-						)}
-					>
-						{t.label}
-					</span>
+					{variant === "default" && (
+						<span
+							className={cn(
+								"truncate text-sm font-medium transition-colors",
+								theme === t.id
+									? "text-foreground"
+									: "text-muted-foreground group-hover:text-foreground",
+							)}
+						>
+							{t.label}
+						</span>
+					)}
 				</button>
 			))}
 		</div>
