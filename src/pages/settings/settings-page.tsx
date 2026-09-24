@@ -4,14 +4,14 @@ import { LoaderIcon, SettingsIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, lazy, useEffect, useRef } from "react";
 
+const DataStorageSection = lazy(() =>
+	import("@/features/settings/components/data-storage").then((m) => ({
+		default: m.DataStorageSection,
+	})),
+);
 const AppearanceSection = lazy(() =>
 	import("@/features/settings/components/appearance").then((m) => ({
 		default: m.AppearanceSection,
-	})),
-);
-const DataStorageSection = lazy(() =>
-	import("@/features/settings/components/data-storage-section").then((m) => ({
-		default: m.DataStorageSection,
 	})),
 );
 const SoundFxSection = lazy(() =>
