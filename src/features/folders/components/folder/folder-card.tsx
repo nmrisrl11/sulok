@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder } from "@/db/db";
+import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
 import { useIsSelectionMode } from "@/hooks";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
@@ -18,7 +19,6 @@ import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
-import { useFolderActions } from "../../hooks/use-folder-actions";
 
 export const FolderCard = memo(
 	function FolderCard({

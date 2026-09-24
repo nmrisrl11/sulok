@@ -94,9 +94,10 @@ The project is currently in the **core features implementation phase**.
 - [x] Recycle Bin auto-cleanup and retention UI (30 days)
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
-- [x] Global Settings Page (tabbed layout)
+- [x] Global Settings Page (tabbed layout) with Premium Segmented Controls
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization
-- [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, colors, and layout density)
+- [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, and layout density)
+- [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
 - [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
 - [x] Interactive UI Sound FX (cuelume)
