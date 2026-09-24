@@ -124,7 +124,7 @@ export function QuickCustomizeDrawer() {
 								<ResetButton
 									onClick={resetAppearance}
 									className="h-8 w-8 px-0 [&_span]:hidden"
-									aria-label="Reset Appearance"
+									label="Reset Appearance"
 								/>
 							</div>
 							<AccordionContent className="pb-6">
@@ -201,7 +201,7 @@ export function QuickCustomizeDrawer() {
 								<ResetButton
 									onClick={resetSulo}
 									className="h-8 w-8 px-0 [&_span]:hidden"
-									aria-label="Reset Sulo Mascot"
+									label="Reset Sulo Mascot"
 								/>
 							</div>
 							<AccordionContent className="pb-6">
@@ -229,7 +229,7 @@ export function QuickCustomizeDrawer() {
 								<ResetButton
 									onClick={resetSounds}
 									className="h-8 w-8 px-0 [&_span]:hidden"
-									aria-label="Reset Sound FX"
+									label="Reset Sound FX"
 								/>
 							</div>
 							<AccordionContent className="pb-6">

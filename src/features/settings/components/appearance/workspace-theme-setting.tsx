@@ -37,6 +37,7 @@ export function WorkspaceThemeControl({
 					key={t.id}
 					type="button"
 					onClick={() => setTheme(t.id as Theme)}
+					aria-label={variant === "compact" ? t.label : undefined}
 					className={cn(
 						"group flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 						variant === "default"

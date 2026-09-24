@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
 import type { AppearanceSettings, FolderColorMode } from "@/types/settings";
 import { PaletteIcon, PipetteIcon, WandSparklesIcon } from "lucide-react";
+import { useId } from "react";
 import { DebouncedColorPicker } from "./debounced-color-picker";
 
 type CustomColorPickerConfig = {
@@ -33,6 +34,7 @@ const SEGMENTS = [
 ] as const;
 
 export function FolderColorControl({ variant = "default" }: { variant?: "default" | "compact" }) {
+	const componentId = useId();
 	const { folderColorMode, folderColorBack, folderColorFront, folderColorPaper } = useSettingsStore(
 		(state) => state.settings.appearanceSettings,
 	);
@@ -44,7 +46,9 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 		if (currentSettings.folderColorMode === "complement" && val === "custom") {
 			// Commit any pending DebouncedColorPicker base-color value
 			let baseHex = currentSettings.folderColorBack;
-			const basePicker = document.getElementById("fc-base") as HTMLInputElement | null;
+			const basePicker = document.getElementById(
+				`fc-base-${componentId}`,
+			) as HTMLInputElement | null;
 			if (basePicker && basePicker.value !== baseHex) {
 				baseHex = basePicker.value;
 			}
@@ -233,7 +237,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 						>
 							<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 								<DebouncedColorPicker
-									id="fc-base"
+									id={`fc-base-${componentId}`}
 									aria-label="Base Color"
 									value={folderColorBack}
 									onChange={(val) => handleColorChange("folderColorBack", val)}
@@ -273,7 +277,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 								>
 									<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 										<DebouncedColorPicker
-											id={picker.id}
+											id={`${picker.id}-${componentId}`}
 											aria-label={picker.label}
 											value={value}
 											onChange={(val) => handleColorChange(picker.key, val)}

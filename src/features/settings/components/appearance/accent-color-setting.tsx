@@ -63,6 +63,7 @@ export function AccentColorControl({
 						key={preset.id}
 						type="button"
 						onClick={() => handleUpdate(preset.id)}
+						aria-label={variant === "compact" ? preset.label : undefined}
 						className={cn(
 							"group flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 							variant === "default"

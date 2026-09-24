@@ -22,7 +22,8 @@
 
 - Settings Layout Shifts: Fixed a layout shift issue where the initial loading skeleton for the Settings page did not correctly mirror the new modular tab architecture and card layout.
 - Sulo Customization: Fixed a bug where resetting Sulo Whispers or global settings wouldn't immediately clear unsaved edits from the form.
-- Accessibility: Fixed missing ARIA labels on Sulo Expressions dropdown controls.
+- Folder Customization: Fixed a bug where edits made in the Quick Customize Drawer's color picker would sometimes inherit or overwrite the hidden color picker's value in the main Settings page due to colliding DOM element IDs.
+- Accessibility: Fixed missing ARIA labels on Sulo Expressions dropdown controls, compact accent preset buttons, and workspace theme buttons. Ensured Reset buttons properly announce their specific target settings.
 
 ### Removed
 
