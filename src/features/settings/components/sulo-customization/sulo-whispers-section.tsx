@@ -70,14 +70,28 @@ export function SuloWhispersSection() {
 
 	const handleRestoreWhispers = useCallback(() => {
 		const currentSettings = useSettingsStore.getState().settings.suloSettings;
+		const restoredWhispers = {
+			positive: [...WHISPER_PHRASES.positive],
+			negative: [...WHISPER_PHRASES.negative],
+			warning: [...WHISPER_PHRASES.warning],
+			info: [...WHISPER_PHRASES.info],
+		};
 		updateSettings({
 			suloSettings: {
 				...currentSettings,
-				whispers: WHISPER_PHRASES,
+				whispers: restoredWhispers,
 			},
 		});
+
+		form.reset({
+			positive: mapPhrasesToForm(restoredWhispers.positive),
+			negative: mapPhrasesToForm(restoredWhispers.negative),
+			warning: mapPhrasesToForm(restoredWhispers.warning),
+			info: mapPhrasesToForm(restoredWhispers.info),
+		});
+
 		notify.success("Whispers restored", { id: "restore-whispers" });
-	}, [updateSettings]);
+	}, [updateSettings, form]);
 
 	const onSubmit = (data: WhispersFormValues) => {
 		const newWhispers = {

@@ -16,6 +16,11 @@
 - Folder Customization: Added new preset, complementary, and custom folder color options to further personalize your workspace.
 - Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.
 
+### Fixed
+
+- Sulo Customization: Fixed a bug where resetting Sulo Whispers or global settings wouldn't immediately clear unsaved edits from the form.
+- Accessibility: Fixed missing ARIA labels on Sulo Expressions dropdown controls.
+
 ---
 
 ## Changelog Format

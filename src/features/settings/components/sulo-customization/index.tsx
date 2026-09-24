@@ -8,7 +8,7 @@ export function SuloCustomizationSection() {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
 	const handleRestoreAll = () => {
-		updateSettings({ suloSettings: defaultSettings.suloSettings });
+		updateSettings({ suloSettings: structuredClone(defaultSettings.suloSettings) });
 		notify.success("Sulo settings restored", { id: "restore-all-sulo" });
 	};
 

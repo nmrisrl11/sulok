@@ -54,7 +54,12 @@ const ExpressionCard = memo(function ExpressionCard({
 						<SuloMascot expression={currentExpr} className="h-6 w-6" />
 					</div>
 					<div className="space-y-0.5">
-						<h4 className="text-sm leading-none font-semibold text-foreground">{label}</h4>
+						<h4
+							id={`expression-title-${id}`}
+							className="text-sm leading-none font-semibold text-foreground"
+						>
+							{label}
+						</h4>
 						<p className="text-xs text-muted-foreground">{description}</p>
 					</div>
 				</div>
@@ -74,6 +79,7 @@ const ExpressionCard = memo(function ExpressionCard({
 					>
 						<SelectTrigger
 							id={`expression-${id}`}
+							aria-labelledby={`expression-title-${id}`}
 							className="w-full bg-background capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 						>
 							<SelectValue>
