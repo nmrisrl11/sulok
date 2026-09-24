@@ -17,11 +17,9 @@ import {
 	LayoutDensityControl,
 	WorkspaceThemeControl,
 } from "@/features/settings/components/appearance-section";
-import {
-	AudioSignaturesControl,
-	SoundSettingsControl,
-	VolumeControl,
-} from "@/features/settings/components/sound-settings-section";
+import { AudioSignaturesControl } from "@/features/settings/components/sound-fx/audio-signatures-setting";
+import { VolumeControl } from "@/features/settings/components/sound-fx/master-volume-setting";
+import { SoundSettingsControl } from "@/features/settings/components/sound-fx/play-interaction-sounds-setting";
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-expressions-section";
 import { useSoundEffects } from "@/hooks";
 import { type SuloExpression } from "@/stores";
@@ -156,7 +154,7 @@ export function QuickCustomizeSheet() {
 											<VolumeControl />
 											<div className="pt-2">
 												<h4 className="mb-3 text-sm font-medium">Audio Signatures</h4>
-												<AudioSignaturesControl variant="compact" />
+												<AudioSignaturesControl />
 											</div>
 										</>
 									)}

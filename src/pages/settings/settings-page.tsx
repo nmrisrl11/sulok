@@ -14,9 +14,9 @@ const DataStorageSection = lazy(() =>
 		default: m.DataStorageSection,
 	})),
 );
-const SoundSettingsSection = lazy(() =>
-	import("@/features/settings/components/sound-settings-section").then((m) => ({
-		default: m.SoundSettingsSection,
+const SoundFxSection = lazy(() =>
+	import("@/features/settings/components/sound-fx/sound-fx-section").then((m) => ({
+		default: m.SoundFxSection,
 	})),
 );
 const SuloCustomizationSection = lazy(() =>
@@ -85,7 +85,7 @@ export function SettingsPage() {
 			case "appearance":
 				return <AppearanceSection />;
 			case "sounds":
-				return <SoundSettingsSection />;
+				return <SoundFxSection />;
 			case "sulo":
 				return <SuloCustomizationSection />;
 			default:

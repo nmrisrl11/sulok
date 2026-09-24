@@ -10,6 +10,8 @@
 ### Changed
 
 - Polished Settings UI: Upgraded Theme and Interface layout controls with beautifully animated segmented buttons, replacing standard dropdowns for a more premium feel.
+- Settings Architecture: Code-split and modularized the Sound FX settings section into dedicated, isolated components for better maintainability.
+- Accessibility: Updated settings toggles to use native Label components for improved screen reader support and clickable hit areas.
 - Folder Customization: Added new preset, complementary, and custom folder color options to further personalize your workspace.
 - Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.
 

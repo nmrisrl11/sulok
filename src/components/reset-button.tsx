@@ -7,6 +7,7 @@ interface ResetButtonProps {
 	label?: string;
 	icon?: LucideIcon;
 	className?: string;
+	disabled?: boolean;
 }
 
 export function ResetButton({
@@ -14,6 +15,7 @@ export function ResetButton({
 	label = "Reset",
 	icon: Icon = RotateCcwIcon,
 	className,
+	disabled,
 }: ResetButtonProps) {
 	return (
 		<Button
@@ -22,6 +24,7 @@ export function ResetButton({
 			size="sm"
 			onClick={onClick}
 			aria-label={label}
+			disabled={disabled}
 			className={cn("shrink-0 text-xs", className)}
 		>
 			<Icon className="h-3.5 w-3.5" />
