@@ -22,9 +22,7 @@ import { VolumeControl } from "@/features/settings/components/sound-fx/master-vo
 import { SoundSettingsControl } from "@/features/settings/components/sound-fx/play-interaction-sounds-setting";
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-expressions-section";
 import { useSoundEffects } from "@/hooks";
-import { type SuloExpression } from "@/stores";
-import { useSettingsStore } from "@/stores";
-import { useUIStore } from "@/stores";
+import { useSettingsStore, useUIStore, type SuloExpression } from "@/stores";
 import { WandSparklesIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 
@@ -152,10 +150,7 @@ export function QuickCustomizeSheet() {
 									{enabled && (
 										<>
 											<VolumeControl />
-											<div className="pt-2">
-												<h4 className="mb-3 text-sm font-medium">Audio Signatures</h4>
-												<AudioSignaturesControl />
-											</div>
+											<AudioSignaturesControl />
 										</>
 									)}
 								</div>

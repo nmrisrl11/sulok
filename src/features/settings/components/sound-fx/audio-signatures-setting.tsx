@@ -47,6 +47,7 @@ function AudioSignatureDropdown({
 			<DropdownMenu>
 				<DropdownMenuTrigger
 					disabled={!enabled}
+					aria-label={`${label} sound: ${value}`}
 					className="flex items-center gap-2 rounded-lg bg-background px-3 py-1.5 text-xs font-medium text-foreground shadow-sm ring-1 ring-border/50 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<ActiveIcon className="h-3.5 w-3.5 text-muted-foreground" />
@@ -102,7 +103,11 @@ export function AudioSignaturesControl() {
 			<div className="space-y-1">
 				<div className="flex items-center justify-between gap-4">
 					<h3 className="text-sm font-medium text-foreground">Audio Signatures</h3>
-					<ResetButton onClick={handleReset} disabled={!enabled} />
+					<ResetButton
+						onClick={handleReset}
+						disabled={!enabled}
+						aria-label="Reset audio signatures"
+					/>
 				</div>
 				<p className="w-full text-sm text-muted-foreground sm:max-w-md">
 					Choose which sound plays for different types of interactions.

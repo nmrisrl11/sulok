@@ -50,7 +50,7 @@ export function VolumeControl() {
 			<div className="space-y-1">
 				<div className="flex items-center justify-between gap-4">
 					<h3 className="text-sm font-medium text-foreground">Master Volume</h3>
-					<ResetButton onClick={handleReset} disabled={!enabled} />
+					<ResetButton onClick={handleReset} disabled={!enabled} aria-label="Reset master volume" />
 				</div>
 				<p className="w-full text-sm text-muted-foreground sm:max-w-md">
 					Adjust the overall volume of sound effects across the application.

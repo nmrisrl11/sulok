@@ -2,8 +2,10 @@ import { ResetButton } from "@/components/reset-button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { defaultSettings, useSettingsStore } from "@/stores";
+import { useId } from "react";
 
 export function SoundSettingsControl() {
+	const switchId = useId();
 	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
@@ -24,7 +26,7 @@ export function SoundSettingsControl() {
 			<div className="space-y-1">
 				<div className="flex items-center justify-between gap-4">
 					<h3 className="text-sm font-medium text-foreground">Play Interaction Sounds</h3>
-					<ResetButton onClick={handleReset} />
+					<ResetButton onClick={handleReset} aria-label="Reset interaction sounds" />
 				</div>
 				<p className="w-full text-sm text-muted-foreground sm:max-w-md">
 					Play audio feedback for interactions like navigating or saving items.
@@ -32,10 +34,10 @@ export function SoundSettingsControl() {
 			</div>
 			<div className="flex w-full shrink-0 flex-col gap-4 pt-2">
 				<div className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/20 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
-					<Label htmlFor="enable-sound" className="text-sm font-medium">
+					<Label htmlFor={switchId} className="text-sm font-medium">
 						Enable Sound FX
 					</Label>
-					<Switch id="enable-sound" checked={enabled} onCheckedChange={handleEnabledChange} />
+					<Switch id={switchId} checked={enabled} onCheckedChange={handleEnabledChange} />
 				</div>
 			</div>
 		</div>
