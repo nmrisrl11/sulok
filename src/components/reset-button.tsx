@@ -24,7 +24,7 @@ export function ResetButton({
 			aria-label={label}
 			className={cn("shrink-0 text-xs", className)}
 		>
-			<Icon className="h-3.5 w-3.5" data-icon="inline-start" />
+			<Icon className="h-3.5 w-3.5" />
 			<span className="hidden sm:inline">{label}</span>
 		</Button>
 	);

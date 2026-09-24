@@ -4,6 +4,7 @@ import type { SoundName } from "cuelume";
 export type AccentColor = string;
 export type CornerStyle = "squircle" | "standard" | "custom";
 export type LayoutDensity = "compact" | "cozy" | "custom";
+export type FolderColorMode = "preset" | "complement" | "custom";
 
 export interface PrivacySettings {
 	enableReferralTracking: boolean;
@@ -15,6 +16,10 @@ export interface AppearanceSettings {
 	customCornerRadius: number;
 	layoutDensity: LayoutDensity;
 	customLayoutDensity: number;
+	folderColorMode: FolderColorMode;
+	folderColorBack: string;
+	folderColorFront: string;
+	folderColorPaper: string;
 }
 
 export interface SoundSettings {
