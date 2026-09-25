@@ -2,9 +2,9 @@ import { ResetButton } from "@/components/reset-button";
 import { APP_INFO } from "@/constants/app-info";
 import { defaultSettings, useSettingsStore } from "@/stores";
 import { SettingsCard } from "../settings-card";
-import { AudioSignaturesControl } from "./audio-signatures-setting";
-import { VolumeControl } from "./master-volume-setting";
-import { SoundSettingsControl } from "./play-interaction-sounds-setting";
+import { AudioSignaturesSetting } from "./audio-signatures-setting";
+import { VolumeSetting } from "./master-volume-setting";
+import { SoundSettingsSetting } from "./play-interaction-sounds-setting";
 
 export function SoundFxSection() {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
@@ -37,9 +37,9 @@ export function SoundFxSection() {
 					</h3>
 					<SettingsCard className="p-0 sm:p-0">
 						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
-							<SoundSettingsControl />
-							<VolumeControl />
-							<AudioSignaturesControl />
+							<SoundSettingsSetting />
+							<VolumeSetting />
+							<AudioSignaturesSetting />
 						</div>
 					</SettingsCard>
 				</div>

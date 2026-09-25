@@ -10,10 +10,10 @@
 ### Changed
 
 - Polished Settings UI: Upgraded Theme and Interface layout controls with beautifully animated segmented buttons, replacing standard dropdowns for a more premium feel.
-- Quick Customize UI: Upgraded the Quick Customize side panel to use the responsive Drawer component with space-efficient accordion sections, perfectly aligning its aesthetic and animations with the rest of the application.
+- Quick Customize UI: Upgraded the Quick Customize side panel to use the responsive Drawer component with space-efficient accordion sections, perfectly aligning its aesthetic and animations with the rest of the application. Reordered sections logically (Appearance > Sound FX > Sulo Customization) and improved Sound FX responsiveness.
 - Sulo Customization: Redesigned the Expressions and Whispers settings to match the premium, cohesive card layout used in the rest of the app.
 - Data & Storage UI: Redesigned the Data & Storage settings layout to match the premium, cohesive card layout used across other settings tabs, and improved responsive text scaling.
-- Settings Architecture: Code-split and modularized the Appearance, Sound FX, Sulo Customization, and Data & Storage settings sections into dedicated, isolated component folders (using an `index.tsx` convention) for better maintainability. Furthermore, heavy components like the Import Preview Dialog are now lazily loaded to reduce the initial bundle size.
+- Settings Architecture: Code-split and modularized the Appearance, Sound FX, Sulo Customization, and Data & Storage settings sections into dedicated, isolated component folders (using an `index.tsx` convention and `controls.ts` for reusing base inputs) for better maintainability. Furthermore, heavy components like the Import Preview Dialog are now lazily loaded to reduce the initial bundle size.
 - Accessibility: Updated settings toggles to use native Label components, properly generated unique IDs via `useId()`, and added accessible names to reset buttons and dropdown triggers for improved screen reader support.
 - Folder Customization: Added new preset, complementary, and custom folder color options to further personalize your workspace.
 - Development: Deep relative imports (`../../`) are now strictly banned in the codebase by a custom `oxlint` rule to enforce clean absolute `@/` import boundaries.

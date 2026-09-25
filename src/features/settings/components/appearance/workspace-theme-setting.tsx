@@ -39,20 +39,20 @@ export function WorkspaceThemeControl({
 					onClick={() => setTheme(t.id as Theme)}
 					aria-label={variant === "compact" ? t.label : undefined}
 					className={cn(
-						"group flex min-w-0 items-center rounded-xl text-left transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
-						variant === "default"
-							? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4"
-							: "aspect-square w-full justify-center p-1",
+						"group flex min-w-0 items-center rounded-xl text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+						variant === "default" ? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4" : "w-full justify-center p-1",
 						theme === t.id
-							? "bg-background text-foreground shadow-engraved"
-							: "border bg-muted/20 not-first:border-border/40",
+							? "bg-background shadow-engraved"
+							: "border bg-muted/20 not-first:border-border/40 hover:bg-muted/50",
 					)}
 				>
 					<div
 						className={cn(
-							"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform group-hover:scale-105 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
-							variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "h-full w-full",
-							theme === t.id ? "ring-primary/50" : "ring-border/50 hover:ring-border",
+							"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+							variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "aspect-square w-full",
+							theme === t.id
+								? "ring-primary/50"
+								: "ring-border/50 group-hover:scale-105 hover:ring-border",
 						)}
 						style={{ background: t.bg }}
 					>

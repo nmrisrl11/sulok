@@ -31,6 +31,35 @@ export function VolumeControl() {
 		}
 	};
 
+	return (
+		<div className="animate-in space-y-4 rounded-xl bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+			<div className="flex items-center justify-between">
+				<h3 className="text-xs text-muted-foreground">Volume Level</h3>
+				<span className="text-xs font-medium text-foreground tabular-nums">
+					{Math.round(localVolume * 100)}%
+				</span>
+			</div>
+			<Slider
+				id="master-volume"
+				min={0}
+				max={1}
+				step={0.01}
+				value={[localVolume]}
+				onValueChange={handleVolumeChange}
+				onValueCommit={handleVolumeCommit}
+				disabled={!enabled}
+				aria-label="Master volume"
+			/>
+		</div>
+	);
+}
+
+export function VolumeSetting() {
+	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const pressMapping = useSettingsStore((state) => state.settings.soundSettings.mappings.press);
+	const { playSound } = useSoundEffects();
+
 	const handleReset = () => {
 		const currentSettings = useSettingsStore.getState().settings.soundSettings;
 		updateSettings({
@@ -57,25 +86,7 @@ export function VolumeControl() {
 				</p>
 			</div>
 			<div className="flex w-full shrink-0 flex-col gap-4 pt-2">
-				<div className="animate-in space-y-4 rounded-xl bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
-					<div className="flex items-center justify-between">
-						<h3 className="text-xs text-muted-foreground">Volume Level</h3>
-						<span className="text-xs font-medium text-foreground tabular-nums">
-							{Math.round(localVolume * 100)}%
-						</span>
-					</div>
-					<Slider
-						id="master-volume"
-						min={0}
-						max={1}
-						step={0.01}
-						value={[localVolume]}
-						onValueChange={handleVolumeChange}
-						onValueCommit={handleVolumeCommit}
-						disabled={!enabled}
-						aria-label="Master volume"
-					/>
-				</div>
+				<VolumeControl />
 			</div>
 		</div>
 	);

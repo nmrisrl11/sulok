@@ -80,7 +80,19 @@ function AudioSignatureDropdown({
 	);
 }
 
-export function AudioSignaturesControl() {
+export function AudioSignaturesControl({
+	variant = "default",
+}: { variant?: "default" | "compact" } = {}) {
+	return (
+		<div className={`grid gap-3 ${variant === "default" ? "sm:grid-cols-2" : "grid-cols-1"}`}>
+			{INTERACTION_TYPES.map(({ id, label }) => (
+				<AudioSignatureDropdown key={id} id={id} label={label} />
+			))}
+		</div>
+	);
+}
+
+export function AudioSignaturesSetting() {
 	const enabled = useSettingsStore((state) => state.settings.soundSettings.enabled);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
@@ -113,10 +125,8 @@ export function AudioSignaturesControl() {
 					Choose which sound plays for different types of interactions.
 				</p>
 			</div>
-			<div className="grid gap-3 pt-2 sm:grid-cols-2">
-				{INTERACTION_TYPES.map(({ id, label }) => (
-					<AudioSignatureDropdown key={id} id={id} label={label} />
-				))}
+			<div className="pt-2">
+				<AudioSignaturesControl />
 			</div>
 		</div>
 	);
