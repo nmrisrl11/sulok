@@ -14,6 +14,19 @@ export function SoundSettingsControl() {
 		updateSettings({ soundSettings: { ...currentSettings, enabled: enabledValue } });
 	};
 
+	return (
+		<div className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/20 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+			<Label htmlFor={switchId} className="text-sm font-medium">
+				Enable Sound FX
+			</Label>
+			<Switch id={switchId} checked={enabled} onCheckedChange={handleEnabledChange} />
+		</div>
+	);
+}
+
+export function SoundSettingsSetting() {
+	const updateSettings = useSettingsStore((state) => state.updateSettings);
+
 	const handleReset = () => {
 		const currentSettings = useSettingsStore.getState().settings.soundSettings;
 		updateSettings({
@@ -33,12 +46,7 @@ export function SoundSettingsControl() {
 				</p>
 			</div>
 			<div className="flex w-full shrink-0 flex-col gap-4 pt-2">
-				<div className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/20 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
-					<Label htmlFor={switchId} className="text-sm font-medium">
-						Enable Sound FX
-					</Label>
-					<Switch id={switchId} checked={enabled} onCheckedChange={handleEnabledChange} />
-				</div>
+				<SoundSettingsControl />
 			</div>
 		</div>
 	);

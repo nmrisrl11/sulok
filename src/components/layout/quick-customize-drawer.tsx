@@ -21,9 +21,11 @@ import {
 	WorkspaceThemeControl,
 } from "@/features/settings/components/appearance/controls";
 import { FolderColorControl } from "@/features/settings/components/appearance/folder-customization-setting";
-import { AudioSignaturesControl } from "@/features/settings/components/sound-fx/audio-signatures-setting";
-import { VolumeControl } from "@/features/settings/components/sound-fx/master-volume-setting";
-import { SoundSettingsControl } from "@/features/settings/components/sound-fx/play-interaction-sounds-setting";
+import {
+	AudioSignaturesControl,
+	SoundSettingsControl,
+	VolumeControl,
+} from "@/features/settings/components/sound-fx/controls";
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-customization/sulo-expressions-section";
 import { useSoundEffects, useThemeDispatch } from "@/hooks";
 import { defaultSettings, useSettingsStore, useUIStore, type SuloExpression } from "@/stores";
@@ -192,16 +194,71 @@ export function QuickCustomizeDrawer() {
 							</AccordionContent>
 						</AccordionItem>
 
-						{/* SULO */}
-						<AccordionItem value="sulo" className="border-b border-border/50 px-4 sm:px-6">
+						{/* SOUNDS */}
+						<AccordionItem value="sounds" className="border-b border-border/50 px-4 sm:px-6">
 							<div className="flex w-full items-center justify-between">
 								<AccordionTrigger className="flex-1 py-4 hover:no-underline [&>svg]:hidden">
-									<span className="font-semibold">Sulo Mascot</span>
+									<span className="font-semibold">Sound FX</span>
+								</AccordionTrigger>
+								<ResetButton
+									onClick={resetSounds}
+									className="h-8 w-8 px-0 [&_span]:hidden"
+									label="Reset Sound FX"
+								/>
+							</div>
+							<AccordionContent className="pb-6">
+								<div className="animate-in space-y-6 fade-in slide-in-from-top-1">
+									<div className="space-y-3">
+										<div>
+											<h4 className="text-sm font-medium">Play Interaction Sounds</h4>
+											<p className="mb-3 text-xs text-muted-foreground">
+												Play audio feedback for interactions like navigating or saving items.
+											</p>
+										</div>
+										<div className="p-1">
+											<SoundSettingsControl />
+										</div>
+									</div>
+									{enabled && (
+										<>
+											<div className="space-y-3">
+												<div>
+													<h4 className="text-sm font-medium">Master Volume</h4>
+													<p className="mb-3 text-xs text-muted-foreground">
+														Adjust the overall volume of sound effects across the application.
+													</p>
+												</div>
+												<div className="p-1">
+													<VolumeControl />
+												</div>
+											</div>
+											<div className="space-y-3">
+												<div>
+													<h4 className="text-sm font-medium">Audio Signatures</h4>
+													<p className="mb-3 text-xs text-muted-foreground">
+														Choose which sound plays for different types of interactions.
+													</p>
+												</div>
+												<div className="p-1">
+													<AudioSignaturesControl variant="compact" />
+												</div>
+											</div>
+										</>
+									)}
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						{/* SULO */}
+						<AccordionItem value="sulo" className="border-b-0 px-4 sm:px-6">
+							<div className="flex w-full items-center justify-between">
+								<AccordionTrigger className="flex-1 py-4 hover:no-underline [&>svg]:hidden">
+									<span className="font-semibold">Sulo Customization</span>
 								</AccordionTrigger>
 								<ResetButton
 									onClick={resetSulo}
 									className="h-8 w-8 px-0 [&_span]:hidden"
-									label="Reset Sulo Mascot"
+									label="Reset Sulo Customization"
 								/>
 							</div>
 							<AccordionContent className="pb-6">
@@ -216,37 +273,6 @@ export function QuickCustomizeDrawer() {
 											variant="compact"
 										/>
 									</div>
-								</div>
-							</AccordionContent>
-						</AccordionItem>
-
-						{/* SOUNDS */}
-						<AccordionItem value="sounds" className="border-b-0 px-4 sm:px-6">
-							<div className="flex w-full items-center justify-between">
-								<AccordionTrigger className="flex-1 py-4 hover:no-underline [&>svg]:hidden">
-									<span className="font-semibold">Sound FX</span>
-								</AccordionTrigger>
-								<ResetButton
-									onClick={resetSounds}
-									className="h-8 w-8 px-0 [&_span]:hidden"
-									label="Reset Sound FX"
-								/>
-							</div>
-							<AccordionContent className="pb-6">
-								<div className="animate-in space-y-6 fade-in slide-in-from-top-1">
-									<div className="p-1">
-										<SoundSettingsControl />
-									</div>
-									{enabled && (
-										<>
-											<div className="p-1">
-												<VolumeControl />
-											</div>
-											<div className="p-1">
-												<AudioSignaturesControl />
-											</div>
-										</>
-									)}
 								</div>
 							</AccordionContent>
 						</AccordionItem>
