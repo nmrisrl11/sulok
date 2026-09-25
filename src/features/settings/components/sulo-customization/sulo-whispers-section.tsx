@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, QuoteIcon, TrashIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useFieldArray, useForm, type FieldErrors } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import { SettingsCard } from "../settings-card";
 
 function mapPhrasesToForm(phrases: readonly string[]) {
@@ -33,6 +34,7 @@ export function SuloWhispersSection() {
 	// this will NOT trigger a re-render when Sulo expressions are updated.
 	const whispers = useSettingsStore((state) => state.settings.suloSettings.whispers);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const location = useLocation();
 
 	const [activeCategory, setActiveCategory] = useState<keyof WhispersFormValues>("positive");
 
@@ -55,6 +57,17 @@ export function SuloWhispersSection() {
 			info: mapPhrasesToForm(whispers.info),
 		});
 	}, [whispers, form]);
+
+	useEffect(() => {
+		if (location.hash === "#whispers") {
+			const element = document.getElementById("whispers");
+			if (element) {
+				setTimeout(() => {
+					element.scrollIntoView({ behavior: "smooth", block: "start" });
+				}, 100);
+			}
+		}
+	}, [location.hash]);
 
 	const positiveArray = useFieldArray({ control: form.control, name: "positive" });
 	const negativeArray = useFieldArray({ control: form.control, name: "negative" });
@@ -120,7 +133,7 @@ export function SuloWhispersSection() {
 	const activeErrors = form.formState.errors[activeCategory];
 
 	return (
-		<div className="space-y-4">
+		<div id="whispers" className="scroll-mt-24 space-y-4">
 			<div className="flex items-center justify-between gap-4">
 				<h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
 					Whispers

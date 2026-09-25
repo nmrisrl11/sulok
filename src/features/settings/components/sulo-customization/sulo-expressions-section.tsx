@@ -1,6 +1,5 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { ResetButton } from "@/components/reset-button";
-import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -9,10 +8,32 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { notify } from "@/lib/notify";
+import { cn } from "@/lib/utils";
 import { defaultSettings, EXPRESSIONS, useSettingsStore, type SuloExpression } from "@/stores";
 import type { SuloSettings } from "@/types/settings";
 import { memo, useCallback, useState } from "react";
 import { SettingsCard } from "../settings-card";
+
+const ExpressionSelectItems = memo(function ExpressionSelectItems({
+	onHover,
+}: {
+	onHover: (expr: SuloExpression) => void;
+}) {
+	return (
+		<>
+			{EXPRESSIONS.map((expr) => (
+				<SelectItem
+					key={expr}
+					value={expr}
+					className="rounded-md px-3 py-2.5 capitalize"
+					onMouseEnter={() => onHover(expr)}
+				>
+					{expr}
+				</SelectItem>
+			))}
+		</>
+	);
+});
 
 const ExpressionCard = memo(function ExpressionCard({
 	id,
@@ -87,17 +108,7 @@ const ExpressionCard = memo(function ExpressionCard({
 							</SelectValue>
 						</SelectTrigger>
 						<SelectContent position="popper" className="max-h-60" data-no-sound="true">
-							{isOpen &&
-								EXPRESSIONS.map((expr) => (
-									<SelectItem
-										key={expr}
-										value={expr}
-										className="rounded-md px-3 py-2.5 capitalize"
-										onMouseEnter={() => setPreviewExpr(expr)}
-									>
-										{expr}
-									</SelectItem>
-								))}
+							{isOpen && <ExpressionSelectItems onHover={setPreviewExpr} />}
 						</SelectContent>
 					</Select>
 				</div>
@@ -135,142 +146,53 @@ export function SuloExpressionsSection() {
 			</div>
 
 			<SettingsCard className="p-4 sm:p-5">
-				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					<ExpressionCard
-						id="expressionEmptyState"
-						label="Empty Corner"
-						description="When a folder has no links yet."
-					/>
-					<ExpressionCard
-						id="expression404"
-						label="Page Not Found"
-						description="When you visit a broken link."
-					/>
-					<ExpressionCard
-						id="expressionNavbar"
-						label="Main Logo"
-						description="Default state in the navigation bar."
-					/>
-					<ExpressionCard
-						id="expressionQuickAction"
-						label="Quick Action Bar"
-						description="When adding a link via the command bar."
-					/>
-					<ExpressionCard
-						id="expressionPreviewUnavailable"
-						label="Preview Failed"
-						description="When a link's image cannot load."
-					/>
-					<ExpressionCard
-						id="expressionError"
-						label="App Crash"
-						description="When something unexpected goes wrong."
-					/>
-				</div>
+				<SuloExpressionsControl variant="default" />
 			</SettingsCard>
 		</div>
 	);
 }
 
-const CompactExpressionSelect = memo(function CompactExpressionSelect({
-	id,
-	label,
-	description,
-	setPreviewExpression,
-}: {
-	id: keyof SuloSettings;
-	label: string;
-	description: string;
-	setPreviewExpression?: (expr: SuloExpression) => void;
-}) {
-	const value = useSettingsStore((state) => state.settings.suloSettings[id] as SuloExpression);
-	const updateSettings = useSettingsStore((state) => state.updateSettings);
-
-	const handleExpressionChange = (val: SuloExpression) => {
-		const currentSettings = useSettingsStore.getState().settings.suloSettings;
-		updateSettings({
-			suloSettings: {
-				...currentSettings,
-				[id]: val,
-			},
-		});
-		setPreviewExpression?.(val);
-	};
-
-	return (
-		<div className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0">
-			<div className="space-y-1">
-				<Label htmlFor={`expression-compact-${id}`} className="text-sm font-medium text-foreground">
-					{label}
-				</Label>
-				<p className="text-sm text-muted-foreground">{description}</p>
-			</div>
-			<div className="w-full">
-				<Select value={value} onValueChange={(v) => handleExpressionChange(v as SuloExpression)}>
-					<SelectTrigger
-						id={`expression-compact-${id}`}
-						className="w-full capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
-					>
-						<SelectValue>
-							<span className="capitalize">{value}</span>
-						</SelectValue>
-					</SelectTrigger>
-					<SelectContent position="popper" className="max-h-60" data-no-sound="true">
-						{EXPRESSIONS.map((expr) => (
-							<SelectItem key={expr} value={expr} className="rounded-md px-3 py-2.5 capitalize">
-								{expr}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</div>
-		</div>
-	);
-});
-
 export function SuloExpressionsControl({
-	setPreviewExpression,
+	variant = "default",
 }: {
-	setPreviewExpression?: (expr: SuloExpression) => void;
 	variant?: "default" | "compact";
 }) {
 	return (
-		<div className="flex flex-col divide-y divide-border/50">
-			<CompactExpressionSelect
+		<div
+			className={cn(
+				"grid gap-4",
+				variant === "default" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1",
+			)}
+		>
+			<ExpressionCard
 				id="expressionEmptyState"
 				label="Empty Corner"
 				description="When a folder has no links yet."
-				setPreviewExpression={setPreviewExpression}
 			/>
-			<CompactExpressionSelect
+			<ExpressionCard
 				id="expression404"
 				label="Page Not Found"
 				description="When you visit a broken link."
-				setPreviewExpression={setPreviewExpression}
 			/>
-			<CompactExpressionSelect
+			<ExpressionCard
 				id="expressionNavbar"
 				label="Main Logo"
 				description="Default state in the navigation bar."
-				setPreviewExpression={setPreviewExpression}
 			/>
-			<CompactExpressionSelect
+			<ExpressionCard
 				id="expressionQuickAction"
 				label="Quick Action Bar"
 				description="When adding a link via the command bar."
-				setPreviewExpression={setPreviewExpression}
 			/>
-			<CompactExpressionSelect
+			<ExpressionCard
 				id="expressionPreviewUnavailable"
 				label="Preview Failed"
 				description="When a link's image cannot load."
-				setPreviewExpression={setPreviewExpression}
 			/>
-			<CompactExpressionSelect
+			<ExpressionCard
 				id="expressionError"
 				label="App Crash"
 				description="When something unexpected goes wrong."
-				setPreviewExpression={setPreviewExpression}
 			/>
 		</div>
 	);

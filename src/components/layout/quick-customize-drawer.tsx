@@ -17,10 +17,10 @@ import {
 import {
 	AccentColorControl,
 	CornerRadiusControl,
+	FolderColorControl,
 	LayoutDensityControl,
 	WorkspaceThemeControl,
 } from "@/features/settings/components/appearance/controls";
-import { FolderColorControl } from "@/features/settings/components/appearance/folder-customization-setting";
 import {
 	AudioSignaturesControl,
 	SoundSettingsControl,
@@ -28,9 +28,10 @@ import {
 } from "@/features/settings/components/sound-fx/controls";
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-customization/sulo-expressions-section";
 import { useSoundEffects, useThemeDispatch } from "@/hooks";
-import { defaultSettings, useSettingsStore, useUIStore, type SuloExpression } from "@/stores";
+import { defaultSettings, useSettingsStore, useUIStore } from "@/stores";
 import { WandSparklesIcon, XIcon } from "lucide-react";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function QuickCustomizeDrawer() {
 	const isOpen = useUIStore((state) => state.isQuickCustomizeOpen);
@@ -40,8 +41,12 @@ export function QuickCustomizeDrawer() {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const currentSettings = useSettingsStore((state) => state.settings);
 	const setTheme = useThemeDispatch();
+	const navigate = useNavigate();
 
-	const setPreviewExpression = useCallback((_expr: SuloExpression) => {}, []);
+	const handleManageWhispers = () => {
+		close();
+		navigate("/settings?tab=sulo#whispers");
+	};
 
 	useEffect(() => {
 		if (isOpen && enabled) {
@@ -268,10 +273,19 @@ export function QuickCustomizeDrawer() {
 										<p className="mb-3 text-xs text-muted-foreground">How Sulo reacts to events.</p>
 									</div>
 									<div className="p-1">
-										<SuloExpressionsControl
-											setPreviewExpression={setPreviewExpression}
-											variant="compact"
-										/>
+										<SuloExpressionsControl variant="compact" />
+									</div>
+
+									<div className="mt-4 space-y-3 border-t border-border/50 pt-4">
+										<div>
+											<h4 className="text-sm font-medium">Sulo's Whispers</h4>
+											<p className="mb-3 text-xs text-muted-foreground">
+												Manage phrases and how Sulo speaks to you.
+											</p>
+										</div>
+										<Button variant="secondary" className="w-full" onClick={handleManageWhispers}>
+											Customize Whispers
+										</Button>
 									</div>
 								</div>
 							</AccordionContent>
