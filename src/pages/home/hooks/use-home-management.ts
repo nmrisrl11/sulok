@@ -12,7 +12,7 @@ import {
 import { useFolderStore, useItemStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export function useHomeData() {
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -72,6 +72,21 @@ export function useHomeData() {
 		itemsData === undefined || totalItemsData === undefined || foldersData === undefined;
 	const isTotalLoading = totalItemsData === undefined;
 
+	const availableDomains = useMemo(() => {
+		if (!itemsData) return [];
+		const domains = new Set<string>();
+		itemsData.forEach((item) => {
+			try {
+				const url = new URL(item.url);
+				const host = url.hostname.replace(/^www\./, "");
+				if (host) domains.add(host);
+			} catch {
+				// Ignore invalid URLs
+			}
+		});
+		return Array.from(domains).sort();
+	}, [itemsData]);
+
 	let items = itemsData ?? [];
 	let folders = foldersData ?? [];
 	const totalItems = totalItemsData ?? 0;
@@ -80,6 +95,20 @@ export function useHomeData() {
 		items = [];
 	} else if (typeFilter === "links") {
 		folders = [];
+	} else if (typeFilter === "favorites") {
+		items = items.filter((i) => i.isFavorite);
+		folders = folders.filter((f) => f.isFavorite);
+	} else if (typeFilter.startsWith("domain:")) {
+		folders = [];
+		const domain = typeFilter.slice(7);
+		items = items.filter((i) => {
+			try {
+				const host = new URL(i.url).hostname.replace(/^www\./, "");
+				return host === domain;
+			} catch {
+				return false;
+			}
+		});
 	}
 
 	// Clear selection when navigating away from home page or switching views/folders
@@ -116,5 +145,6 @@ export function useHomeData() {
 		totalItems,
 		isLoading,
 		isTotalLoading,
+		availableDomains,
 	};
 }

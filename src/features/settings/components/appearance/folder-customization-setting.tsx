@@ -179,19 +179,20 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 									onClick={() => applyPreset(preset)}
 									title={preset.label}
 									className={cn(
-										"group flex min-w-0 items-center transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+										"group flex min-w-0 items-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 										variant === "compact"
 											? "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:aspect-square sm:justify-center sm:gap-0 sm:rounded-lg sm:pr-2 sm:supports-[corner-shape:squircle]:rounded-xl"
 											: "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
 										isActive
-											? "bg-background text-foreground shadow-engraved"
-											: "border border-border/40 bg-muted/20",
+											? "bg-background shadow-engraved"
+											: "border border-border/40 bg-muted/20 hover:bg-muted/50",
 									)}
 								>
 									<div
 										className={cn(
-											"flex shrink-0 items-center justify-center transition-transform group-hover:scale-105",
+											"flex shrink-0 items-center justify-center transition-transform",
 											variant === "compact" ? "h-8 w-8" : "h-8 w-8 sm:h-9 sm:w-9",
+											!isActive && "group-hover:scale-105",
 										)}
 									>
 										<FolderIcon
