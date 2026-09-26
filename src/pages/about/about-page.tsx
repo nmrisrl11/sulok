@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export function AboutPage() {
 	return (
-		<div className="mx-auto flex w-full max-w-2xl animate-in flex-col gap-10 py-8 duration-500 fade-in slide-in-from-bottom-4">
+		<div className="mx-auto flex w-full max-w-2xl animate-in flex-col gap-10 px-4 pt-6 duration-500 fade-in slide-in-from-bottom-4 md:px-6 md:pt-12">
 			<section className="flex w-full flex-col gap-4 text-center sm:text-left">
 				<h1
 					className="font-heading text-4xl font-extrabold italic"

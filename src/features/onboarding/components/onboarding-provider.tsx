@@ -1,8 +1,8 @@
 import { APP_INFO } from "@/constants/app-info";
 import { useTheme } from "@/hooks";
 import { useSettingsStore } from "@/stores";
-import { type ReactNode } from "react";
-import { type EventData, Joyride, STATUS, type Step } from "react-joyride";
+import { useEffect, useState, type ReactNode } from "react";
+import { Joyride, STATUS, type EventData, type Step } from "react-joyride";
 import { useLocation } from "react-router-dom";
 import { CustomTooltip } from "./custom-tooltip";
 
@@ -69,10 +69,59 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 	const { settings, updateSettings } = useSettingsStore();
 	const { theme } = useTheme();
 	const location = useLocation();
+	const [isTargetReady, setIsTargetReady] = useState(false);
+	const [prevTracking, setPrevTracking] = useState({ isRunning: false, stepIndex: 0 });
 
 	// Ensure tour only runs on the home page so targets can be found
 	const isRunning = settings.onboardingStatus === "in_progress" && location.pathname === "/";
 	const stepIndex = settings.onboardingStep ?? 0;
+
+	// Derive state during render (React Compiler safe way to reset state on dependency change)
+	if (prevTracking.isRunning !== isRunning || prevTracking.stepIndex !== stepIndex) {
+		setPrevTracking({ isRunning, stepIndex });
+		setIsTargetReady(false);
+	}
+
+	useEffect(() => {
+		if (!isRunning) return;
+
+		let isMounted = true;
+		const currentTarget = TOUR_STEPS[stepIndex]?.target;
+
+		if (!currentTarget || currentTarget === "body") {
+			requestAnimationFrame(() => {
+				if (isMounted) setIsTargetReady(true);
+			});
+			return () => {
+				isMounted = false;
+			};
+		}
+
+		const checkTarget = () => !!document.querySelector(currentTarget as string);
+
+		if (checkTarget()) {
+			requestAnimationFrame(() => {
+				if (isMounted) setIsTargetReady(true);
+			});
+			return () => {
+				isMounted = false;
+			};
+		}
+
+		const observer = new MutationObserver(() => {
+			if (checkTarget() && isMounted) {
+				setIsTargetReady(true);
+				observer.disconnect();
+			}
+		});
+
+		observer.observe(document.body, { childList: true, subtree: true });
+
+		return () => {
+			isMounted = false;
+			observer.disconnect();
+		};
+	}, [isRunning, stepIndex]);
 
 	const handleJoyrideCallback = (data: EventData) => {
 		const { action, status, type, index } = data;
@@ -98,7 +147,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 			{children}
 			<Joyride
 				steps={TOUR_STEPS}
-				run={isRunning}
+				run={isRunning && isTargetReady}
 				stepIndex={stepIndex}
 				onEvent={handleJoyrideCallback}
 				continuous

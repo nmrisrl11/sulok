@@ -9,10 +9,8 @@ export function Header() {
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
 
 	const navLinks: { to: string; label: string; expression: SuloExpression }[] = [
-		{ to: "/about", label: "About", expression: "shy" },
 		{ to: "/updates", label: "Updates", expression: "excited" },
 		{ to: "/settings", label: "Settings", expression: "attentive" },
-		{ to: "/install", label: "Install", expression: "curious" },
 	];
 
 	return (
