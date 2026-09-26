@@ -2,6 +2,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig, type ResolvedConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import { APP_INFO } from "./src/constants/app-info.ts";
 
 const htmlPlugin = () => {
@@ -30,7 +31,77 @@ const htmlPlugin = () => {
 };
 
 export default defineConfig({
-	plugins: [htmlPlugin(), react(), tailwindcss()],
+	plugins: [
+		htmlPlugin(),
+		react(),
+		tailwindcss(),
+		VitePWA({
+			registerType: "prompt",
+			injectRegister: "auto",
+			devOptions: {
+				enabled: true,
+				suppressWarnings: true,
+				type: "module",
+			},
+			includeAssets: ["favicon.svg", "favicon.ico", "apple-touch-icon.png", "favicon-96x96.png"],
+			manifest: {
+				name: APP_INFO.name,
+				short_name: APP_INFO.shortName,
+				description: APP_INFO.description,
+				theme_color: APP_INFO.themeColor,
+				background_color: APP_INFO.backgroundColor,
+				display: "standalone",
+				orientation: "portrait",
+				icons: [
+					{
+						src: "/web-app-manifest-192x192.png",
+						sizes: "192x192",
+						type: "image/png",
+						purpose: "any",
+					},
+					{
+						src: "/web-app-manifest-512x512.png",
+						sizes: "512x512",
+						type: "image/png",
+						purpose: "any",
+					},
+					{
+						src: "/web-app-manifest-512x512.png",
+						sizes: "512x512",
+						type: "image/png",
+						purpose: "maskable",
+					},
+				],
+				screenshots: [
+					{
+						src: "/screenshot-desktop-1.png",
+						sizes: "1920x1080",
+						type: "image/png",
+						form_factor: "wide",
+						label: "Sulok Library View",
+					},
+					{
+						src: "/screenshot-desktop-2.png",
+						sizes: "1920x1080",
+						type: "image/png",
+						form_factor: "wide",
+						label: "Sulok Settings View",
+					},
+					{
+						src: "/screenshot-mobile-1.png",
+						sizes: "1080x1920",
+						type: "image/png",
+						form_factor: "narrow",
+						label: "Sulok Mobile View",
+					},
+				],
+			},
+			workbox: {
+				globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}"],
+				maximumFileSizeToCacheInBytes: 5000000,
+			},
+		}),
+	],
 	resolve: {
 		alias: {
 			"@": path.resolve(import.meta.dirname, "./src"),

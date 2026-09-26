@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — Sulok
 
-> Last updated: 2026-09-11
+> Last updated: 2026-09-26
 
 ## Project Status: 🟢 Development
 
@@ -32,7 +32,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Brand mascot (Sulo) & interactive morphing logo implemented
 - [x] Sulo mascot contextual whisper feedback on header
 - [x] Vite Rollup code splitting (manualChunks) optimizations
-- [ ] PWA configured
+- [x] PWA configured
 
 ---
 
@@ -103,7 +103,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI
-- [ ] PWA/offline support
+- [x] PWA/offline support
 
 ### Phase 2 — Browser Extension
 

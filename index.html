@@ -9,7 +9,6 @@
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<meta name="apple-mobile-web-app-title" content="%APP_NAME%" />
 		<meta name="theme-color" content="%APP_THEME_COLOR%" />
-		<link rel="manifest" href="/site.webmanifest" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>%APP_TITLE%</title>
@@ -52,6 +51,23 @@
 					}
 				} catch (e) {}
 			})();
+		</script>
+
+		<!-- Catch beforeinstallprompt early to prevent missed events -->
+		<script>
+			window.__deferredPrompt = null;
+			window.__isInstallable = false;
+			window.addEventListener("beforeinstallprompt", function (e) {
+				e.preventDefault();
+				window.__deferredPrompt = e;
+				window.__isInstallable = true;
+				window.dispatchEvent(new Event("app-installable"));
+			});
+			window.addEventListener("appinstalled", function () {
+				window.__deferredPrompt = null;
+				window.__isInstallable = false;
+				window.dispatchEvent(new Event("app-installable"));
+			});
 		</script>
 
 		%REACT_SCAN%
