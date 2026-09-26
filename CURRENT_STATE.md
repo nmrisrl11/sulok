@@ -40,7 +40,7 @@ The project is currently in the **core features implementation phase**.
 
 ### Next Steps
 
-1. Implement item filter capabilities.
+1. [x] Implement item filter capabilities.
 2. [x] Refine overall UI polish for mobile responsiveness.
 3. [x] Finalize the "Library" default UX (e.g., handling new users, default folders, and interactive onboarding tour).
 

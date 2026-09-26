@@ -40,10 +40,10 @@ export function ExplorerMainSkeleton() {
 
 	return (
 		<div role="alert" aria-label="Loading items" className="contents">
-			<div id="explorer-main" className="flex flex-col gap-2">
+			<div id="explorer-main" className="flex flex-col">
 				<FolderCardSkeleton />
 				<FolderCardSkeleton />
-				<div className="my-4 border-b border-border/50" />
+				<div className="my-2 border-b border-border/50" />
 				<ItemCardSkeleton />
 				<ItemCardSkeleton />
 				<ItemCardSkeleton />

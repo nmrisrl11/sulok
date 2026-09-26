@@ -10,7 +10,10 @@ import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
+	SelectGroup,
 	SelectItem,
+	SelectLabel,
+	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -35,9 +38,11 @@ import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
 export const ExplorerToolbar = memo(function ExplorerToolbar({
 	hasItems = true,
 	hasFolders = true,
+	availableDomains = [],
 }: {
 	hasItems?: boolean;
 	hasFolders?: boolean;
+	availableDomains?: string[];
 }) {
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
@@ -80,6 +85,16 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 		setTypeFilter("all");
 		setSortOption("date-desc");
 		setMixData(false);
+	};
+
+	const getSelectValueDisplay = () => {
+		if (typeFilter.startsWith("domain:")) {
+			return typeFilter.slice(7);
+		}
+		if (typeFilter === "favorites") return "Favorites";
+		if (typeFilter === "folders") return "Folders Only";
+		if (typeFilter === "links") return "Links Only";
+		return "All Types";
 	};
 
 	return (
@@ -154,20 +169,35 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 
 					{/* Type & Sort Row */}
 					<div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:flex sm:w-auto sm:flex-none sm:items-center sm:gap-2">
-						<Select
-							value={typeFilter}
-							onValueChange={(val) => setTypeFilter(val as "all" | "folders" | "links")}
-						>
+						<Select value={typeFilter} onValueChange={(val) => setTypeFilter(val)}>
 							<SelectTrigger
 								className="h-8 w-full rounded-lg border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-32 sm:flex-none"
 								aria-label="Filter by type"
 							>
-								<SelectValue placeholder="All Types" />
+								<SelectValue placeholder="All Types">{getSelectValueDisplay()}</SelectValue>
 							</SelectTrigger>
-							<SelectContent position="popper" align="end">
-								<SelectItem value="all">All Types</SelectItem>
-								<SelectItem value="folders">Folders Only</SelectItem>
-								<SelectItem value="links">Links Only</SelectItem>
+							<SelectContent position="popper" align="end" className="max-h-64">
+								<SelectGroup>
+									<SelectItem value="all">All Types</SelectItem>
+									<SelectItem value="favorites">Favorites</SelectItem>
+									<SelectItem value="folders">Folders Only</SelectItem>
+									<SelectItem value="links">Links Only</SelectItem>
+								</SelectGroup>
+								{availableDomains.length > 0 && (
+									<>
+										<SelectSeparator />
+										<SelectGroup>
+											<SelectLabel className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+												Domains
+											</SelectLabel>
+											{availableDomains.map((domain) => (
+												<SelectItem key={domain} value={`domain:${domain}`}>
+													{domain}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</>
+								)}
 							</SelectContent>
 						</Select>
 						<Select

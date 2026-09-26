@@ -27,7 +27,7 @@ const TOUR_STEPS: Step[] = [
 		target: "#explorer-main",
 		title: "Your Collection",
 		content:
-			"We've added a default folder and link to get you started. This is where all your saved content will seamlessly live.",
+			"This is where all your saved content will seamlessly live. If you're new here, we've added some examples to get you started!",
 		placement: "top",
 		skipBeacon: true,
 	},
@@ -51,7 +51,7 @@ const TOUR_STEPS: Step[] = [
 		target: "#quick-customize-btn",
 		title: "Make it Yours",
 		content:
-			"Access Quick Customize to instantly change your theme, colors, and even Sulo's expression to match your mood.",
+			"Access Quick Customize to instantly change your theme, fine-tune sound effects, and personalize Sulo's expressions to match your mood.",
 		placement: "left",
 		skipBeacon: true,
 	},

@@ -4,6 +4,7 @@ import { ExplorerDndContext } from "@/features/folders/components/dnd/explorer-d
 import { ExplorerMain } from "@/features/folders/components/explorer/explorer-main";
 import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer-sidebar";
 import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
+import { getHasDataHint } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { useFolderStore, useItemStore } from "@/stores";
 import { memo, useRef } from "react";
@@ -14,11 +15,13 @@ const SelectionHeader = memo(function SelectionHeader({
 	hasItems,
 	folders,
 	hasFolders,
+	isLoading,
 }: {
 	items: Item[];
 	hasItems: boolean;
 	folders: Folder[];
 	hasFolders: boolean;
+	isLoading?: boolean;
 }) {
 	const selectedIds = useItemStore((state) => state.selectedIds);
 	const selectedFolderIds = useFolderStore((state) => state.selectedFolderIds);
@@ -26,6 +29,21 @@ const SelectionHeader = memo(function SelectionHeader({
 	const clearItemSelection = useItemStore((state) => state.clearSelection);
 	const selectAllFolders = useFolderStore((state) => state.selectAll);
 	const clearFolderSelection = useFolderStore((state) => state.clearSelection);
+
+	if (isLoading) {
+		if (getHasDataHint()) {
+			return (
+				<div className="mb-2 flex items-center justify-between border-b px-3 py-2">
+					<div className="flex items-center gap-3">
+						<div className="size-4 rounded-sm border border-border bg-muted/50" />
+						<div className="h-4 w-8 rounded bg-muted/50" />
+					</div>
+					<div className="h-4 w-12 rounded bg-muted/50" />
+				</div>
+			);
+		}
+		return null;
+	}
 
 	if (!hasItems && !hasFolders) return null;
 
@@ -84,12 +102,14 @@ export function HomePage({ className }: { className?: string }) {
 						<ExplorerToolbar
 							hasItems={homeData.items.length > 0}
 							hasFolders={homeData.folders.length > 0}
+							availableDomains={homeData.availableDomains}
 						/>
 						<SelectionHeader
 							items={homeData.items}
 							hasItems={homeData.items.length > 0}
 							folders={homeData.folders}
 							hasFolders={homeData.folders.length > 0}
+							isLoading={homeData.isLoading}
 						/>
 						<div
 							ref={scrollRef}
