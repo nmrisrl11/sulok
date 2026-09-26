@@ -14,6 +14,36 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.8.0",
+		date: "Sep 26, 2026",
+		title: "Folder Colors, Powerful Filters, and Settings Overhaul",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Dynamic Filters: You can now instantly filter your library by domains or view only your Favorites directly from the Home Explorer toolbar.",
+					"Custom Folder Colors: Added new preset, complementary, and custom color options so you can personalize your folders exactly the way you want.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Premium Settings Redesign: We completely overhauled the Settings and Quick Customize menus. They now feature beautifully animated segmented buttons instead of generic dropdowns, space-efficient accordion sections on mobile, and a cohesive, premium card layout across all tabs.",
+					"Snappier Settings Performance: Rebuilt the Settings architecture behind the scenes so the app stays lightning fast and responsive, even when loading heavy features like data imports.",
+					"Improved Accessibility: Tightened up screen-reader support across all settings toggles, dropdowns, and reset buttons, ensuring the app is usable by everyone.",
+					"Onboarding Polish: Refined the welcome tour to seamlessly accommodate returning users and updated it to showcase the latest Sound FX features.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Seamless Loading: Eliminated jarring layout shifts when the app loads. The initial loading skeletons for the Home page, Item cards, and Settings now perfectly mirror the actual layout, ensuring buttery-smooth transitions.",
+					"Customization Fixes: Resolved frustrating bugs where resetting Sulo's whispers or global settings wouldn't properly clear unsaved edits, and fixed an issue where the color picker in the Quick Customize menu would conflict with the main settings page.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.7.0",
 		date: "Sep 23, 2026",
 		title: "Massive Performance Leap, Import Upgrades, and Refined Mobile UI",
