@@ -63,6 +63,11 @@
 				window.__isInstallable = true;
 				window.dispatchEvent(new Event("app-installable"));
 			});
+			window.addEventListener("appinstalled", function () {
+				window.__deferredPrompt = null;
+				window.__isInstallable = false;
+				window.dispatchEvent(new Event("app-installable"));
+			});
 		</script>
 
 		%REACT_SCAN%

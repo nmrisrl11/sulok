@@ -1,37 +1,37 @@
+import { AppearanceProvider } from "@/components/appearance-provider";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { AppLayout } from "@/components/layout/app-layout";
+import { TrashManager } from "@/components/managers/trash-manager";
+import { ThemeProvider } from "@/components/theme-provider";
+import { OnboardingProvider } from "@/features/onboarding/components/onboarding-provider";
+import { PwaManager } from "@/features/pwa/components/pwa-manager";
+import { useGlobalSoundInteractions } from "@/hooks";
+import { AboutSkeleton } from "@/pages/about/about-skeleton";
+import { HomeRouteFallback } from "@/pages/home/home-route-fallback";
+import { InstallSkeleton } from "@/pages/install/install-skeleton";
+import { SettingsSkeleton } from "@/pages/settings/settings-skeleton";
+import { UpdatesSkeleton } from "@/pages/updates/updates-skeleton";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AppearanceProvider } from "./components/appearance-provider";
-import { ErrorBoundary } from "./components/error-boundary";
-import { AppLayout } from "./components/layout/app-layout";
-import { TrashManager } from "./components/managers/trash-manager";
-import { ThemeProvider } from "./components/theme-provider";
-import { OnboardingProvider } from "./features/onboarding/components/onboarding-provider";
-import { PwaManager } from "./features/pwa/components/pwa-manager";
-import { useGlobalSoundInteractions } from "./hooks";
-import { AboutSkeleton } from "./pages/about/about-skeleton";
-import { HomeRouteFallback } from "./pages/home/home-route-fallback";
-import { InstallSkeleton } from "./pages/install/install-skeleton";
-import { SettingsSkeleton } from "./pages/settings/settings-skeleton";
-import { UpdatesSkeleton } from "./pages/updates/updates-skeleton";
 
 const HomePage = lazy(() =>
-	import("./pages/home/home-page").then((m) => ({ default: m.HomePage })),
+	import("@/pages/home/home-page").then((m) => ({ default: m.HomePage })),
 );
 const AboutPage = lazy(() =>
-	import("./pages/about/about-page").then((m) => ({ default: m.AboutPage })),
+	import("@/pages/about/about-page").then((m) => ({ default: m.AboutPage })),
 );
 const UpdatesPage = lazy(() =>
-	import("./pages/updates/updates-page").then((m) => ({ default: m.UpdatesPage })),
+	import("@/pages/updates/updates-page").then((m) => ({ default: m.UpdatesPage })),
 );
 const NotFoundPage = lazy(() =>
-	import("./pages/not-found/not-found-page").then((m) => ({ default: m.NotFoundPage })),
+	import("@/pages/not-found/not-found-page").then((m) => ({ default: m.NotFoundPage })),
 );
 const SettingsPage = lazy(() =>
-	import("./pages/settings/settings-page").then((m) => ({ default: m.SettingsPage })),
+	import("@/pages/settings/settings-page").then((m) => ({ default: m.SettingsPage })),
 );
 const InstallPage = lazy(() =>
-	import("./pages/install/install-page").then((m) => ({ default: m.InstallPage })),
+	import("@/pages/install/install-page").then((m) => ({ default: m.InstallPage })),
 );
 
 function GlobalSoundInteractions() {
