@@ -20,6 +20,11 @@ export * from "./folders/folder-plus-circle-icon";
 export * from "./folders/follow-folder-icon";
 export * from "./folders/move-to-folder-icon";
 
+// Features
+export * from "./features/fast-icon";
+export * from "./features/offline-icon";
+export * from "./features/screen-app-icon";
+
 // Items
 export * from "./items/copy-icon";
 export * from "./items/external-link-icon";

@@ -7,9 +7,11 @@ import { AppLayout } from "./components/layout/app-layout";
 import { TrashManager } from "./components/managers/trash-manager";
 import { ThemeProvider } from "./components/theme-provider";
 import { OnboardingProvider } from "./features/onboarding/components/onboarding-provider";
+import { PwaManager } from "./features/pwa/components/pwa-manager";
 import { useGlobalSoundInteractions } from "./hooks";
 import { AboutSkeleton } from "./pages/about/about-skeleton";
 import { HomeRouteFallback } from "./pages/home/home-route-fallback";
+import { InstallSkeleton } from "./pages/install/install-skeleton";
 import { SettingsSkeleton } from "./pages/settings/settings-skeleton";
 import { UpdatesSkeleton } from "./pages/updates/updates-skeleton";
 
@@ -28,6 +30,9 @@ const NotFoundPage = lazy(() =>
 const SettingsPage = lazy(() =>
 	import("./pages/settings/settings-page").then((m) => ({ default: m.SettingsPage })),
 );
+const InstallPage = lazy(() =>
+	import("./pages/install/install-page").then((m) => ({ default: m.InstallPage })),
+);
 
 function GlobalSoundInteractions() {
 	useGlobalSoundInteractions();
@@ -39,6 +44,7 @@ function App() {
 		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
 			<AppearanceProvider>
 				<TrashManager />
+				<PwaManager />
 				<GlobalSoundInteractions />
 				<BrowserRouter>
 					<NuqsAdapter>
@@ -75,6 +81,14 @@ function App() {
 											element={
 												<Suspense fallback={<SettingsSkeleton />}>
 													<SettingsPage />
+												</Suspense>
+											}
+										/>
+										<Route
+											path="/install"
+											element={
+												<Suspense fallback={<InstallSkeleton />}>
+													<InstallPage />
 												</Suspense>
 											}
 										/>

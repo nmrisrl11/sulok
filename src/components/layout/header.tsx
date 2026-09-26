@@ -12,6 +12,7 @@ export function Header() {
 		{ to: "/about", label: "About", expression: "shy" },
 		{ to: "/updates", label: "Updates", expression: "excited" },
 		{ to: "/settings", label: "Settings", expression: "attentive" },
+		{ to: "/install", label: "Install", expression: "curious" },
 	];
 
 	return (
