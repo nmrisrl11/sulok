@@ -18,7 +18,7 @@ export function SettingsSkeleton() {
 					<Skeleton className="h-9 w-44 shrink-0 rounded-full corner-squircle supports-[corner-shape:squircle]:rounded-2xl" />
 				</nav>
 
-				<main className="min-w-0 flex-1 pb-10">
+				<main className="min-w-0 flex-1">
 					<div className="animate-in space-y-8 duration-300 fade-in slide-in-from-bottom-2">
 						<div>
 							<Skeleton className="mb-2 h-7 w-48" />

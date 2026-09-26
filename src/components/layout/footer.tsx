@@ -39,10 +39,8 @@ export function Footer() {
 			type: "button",
 			label: "App Tour",
 			onClick: () => {
+				updateSettings({ onboardingStatus: "in_progress", onboardingStep: 0 });
 				navigate("/");
-				setTimeout(() => {
-					updateSettings({ onboardingStatus: "in_progress", onboardingStep: 0 });
-				}, 100);
 			},
 		},
 		{
