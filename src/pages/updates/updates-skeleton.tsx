@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function UpdatesSkeleton() {
 	return (
-		<div className="mx-auto flex w-full max-w-3xl flex-col gap-12 py-8">
+		<div className="mx-auto flex w-full max-w-3xl flex-col gap-12 px-4 pt-6 md:px-0 md:pt-12">
 			{/* Header Section */}
 			<section className="flex w-full flex-col items-center gap-3 text-center sm:items-start sm:text-left">
 				<Skeleton className="mb-1 h-10 w-48 sm:h-12" />

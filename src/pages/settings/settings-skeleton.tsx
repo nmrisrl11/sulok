@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function SettingsSkeleton() {
 	return (
-		<div className="mx-auto w-full max-w-2xl px-4 py-8 pb-24 sm:px-6 md:py-12 md:pb-12">
+		<div className="mx-auto w-full max-w-2xl px-4 pt-6 md:px-6 md:pt-12">
 			<div className="mb-10 text-center sm:text-left">
 				<h1 className="flex items-center justify-center gap-2.5 font-heading text-3xl font-bold sm:justify-start">
 					<Skeleton className="h-8 w-32" />

@@ -102,7 +102,7 @@ export function SettingsPage() {
 	};
 
 	return (
-		<div className="mx-auto w-full max-w-2xl px-4 py-8 pb-24 sm:px-6 md:py-12 md:pb-12">
+		<div className="mx-auto w-full max-w-2xl px-4 pt-6 md:px-6 md:pt-12">
 			<div className="mb-10 text-center sm:text-left">
 				<h1 className="flex items-center justify-center gap-2.5 font-heading text-3xl font-bold sm:justify-start">
 					Settings
@@ -124,7 +124,7 @@ export function SettingsPage() {
 					))}
 				</nav>
 
-				<main className="min-w-0 flex-1 pb-10">
+				<main className="min-w-0 flex-1">
 					<Suspense
 						fallback={
 							<div className="flex justify-center p-12">
