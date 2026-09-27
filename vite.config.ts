@@ -4,6 +4,7 @@ import path from "path";
 import { defineConfig, type ResolvedConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { APP_INFO } from "./src/constants/app-info.ts";
+import { APP_SCREENSHOTS } from "./src/constants/pwa-screenshots.ts";
 
 const htmlPlugin = () => {
 	let isDev = false;
@@ -72,29 +73,7 @@ export default defineConfig({
 						purpose: "maskable",
 					},
 				],
-				screenshots: [
-					{
-						src: "/screenshot-desktop-1.png",
-						sizes: "1920x1080",
-						type: "image/png",
-						form_factor: "wide",
-						label: "Sulok Library View",
-					},
-					{
-						src: "/screenshot-desktop-2.png",
-						sizes: "1920x1080",
-						type: "image/png",
-						form_factor: "wide",
-						label: "Sulok Settings View",
-					},
-					{
-						src: "/screenshot-mobile-1.png",
-						sizes: "1080x1920",
-						type: "image/png",
-						form_factor: "narrow",
-						label: "Sulok Mobile View",
-					},
-				],
+				screenshots: APP_SCREENSHOTS,
 			},
 			workbox: {
 				globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}"],

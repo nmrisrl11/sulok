@@ -23,6 +23,9 @@
 
 - Install Page Skeleton: Rebuilt the global page-level `InstallSkeleton` to pixel-perfectly match the structure of the redesigned Install page, eliminating a massive layout shift during lazy-loading.
 - Install Prompt State: Fixed an edge case where dismissing the PWA install prompt could prevent it from cleanly resetting its internal state for future attempts.
+- iOS Safe Area Collision: Added `viewport-fit=cover` to the application and implemented top safe-area insets in the root layout to prevent the main header from colliding with the iOS status bar and dynamic island on mobile devices.
+- Slider Interaction in Drawers: Fixed an issue where interacting with sliders inside mobile drawers (like the Settings Drawer) would inadvertently drag and close the drawer.
+- PWA Configuration Refactoring: Extracted the PWA manifest screenshots configuration into a centralized constants file and introduced rich install UI assets.
 
 ---
 

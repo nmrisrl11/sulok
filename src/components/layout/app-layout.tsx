@@ -164,7 +164,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 	}, [toggleQuickCustomize]);
 
 	return (
-		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))]">
+		<div className="flex min-h-dvh flex-col bg-background pt-[env(safe-area-inset-top)] pb-[calc(5rem+env(safe-area-inset-bottom))]">
 			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
 				<Header />
 
