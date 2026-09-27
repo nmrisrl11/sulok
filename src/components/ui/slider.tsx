@@ -1,8 +1,8 @@
 "use client";
 
-import { type ComponentProps, useMemo } from "react";
 import { cn } from "cn";
 import { Slider as SliderPrimitive } from "radix-ui";
+import { type ComponentProps, useMemo } from "react";
 
 function Slider({
 	className,
@@ -20,6 +20,7 @@ function Slider({
 	return (
 		<SliderPrimitive.Root
 			data-slot="slider"
+			data-vaul-no-drag
 			defaultValue={defaultValue}
 			value={value}
 			min={min}

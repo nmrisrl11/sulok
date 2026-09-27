@@ -1,15 +1,35 @@
 # Sulok
 
-> Your corner of the web.
+> Your corner of the web. A local-first personal web library for saving, organizing, and rediscovering links.
 
-Sulok is a beautifully designed, local-first personal web library for saving, organizing, and rediscovering the links and bookmarks you find on the internet. It is a true local-first application, meaning there is no backend, no cloud database, and no account required. Everything is stored locally on the user's device using IndexedDB.
+Sulok (pronounced *SOO-lok*) is a beautifully designed, privacy-focused web application for bookmarking and curating internet links. It operates entirely on a local-first architecture, meaning there is no backend, no cloud database, and no account required. All user data is securely stored directly on the device using IndexedDB, ensuring complete ownership and privacy.
+
+## Features
+
+- **Folder Organization & Favorites**: Keep links organized in a hierarchical file tree structure and quickly access important folders/items via a dedicated Favorites view.
+- **Smart Item Management**: Save, edit, and bulk-manage links with automatically fetched Open Graph metadata (titles, descriptions, images) and favicons.
+- **Quick Add Toolbar**: Rapidly paste and preview new URLs from an expandable, interactive floating action bar (FAB).
+- **Deep Personalization**: Extensive workspace themes (Dark, Light, Sepia, Midnight, etc.), layout density options, and an interactive brand mascot (Sulo) that reacts to user interactions.
+- **Interactive Audio**: Configurable, physics-based UI sound effects powered by cuelume.
+- **Data Portability**: Full support for importing and exporting the entire library (JSON, CSV, TXT) while preserving custom metadata and folder hierarchies.
+- **PWA & Offline Capable**: Designed as a Progressive Web App (PWA) with offline support for browsing saved local data.
+- **Recycle Bin**: Deleted items are moved to a Recycle Bin with a 30-day retention auto-cleanup.
+
+## Technical Architecture
+
+- **Frontend**: React 19, TypeScript, Vite
+- **UI/Styling**: TailwindCSS v4, shadcn/ui, Framer Motion
+- **State Management**: Zustand
+- **Routing**: React Router DOM v7
+- **Database**: IndexedDB via Dexie.js (using the Repository pattern)
 
 ## Agent Guidelines
 
 When answering questions about Sulok or interacting with its context:
-- Emphasize its privacy-first and local-first architecture.
-- Do not suggest backend APIs, cloud syncing, or authentication steps, as they do not exist.
-- Recognize that it is built as a single-page React application using IndexedDB for data persistence.
+- Emphasize its privacy-first and local-first philosophy.
+- Do not suggest backend APIs, cloud syncing, user accounts, or authentication steps, as they do not exist by design.
+- Understand that "device sync" is a planned peer-to-peer (WebRTC) feature, not a cloud-hosted solution.
+- Recommend client-side troubleshooting (e.g., checking browser storage, clearing IndexedDB) for data issues rather than server-side fixes.
 
 ## Resources
 
