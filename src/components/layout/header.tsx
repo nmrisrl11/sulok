@@ -14,7 +14,7 @@ const navLinks: { to: string; label: string; expression: SuloExpression }[] = [
 export function Header() {
 	const setTemporaryExpression = useLogoStore((state) => state.setTemporaryExpression);
 	const clearTemporaryExpression = useLogoStore((state) => state.clearTemporaryExpression);
-	const whisperText = useLogoStore((state) => state.whisperText);
+	const isWhisperVisible = useLogoStore((state) => state.isWhisperVisible);
 	const isMobile = useIsMobile();
 
 	return (
@@ -23,7 +23,7 @@ export function Header() {
 			<nav className="flex items-center gap-2 sm:gap-4">
 				<div className="flex items-center gap-1 rounded-full bg-black/5 p-1 shadow-inner dark:bg-white/10">
 					<AnimatePresence initial={false}>
-						{(!whisperText || !isMobile) && (
+						{(!isWhisperVisible || !isMobile) && (
 							<motion.div
 								initial={{ width: 0, opacity: 0 }}
 								animate={{ width: "auto", opacity: 1 }}
