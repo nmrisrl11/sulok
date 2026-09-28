@@ -196,23 +196,25 @@ export function SulokLogo({ className }: { className?: string }) {
 					initial={{ opacity: 0, x: -10, scale: 0.95 }}
 					animate={{ opacity: 1, x: 0, scale: 1 }}
 					exit={{ opacity: 0, scale: 0.95 }}
-					className="pointer-events-none relative rounded-full bg-foreground px-3 py-1 font-mono text-[11px] tracking-tight whitespace-nowrap text-background shadow-md corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+					className="pointer-events-none relative flex min-w-0 items-center rounded-2xl bg-foreground px-3 py-1.5 font-mono text-[11px] leading-tight tracking-tight text-background shadow-md corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 				>
 					{/* Small tail for the speech bubble effect pointing to Sulo */}
-					<div className="absolute top-1/2 -left-1 h-2 w-2 -translate-y-1/2 rotate-45 rounded-sm bg-foreground" />
-					<span className="relative z-10">{whisperText}</span>
+					<div className="absolute top-1/2 -left-1 h-2 w-2 shrink-0 -translate-y-1/2 rotate-45 rounded-sm bg-foreground" />
+					<span className="relative z-10 wrap-break-word">{whisperText}</span>
 				</motion.div>
 			)}
 		</AnimatePresence>
 	);
 
+	const wrapperClassName = cn("flex min-w-0 items-center gap-3", isMobile ? "h-9" : "h-12");
+
 	if (isHome) {
 		return (
-			<div className="flex items-center gap-3">
+			<div className={wrapperClassName}>
 				<button
 					type="button"
 					onClick={handleInteract}
-					className={classNameValue}
+					className={cn(classNameValue, "shrink-0")}
 					onMouseEnter={handleMouseEnter}
 					onMouseLeave={handleMouseLeave}
 					aria-label={`${APP_INFO.name} Home`}
@@ -226,10 +228,10 @@ export function SulokLogo({ className }: { className?: string }) {
 	}
 
 	return (
-		<div className="flex items-center gap-3">
+		<div className={wrapperClassName}>
 			<Link
 				to="/"
-				className={classNameValue}
+				className={cn(classNameValue, "shrink-0")}
 				onClick={handleInteract}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}

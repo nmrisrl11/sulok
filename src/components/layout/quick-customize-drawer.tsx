@@ -29,7 +29,7 @@ import {
 import { SuloExpressionsControl } from "@/features/settings/components/sulo-customization/sulo-expressions-section";
 import { useSoundEffects, useThemeDispatch } from "@/hooks";
 import { defaultSettings, useSettingsStore, useUIStore } from "@/stores";
-import { WandSparklesIcon, XIcon } from "lucide-react";
+import { ArrowRightIcon, MessageSquareTextIcon, WandSparklesIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -276,16 +276,23 @@ export function QuickCustomizeDrawer() {
 										<SuloExpressionsControl variant="compact" />
 									</div>
 
-									<div className="mt-4 space-y-3 border-t border-border/50 pt-4">
-										<div>
-											<h4 className="text-sm font-medium">Sulo's Whispers</h4>
-											<p className="mb-3 text-xs text-muted-foreground">
-												Manage phrases and how Sulo speaks to you.
-											</p>
-										</div>
-										<Button variant="secondary" className="w-full" onClick={handleManageWhispers}>
-											Customize Whispers
-										</Button>
+									<div className="mt-4 border-t border-border/50 pt-4">
+										<button
+											type="button"
+											onClick={handleManageWhispers}
+											className="group flex w-full items-center justify-between gap-4 rounded-lg border border-border/50 bg-card p-3 shadow-sm transition-all corner-squircle hover:border-border hover:bg-muted/30 supports-[corner-shape:squircle]:rounded-2xl"
+										>
+											<div className="flex items-center gap-3">
+												<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/50 bg-muted/50 corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+													<MessageSquareTextIcon className="h-5 w-5" />
+												</div>
+												<div className="text-left">
+													<h4 className="text-sm font-medium text-foreground">Sulo's Whispers</h4>
+													<p className="text-xs text-muted-foreground">Customize what Sulo says</p>
+												</div>
+											</div>
+											<ArrowRightIcon className="mr-1 h-4 w-4 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
+										</button>
 									</div>
 								</div>
 							</AccordionContent>
