@@ -145,12 +145,18 @@ export function SulokLogo({ className }: { className?: string }) {
 
 	const whisperText = useLogoStore((state) => state.whisperText);
 	const setIsWhisperVisible = useLogoStore((state) => state.setIsWhisperVisible);
+	const setIsSuloVisible = useLogoStore((state) => state.setIsSuloVisible);
 
 	const actualWhisperVisible = !!(whisperText && isMorphed && !isHovered);
+	const actualSuloVisible = isMorphed && !isHovered;
 
 	useEffect(() => {
 		setIsWhisperVisible(actualWhisperVisible);
 	}, [actualWhisperVisible, setIsWhisperVisible]);
+
+	useEffect(() => {
+		setIsSuloVisible(actualSuloVisible);
+	}, [actualSuloVisible, setIsSuloVisible]);
 
 	const logoElement = (
 		<motion.div

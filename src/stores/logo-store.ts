@@ -25,10 +25,12 @@ interface LogoStore {
 	temporaryExpression: SuloExpression | null;
 	whisperText: string | null;
 	isWhisperVisible: boolean;
+	isSuloVisible: boolean;
 	setTemporaryExpression: (expression: SuloExpression, durationMs?: number) => void;
 	setReaction: (expression: SuloExpression, text: string, durationMs?: number) => void;
 	clearTemporaryExpression: () => void;
 	setIsWhisperVisible: (visible: boolean) => void;
+	setIsSuloVisible: (visible: boolean) => void;
 }
 
 let timeoutId: ReturnType<typeof setTimeout>;
@@ -37,6 +39,7 @@ export const useLogoStore = create<LogoStore>((set) => ({
 	temporaryExpression: null,
 	whisperText: null,
 	isWhisperVisible: false,
+	isSuloVisible: false,
 	setTemporaryExpression: (expression, durationMs = 2500) => {
 		set({ temporaryExpression: expression });
 		clearTimeout(timeoutId);
@@ -56,4 +59,5 @@ export const useLogoStore = create<LogoStore>((set) => ({
 		set({ temporaryExpression: null, whisperText: null });
 	},
 	setIsWhisperVisible: (visible) => set({ isWhisperVisible: visible }),
+	setIsSuloVisible: (visible) => set({ isSuloVisible: visible }),
 }));

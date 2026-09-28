@@ -17,8 +17,7 @@
 - App Layout & Header: Unified the global Footer placement inside the main application layout to ensure it appears consistently across all views. Resolved iOS safe area layout shifts by implementing a sticky translucent header, and adapted the Updates page layout to account for the new header positioning.
 - UI Consistency: Standardized the top padding and layout margins across the Settings, About, and Updates pages to ensure a unified responsive structure.
 - Copywriting: Updated footer labels to better reflect Sulok's local-first identity (e.g., "Manage Data" instead of "Sync Data").
-- PWA Stability: Enhanced the service worker manager to actively poll for application updates every hour. Migrated the `beforeinstallprompt` listener to a global inline script in `index.html` to reliably capture the install event before React mounts.
-- Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that smoothly morphs away on mobile devices when Sulo is actively whispering, preventing layout overflow.
+- Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that elegantly hides the right navigation links on mobile devices when the wide "Sulok" text logo is visible, preventing layout overflow, and smoothly reveals them when it morphs into the compact Sulo mascot.
 - Component Reorganization: Migrated `PwaManager` into the global `src/components/managers` directory and renamed the explorer sidebar to `ExplorerNav` to better reflect its horizontal navigation role.
 - Design System: Refined the border radius scale and squircle classes across all components for perfect mathematical consistency and nesting aesthetics. Adjusted UI containers to use `rounded-xl` (squircle `4xl`), inner cards to `rounded-lg` (squircle `2xl`), and internal controls to `rounded-md` (squircle `xl`).
 
