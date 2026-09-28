@@ -14,18 +14,21 @@
 ### Changed
 
 - Install Page UI: Redesigned the Install page to be visually cohesive, compact, and responsive. Introduced dynamic, platform-specific guided installation cards (iOS, Desktop, Supported) for improved UX.
-- App Layout & Footer: Unified the global Footer placement inside the main application layout to ensure it appears consistently across all views. Cleaned up the main Header by moving the "App Tour" and "Install" links down to the new Footer.
+- App Layout & Header: Unified the global Footer placement inside the main application layout to ensure it appears consistently across all views. Resolved iOS safe area layout shifts by implementing a sticky translucent header, and adapted the Updates page layout to account for the new header positioning.
 - UI Consistency: Standardized the top padding and layout margins across the Settings, About, and Updates pages to ensure a unified responsive structure.
 - Copywriting: Updated footer labels to better reflect Sulok's local-first identity (e.g., "Manage Data" instead of "Sync Data").
 - PWA Stability: Enhanced the service worker manager to actively poll for application updates every hour. Migrated the `beforeinstallprompt` listener to a global inline script in `index.html` to reliably capture the install event before React mounts.
+- Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that smoothly morphs away on mobile devices when Sulo is actively whispering, preventing layout overflow.
+- Component Reorganization: Migrated `PwaManager` into the global `src/components/managers` directory and renamed the explorer sidebar to `ExplorerNav` to better reflect its horizontal navigation role.
 
 ### Fixed
 
 - Install Page Skeleton: Rebuilt the global page-level `InstallSkeleton` to pixel-perfectly match the structure of the redesigned Install page, eliminating a massive layout shift during lazy-loading.
 - Install Prompt State: Fixed an edge case where dismissing the PWA install prompt could prevent it from cleanly resetting its internal state for future attempts.
-- iOS Safe Area Collision: Added `viewport-fit=cover` to the application and implemented top safe-area insets in the root layout to prevent the main header from colliding with the iOS status bar and dynamic island on mobile devices.
+- iOS Safe Area Collision: Added `viewport-fit=cover` to the application and implemented top safe-area insets directly on the sticky header to prevent collisions with the iOS status bar and dynamic island on mobile devices.
 - Slider Interaction in Drawers: Fixed an issue where interacting with sliders inside mobile drawers (like the Settings Drawer) would inadvertently drag and close the drawer.
 - PWA Configuration Refactoring: Extracted the PWA manifest screenshots configuration into a centralized constants file and introduced rich install UI assets.
+- Mascot Whisper Context: Fixed an issue where the whisper speech bubble would awkwardly point to the "Sulok" text logo instead of the Sulo mascot by strictly conditionally rendering the whisper only when the mascot is fully visible and not being hovered.
 
 ---
 

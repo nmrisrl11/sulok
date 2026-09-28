@@ -178,7 +178,7 @@ export function SulokLogo({ className }: { className?: string }) {
 
 	const whisperElement = (
 		<AnimatePresence>
-			{whisperText && (
+			{whisperText && isMorphed && !isHovered && (
 				<motion.div
 					initial={{ opacity: 0, x: -10, scale: 0.95 }}
 					animate={{ opacity: 1, x: 0, scale: 1 }}
