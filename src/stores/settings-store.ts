@@ -25,6 +25,7 @@ export const defaultSettings: Settings = {
 		expressionQuickAction: "sleepy",
 		expressionPreviewUnavailable: "neutral",
 		expressionError: "sad",
+		expressionInstallPage: "attentive",
 		whispers: WHISPER_PHRASES,
 	},
 	privacySettings: {
@@ -150,6 +151,7 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 			"expressionQuickAction",
 			"expressionPreviewUnavailable",
 			"expressionError",
+			"expressionInstallPage",
 		];
 
 		for (const field of expressionFields) {

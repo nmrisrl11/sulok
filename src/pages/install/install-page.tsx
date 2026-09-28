@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { APP_INFO } from "@/constants/app-info";
 import { CHANGELOG_DATA } from "@/data/changelog";
 import { useInstallApp } from "@/hooks";
+import { useSettingsStore } from "@/stores";
 import { CheckCircle2Icon, DownloadIcon, MonitorSmartphoneIcon, ShareIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -148,7 +149,12 @@ export function InstallPage() {
 				{/* Branding / App Icon */}
 				<div className="relative mb-6 flex flex-col items-center">
 					<div className="relative mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border bg-card corner-squircle supports-[corner-shape:squircle]:rounded-full">
-						<SuloMascot expression="attentive" className="h-12 w-12 text-foreground" />
+						<SuloMascot
+							expression={useSettingsStore(
+								(state) => state.settings.suloSettings.expressionInstallPage,
+							)}
+							className="h-12 w-12 text-foreground"
+						/>
 					</div>
 					<div className="mt-4 rounded-full border bg-muted/50 px-3 py-1 text-[10px] font-medium tracking-wide text-muted-foreground">
 						v{currentVersion}

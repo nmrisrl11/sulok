@@ -13,16 +13,19 @@
 
 ### Changed
 
+- Settings UI Polish: Replaced the plain secondary button for "Customize Whispers" in the Quick Customize drawer with a premium, branded link card featuring micro-animations. Upgraded the 404 fallback state for invalid Settings tabs to match the primary 404 page layout, utilizing the interactive Sulo mascot and brand-aligned copywriting.
 - Install Page UI: Redesigned the Install page to be visually cohesive, compact, and responsive. Introduced dynamic, platform-specific guided installation cards (iOS, Desktop, Supported) for improved UX.
 - App Layout & Header: Unified the global Footer placement inside the main application layout to ensure it appears consistently across all views. Resolved iOS safe area layout shifts by implementing a sticky translucent header, and adapted the Updates page layout to account for the new header positioning.
 - UI Consistency: Standardized the top padding and layout margins across the Settings, About, and Updates pages to ensure a unified responsive structure.
 - Copywriting: Updated footer labels to better reflect Sulok's local-first identity (e.g., "Manage Data" instead of "Sync Data").
-- Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that elegantly hides the right navigation links on mobile devices when the wide "Sulok" text logo is visible, preventing layout overflow, and smoothly reveals them when it morphs into the compact Sulo mascot.
+- Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that elegantly hides the right navigation links on mobile devices when the wide "Sulok" text logo is visible, preventing layout overflow, and smoothly reveals them when it morphs into the compact Sulo mascot. The whisper bubble now gracefully wraps text onto a second line instead of truncating it, ensuring custom messages remain fully readable without pushing navigation items off-screen on narrow devices.
 - Component Reorganization: Migrated `PwaManager` into the global `src/components/managers` directory and renamed the explorer sidebar to `ExplorerNav` to better reflect its horizontal navigation role.
 - Design System: Refined the border radius scale and squircle classes across all components for perfect mathematical consistency and nesting aesthetics. Adjusted UI containers to use `rounded-xl` (squircle `4xl`), inner cards to `rounded-lg` (squircle `2xl`), and internal controls to `rounded-md` (squircle `xl`).
 
 ### Fixed
 
+- Header Overflow: Fixed an issue where wrapped whisper notifications would get clipped by the global header's overflow bounds.
+- Settings State Reset: Fixed a bug in the Quick Customize drawer where resetting Sulo's expressions failed to restore the Install Page expression back to its default.
 - Install Page Skeleton: Rebuilt the global page-level `InstallSkeleton` to pixel-perfectly match the structure of the redesigned Install page, eliminating a massive layout shift during lazy-loading.
 - Install Prompt State: Fixed an edge case where dismissing the PWA install prompt could prevent it from cleanly resetting its internal state for future attempts.
 - iOS Safe Area Collision: Added `viewport-fit=cover` to the application and implemented top safe-area insets directly on the sticky header to prevent collisions with the iOS status bar and dynamic island on mobile devices.

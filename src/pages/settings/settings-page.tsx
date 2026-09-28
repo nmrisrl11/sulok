@@ -1,6 +1,9 @@
 import { AppearanceIcon, DataIcon, SoundFxIcon, SuloCustomizationIcon } from "@/components/icons";
+import { SuloMascot } from "@/components/logo/sulo-mascot";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LoaderIcon, SettingsIcon } from "lucide-react";
+import { useSettingsStore } from "@/stores";
+import { LoaderIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, lazy, useEffect, useRef } from "react";
 
@@ -78,6 +81,8 @@ export function SettingsPage() {
 		parseAsString.withDefault("data").withOptions({ shallow: true }),
 	);
 
+	const expression = useSettingsStore((state) => state.settings.suloSettings.expression404);
+
 	const renderContent = () => {
 		switch (activeTab) {
 			case "data":
@@ -90,12 +95,20 @@ export function SettingsPage() {
 				return <SuloCustomizationSection />;
 			default:
 				return (
-					<div className="flex flex-col items-center justify-center py-20 text-center">
-						<SettingsIcon className="mb-4 h-12 w-12 text-muted-foreground/50" />
-						<h2 className="font-heading text-lg font-medium">Coming Soon</h2>
-						<p className="mt-1 max-w-sm text-sm text-muted-foreground">
-							These settings are currently under development. Please check back later.
-						</p>
+					<div className="flex animate-in flex-col items-center justify-center gap-6 text-center duration-500 fade-in">
+						<div className="h-32 w-32 sm:h-48 sm:w-48">
+							<SuloMascot expression={expression} />
+						</div>
+						<div className="flex flex-col gap-2">
+							<h2 className="font-heading text-2xl font-bold">Lost in the settings?</h2>
+							<p className="mx-auto max-w-sm text-muted-foreground">
+								This configuration corner doesn't seem to exist. Let's get you back to familiar
+								territory.
+							</p>
+						</div>
+						<Button className="cursor-pointer" onClick={() => setActiveTab("data")}>
+							Return to Data & Storage
+						</Button>
 					</div>
 				);
 		}

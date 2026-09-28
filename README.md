@@ -24,18 +24,20 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 
 ## ✨ Features
 
-- **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure.
+- **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure with drag-and-drop support.
 - **⭐ Favorites**: Mark important folders and links as favorites to quickly access them from a dedicated view.
+- **🗑️ Recycle Bin**: Safely soft-delete items with a 30-day retention and auto-cleanup system.
 - **🔍 Smart Filtering**: Instantly filter your library by domains or favorites directly from the toolbar.
 - **📝 Item Management**: Save, edit, delete, and bulk-manage links with auto-fetched metadata (titles, descriptions, and images).
-- **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar.
-- **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, and custom scrollbars.
+- **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar with smart clipboard detection.
+- **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, responsive global action drawers, and custom scrollbars.
 - **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
-- **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, and mascot customization via a Quick Customize menu.
+- **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, custom folder colors, and mascot customization via a Quick Customize menu.
 - **🚀 Local-First Performance**: Lightning-fast operations powered by IndexedDB, heavily optimized React state isolation, buttery-smooth list virtualization, and zero-latency UI responses.
 - **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
-- **🌐 Offline Capable**: Designed to work offline for local data and existing items (metadata fetching requires network access; PWA support coming soon).
-- **🎉 Sulo Mascot**: A responsive, interactive brand mascot that reacts to your actions and inputs throughout the app.
+- **🌐 Fully Offline Capable**: PWA configured with hourly update polling. Designed to work completely offline for local data and existing items (initial metadata fetching requires network access).
+- **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
+- **📰 Built-in Changelog**: Stay up to date with a dedicated Updates page seamlessly integrated with the app's dynamic versioning.
 
 ---
 
@@ -46,7 +48,7 @@ Sulok is built on a **local-first architecture**.
 - **No Accounts:** You don't need to sign up or log in.
 - **No Cloud Database:** We don't store your bookmarks on our servers. In fact, we don't have servers.
 - **Browser Storage:** Folders and items are saved locally on your device using IndexedDB, while theme and settings use localStorage.
-- **External Requests:** The app fetches link metadata (via `api.ogfetch.com`) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
+- **External Requests:** The app fetches link metadata (like Open Graph tags) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
 
 _Note: Device synchronization is planned for future releases to help you securely move your data between devices._
 
@@ -91,6 +93,9 @@ Sulok enforces a scalable, modular architecture with strict boundaries between t
 ```text
 src/
 ├── components/       # Global App UI (layout, branding, mascots)
+│   ├── icons/        # Centralized SVG icons
+│   ├── layout/       # App-wide structural layout (header, footer, nav)
+│   ├── managers/     # Global state/event managers (e.g., PWA manager)
 │   └── ui/           # Generic shadcn/ui primitive components
 ├── constants/        # Centralized app configuration (APP_INFO)
 ├── data/             # Static data (e.g. changelog)
@@ -178,8 +183,7 @@ _(No `.env` file is required to run the application locally.)_
 
 We are currently focused on completing Phase 1 of our roadmap. Future plans include:
 
-- Full Progressive Web App (PWA) installation support
-- Chrome Extension for quick-saving
+- Chrome Extension for quick-saving ("Save to Sulok" button)
 - Peer-to-peer (WebRTC) device synchronization without a backend
 
 _(Check `CURRENT_STATE.md` for detailed tracking)._

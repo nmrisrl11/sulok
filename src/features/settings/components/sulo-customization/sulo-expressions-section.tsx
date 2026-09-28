@@ -131,6 +131,7 @@ export function SuloExpressionsSection() {
 				expressionQuickAction: defaultSettings.suloSettings.expressionQuickAction,
 				expressionPreviewUnavailable: defaultSettings.suloSettings.expressionPreviewUnavailable,
 				expressionError: defaultSettings.suloSettings.expressionError,
+				expressionInstallPage: defaultSettings.suloSettings.expressionInstallPage,
 			},
 		});
 		notify.success("Expressions restored", { id: "restore-expressions" });
@@ -193,6 +194,11 @@ export function SuloExpressionsControl({
 				id="expressionError"
 				label="App Crash"
 				description="When something unexpected goes wrong."
+			/>
+			<ExpressionCard
+				id="expressionInstallPage"
+				label="Installation Page"
+				description="When downloading the app to your device."
 			/>
 		</div>
 	);

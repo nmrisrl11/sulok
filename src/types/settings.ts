@@ -41,6 +41,7 @@ export interface SuloSettings {
 	expressionQuickAction: SuloExpression;
 	expressionPreviewUnavailable: SuloExpression;
 	expressionError: SuloExpression;
+	expressionInstallPage: SuloExpression;
 	whispers: {
 		positive: string[];
 		negative: string[];
