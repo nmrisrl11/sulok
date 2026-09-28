@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- Header Overflow: Fixed an issue where wrapped whisper notifications would get clipped by the global header's overflow bounds.
+- Settings State Reset: Fixed a bug in the Quick Customize drawer where resetting Sulo's expressions failed to restore the Install Page expression back to its default.
 - Install Page Skeleton: Rebuilt the global page-level `InstallSkeleton` to pixel-perfectly match the structure of the redesigned Install page, eliminating a massive layout shift during lazy-loading.
 - Install Prompt State: Fixed an edge case where dismissing the PWA install prompt could prevent it from cleanly resetting its internal state for future attempts.
 - iOS Safe Area Collision: Added `viewport-fit=cover` to the application and implemented top safe-area insets directly on the sticky header to prevent collisions with the iOS status bar and dynamic island on mobile devices.

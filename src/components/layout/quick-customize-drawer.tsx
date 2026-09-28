@@ -82,6 +82,7 @@ export function QuickCustomizeDrawer() {
 				expressionQuickAction: defaultSettings.suloSettings.expressionQuickAction,
 				expressionPreviewUnavailable: defaultSettings.suloSettings.expressionPreviewUnavailable,
 				expressionError: defaultSettings.suloSettings.expressionError,
+				expressionInstallPage: defaultSettings.suloSettings.expressionInstallPage,
 			},
 		});
 	};

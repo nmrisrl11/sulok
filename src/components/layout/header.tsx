@@ -19,7 +19,7 @@ export function Header() {
 	const isMobile = useIsMobile();
 
 	return (
-		<header className="sticky top-0 z-50 flex items-center justify-between overflow-hidden bg-background/90 px-4 pt-[calc(env(safe-area-inset-top)+1rem)] pb-4 backdrop-blur-md md:px-8 md:pt-[calc(env(safe-area-inset-top)+1.5rem)] md:pb-6">
+		<header className="sticky top-0 z-50 flex items-center justify-between overflow-visible bg-background/90 px-4 pt-[calc(env(safe-area-inset-top)+1rem)] pb-4 backdrop-blur-md md:px-8 md:pt-[calc(env(safe-area-inset-top)+1.5rem)] md:pb-6">
 			<SulokLogo />
 			<nav className="flex max-w-full shrink-0 items-center gap-2 sm:gap-4">
 				<div className="flex h-9 shrink-0 items-center gap-1 rounded-full bg-black/5 py-0.5 pr-1.5 pl-1 shadow-inner sm:h-10 sm:gap-1.5 sm:pr-1.5 dark:bg-white/10">
