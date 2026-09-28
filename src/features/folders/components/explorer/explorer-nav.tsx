@@ -38,7 +38,7 @@ export const ExplorerNav = memo(function ExplorerNav() {
 	return (
 		<nav
 			id="explorer-nav"
-			className="flex w-full flex-row gap-1 overflow-x-auto rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-auto sm:flex-wrap sm:overflow-visible"
+			className="flex w-full flex-row gap-1 overflow-x-auto rounded-lg border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:w-auto sm:flex-wrap sm:overflow-visible"
 		>
 			{NAV_ITEMS.map((item) => {
 				const Icon = item.icon;
@@ -49,7 +49,7 @@ export const ExplorerNav = memo(function ExplorerNav() {
 						key={item.id}
 						type="button"
 						className={cn(
-							"group flex flex-1 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:flex-none",
+							"group flex flex-1 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1.5 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:flex-none",
 							isActive
 								? "bg-background text-foreground shadow-engraved"
 								: "text-muted-foreground hover:bg-background/50 hover:text-foreground",

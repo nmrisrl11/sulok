@@ -28,12 +28,12 @@ function ExportOptionButton({
 			disabled={disabled}
 			className={cn(
 				"flex flex-col items-center gap-2 p-3 text-center transition-all sm:items-start sm:gap-3 sm:p-4 sm:text-left",
-				"rounded-2xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
-				"corner-squircle supports-[corner-shape:squircle]:rounded-3xl",
+				"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+				"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
 				"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
 			)}
 		>
-			<div className="rounded-xl border border-border/50 bg-card p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+			<div className="rounded-lg border border-border/50 bg-card p-2 text-muted-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 				{icon}
 			</div>
 			<div>
@@ -93,7 +93,7 @@ export function ExportLibrarySetting() {
 				/>
 			</div>
 			{!hasData && (
-				<div className="flex items-start gap-2 rounded-xl bg-amber-500/10 p-3 text-amber-500 corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+				<div className="flex items-start gap-2 rounded-lg bg-amber-500/10 p-3 text-amber-500 corner-squircle supports-[corner-shape:squircle]:rounded-4xl">
 					<AlertCircleIcon className="mt-0.5 h-4 w-4 shrink-0" />
 					<p className="text-xs leading-relaxed font-medium">
 						You don't have any items to export yet. Add some items first.

@@ -62,7 +62,7 @@ const ExpressionCard = memo(function ExpressionCard({
 	const currentExpr = previewExpr || value;
 
 	return (
-		<div className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-border/50 bg-background p-4 shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+		<div className="relative flex flex-col justify-between overflow-hidden rounded-lg border border-border/50 bg-background p-4 shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 			{/* Background floating mascot (subtle) - No scaling on hover */}
 			<div className="pointer-events-none absolute -top-6 -right-6 opacity-[0.03] dark:opacity-10">
 				<SuloMascot expression={currentExpr} className="h-32 w-32" />
@@ -101,7 +101,7 @@ const ExpressionCard = memo(function ExpressionCard({
 						<SelectTrigger
 							id={`expression-${id}`}
 							aria-labelledby={`expression-title-${id}`}
-							className="w-full bg-background capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+							className="w-full rounded-md bg-background capitalize corner-squircle supports-[corner-shape:squircle]:rounded-xl"
 						>
 							<SelectValue>
 								<span className="capitalize">{value}</span>

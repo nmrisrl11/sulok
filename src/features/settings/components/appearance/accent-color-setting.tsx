@@ -65,7 +65,7 @@ export function AccentColorControl({
 						onClick={() => handleUpdate(preset.id)}
 						aria-label={variant === "compact" ? preset.label : undefined}
 						className={cn(
-							"group flex min-w-0 items-center rounded-xl text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+							"group flex min-w-0 items-center rounded-lg text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 							variant === "default"
 								? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4"
 								: "w-full justify-center p-1",
@@ -76,7 +76,7 @@ export function AccentColorControl({
 					>
 						<div
 							className={cn(
-								"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+								"flex shrink-0 items-center justify-center rounded-md ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
 								variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "aspect-square w-full",
 								accentColor === preset.id
 									? "ring-primary/50"
@@ -112,7 +112,7 @@ export function AccentColorControl({
 
 			<div
 				className={cn(
-					"group relative flex min-w-0 items-center rounded-xl text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+					"group relative flex min-w-0 items-center rounded-lg text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 					variant === "default" ? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4" : "w-full justify-center p-1",
 					isCustom
 						? "bg-background shadow-engraved"
@@ -130,7 +130,7 @@ export function AccentColorControl({
 				</div>
 				<div
 					className={cn(
-						"flex shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+						"flex shrink-0 items-center justify-center overflow-hidden rounded-md ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
 						variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "aspect-square w-full",
 						isCustom ? "ring-primary/50" : "ring-border/50 group-hover:scale-105 hover:ring-border",
 					)}

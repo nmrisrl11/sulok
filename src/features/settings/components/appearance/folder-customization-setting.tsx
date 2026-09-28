@@ -111,7 +111,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 			{/* Segmented Control */}
 			<div
 				className={cn(
-					"flex w-full flex-row gap-1 rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+					"flex w-full flex-row gap-1 rounded-lg border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 					variant === "compact"
 						? "flex-wrap sm:flex-wrap"
 						: "overflow-x-auto sm:flex-nowrap sm:overflow-visible",
@@ -126,7 +126,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 							type="button"
 							onClick={() => handleModeChange(segment.id)}
 							className={cn(
-								"group flex flex-1 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg px-2 py-2 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:gap-2 sm:px-3 sm:py-1.5",
+								"group flex flex-1 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-md px-2 py-2 text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:gap-2 sm:px-3 sm:py-1.5",
 								variant === "compact" ? "flex-col" : "sm:flex-row",
 								isActive
 									? "bg-background text-foreground shadow-engraved"
@@ -179,10 +179,10 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 									onClick={() => applyPreset(preset)}
 									title={preset.label}
 									className={cn(
-										"group flex min-w-0 items-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+										"group flex min-w-0 items-center gap-2 rounded-lg p-2 pr-3 text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 										variant === "compact"
-											? "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:aspect-square sm:justify-center sm:gap-0 sm:rounded-lg sm:pr-2 sm:supports-[corner-shape:squircle]:rounded-xl"
-											: "gap-2 rounded-xl p-2 pr-3 text-left supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-3 sm:pr-4",
+											? "sm:aspect-square sm:justify-center sm:gap-0 sm:pr-2"
+											: "sm:gap-3 sm:pr-4",
 										isActive
 											? "bg-background shadow-engraved"
 											: "border border-border/40 bg-muted/20 hover:bg-muted/50",
@@ -232,7 +232,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 					>
 						<div
 							className={cn(
-								"group relative flex w-full items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+								"group relative flex w-full items-center gap-3 rounded-lg bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 								variant !== "compact" && "sm:w-[calc(33.333%-0.5rem)]",
 							)}
 						>
@@ -246,7 +246,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 								/>
 							</div>
 							<div
-								className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+								className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
 								style={{ backgroundColor: folderColorBack }}
 							/>
 							<span className="text-sm font-medium whitespace-nowrap text-foreground">
@@ -274,7 +274,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 							return (
 								<div
 									key={picker.id}
-									className="group relative flex items-center gap-3 rounded-xl bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
+									className="group relative flex items-center gap-3 rounded-lg bg-muted/30 p-2 pr-4 text-left shadow-engraved transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
 								>
 									<div className="absolute inset-0 z-10 cursor-pointer opacity-0">
 										<DebouncedColorPicker
@@ -286,7 +286,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 										/>
 									</div>
 									<div
-										className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-10 sm:w-10"
+										className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md ring-1 ring-border/50 transition-transform group-hover:scale-105 group-hover:ring-border supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:h-10 sm:w-10"
 										style={{ backgroundColor: value }}
 									/>
 									<span className="truncate text-xs font-medium text-foreground sm:text-sm">
@@ -301,7 +301,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 
 			{/* Dedicated Live Preview Section */}
 			{variant !== "compact" && (
-				<div className="mt-2 flex flex-col items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex-row sm:gap-6 sm:p-5">
+				<div className="mt-2 flex flex-col items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 supports-[corner-shape:squircle]:rounded-4xl supports-[corner-shape:squircle]:corner-squircle sm:flex-row sm:gap-6 sm:p-5">
 					<div className="flex flex-col items-center gap-1.5 text-center sm:items-start sm:text-left">
 						<span className="text-sm font-semibold text-primary">Live Preview</span>
 						<span className="max-w-70 text-xs leading-relaxed text-muted-foreground">
@@ -309,7 +309,7 @@ export function FolderColorControl({ variant = "default" }: { variant?: "default
 							personalization makes your workspace truly yours.
 						</span>
 					</div>
-					<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-background/50 shadow-inner ring-1 ring-border/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:h-24 sm:w-24">
+					<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-background/50 shadow-inner ring-1 ring-border/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:h-24 sm:w-24">
 						<FolderIcon className="size-12 drop-shadow-md transition-all sm:size-16" />
 					</div>
 				</div>

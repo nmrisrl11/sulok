@@ -92,11 +92,12 @@ Use a 4px base grid. TailwindCSS spacing scale.
 
 ## Border Radius
 
-| Token        | Value | Usage                 |
-| ------------ | ----- | --------------------- |
-| `rounded-sm` | 4px   | Small inputs, tags    |
-| `rounded-md` | 6px   | Cards, buttons        |
-| `rounded-lg` | 8px   | Modal dialogs, sheets |
+| Token        | Value | Usage                                   |
+| ------------ | ----- | --------------------------------------- |
+| `rounded-sm` | 4px   | Small tags, badges                      |
+| `rounded-md` | 6px   | Inner buttons, small inputs             |
+| `rounded-lg` | 8px   | Cards, middle containers                |
+| `rounded-xl` | 12px  | Modal dialogs, sheets, outer containers |
 
 ### Squircles (Progressive Enhancement)
 
@@ -104,9 +105,9 @@ We use `@toolwind/corner-shape` (`corner-squircle`) for a premium iOS-like corne
 Because CSS `corner-shape` is not universally supported, we enforce a strict progressive enhancement pattern:
 
 - **Fallback:** Always include a baseline `rounded-*` class (e.g., `rounded-md` / 6px) for Safari/Firefox/Mobile.
-- **Enhanced:** Use `supports-[corner-shape:squircle]:rounded-*` to apply the larger radius required for a deep squircle (e.g., `rounded-xl` or `rounded-2xl`) only on supported browsers.
+- **Enhanced:** Use `supports-[corner-shape:squircle]:rounded-*` to apply the larger radius required for a deep squircle (e.g., `rounded-xl` for inner elements, `rounded-2xl` for cards, or `rounded-4xl` for large outer containers) only on supported browsers.
 
-Example: `className="rounded-md supports-[corner-shape:squircle]:rounded-xl corner-squircle"`
+Example: `className="rounded-lg supports-[corner-shape:squircle]:rounded-2xl corner-squircle"`
 
 ---
 
@@ -180,7 +181,7 @@ Minimal shadows. Prefer border/background differentiation.
 - The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space. Breadcrumbs intelligently adapt to screen size, displaying up to 6 items on desktop and strictly 3 items on mobile.
 - Utility rows (Search & View modes) are placed in a floating pill container (`bg-muted/30 backdrop-blur-md`).
 - On mobile, it utilizes a responsive 3-row grid structure (Search, Filter, Actions) to remain accessible without horizontal overflow.
-- **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.
+- **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-md` or `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.
 - **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
 
 ### Explorer Navigation (ExplorerNav)

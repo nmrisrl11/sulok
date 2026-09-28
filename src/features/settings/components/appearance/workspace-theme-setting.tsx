@@ -39,7 +39,7 @@ export function WorkspaceThemeControl({
 					onClick={() => setTheme(t.id as Theme)}
 					aria-label={variant === "compact" ? t.label : undefined}
 					className={cn(
-						"group flex min-w-0 items-center rounded-xl text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+						"group flex min-w-0 items-center rounded-lg text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 						variant === "default" ? "gap-2 p-2 pr-3 sm:gap-3 sm:pr-4" : "w-full justify-center p-1",
 						theme === t.id
 							? "bg-background shadow-engraved"
@@ -48,7 +48,7 @@ export function WorkspaceThemeControl({
 				>
 					<div
 						className={cn(
-							"flex shrink-0 items-center justify-center rounded-lg ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
+							"flex shrink-0 items-center justify-center rounded-md ring-1 transition-transform supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
 							variant === "default" ? "h-8 w-8 sm:h-9 sm:w-9" : "aspect-square w-full",
 							theme === t.id
 								? "ring-primary/50"

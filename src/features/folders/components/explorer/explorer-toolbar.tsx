@@ -156,7 +156,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 
 			{/* Bottom row: Search & View modes */}
 			{view !== "trash" && (hasItems || hasFolders || hasFiltersActive) && (
-				<div className="grid grid-cols-2 gap-2 rounded-xl border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
+				<div className="grid grid-cols-2 gap-2 rounded-lg border border-border/40 bg-muted/30 p-1 shadow-sm backdrop-blur-md supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:flex sm:min-h-11 sm:flex-row sm:items-center sm:gap-2">
 					{/* Search & Reset */}
 					<div className="col-span-2 flex items-center gap-2 sm:col-span-1 sm:w-full sm:flex-1">
 						<div className="relative flex w-full flex-1 items-center">
@@ -171,7 +171,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 					<div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:flex sm:w-auto sm:flex-none sm:items-center sm:gap-2">
 						<Select value={typeFilter} onValueChange={(val) => setTypeFilter(val)}>
 							<SelectTrigger
-								className="h-8 w-full rounded-lg border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-32 sm:flex-none"
+								className="h-8 w-full rounded-md border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-32 sm:flex-none"
 								aria-label="Filter by type"
 							>
 								<SelectValue placeholder="All Types">{getSelectValueDisplay()}</SelectValue>
@@ -207,7 +207,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 							}
 						>
 							<SelectTrigger
-								className="h-8 w-full rounded-lg border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none"
+								className="h-8 w-full rounded-md border-0 text-sm ring-offset-0 focus:ring-0 focus:ring-offset-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none"
 								aria-label="Sort items"
 							>
 								<SelectValue placeholder="Sort by" />
@@ -231,7 +231,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 								variant="ghost"
 								size="sm"
 								className={cn(
-									"h-8 rounded-lg px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:px-0",
+									"h-8 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:px-0",
 									mixData
 										? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
@@ -251,7 +251,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 									size="sm"
 									title="List View"
 									aria-label="List View"
-									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("list")}
 								>
 									<ListIcon className="size-4" />
@@ -261,7 +261,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 									size="sm"
 									title="Grid View"
 									aria-label="Grid View"
-									className={`size-8 rounded-lg px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
 									onClick={() => setViewMode("grid")}
 								>
 									<GridIcon className="size-4" />
@@ -276,7 +276,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 									variant="ghost"
 									size="sm"
 									onClick={handleResetFilters}
-									className="h-8 shrink-0 rounded-lg px-3 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+									className="h-8 shrink-0 rounded-md px-3 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
 								>
 									Clear
 								</Button>
@@ -303,7 +303,7 @@ function ExplorerSearchInput() {
 				autoCorrect="off"
 				spellCheck="false"
 				placeholder="Search your corner..."
-				className="h-8 w-full rounded-lg border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
+				className="h-8 w-full rounded-md border-0 pl-8 shadow-none focus-visible:ring-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:pl-7"
 				value={localSearch}
 				onChange={(e) => setLocalSearch(e.target.value)}
 			/>

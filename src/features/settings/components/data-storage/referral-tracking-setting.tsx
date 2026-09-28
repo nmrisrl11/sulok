@@ -35,7 +35,7 @@ export function ReferralTrackingSetting() {
 					This appends a small tag to external links when you open them.
 				</p>
 			</div>
-			<div className="rounded-xl border border-border/50 bg-muted/30 p-3 text-xs corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+			<div className="rounded-lg border border-border/50 bg-muted/30 p-3 text-xs corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 				<span className="font-medium text-foreground">Preview: </span>
 				<span className="text-muted-foreground">https://example.com/</span>
 				<span

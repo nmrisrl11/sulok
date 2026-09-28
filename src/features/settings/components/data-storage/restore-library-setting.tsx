@@ -68,12 +68,12 @@ export function RestoreLibrarySetting() {
 				onClick={() => fileInputRef.current?.click()}
 				className={cn(
 					"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
-					"rounded-2xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
-					"corner-squircle supports-[corner-shape:squircle]:rounded-3xl",
+					"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+					"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
 					"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
 				)}
 			>
-				<div className="rounded-xl border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+				<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 					<UploadCloudIcon className="h-5 w-5" />
 				</div>
 				<div>

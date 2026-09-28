@@ -29,12 +29,12 @@ export function SettingsSkeleton() {
 						<div className="space-y-10">
 							<div className="space-y-4">
 								<Skeleton className="h-3 w-32" />
-								<Skeleton className="h-44 w-full rounded-3xl corner-squircle supports-[corner-shape:squircle]:rounded-[2rem]" />
+								<Skeleton className="h-44 w-full rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-4xl" />
 							</div>
 
 							<div className="space-y-4">
 								<Skeleton className="h-3 w-36" />
-								<Skeleton className="h-44 w-full rounded-3xl corner-squircle supports-[corner-shape:squircle]:rounded-[2rem]" />
+								<Skeleton className="h-44 w-full rounded-xl corner-squircle supports-[corner-shape:squircle]:rounded-4xl" />
 							</div>
 						</div>
 					</div>
