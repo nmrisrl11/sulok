@@ -20,7 +20,7 @@ export function AboutPage() {
 			<section className="flex flex-col gap-8">
 				<div className="flex flex-col gap-3">
 					<h2 className="font-heading text-lg font-bold">What does "{APP_INFO.name}" mean?</h2>
-					<div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5">
+					<div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5 supports-[corner-shape:squircle]:rounded-4xl supports-[corner-shape:squircle]:corner-squircle">
 						<p className="text-foreground">
 							<strong>{APP_INFO.name}</strong>{" "}
 							<span className="text-muted-foreground">{APP_INFO.pronunciation}</span>

@@ -22,7 +22,7 @@ function RestoreAppearanceButton() {
 		<ResetButton
 			onClick={handleRestore}
 			label="Reset Appearance"
-			className="corner-squircle supports-[corner-shape:squircle]:rounded-xl"
+			className="corner-squircle supports-[corner-shape:squircle]:rounded-4xl"
 		/>
 	);
 }

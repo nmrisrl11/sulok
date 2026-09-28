@@ -60,7 +60,7 @@ export function FolderEmptyState({ animate = true }: { animate?: boolean }) {
 	return (
 		<div
 			className={cn(
-				"flex w-full flex-col items-center justify-center rounded-xl border bg-card p-8 py-12 text-center shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
+				"flex w-full flex-col items-center justify-center rounded-lg border bg-card p-8 py-12 text-center shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
 				animate && "animate-in duration-300 zoom-in-95 fade-in",
 			)}
 		>

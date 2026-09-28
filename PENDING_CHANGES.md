@@ -20,6 +20,7 @@
 - PWA Stability: Enhanced the service worker manager to actively poll for application updates every hour. Migrated the `beforeinstallprompt` listener to a global inline script in `index.html` to reliably capture the install event before React mounts.
 - Sulo Mascot & Header UX: Refined the online/offline status whisper messages for conciseness. Implemented a dynamic header navigation that smoothly morphs away on mobile devices when Sulo is actively whispering, preventing layout overflow.
 - Component Reorganization: Migrated `PwaManager` into the global `src/components/managers` directory and renamed the explorer sidebar to `ExplorerNav` to better reflect its horizontal navigation role.
+- Design System: Refined the border radius scale and squircle classes across all components for perfect mathematical consistency and nesting aesthetics. Adjusted UI containers to use `rounded-xl` (squircle `4xl`), inner cards to `rounded-lg` (squircle `2xl`), and internal controls to `rounded-md` (squircle `xl`).
 
 ### Fixed
 
@@ -29,6 +30,7 @@
 - Slider Interaction in Drawers: Fixed an issue where interacting with sliders inside mobile drawers (like the Settings Drawer) would inadvertently drag and close the drawer.
 - PWA Configuration Refactoring: Extracted the PWA manifest screenshots configuration into a centralized constants file and introduced rich install UI assets.
 - Mascot Whisper Context: Fixed an issue where the whisper speech bubble would awkwardly point to the "Sulok" text logo instead of the Sulo mascot by strictly conditionally rendering the whisper only when the mascot is fully visible and not being hovered.
+- Pill Navigation Clipping: Resolved an issue where active navigation backgrounds with `shadow-engraved` were being sliced off by their container's overflow bounds. Implemented a mathematically precise concentric padding layout with fixed heights to perfectly align border radii and preserve outer shadows.
 
 ---
 

@@ -13,7 +13,7 @@ export function AboutSkeleton() {
 			<section className="flex flex-col gap-8">
 				<div className="flex flex-col gap-3">
 					<Skeleton className="h-6 w-48" />
-					<div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5">
+					<div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5 supports-[corner-shape:squircle]:rounded-4xl supports-[corner-shape:squircle]:corner-squircle">
 						<div className="flex items-center gap-2">
 							<Skeleton className="h-5 w-24" />
 							<Skeleton className="h-4 w-16" />

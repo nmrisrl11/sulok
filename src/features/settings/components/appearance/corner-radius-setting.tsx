@@ -43,7 +43,7 @@ export function CornerRadiusControl({ variant = "default" }: { variant?: "defaul
 				className={cn(
 					"grid grid-cols-3",
 					variant === "compact"
-						? "gap-1 rounded-xl bg-muted/40 p-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
+						? "gap-1 rounded-lg bg-muted/40 p-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle"
 						: "gap-2 sm:gap-3",
 				)}
 			>
@@ -56,14 +56,12 @@ export function CornerRadiusControl({ variant = "default" }: { variant?: "defaul
 							type="button"
 							onClick={() => handleUpdate(style.id)}
 							className={cn(
-								"group flex min-w-0 items-center justify-center text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+								"group flex min-w-0 items-center justify-center text-center transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:corner-squircle",
 								variant === "compact"
-									? "flex-col gap-1.5 rounded-lg py-2.5 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
-									: "gap-1.5 rounded-xl p-2 hover:bg-muted/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle sm:gap-2",
+									? "flex-col gap-1.5 rounded-md py-2.5 supports-[corner-shape:squircle]:rounded-xl"
+									: "gap-1.5 rounded-lg p-2 hover:bg-muted/50 supports-[corner-shape:squircle]:rounded-2xl sm:gap-2",
 								isActive
-									? variant === "compact"
-										? "bg-background text-foreground shadow-engraved"
-										: "bg-background text-foreground shadow-engraved"
+									? "bg-background text-foreground shadow-engraved"
 									: variant === "compact"
 										? "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
 										: "border border-border/40 bg-muted/20",
@@ -94,7 +92,7 @@ export function CornerRadiusControl({ variant = "default" }: { variant?: "defaul
 				})}
 			</div>
 			{cornerStyle === "custom" && (
-				<div className="animate-in space-y-4 rounded-xl bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+				<div className="animate-in space-y-4 rounded-lg bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
 					<div className="flex items-center justify-between">
 						<h3 className="text-xs text-muted-foreground">Radius Value</h3>
 						<span className="text-xs font-medium text-foreground tabular-nums">

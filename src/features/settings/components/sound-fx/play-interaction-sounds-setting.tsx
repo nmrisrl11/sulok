@@ -15,7 +15,7 @@ export function SoundSettingsControl() {
 	};
 
 	return (
-		<div className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/20 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+		<div className="flex items-center justify-between rounded-lg border border-border/40 bg-muted/20 p-4 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
 			<Label htmlFor={switchId} className="text-sm font-medium">
 				Enable Sound FX
 			</Label>

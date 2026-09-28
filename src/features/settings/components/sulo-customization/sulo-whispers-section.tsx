@@ -149,14 +149,14 @@ export function SuloWhispersSection() {
 				<SettingsCard className="flex flex-col p-0 sm:p-0">
 					<div className="flex flex-col divide-y divide-border/50">
 						<div className="bg-muted/20 p-4 sm:px-6 sm:py-5">
-							<div className="flex flex-wrap items-center gap-1.5 rounded-2xl bg-muted/40 p-1.5 shadow-inner corner-squircle supports-[corner-shape:squircle]:rounded-3xl">
+							<div className="flex flex-wrap items-center gap-1.5 rounded-lg bg-muted/40 p-1.5 shadow-inner corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 								{(Object.keys(categoryMap) as Array<keyof WhispersFormValues>).map((cat) => (
 									<button
 										key={cat}
 										type="button"
 										onClick={() => setActiveCategory(cat)}
 										className={cn(
-											"flex-1 rounded-xl px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
+											"flex-1 rounded-md px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle",
 											activeCategory === cat
 												? "animate-in bg-background text-foreground shadow-engraved duration-200 zoom-in-95"
 												: "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
@@ -181,7 +181,7 @@ export function SuloWhispersSection() {
 									const fieldError = activeErrors?.[index]?.value;
 									return (
 										<div key={field.id} className="space-y-1.5">
-											<div className="group relative flex items-center overflow-hidden rounded-xl border border-border/50 shadow-sm transition-all corner-squircle focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 hover:border-border supports-[corner-shape:squircle]:rounded-2xl">
+											<div className="group relative flex items-center overflow-hidden rounded-md border border-border/50 shadow-sm transition-all corner-squircle focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 hover:border-border supports-[corner-shape:squircle]:rounded-2xl">
 												<div className="pointer-events-none flex w-10 shrink-0 items-center justify-center self-stretch bg-background text-muted-foreground/60 peer-disabled:opacity-50">
 													<QuoteIcon size={14} />
 												</div>
@@ -218,7 +218,7 @@ export function SuloWhispersSection() {
 									<button
 										type="button"
 										onClick={() => arrays[activeCategory].append({ value: "" })}
-										className="flex min-h-8 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border/50 text-sm font-medium text-muted-foreground transition-colors corner-squircle hover:border-border hover:bg-muted/30 hover:text-foreground supports-[corner-shape:squircle]:rounded-2xl"
+										className="flex min-h-8 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border/50 text-sm font-medium text-muted-foreground transition-colors corner-squircle hover:border-border hover:bg-muted/30 hover:text-foreground supports-[corner-shape:squircle]:rounded-2xl"
 									>
 										<PlusIcon className="h-4 w-4" />
 										Add Phrase
@@ -233,7 +233,7 @@ export function SuloWhispersSection() {
 							type="submit"
 							form="whispers-form"
 							disabled={!form.formState.isDirty}
-							className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium whitespace-nowrap text-primary-foreground shadow transition-colors corner-squircle hover:bg-primary/90 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 supports-[corner-shape:squircle]:rounded-xl"
+							className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium whitespace-nowrap text-primary-foreground shadow transition-colors corner-squircle hover:bg-primary/90 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 supports-[corner-shape:squircle]:rounded-2xl"
 						>
 							Save Whispers
 						</button>

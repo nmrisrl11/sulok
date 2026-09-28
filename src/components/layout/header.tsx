@@ -21,14 +21,14 @@ export function Header() {
 		<header className="sticky top-0 z-50 flex items-center justify-between bg-background/90 px-4 pt-[calc(env(safe-area-inset-top)+1rem)] pb-4 backdrop-blur-md md:px-8 md:pt-[calc(env(safe-area-inset-top)+1.5rem)] md:pb-6">
 			<SulokLogo />
 			<nav className="flex items-center gap-2 sm:gap-4">
-				<div className="flex items-center gap-1 rounded-full bg-black/5 p-1 shadow-inner dark:bg-white/10">
+				<div className="flex items-center gap-1 rounded-full bg-black/5 p-1 pr-1.5 shadow-inner sm:gap-1.5 sm:pr-1.5 dark:bg-white/10">
 					<AnimatePresence initial={false}>
 						{(!isWhisperVisible || !isMobile) && (
 							<motion.div
 								initial={{ width: 0, opacity: 0 }}
 								animate={{ width: "auto", opacity: 1 }}
 								exit={{ width: 0, opacity: 0 }}
-								className="flex items-center gap-1 overflow-hidden"
+								className="flex items-center gap-1 overflow-hidden py-0.5 pl-0.5 sm:gap-1.5"
 							>
 								{navLinks.map((link) => (
 									<NavLink
@@ -39,7 +39,7 @@ export function Header() {
 										onMouseLeave={clearTemporaryExpression}
 										className={({ isActive }) =>
 											cn(
-												"cursor-pointer rounded-full px-2 py-1 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3 sm:py-1.5 sm:text-sm",
+												"relative flex h-7 shrink-0 items-center justify-center rounded-full px-3 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-8 sm:px-4 sm:text-sm",
 												isActive
 													? "bg-background text-foreground shadow-engraved"
 													: "text-muted-foreground hover:text-foreground",
@@ -49,7 +49,7 @@ export function Header() {
 										{link.label}
 									</NavLink>
 								))}
-								<div className="mx-0.5 h-4 w-px shrink-0 bg-border/50" />
+								<div className="mx-0.5 h-4 w-px shrink-0 bg-border/50 sm:mx-1" />
 							</motion.div>
 						)}
 					</AnimatePresence>
@@ -60,7 +60,7 @@ export function Header() {
 						onMouseEnter={() => setTemporaryExpression("curious", 10000)}
 						onMouseLeave={clearTemporaryExpression}
 						className={cn(
-							"flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-8 sm:w-8",
+							"flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-8 sm:w-8",
 							useUIStore((state) => state.isQuickCustomizeOpen)
 								? "border-0 bg-background text-foreground shadow-engraved"
 								: "text-muted-foreground hover:bg-background/50 hover:text-foreground",

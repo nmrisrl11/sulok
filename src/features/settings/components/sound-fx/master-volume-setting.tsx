@@ -32,7 +32,7 @@ export function VolumeControl() {
 	};
 
 	return (
-		<div className="animate-in space-y-4 rounded-xl bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+		<div className="animate-in space-y-4 rounded-lg bg-muted/30 p-4 shadow-engraved fade-in slide-in-from-top-1 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
 			<div className="flex items-center justify-between">
 				<h3 className="text-xs text-muted-foreground">Volume Level</h3>
 				<span className="text-xs font-medium text-foreground tabular-nums">

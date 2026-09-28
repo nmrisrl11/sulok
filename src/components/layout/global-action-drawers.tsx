@@ -41,9 +41,9 @@ function ActionRow({
 			type="button"
 			onClick={onClick}
 			className={cn(
-				"flex w-full items-center gap-3 rounded-xl p-3 text-left transition-colors active:bg-muted/50 md:hover:bg-muted/50",
+				"flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-muted/50 active:bg-muted/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle",
 				variant === "destructive"
-					? "text-destructive active:bg-destructive/10 md:hover:bg-destructive/10"
+					? "text-destructive hover:bg-destructive/10 active:bg-destructive/10"
 					: "text-foreground",
 			)}
 		>
@@ -76,7 +76,7 @@ function ItemActionDrawerContent({ item, onClose }: { item: Item; onClose: () =>
 	return (
 		<div className="flex flex-col px-4 pt-4 pb-8 sm:pb-6">
 			<div className="mb-4 flex items-center gap-3 border-b border-border/50 pb-4">
-				<div className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted/50">
+				<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted/50 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
 					<SiteFavicon url={item.url} logo={item.logo} className="h-6 w-6" />
 				</div>
 				<div className="flex min-w-0 flex-col">

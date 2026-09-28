@@ -42,13 +42,13 @@ function AudioSignatureDropdown({
 	const ActiveIcon = SOUND_ICONS[value] || SOUND_ICONS.tick;
 
 	return (
-		<div className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/20 p-3 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
+		<div className="flex items-center justify-between rounded-lg border border-border/40 bg-muted/20 p-3 supports-[corner-shape:squircle]:rounded-2xl supports-[corner-shape:squircle]:corner-squircle">
 			<span className="text-sm font-medium text-foreground">{label}</span>
 			<DropdownMenu>
 				<DropdownMenuTrigger
 					disabled={!enabled}
 					aria-label={`${label} sound: ${value}`}
-					className="flex items-center gap-2 rounded-lg bg-background px-3 py-1.5 text-xs font-medium text-foreground shadow-sm ring-1 ring-border/50 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+					className="flex items-center gap-2 rounded-md bg-background px-3 py-1.5 text-xs font-medium text-foreground shadow-sm ring-1 ring-border/50 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
 				>
 					<ActiveIcon className="h-3.5 w-3.5 text-muted-foreground" />
 					<span className="capitalize">{value}</span>
