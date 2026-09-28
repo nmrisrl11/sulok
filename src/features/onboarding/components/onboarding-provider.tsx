@@ -16,7 +16,7 @@ const TOUR_STEPS: Step[] = [
 		skipBeacon: true,
 	},
 	{
-		target: "#explorer-sidebar",
+		target: "#explorer-nav",
 		title: "Your Digital Library",
 		content:
 			"This is your command center. Hop between your main library, your favorite links, and the recycle bin.",

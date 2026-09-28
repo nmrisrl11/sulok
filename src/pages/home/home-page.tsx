@@ -2,7 +2,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { type Folder, type Item } from "@/db/db";
 import { ExplorerDndContext } from "@/features/folders/components/dnd/explorer-dnd-context";
 import { ExplorerMain } from "@/features/folders/components/explorer/explorer-main";
-import { ExplorerSidebar } from "@/features/folders/components/explorer/explorer-sidebar";
+import { ExplorerNav } from "@/features/folders/components/explorer/explorer-nav";
 import { ExplorerToolbar } from "@/features/folders/components/explorer/explorer-toolbar";
 import { getHasDataHint } from "@/lib/storage";
 import { cn } from "@/lib/utils";
@@ -95,7 +95,7 @@ export function HomePage({ className }: { className?: string }) {
 					<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
 						Your Corner
 					</h2>
-					<ExplorerSidebar />
+					<ExplorerNav />
 				</div>
 				<ExplorerDndContext>
 					<div className="flex w-full min-w-0 flex-col">

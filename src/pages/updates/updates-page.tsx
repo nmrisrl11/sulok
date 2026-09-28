@@ -26,7 +26,7 @@ export function UpdatesPage() {
 					<div key={release.version} className="flex w-full flex-col gap-8 md:flex-row md:gap-12">
 						{/* Left Column: Version & Date */}
 						<div className="flex shrink-0 flex-col gap-1 md:w-1/4">
-							<div className="sticky top-20">
+							<div className="sticky top-[calc(6rem+env(safe-area-inset-top))] md:top-[calc(8rem+env(safe-area-inset-top))]">
 								<h2 className="font-mono text-xl font-bold text-primary">{release.version}</h2>
 								<p className="text-sm font-medium text-muted-foreground">{release.date}</p>
 							</div>

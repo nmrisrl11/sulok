@@ -39,11 +39,11 @@ export function PwaManager() {
 
 	useEffect(() => {
 		const handleOnline = () => {
-			setReaction("happy", "You are back online!", 4000);
+			setReaction("happy", "Back online!", 4000);
 		};
 
 		const handleOffline = () => {
-			setReaction("sleepy", "Offline. Changes saved locally.", 5000);
+			setReaction("sleepy", "Working offline", 5000);
 		};
 
 		window.addEventListener("online", handleOnline);

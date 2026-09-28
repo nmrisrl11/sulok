@@ -183,7 +183,7 @@ Minimal shadows. Prefer border/background differentiation.
 - **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.
 - **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
 
-### Explorer Sidebar (Navigation)
+### Explorer Navigation (ExplorerNav)
 
 - Implemented as a sleek, horizontal tab layout alongside the main header (`Your Corner`) to maximize vertical and horizontal real estate for content in a single-column layout.
 - Groups the icons and text tightly (`[Icon] [Label]`).

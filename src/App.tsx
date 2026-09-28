@@ -1,10 +1,10 @@
 import { AppearanceProvider } from "@/components/appearance-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { AppLayout } from "@/components/layout/app-layout";
+import { PwaManager } from "@/components/managers/pwa-manager";
 import { TrashManager } from "@/components/managers/trash-manager";
 import { ThemeProvider } from "@/components/theme-provider";
 import { OnboardingProvider } from "@/features/onboarding/components/onboarding-provider";
-import { PwaManager } from "@/features/pwa/components/pwa-manager";
 import { useGlobalSoundInteractions } from "@/hooks";
 import { AboutSkeleton } from "@/pages/about/about-skeleton";
 import { HomeRouteFallback } from "@/pages/home/home-route-fallback";
