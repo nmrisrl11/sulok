@@ -14,6 +14,34 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.9.0",
+		date: "Sep 28, 2026",
+		title: "Interactive Mascot, Polished Layouts, and Streamlined UX",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Installable App & Offline Support: Sulok is now a full Progressive Web App (PWA)! You can install it directly to your desktop or mobile home screen for a native, app-like experience that works completely offline.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Polished Layouts & Installation: We've redesigned the Install page with sleek, platform-specific guides to make installing Sulok easier than ever. The entire app layout has also been refined with a unified global footer and a beautiful sticky, translucent header for a seamless experience across all devices.",
+					"Premium Settings & Design: The Quick Customize drawer received a visual upgrade, featuring premium branded cards and micro-animations. We also perfected our mathematical 'squircle' corners across the entire app for a softer, more cohesive aesthetic.",
+					"Smarter Header Navigation: The header now intelligently adapts to your screen size. On mobile, it elegantly manages space to prevent overlapping links, and Sulo's status whispers now wrap gracefully without ever getting clipped off-screen.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Mobile & iOS Enhancements: Resolved an issue where the header would awkwardly collide with the iOS status bar and dynamic island. We also fixed a bug that caused mobile drawers to accidentally close when dragging settings sliders.",
+					"Squashed Bugs: Fixed visual clipping issues on active navigation tabs, eliminated layout shifting during the initial app load, and ensured Sulo's custom expressions correctly reset when restoring defaults.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.8.0",
 		date: "Sep 26, 2026",
 		title: "Folder Colors, Powerful Filters, and Settings Overhaul",
