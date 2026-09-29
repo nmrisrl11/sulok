@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Polished the Updates page layout and minimap navigation, ensuring a perfectly smooth, flicker-free scrolling experience across the version history timeline on all devices.
 - Reorganized app navigation: Moved "About" to the main header and "Updates" to the footer for better accessibility.
 - Optimized app update delivery: The app now proactively checks for updates when you return to it, ensuring you always have the latest features without needing to refresh.
 - Improved Settings navigation: Replaced native tab scrolling with a robust custom implementation to fix unintended page scrolling when switching tabs.
