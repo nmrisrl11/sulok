@@ -14,6 +14,26 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.9.1",
+		date: "Sep 29, 2026",
+		title: "Offline Enhancements & Seamless Mobile Interactions",
+		changes: [
+			{
+				category: "Changed",
+				items: [
+					"Fluid Navigation & Ergonomics: We've polished the app's layout by moving 'About' to the header and 'Updates' to the footer for easier access. Dragging and dropping items on your phone now feels completely natural, allowing you to glide smoothly past screen edges without hitting an invisible wall.",
+					"Buttery Smooth Scrolling & Updates: The Updates page minimap now delivers a perfectly smooth, flicker-free scrolling experience. We also completely re-engineered tab switching in Settings to eliminate unintended page jumps, and the app now proactively checks for updates in the background so you're always on the latest version.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Bulletproof Offline Mode: Fixed critical issues preventing the app from loading completely offline. Your recently viewed favicons, external images, and rich installation assets are now reliably cached, ensuring your library looks beautiful even without an internet connection.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.9.0",
 		date: "Sep 28, 2026",
 		title: "Interactive Mascot, Polished Layouts, and Streamlined UX",
