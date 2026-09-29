@@ -17,7 +17,7 @@
 
 ### Fixed
 
-- Fixed an issue where favicons for saved links would fail to load when the app was used completely offline.
+- Fixed an issue where recently viewed favicons (up to 200) and external images (up to 100) would fail to load when the app was used completely offline.
 - Fixed an issue where the app failed to load properly offline due to missing cache routing configuration.
 - Fixed missing rich installation images when offline.
 

@@ -89,6 +89,7 @@ export default defineConfig({
 							expiration: {
 								maxEntries: 200,
 								maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+								purgeOnQuotaError: true,
 							},
 							cacheableResponse: {
 								statuses: [0, 200],
@@ -96,13 +97,14 @@ export default defineConfig({
 						},
 					},
 					{
-						urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+						urlPattern: ({ url }) => /\.(?:png|jpg|jpeg|svg|gif|webp)$/i.test(url.pathname),
 						handler: "StaleWhileRevalidate",
 						options: {
 							cacheName: "external-images-cache",
 							expiration: {
 								maxEntries: 100,
 								maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+								purgeOnQuotaError: true,
 							},
 							cacheableResponse: {
 								statuses: [0, 200],
