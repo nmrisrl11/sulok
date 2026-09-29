@@ -205,7 +205,6 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 		activeNodeRect,
 		overlayNodeRect,
 		transform,
-		windowRect,
 	}) => {
 		let newTransform = { ...transform };
 
@@ -233,25 +232,6 @@ export function ExplorerDndContext({ children }: { children: ReactNode }) {
 				x: newTransform.x + shiftX,
 				y: newTransform.y + shiftY,
 			};
-		}
-
-		// Prevent the overlay from clipping outside the screen edges
-		if (activeNodeRect && overlayNodeRect && windowRect) {
-			const PADDING = 16;
-			const projectedX = overlayNodeRect.left + newTransform.x;
-			const projectedY = overlayNodeRect.top + newTransform.y;
-
-			if (projectedX < PADDING) {
-				newTransform.x += PADDING - projectedX;
-			} else if (projectedX + overlayNodeRect.width > windowRect.width - PADDING) {
-				newTransform.x -= projectedX + overlayNodeRect.width - (windowRect.width - PADDING);
-			}
-
-			if (projectedY < PADDING) {
-				newTransform.y += PADDING - projectedY;
-			} else if (projectedY + overlayNodeRect.height > windowRect.height - PADDING) {
-				newTransform.y -= projectedY + overlayNodeRect.height - (windowRect.height - PADDING);
-			}
 		}
 
 		return newTransform;

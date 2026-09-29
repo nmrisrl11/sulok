@@ -76,8 +76,40 @@ export default defineConfig({
 				screenshots: APP_SCREENSHOTS,
 			},
 			workbox: {
-				globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}"],
+				cacheId: "sulok-app",
+				globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp,woff,woff2,ttf}"],
 				maximumFileSizeToCacheInBytes: 5000000,
+				navigateFallback: "/index.html",
+				runtimeCaching: [
+					{
+						urlPattern: /^https:\/\/www\.google\.com\/s2\/favicons/,
+						handler: "StaleWhileRevalidate",
+						options: {
+							cacheName: "google-favicons-cache",
+							expiration: {
+								maxEntries: 200,
+								maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+							},
+							cacheableResponse: {
+								statuses: [0, 200],
+							},
+						},
+					},
+					{
+						urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+						handler: "StaleWhileRevalidate",
+						options: {
+							cacheName: "external-images-cache",
+							expiration: {
+								maxEntries: 100,
+								maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+							},
+							cacheableResponse: {
+								statuses: [0, 200],
+							},
+						},
+					},
+				],
 			},
 		}),
 	],
