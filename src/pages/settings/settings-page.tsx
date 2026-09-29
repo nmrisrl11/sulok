@@ -48,7 +48,14 @@ function SettingsTabTrigger({
 
 	useEffect(() => {
 		if (isActive && triggerRef.current) {
-			triggerRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+			const parent = triggerRef.current.parentElement;
+			if (parent) {
+				const scrollLeft =
+					triggerRef.current.offsetLeft -
+					parent.offsetWidth / 2 +
+					triggerRef.current.offsetWidth / 2;
+				parent.scrollTo({ left: scrollLeft, behavior: "smooth" });
+			}
 		}
 	}, [isActive]);
 
@@ -126,7 +133,7 @@ export function SettingsPage() {
 			</div>
 
 			<div className="flex flex-col gap-10">
-				<nav className="custom-scrollbar flex snap-x items-center gap-2 overflow-x-auto border-b border-border/50 pb-4">
+				<nav className="custom-scrollbar relative flex snap-x items-center gap-2 overflow-x-auto border-b border-border/50 pb-4">
 					{TABS.map((tab) => (
 						<SettingsTabTrigger
 							key={tab.id}

@@ -16,12 +16,29 @@ export function PwaManager() {
 		onRegistered(r) {
 			console.log("SW Registered:", r);
 			if (r) {
+				// 1. Fallback: Check for updates every hour
 				updateIntervalRef.current = window.setInterval(
 					() => {
+						if (r.installing || !navigator.onLine) return;
 						r.update();
 					},
 					60 * 60 * 1000,
-				); // Check for updates every hour
+				);
+
+				// 2. Responsive: Check for updates when user returns to the app
+				const handleVisibilityChange = () => {
+					if (document.visibilityState === "visible" && !r.installing && navigator.onLine) {
+						r.update();
+					}
+				};
+				document.addEventListener("visibilitychange", handleVisibilityChange);
+
+				// Store cleanup on window so we can clean it up in useEffect if needed,
+				// though this component is a global singleton so it rarely unmounts.
+				// @ts-expect-error - storing cleanup function for dev fast-refresh
+				window.__pwaCleanup = () => {
+					document.removeEventListener("visibilitychange", handleVisibilityChange);
+				};
 			}
 		},
 		onRegisterError(error) {
@@ -33,6 +50,11 @@ export function PwaManager() {
 		return () => {
 			if (updateIntervalRef.current) {
 				window.clearInterval(updateIntervalRef.current);
+			}
+			// @ts-expect-error - clean up the visibility listener during fast-refresh
+			if (window.__pwaCleanup) {
+				// @ts-expect-error - clean up the visibility listener during fast-refresh
+				window.__pwaCleanup();
 			}
 		};
 	}, []);
