@@ -7,7 +7,7 @@ import { WandSparklesIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const navLinks: { to: string; label: string; expression: SuloExpression }[] = [
-	{ to: "/updates", label: "Updates", expression: "excited" },
+	{ to: "/about", label: "About", expression: "shy" },
 	{ to: "/settings", label: "Settings", expression: "attentive" },
 ];
 
@@ -36,6 +36,7 @@ export function Header() {
 										key={link.to}
 										to={link.to}
 										title={link.label}
+										onClick={() => window.scrollTo(0, 0)}
 										onMouseEnter={() => setTemporaryExpression(link.expression, 10000)}
 										onMouseLeave={clearTemporaryExpression}
 										className={({ isActive }) =>

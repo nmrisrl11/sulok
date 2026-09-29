@@ -34,7 +34,7 @@ The project is currently in the **core features implementation phase**.
 - [x] Interactive NomiBot component with physics-based animations in the global footer
 - [x] Unified AppLayout with global Header and Footer structure
 - [x] Vite Rollup code splitting (manualChunks) optimizations
-- [x] PWA configured with hourly update polling
+- [x] PWA configured with responsive update checking (on visibility change) and hourly polling fallback
 
 ---
 

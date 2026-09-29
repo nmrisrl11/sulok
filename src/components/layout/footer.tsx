@@ -31,9 +31,15 @@ export function Footer() {
 		},
 		{
 			type: "link",
-			label: "Install",
+			label: "Install App",
 			to: "/install",
 			title: `Install ${APP_INFO.name} on your device`,
+		},
+		{
+			type: "link",
+			label: "Updates",
+			to: "/updates",
+			title: `View ${APP_INFO.name} release notes and updates`,
 		},
 		{
 			type: "button",
@@ -42,12 +48,6 @@ export function Footer() {
 				updateSettings({ onboardingStatus: "in_progress", onboardingStep: 0 });
 				navigate("/");
 			},
-		},
-		{
-			type: "link",
-			label: "About",
-			to: "/about",
-			title: `Learn more about ${APP_INFO.name}`,
 		},
 	];
 
