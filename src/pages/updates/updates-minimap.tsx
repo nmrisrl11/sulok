@@ -64,7 +64,10 @@ export function UpdatesMinimap({ releases }: { releases: ChangelogRelease[] }) {
 					const isLast = index === releases.length - 1;
 
 					return (
-						<li key={release.version} className="relative flex items-center">
+						<li
+							key={release.version}
+							className={cn("relative flex items-center", isActive ? "z-50" : "z-10")}
+						>
 							{/* Active Pill Background */}
 							{isActive && (
 								<motion.div
