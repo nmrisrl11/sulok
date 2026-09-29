@@ -8,9 +8,11 @@ export function UpdatesPage() {
 	const location = useLocation();
 
 	useEffect(() => {
+		let timerId: NodeJS.Timeout;
+
 		if (location.hash) {
 			const id = location.hash.replace("#", "");
-			setTimeout(() => {
+			timerId = setTimeout(() => {
 				const element = document.getElementById(id);
 				if (element) {
 					element.scrollIntoView({ behavior: "smooth" });
@@ -19,6 +21,10 @@ export function UpdatesPage() {
 		} else {
 			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
+
+		return () => {
+			if (timerId) clearTimeout(timerId);
+		};
 	}, [location.hash]);
 
 	return (
