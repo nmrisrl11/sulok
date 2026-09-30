@@ -38,6 +38,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🌐 Fully Offline Capable**: PWA configured with hourly update polling. Designed to work completely offline for local data and existing items (initial metadata fetching requires network access).
 - **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
 - **📰 Built-in Changelog**: Stay up to date with a dedicated Updates page seamlessly integrated with the app's dynamic versioning.
+- **🧩 Browser Extension**: A fully-featured Chrome Extension companion for zero-click saving via smart context menus, featuring a highly-performant searchable folder popup.
 
 ---
 
@@ -157,7 +158,13 @@ npm run dev
 npm run build
 ```
 
-**4. Preview Production Build**
+**4. Build the Browser Extension**
+
+```bash
+npm run build:ext
+```
+
+**5. Preview Production Build**
 
 ```bash
 npm run preview
@@ -181,9 +188,8 @@ _(No `.env` file is required to run the application locally.)_
 
 ## 🔮 Roadmap
 
-We are currently focused on completing Phase 1 of our roadmap. Future plans include:
+We are currently focused on completing Phase 2 of our roadmap. Future plans include:
 
-- Chrome Extension for quick-saving ("Save to Sulok" button)
 - Peer-to-peer (WebRTC) device synchronization without a backend
 
 _(Check `CURRENT_STATE.md` for detailed tracking)._

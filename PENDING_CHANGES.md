@@ -7,7 +7,13 @@
 
 ## Unreleased
 
-_(No pending user-facing changes yet)_
+### Added
+
+- **Sulok Browser Extension (Beta):** A companion Chrome extension for seamless, zero-click saving.
+  - Features smart context menus ("Save Link to Sulok") to save articles without opening them.
+  - Provides a beautiful, popup interface with a searchable folder selector.
+  - Works entirely offline by securely syncing with your local Sulok web app.
+  - Context-aware duplicate detection prevents saving the same link twice or alerts you if the link is in your Recycle Bin.
 
 ---
 

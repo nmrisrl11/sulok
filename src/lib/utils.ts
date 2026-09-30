@@ -26,6 +26,15 @@ export function formatUrl(url: string): string {
 	return formatted;
 }
 
+export function normalizeUrl(u: string): string {
+	try {
+		const parsed = new URL(u);
+		return parsed.host.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search;
+	} catch {
+		return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+	}
+}
+
 export function generateUniqueName(name: string, existingNames: Set<string>): string {
 	let finalName = name;
 	if (existingNames.has(finalName.toLowerCase())) {

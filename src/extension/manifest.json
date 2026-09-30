@@ -1,0 +1,23 @@
+{
+	"manifest_version": 3,
+	"name": "Sulok",
+	"version": "0.1.0",
+	"description": "Your corner of the web.",
+	"action": {
+		"default_popup": "src/extension/popup.html",
+		"default_title": "Save to Sulok"
+	},
+	"background": {
+		"service_worker": "src/extension/background.ts",
+		"type": "module"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://sulok-app.vercel.app/*"],
+			"js": ["src/extension/content.ts"],
+			"run_at": "document_end"
+		}
+	],
+	"permissions": ["activeTab", "contextMenus", "storage", "scripting", "notifications"],
+	"host_permissions": ["*://sulok-app.vercel.app/*"]
+}

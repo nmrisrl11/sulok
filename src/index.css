@@ -2,10 +2,29 @@
 @plugin "@toolwind/corner-shape";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/manrope";
-@import "@fontsource-variable/fraunces";
-@import "@fontsource-variable/fraunces/full.css";
-@import "@fontsource-variable/fraunces/full-italic.css";
+@font-face {
+	font-family: "Manrope Variable";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200 800;
+	src: url("/fonts/manrope-latin-wght-normal.woff2") format("woff2-variations");
+}
+
+@font-face {
+	font-family: "Fraunces Variable";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 100 900;
+	src: url("/fonts/fraunces-latin-full-normal.woff2") format("woff2-variations");
+}
+
+@font-face {
+	font-family: "Fraunces Variable";
+	font-style: italic;
+	font-display: swap;
+	font-weight: 100 900;
+	src: url("/fonts/fraunces-latin-full-italic.woff2") format("woff2-variations");
+}
 
 @custom-variant dark (&:is(.dark *));
 
