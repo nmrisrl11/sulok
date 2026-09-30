@@ -3,6 +3,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { AppLayout } from "@/components/layout/app-layout";
 import { PwaManager } from "@/components/managers/pwa-manager";
 import { TrashManager } from "@/components/managers/trash-manager";
+import { ExtensionManager } from "@/components/managers/extension-manager";
 import { ThemeProvider } from "@/components/theme-provider";
 import { OnboardingProvider } from "@/features/onboarding/components/onboarding-provider";
 import { useGlobalSoundInteractions } from "@/hooks";
@@ -48,6 +49,7 @@ function App() {
 				<GlobalSoundInteractions />
 				<BrowserRouter>
 					<NuqsAdapter>
+						<ExtensionManager />
 						<AppLayout>
 							<ErrorBoundary>
 								<OnboardingProvider>

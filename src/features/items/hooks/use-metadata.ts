@@ -20,6 +20,68 @@ const ogFetchResponseSchema = z.object({
 // Simple in-memory cache to prevent exhausting the per-day API limit
 const metadataCache = new Map<string, URLMetadata>();
 
+export async function fetchUrlMetadata(url: string): Promise<URLMetadata> {
+	// Check cache first
+	if (metadataCache.has(url)) {
+		return metadataCache.get(url)!;
+	}
+
+	// Basic URL validation before trying to fetch
+	new URL(url); // Throws if invalid
+
+	const response = await fetch(`https://api.ogfetch.com/preview?url=${encodeURIComponent(url)}`);
+	if (!response.ok) {
+		throw new Error("Failed to fetch metadata");
+	}
+
+	const payload: unknown = await response.json();
+	const parsed = ogFetchResponseSchema.safeParse(payload);
+
+	if (parsed.success) {
+		const resultData = parsed.data;
+
+		// Normalize relative URLs
+		const sourceUrl = new URL(url);
+		sourceUrl.username = "";
+		sourceUrl.password = "";
+		const baseUrl = sourceUrl.toString();
+
+		const normalizeUrl = (u?: string | null) => {
+			if (!u) return undefined;
+			if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("data:")) {
+				return u;
+			}
+			if (u.startsWith("//")) {
+				return `https:${u}`;
+			}
+			try {
+				return new URL(u, baseUrl).toString();
+			} catch {
+				return u;
+			}
+		};
+
+		const parsedMetadata: URLMetadata = {
+			title: resultData.title || undefined,
+			description: resultData.description || undefined,
+			image: normalizeUrl(resultData.image),
+			logo: normalizeUrl(resultData.favicon),
+			url: resultData.url || undefined,
+		};
+
+		// Save to cache and enforce max limit of 50 to prevent memory leaks
+		metadataCache.set(url, parsedMetadata);
+		if (metadataCache.size > 50) {
+			const oldestKey = metadataCache.keys().next().value;
+			if (oldestKey) metadataCache.delete(oldestKey);
+		}
+
+		return parsedMetadata;
+	} else {
+		throw new Error("Failed to parse metadata");
+	}
+}
+
 export function useMetadata(url: string, enabled: boolean = true) {
 	const [data, setData] = useState<URLMetadata | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -41,90 +103,15 @@ export function useMetadata(url: string, enabled: boolean = true) {
 				return;
 			}
 
-			// Check cache first
-			if (metadataCache.has(url)) {
-				if (isMounted) {
-					setData(metadataCache.get(url)!);
-					setError(null);
-					setLoading(false);
-				}
-				return;
-			}
-
-			// Basic URL validation before trying to fetch
-			try {
-				new URL(url);
-			} catch {
-				if (isMounted) {
-					setData(null);
-					setError("Invalid URL");
-					setLoading(false);
-				}
-				return;
-			}
-
 			if (isMounted) {
 				setLoading(true);
 				setError(null);
 			}
+
 			try {
-				// Using OG Fetch as a simple, boundary-isolated metadata provider
-				const response = await fetch(
-					`https://api.ogfetch.com/preview?url=${encodeURIComponent(url)}`,
-				);
-
-				if (!response.ok) {
-					throw new Error("Failed to fetch metadata");
-				}
-
-				const payload: unknown = await response.json();
-
-				const parsed = ogFetchResponseSchema.safeParse(payload);
-
-				if (parsed.success) {
-					const resultData = parsed.data;
-
-					// Normalize relative URLs
-					const sourceUrl = new URL(url);
-					sourceUrl.username = "";
-					sourceUrl.password = "";
-					const baseUrl = sourceUrl.toString();
-
-					const normalizeUrl = (u?: string | null) => {
-						if (!u) return undefined;
-						if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("data:")) {
-							return u;
-						}
-						if (u.startsWith("//")) {
-							return `https:${u}`;
-						}
-						try {
-							return new URL(u, baseUrl).toString();
-						} catch {
-							return u;
-						}
-					};
-
-					const parsedMetadata: URLMetadata = {
-						title: resultData.title || undefined,
-						description: resultData.description || undefined,
-						image: normalizeUrl(resultData.image),
-						logo: normalizeUrl(resultData.favicon),
-						url: resultData.url || undefined,
-					};
-
-					// Save to cache and enforce max limit of 50 to prevent memory leaks
-					metadataCache.set(url, parsedMetadata);
-					if (metadataCache.size > 50) {
-						const oldestKey = metadataCache.keys().next().value;
-						if (oldestKey) metadataCache.delete(oldestKey);
-					}
-
-					if (isMounted) {
-						setData(parsedMetadata);
-					}
-				} else {
-					throw new Error("Failed to parse metadata");
+				const result = await fetchUrlMetadata(url);
+				if (isMounted) {
+					setData(result);
 				}
 			} catch (err) {
 				if (isMounted) {

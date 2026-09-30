@@ -1,5 +1,6 @@
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
+import { normalizeUrl } from "@/lib/utils";
 import {
 	importFolderSchema,
 	importItemSchema,
@@ -23,15 +24,6 @@ export type ParsedImportData = {
 };
 
 export async function parseImportFile(file: File): Promise<ParsedImportData> {
-	const normalizeUrl = (u: string) => {
-		try {
-			const parsed = new URL(u);
-			return parsed.host.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search;
-		} catch {
-			return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-		}
-	};
-
 	const existingItems = await ItemRepository.getAll();
 	const existingUrls = new Set(existingItems.map((item) => normalizeUrl(item.url)));
 

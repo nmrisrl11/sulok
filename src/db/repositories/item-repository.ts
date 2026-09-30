@@ -1,6 +1,6 @@
 import { TRASH_RETENTION_DAYS } from "@/constants/app-info";
 import { setHasDataHint } from "@/lib/storage";
-import { generateUniqueName } from "@/lib/utils";
+import { generateUniqueName, normalizeUrl } from "@/lib/utils";
 import { itemSchema } from "@/schemas";
 import { db, type Item } from "../db";
 
@@ -11,6 +11,10 @@ export const ItemRepository = {
 			.filter((item) => !item.deletedAt)
 			.reverse()
 			.toArray();
+	},
+
+	async getAllIncludingTrash(): Promise<Item[]> {
+		return await db.items.orderBy("createdAt").reverse().toArray();
 	},
 
 	async query(params: {
@@ -93,20 +97,9 @@ export const ItemRepository = {
 		const exactMatch = await db.items.where("url").equals(url).first();
 		if (exactMatch) return exactMatch;
 
-		const normalize = (u: string) => {
-			try {
-				const parsed = new URL(u);
-				return (
-					parsed.host.replace(/^www\./, "") + parsed.pathname.replace(/\/$/, "") + parsed.search
-				);
-			} catch {
-				return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-			}
-		};
-
-		const target = normalize(url);
+		const target = normalizeUrl(url);
 		const allItems = await db.items.toArray();
-		return allItems.find((item) => normalize(item.url) === target);
+		return allItems.find((item) => normalizeUrl(item.url) === target);
 	},
 
 	async count(): Promise<number> {

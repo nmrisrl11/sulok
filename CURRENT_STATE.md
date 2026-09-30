@@ -4,7 +4,7 @@
 
 ## Project Status: 🟢 Development
 
-The project is currently in the **core features implementation phase**.
+The project is currently in the **Phase 2: Browser Extension implementation phase**.
 
 ---
 
@@ -38,13 +38,12 @@ The project is currently in the **core features implementation phase**.
 
 ---
 
-## Current Phase: Core Development
+## Current Phase: Browser Extension (Phase 2)
 
 ### Next Steps
 
-1. [x] Implement item filter capabilities.
-2. [x] Refine overall UI polish for mobile responsiveness.
-3. [x] Finalize the "Library" default UX (e.g., handling new users, default folders, and interactive onboarding tour).
+1. [ ] Redesign `/install` page into a unified "Get Sulok" hub for PWA and Extension downloads.
+2. [ ] Polish the extension distribution build (prepare for zip/Web Store).
 
 ---
 
@@ -107,11 +106,14 @@ The project is currently in the **core features implementation phase**.
 - [x] Responsive/mobile UI
 - [x] PWA/offline support
 
-### Phase 2 — Browser Extension
+### Phase 2 — Browser Extension (Current)
 
-- Chrome extension for quick save
-- "Save to Sulok" button
-- Popup with folder selector
+- [x] Chrome extension for quick save
+- [x] "Save to Sulok" zero-click context menus
+- [x] Popup with highly-performant virtualized folder selector
+- [x] Web App Sync Bridge (reads from IndexedDB, syncs to `chrome.storage`)
+- [x] Context-aware duplicate and recycle-bin logic (prevents false positive success toasts)
+- [ ] Unified Installation UI in the web app
 
 ### Phase 3 — Device Sync
 
