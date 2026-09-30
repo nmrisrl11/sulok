@@ -23,9 +23,11 @@ export function SiteFavicon({
 
 	useEffect(() => {
 		if (!smartInvert || !logo || logoError) return;
+		let isMounted = true;
 		const img = new Image();
 		img.crossOrigin = "Anonymous";
 		img.onload = () => {
+			if (!isMounted) return;
 			try {
 				const canvas = document.createElement("canvas");
 				canvas.width = img.width || 32;
@@ -58,6 +60,9 @@ export function SiteFavicon({
 			}
 		};
 		img.src = logo;
+		return () => {
+			isMounted = false;
+		};
 	}, [logo, logoError, smartInvert]);
 
 	const [prevUrl, setPrevUrl] = useState(url);
@@ -65,6 +70,9 @@ export function SiteFavicon({
 
 	// Reset error when URL or logo changes (derived state instead of effect)
 	if (url !== prevUrl || logo !== prevLogo) {
+		if (logo !== prevLogo) {
+			setNeedsInvert(false);
+		}
 		setPrevUrl(url);
 		setPrevLogo(logo);
 		setError(false);

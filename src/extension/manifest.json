@@ -13,11 +13,11 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["*://sulok-app.vercel.app/*", "http://localhost:5173/*"],
+			"matches": ["*://sulok-app.vercel.app/*"],
 			"js": ["src/extension/content.ts"],
 			"run_at": "document_end"
 		}
 	],
 	"permissions": ["activeTab", "contextMenus", "storage", "scripting", "notifications"],
-	"host_permissions": ["*://sulok-app.vercel.app/*", "http://localhost:5173/*"]
+	"host_permissions": ["*://sulok-app.vercel.app/*"]
 }

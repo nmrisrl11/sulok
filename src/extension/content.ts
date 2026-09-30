@@ -26,8 +26,22 @@ window.addEventListener("message", (event) => {
 	const data = event.data;
 
 	if (data && data.type === "SULOK_EXT_CLEAR_SAVES") {
-		chrome.storage.local.remove("pendingSaves", () => {
-			console.log("Sulok Extension: Pending saves cleared by web app.");
+		const processedTimestamps = new Set(data.payload as number[]);
+		chrome.storage.local.get("pendingSaves", (result) => {
+			const pendingSaves = (result.pendingSaves as { timestamp: number }[]) || [];
+			const remainingSaves = pendingSaves.filter((s) => !processedTimestamps.has(s.timestamp));
+			chrome.storage.local.set({ pendingSaves: remainingSaves }, () => {
+				console.log("Sulok Extension: Pending saves cleared by web app.");
+			});
+		});
+	}
+
+	if (data && data.type === "SULOK_EXT_READY") {
+		chrome.storage.local.get("pendingSaves", (result) => {
+			const pendingSaves = (result.pendingSaves as unknown[]) || [];
+			if (pendingSaves.length > 0) {
+				window.postMessage({ type: "SULOK_EXT_PENDING_SAVES", payload: pendingSaves }, "*");
+			}
 		});
 	}
 

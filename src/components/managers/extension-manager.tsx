@@ -9,6 +9,16 @@ import { useItemStore, useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
+import { z } from "zod";
+
+const savePayloadSchema = z.object({
+	url: z.string().url(),
+	title: z.string().optional(),
+	folderId: z.string().optional(),
+	timestamp: z.number().optional(),
+});
+
+type SavePayload = z.infer<typeof savePayloadSchema>;
 
 export function ExtensionManager() {
 	const folders = useLiveQuery(() => FolderRepository.getAll());
@@ -71,7 +81,9 @@ export function ExtensionManager() {
 
 	// Listen for pending saves from extension
 	useEffect(() => {
-		const handleMessage = async (event: MessageEvent) => {
+		let syncQueue = Promise.resolve();
+
+		const handleMessage = (event: MessageEvent) => {
 			if (event.source !== window) return;
 
 			const data = event.data;
@@ -79,105 +91,116 @@ export function ExtensionManager() {
 				const saves = data.payload;
 				if (!Array.isArray(saves) || saves.length === 0) return;
 
-				let addedCount = 0;
-				let duplicateCount = 0;
-				let lastDuplicateItem = null;
+				syncQueue = syncQueue.then(async () => {
+					let addedCount = 0;
+					let duplicateCount = 0;
+					let lastDuplicateItem = null;
 
-				for (const save of saves) {
-					try {
-						// Attempt to fetch favicon and image metadata gracefully
-						let image: string | undefined;
-						let logo: string | undefined;
-						let description: string | undefined;
+					for (const rawSave of saves) {
+						const parsed = savePayloadSchema.safeParse(rawSave);
+						if (!parsed.success) {
+							console.warn("Invalid save payload received from extension:", parsed.error);
+							continue;
+						}
+						const save = parsed.data;
 
 						try {
-							const meta = await fetchUrlMetadata(save.url);
-							image = meta.image;
-							logo = meta.logo;
-							description = meta.description;
-						} catch (e) {
-							console.warn("Failed to fetch metadata for extension save", e);
-						}
+							// Attempt to fetch favicon and image metadata gracefully
+							let image: string | undefined;
+							let logo: string | undefined;
+							let description: string | undefined;
 
-						await ItemRepository.save({
-							url: save.url,
-							title: save.title ? save.title.substring(0, 100) : undefined,
-							folderId: save.folderId || undefined,
-							description: description ? description.substring(0, 500) : "",
-							image,
-							logo,
-							isFavorite: false,
-						});
-						addedCount++;
-					} catch (e) {
-						if (e instanceof Error && e.message === "This link is already in your corner.") {
-							duplicateCount++;
-							if (saves.length === 1) {
-								const existingItem = await ItemRepository.findByUrl(save.url);
-								if (existingItem) lastDuplicateItem = existingItem;
+							try {
+								const meta = await fetchUrlMetadata(save.url);
+								image = meta.image;
+								logo = meta.logo;
+								description = meta.description;
+							} catch (e) {
+								console.warn("Failed to fetch metadata for extension save", e);
 							}
-						} else {
-							// Ignore other errors from extension saves
-							console.error("Failed to save item from extension:", e);
+
+							await ItemRepository.save({
+								url: save.url,
+								title: save.title ? save.title.substring(0, 100) : undefined,
+								folderId: save.folderId || undefined,
+								description: description ? description.substring(0, 500) : "",
+								image,
+								logo,
+								isFavorite: false,
+							});
+							addedCount++;
+						} catch (e) {
+							if (e instanceof Error && e.message === "This link is already in your corner.") {
+								duplicateCount++;
+								if (saves.length === 1) {
+									const existingItem = await ItemRepository.findByUrl(save.url);
+									if (existingItem) lastDuplicateItem = existingItem;
+								}
+							} else {
+								// Ignore other errors from extension saves
+								console.error("Failed to save item from extension:", e);
+							}
 						}
 					}
-				}
 
-				// Aggregate notifications
-				if (saves.length === 1 && duplicateCount === 1 && lastDuplicateItem) {
-					// Single duplicate saved, show specific action toast
-					if (lastDuplicateItem.deletedAt) {
-						notify.warning("This link is in your Recycle Bin.", {
-							id: `ext-dup-${lastDuplicateItem.id}`,
-							action: {
-								label: "Restore",
-								onClick: async () => {
-									await useItemStore.getState().restoreItems([lastDuplicateItem!.id]);
-									notify.dismiss(`ext-dup-${lastDuplicateItem!.id}`);
-									notify.success("Link restored from trash", { id: "item-restored" });
+					// Aggregate notifications
+					if (saves.length === 1 && duplicateCount === 1 && lastDuplicateItem) {
+						// Single duplicate saved, show specific action toast
+						if (lastDuplicateItem.deletedAt) {
+							notify.warning("This link is in your Recycle Bin.", {
+								id: `ext-dup-${lastDuplicateItem.id}`,
+								action: {
+									label: "Restore",
+									onClick: async () => {
+										await useItemStore.getState().restoreItems([lastDuplicateItem!.id]);
+										notify.dismiss(`ext-dup-${lastDuplicateItem!.id}`);
+										notify.success("Link restored from trash", { id: "item-restored" });
+									},
 								},
-							},
-						});
+							});
+						} else {
+							notify.warning("This link is already in your corner.", {
+								id: `ext-dup-${lastDuplicateItem.id}`,
+								action: {
+									label: "Go to link",
+									onClick: () => {
+										setFolderId(lastDuplicateItem!.folderId || null);
+										setSearchQuery(null);
+										setView("all");
+										useItemStore.getState().clearSelection();
+									},
+								},
+							});
+						}
 					} else {
-						notify.warning("This link is already in your corner.", {
-							id: `ext-dup-${lastDuplicateItem.id}`,
-							action: {
-								label: "Go to link",
-								onClick: () => {
-									setFolderId(lastDuplicateItem!.folderId || null);
-									setSearchQuery(null);
-									setView("all");
-									useItemStore.getState().clearSelection();
-								},
-							},
-						});
+						// Bulk processing or single success
+						if (addedCount > 0 && duplicateCount === 0) {
+							notify.success(
+								`Saved ${addedCount} link${addedCount > 1 ? "s" : ""} from the extension!`,
+								{ id: "ext-sync" },
+							);
+						} else if (addedCount > 0 && duplicateCount > 0) {
+							notify.success(
+								`Saved ${addedCount} link${addedCount > 1 ? "s" : ""}. ${duplicateCount} were already in your corner.`,
+								{ id: "ext-sync" },
+							);
+						} else if (addedCount === 0 && duplicateCount > 0) {
+							notify.warning(
+								`All ${duplicateCount} link${duplicateCount > 1 ? "s" : ""} were already in your corner.`,
+								{ id: "ext-sync-dup" },
+							);
+						}
 					}
-				} else {
-					// Bulk processing or single success
-					if (addedCount > 0 && duplicateCount === 0) {
-						notify.success(
-							`Saved ${addedCount} link${addedCount > 1 ? "s" : ""} from the extension!`,
-							{ id: "ext-sync" },
-						);
-					} else if (addedCount > 0 && duplicateCount > 0) {
-						notify.success(
-							`Saved ${addedCount} link${addedCount > 1 ? "s" : ""}. ${duplicateCount} were already in your corner.`,
-							{ id: "ext-sync" },
-						);
-					} else if (addedCount === 0 && duplicateCount > 0) {
-						notify.warning(
-							`All ${duplicateCount} link${duplicateCount > 1 ? "s" : ""} were already in your corner.`,
-							{ id: "ext-sync-dup" },
-						);
-					}
-				}
 
-				// Tell extension to clear the queue
-				window.postMessage({ type: "SULOK_EXT_CLEAR_SAVES" }, "*");
+					// Tell extension to clear the queue
+					const processedTimestamps = saves.map((s: SavePayload) => s.timestamp).filter(Boolean);
+					window.postMessage({ type: "SULOK_EXT_CLEAR_SAVES", payload: processedTimestamps }, "*");
+				});
 			}
 		};
 
 		window.addEventListener("message", handleMessage);
+		window.postMessage({ type: "SULOK_EXT_READY" }, "*");
 		return () => window.removeEventListener("message", handleMessage);
 	}, [setFolderId, setSearchQuery, setView]);
 

@@ -40,25 +40,40 @@ interface SaveData {
 	folderId: string | null;
 	timestamp: number;
 }
+
+let saveQueueLock = Promise.resolve();
+
 function saveToQueue(saveData: SaveData) {
-	chrome.storage.local.get(["pendingSaves", "savedUrls"], (result) => {
-		const pendingSaves = (result.pendingSaves as SaveData[]) || [];
+	saveQueueLock = saveQueueLock.then(() => {
+		return new Promise<void>((resolve) => {
+			chrome.storage.local.get(["pendingSaves", "savedUrls"], (result) => {
+				const pendingSaves = (result.pendingSaves as SaveData[]) || [];
 
-		// Now an array of { url: string, isDeleted: boolean }
-		const savedUrls = (result.savedUrls as { url: string; isDeleted: boolean }[]) || [];
-		const normalizedInput = normalizeUrl(saveData.url);
-		const existingMatch = savedUrls.find((s) => s.url === normalizedInput);
+				// Now an array of { url: string, isDeleted: boolean }
+				const savedUrls = (result.savedUrls as { url: string; isDeleted: boolean }[]) || [];
+				const normalizedInput = normalizeUrl(saveData.url);
+				const existingMatch = savedUrls.find((s) => s.url === normalizedInput);
 
-		let status: "new" | "duplicate" | "trashed" = "new";
-		if (existingMatch) {
-			status = existingMatch.isDeleted ? "trashed" : "duplicate";
-		}
+				let status: "new" | "duplicate" | "trashed" = "new";
+				if (existingMatch) {
+					status = existingMatch.isDeleted ? "trashed" : "duplicate";
+				}
 
-		chrome.storage.local.set({ pendingSaves: [...pendingSaves, saveData] }, () => {
-			showSaveNotification({ title: saveData.title, status });
+				chrome.storage.local.set({ pendingSaves: [...pendingSaves, saveData] }, () => {
+					showSaveNotification({ title: saveData.title, status });
+					resolve();
+				});
+			});
 		});
 	});
 }
+
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+	if (request.type === "SULOK_EXT_SAVE_POPUP") {
+		saveToQueue(request.payload);
+		sendResponse({ success: true });
+	}
+});
 
 chrome.notifications.onClicked.addListener((notificationId) => {
 	if (notificationId === "sulok-save-notification") {

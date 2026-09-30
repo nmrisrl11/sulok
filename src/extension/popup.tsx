@@ -6,7 +6,6 @@ import { APP_INFO } from "@/constants/app-info";
 import { normalizeUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { type FolderRef } from "./types";
-import { showSaveNotification } from "./utils";
 import { VirtualFolderCombobox } from "./virtual-folder-combobox";
 
 function Popup() {
@@ -55,26 +54,22 @@ function Popup() {
 	}, []);
 
 	const handleSave = () => {
-		chrome.storage.local.get("pendingSaves", (result) => {
-			interface SaveData {
-				url: string;
-				title: string;
-				folderId: string | null;
-				timestamp: number;
-			}
-			const pendingSaves = (result.pendingSaves as SaveData[]) || [];
-			const newSave: SaveData = {
-				url,
-				title,
-				folderId: selectedFolderId === "unorganized" ? null : selectedFolderId,
-				timestamp: Date.now(),
-			};
+		interface SaveData {
+			url: string;
+			title: string;
+			folderId: string | null;
+			timestamp: number;
+		}
+		const newSave: SaveData = {
+			url,
+			title,
+			folderId: selectedFolderId === "unorganized" ? null : selectedFolderId,
+			timestamp: Date.now(),
+		};
 
-			chrome.storage.local.set({ pendingSaves: [...pendingSaves, newSave] }, () => {
-				showSaveNotification({ title, status });
-				setSaved(true);
-				setTimeout(() => window.close(), 1500);
-			});
+		chrome.runtime.sendMessage({ type: "SULOK_EXT_SAVE_POPUP", payload: newSave }, () => {
+			setSaved(true);
+			setTimeout(() => window.close(), 1500);
 		});
 	};
 
