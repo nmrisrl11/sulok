@@ -12,6 +12,7 @@ dist
 dist-ssr
 dev-dist
 dist-ext
+releases
 *.local
 
 # Editor directories and files

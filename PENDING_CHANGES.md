@@ -14,6 +14,8 @@
   - Provides a beautiful, popup interface with a searchable folder selector.
   - Works entirely offline by securely syncing with your local Sulok web app.
   - Context-aware duplicate detection prevents saving the same link twice or alerts you if the link is in your Recycle Bin.
+- **Get App Hub**: Completely redesigned the `/install` page into a unified hub for both the Web App and Browser Extension downloads.
+  - The browser extension download now automatically points to the latest GitHub release, eliminating hardcoded links.
 
 ---
 

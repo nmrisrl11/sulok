@@ -31,9 +31,9 @@ export function Footer() {
 		},
 		{
 			type: "link",
-			label: "Install App",
+			label: "Get App",
 			to: "/install",
-			title: `Install ${APP_INFO.name} on your device`,
+			title: `Get ${APP_INFO.name} on your device`,
 		},
 		{
 			type: "link",

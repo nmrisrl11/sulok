@@ -14,6 +14,8 @@ export const APP_INFO = {
 	keywords: "bookmark manager, web library, save links, local-first bookmarking, sulok",
 	author: "Sulok",
 	appUrl: "sulok-app.vercel.app",
+	githubUrl: "https://github.com/nmrisrl11/sulok",
+	githubReleasesUrl: "https://github.com/nmrisrl11/sulok/releases",
 };
 
 export const TRASH_RETENTION_DAYS = 30;
