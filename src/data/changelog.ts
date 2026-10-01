@@ -14,6 +14,21 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.10.0",
+		date: "Oct 01, 2026",
+		title: "Browser Extension & Unified App Hub",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"The Sulok Browser Extension (Beta): We've launched a beautiful companion Chrome extension for a seamless, zero-click saving experience. Save articles instantly via smart context menus, or organize links on the fly using a lightning-fast popup folder selector. It works entirely offline by securely syncing directly with your local app.",
+					"Smart Link Protection: The new extension features context-aware duplicate detection, automatically preventing you from saving the same link twice or alerting you if a link is currently in your Recycle Bin.",
+					"The 'Get App' Hub: We completely redesigned the installation page into a single, beautifully unified hub where you can download both the desktop/mobile Web App and the new Browser Extension.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.9.1",
 		date: "Sep 29, 2026",
 		title: "Offline Enhancements & Seamless Mobile Interactions",
