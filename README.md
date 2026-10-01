@@ -75,6 +75,7 @@ Sulok is built with modern, performant, and type-safe web technologies.
 
 - **React Router DOM v7** (Application routing)
 - **Zustand** (Global state management)
+- **nuqs** (URL query string state management)
 - **React Hook Form & Zod** (Form validation)
 
 **Data & Storage**
@@ -101,6 +102,7 @@ src/
 ├── constants/        # Centralized app configuration (APP_INFO)
 ├── data/             # Static data (e.g. changelog)
 ├── db/               # Dexie.js setup and Repository pattern (Data Layer)
+├── extension/        # Browser Extension (background, content, popup)
 ├── features/         # Domain-specific modules (items, settings)
 ├── hooks/            # Global custom React hooks
 ├── lib/              # Global utilities, helpers, constants
@@ -164,7 +166,13 @@ npm run build
 npm run build:ext
 ```
 
-**5. Preview Production Build**
+**5. Package the Browser Extension (zip)**
+
+```bash
+npm run pack:ext
+```
+
+**6. Preview Production Build**
 
 ```bash
 npm run preview

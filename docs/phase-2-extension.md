@@ -88,6 +88,8 @@ Because Sulok operates entirely offline via IndexedDB (`sulok-app.vercel.app`) a
 ### The Distribution Strategy
 
 1. **Beta Phase (GitHub Releases):** During initial development and testing, the extension will be distributed as a `.zip` file hosted on GitHub. Users will install it manually by enabling "Developer Mode" in `chrome://extensions` and loading the unpacked folder.
+   - **Automated Packaging:** Run `npm run pack:ext` to automatically build the extension and package `dist-ext/` into a versioned `.zip` file (e.g., `sulok-extension-v0.9.1.zip`).
+   - **GitHub Release:** Draft a new release on GitHub, create a version tag matching `package.json`, attach the generated `.zip` file, and publish. The direct link to this asset will be used in the web app UI.
 2. **Production Phase (Chrome Web Store):** Once polished, the extension will be officially published to the Chrome Web Store. This provides a trusted, 1-click installation experience and guarantees automatic background updates for all users.
 
 ### The In-App UI Integration

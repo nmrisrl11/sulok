@@ -42,8 +42,7 @@ The project is currently in the **Phase 2: Browser Extension implementation phas
 
 ### Next Steps
 
-1. [ ] Redesign `/install` page into a unified "Get Sulok" hub for PWA and Extension downloads.
-2. [ ] Polish the extension distribution build (prepare for zip/Web Store).
+1. [ ] Begin planning device synchronization (Phase 3).
 
 ---
 
@@ -113,7 +112,8 @@ The project is currently in the **Phase 2: Browser Extension implementation phas
 - [x] Popup with highly-performant virtualized folder selector
 - [x] Web App Sync Bridge (reads from IndexedDB, syncs to `chrome.storage`)
 - [x] Context-aware duplicate and recycle-bin logic (prevents false positive success toasts)
-- [ ] Unified Installation UI in the web app
+- [x] Unified Installation UI in the web app (Get App hub)
+- [x] Automated extension distribution build and GitHub release workflow
 
 ### Phase 3 — Device Sync
 
