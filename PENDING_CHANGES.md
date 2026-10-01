@@ -7,7 +7,9 @@
 
 ## Unreleased
 
-_(No pending changes. Next phase starting soon!)_
+### Added
+
+- Integrated Vercel Analytics and Speed Insights to monitor app traffic and performance
 
 ---
 

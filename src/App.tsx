@@ -1,9 +1,9 @@
 import { AppearanceProvider } from "@/components/appearance-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { AppLayout } from "@/components/layout/app-layout";
+import { ExtensionManager } from "@/components/managers/extension-manager";
 import { PwaManager } from "@/components/managers/pwa-manager";
 import { TrashManager } from "@/components/managers/trash-manager";
-import { ExtensionManager } from "@/components/managers/extension-manager";
 import { ThemeProvider } from "@/components/theme-provider";
 import { OnboardingProvider } from "@/features/onboarding/components/onboarding-provider";
 import { useGlobalSoundInteractions } from "@/hooks";
@@ -12,6 +12,8 @@ import { HomeRouteFallback } from "@/pages/home/home-route-fallback";
 import { InstallSkeleton } from "@/pages/install/install-skeleton";
 import { SettingsSkeleton } from "@/pages/settings/settings-skeleton";
 import { UpdatesSkeleton } from "@/pages/updates/updates-skeleton";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -47,6 +49,8 @@ function App() {
 				<TrashManager />
 				<PwaManager />
 				<GlobalSoundInteractions />
+				<Analytics />
+				<SpeedInsights />
 				<BrowserRouter>
 					<NuqsAdapter>
 						<ExtensionManager />
