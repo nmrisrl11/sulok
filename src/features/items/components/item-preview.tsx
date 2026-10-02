@@ -2,6 +2,7 @@ import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettingsStore } from "@/stores";
 import { GlobeIcon, ImageIcon } from "lucide-react";
+import { useState } from "react";
 import type { URLMetadata } from "../hooks/use-metadata";
 
 interface ItemPreviewProps {
@@ -15,6 +16,16 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 	const defaultExpression = useSettingsStore(
 		(state) => state.settings.suloSettings.expressionPreviewUnavailable,
 	);
+
+	const [imageError, setImageError] = useState(false);
+	const [logoError, setLogoError] = useState(false);
+	const [prevUrl, setPrevUrl] = useState(url);
+
+	if (url !== prevUrl) {
+		setPrevUrl(url);
+		setImageError(false);
+		setLogoError(false);
+	}
 
 	if (!url && !loading && !error && !metadata) {
 		return (
@@ -74,9 +85,14 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 
 	return (
 		<div className="flex shrink-0 flex-col overflow-hidden rounded-md border bg-card text-card-foreground shadow-sm corner-squircle supports-[corner-shape:squircle]:rounded-[24px]">
-			{metadata.image ? (
+			{metadata.image && !imageError ? (
 				<div className="relative aspect-video w-full overflow-hidden border-b bg-muted">
-					<img src={metadata.image} alt="Preview" className="h-full w-full object-cover" />
+					<img
+						src={metadata.image}
+						alt="Preview"
+						className="h-full w-full object-cover"
+						onError={() => setImageError(true)}
+					/>
 				</div>
 			) : (
 				<div className="flex aspect-3/1 w-full items-center justify-center border-b bg-muted text-muted-foreground">
@@ -85,8 +101,13 @@ export function ItemPreview({ metadata, loading, error, url }: ItemPreviewProps)
 			)}
 			<div className="flex flex-col gap-1 p-3 pt-2">
 				<div className="flex items-center gap-2 text-xs text-muted-foreground">
-					{metadata.logo ? (
-						<img src={metadata.logo} alt="" className="h-3.5 w-3.5 rounded-sm object-cover" />
+					{metadata.logo && !logoError ? (
+						<img
+							src={metadata.logo}
+							alt=""
+							className="h-3.5 w-3.5 rounded-sm object-cover"
+							onError={() => setLogoError(true)}
+						/>
 					) : (
 						<GlobeIcon className="h-3.5 w-3.5" />
 					)}
