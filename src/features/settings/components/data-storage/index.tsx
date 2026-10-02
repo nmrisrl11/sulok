@@ -1,4 +1,5 @@
 import { SettingsCard } from "../settings-card";
+import { BrowserStorageSetting } from "./browser-storage-setting";
 import { ExportLibrarySetting } from "./export-library-setting";
 import { ReferralTrackingSetting } from "./referral-tracking-setting";
 import { RestartAppTourSetting } from "./restart-app-tour-setting";
@@ -19,6 +20,19 @@ export function DataStorageSection() {
 			<div className="space-y-10">
 				<div className="space-y-4">
 					<h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+						Storage & System
+					</h3>
+					<SettingsCard className="p-0 sm:p-0">
+						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
+							<BrowserStorageSetting />
+							<ReferralTrackingSetting />
+							<RestartAppTourSetting />
+						</div>
+					</SettingsCard>
+				</div>
+
+				<div className="space-y-4">
+					<h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
 						Backup & Restore
 					</h3>
 					<SettingsCard className="p-0 sm:p-0">
@@ -26,18 +40,6 @@ export function DataStorageSection() {
 							<ExportLibrarySetting />
 							<RestoreLibrarySetting />
 							<SyncSettingsSetting />
-						</div>
-					</SettingsCard>
-				</div>
-
-				<div className="space-y-4">
-					<h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-						Privacy & System
-					</h3>
-					<SettingsCard className="p-0 sm:p-0">
-						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
-							<ReferralTrackingSetting />
-							<RestartAppTourSetting />
 						</div>
 					</SettingsCard>
 				</div>
