@@ -14,6 +14,28 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.11.0",
+		date: "Oct 02, 2026",
+		title: "Data Protection, Analytics, & Settings Backups",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Complete Settings Backup & Restore: You can now backup and restore all of your application settings and personalization choices (theme, sound preferences, UI density) via a unified JSON file, complete with a detailed preview screen that highlights exactly what will change before you restore.",
+					"Enhanced Data Protection: We've introduced a new Danger Zone in settings for critical actions like deleting your library or performing a factory reset, all protected by strict confirmation dialogs. Additionally, you can now request persistent storage to prevent browsers from accidentally evicting your local data, and monitor your exact storage usage via a new built-in tracker.",
+					"Smart 'Get Sulok' Banner: Added a responsive, dismissible banner to recommend the PWA and browser extension. It's smart enough to hide itself during onboarding, when running as an installed app, or if you already have the extension.",
+					"Analytics & Polish: Integrated Vercel Analytics and Speed Insights to help monitor performance. We also added dynamic page titles that automatically update based on your current folder, graceful offline fallbacks for broken or uncached external images, and optimized our background logging.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Social Sharing & URLs: Resolved an issue that caused link previews to look cluttered or duplicated when sharing Sulok on social platforms like Twitter or Discord, and ensured absolute link URLs are strictly accurate across all environments.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.10.0",
 		date: "Oct 01, 2026",
 		title: "Browser Extension & Unified App Hub",
