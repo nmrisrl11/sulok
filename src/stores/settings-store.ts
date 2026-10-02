@@ -209,7 +209,9 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		legacySettings.hasDismissedExtensionNudge !== undefined &&
 		typeof legacySettings.hasDismissedExtensionNudge === "boolean"
 	) {
-		safeSettings.hasDismissedInstallNudge = legacySettings.hasDismissedExtensionNudge;
+		if (safeSettings.hasDismissedInstallNudge === undefined) {
+			safeSettings.hasDismissedInstallNudge = legacySettings.hasDismissedExtensionNudge;
+		}
 		delete legacySettings.hasDismissedExtensionNudge;
 	}
 
