@@ -3,6 +3,7 @@ import { ExportLibrarySetting } from "./export-library-setting";
 import { ReferralTrackingSetting } from "./referral-tracking-setting";
 import { RestartAppTourSetting } from "./restart-app-tour-setting";
 import { RestoreLibrarySetting } from "./restore-library-setting";
+import { SyncSettingsSetting } from "./sync-settings-setting";
 
 export function DataStorageSection() {
 	return (
@@ -24,6 +25,7 @@ export function DataStorageSection() {
 						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
 							<ExportLibrarySetting />
 							<RestoreLibrarySetting />
+							<SyncSettingsSetting />
 						</div>
 					</SettingsCard>
 				</div>

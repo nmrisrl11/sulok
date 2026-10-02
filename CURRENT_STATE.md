@@ -100,6 +100,7 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 - [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, and layout density)
 - [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
 - [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata and folder hierarchy preservation
+- [x] Backup and Restore for Application Settings (JSON payload with appearance, sound, privacy, and Sulo configurations)
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI

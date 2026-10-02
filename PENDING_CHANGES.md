@@ -9,8 +9,12 @@
 
 ### Added
 
-- Added a smart, dismissible banner to recommend the browser extension to users who haven't installed it yet
+- Added the ability to backup and restore all application settings and personalization choices (theme, sound preferences, UI density) via a unified JSON file
+- Added a detailed preview screen before restoring settings, highlighting exactly which preferences will change compared to your current setup
+- Redesigned the Data & Storage settings page to use a clean, unified card-based layout for both library and settings backups
+- Added a smart, dismissible "Get Sulok" banner to recommend installing the web app (PWA) and browser extension
 - The banner automatically hides during the initial user onboarding flow to prevent visual noise
+- The banner intelligently hides itself once the user installs the web app to their device or installs the browser extension
 - The banner features a fully responsive design, moving the dismiss button to the top-right corner on mobile devices
 - Integrated Vercel Analytics and Speed Insights to monitor app traffic and performance
 - Added dynamic page titles that automatically update based on the specific folder or screen you are currently viewing
