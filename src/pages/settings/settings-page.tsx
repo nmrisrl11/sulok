@@ -1,6 +1,7 @@
 import { ExtensionNudgeBanner } from "@/components/extension-nudge-banner";
 import { AppearanceIcon, DataIcon, SoundFxIcon, SuloCustomizationIcon } from "@/components/icons";
 import { SuloMascot } from "@/components/logo/sulo-mascot";
+import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
@@ -124,6 +125,12 @@ export function SettingsPage() {
 
 	return (
 		<div className="mx-auto w-full max-w-2xl px-4 pt-6 md:px-6 md:pt-12">
+			<SEO
+				title="Settings"
+				description="Customize your experience and manage your data."
+				canonical="/settings"
+				robots="noindex, nofollow"
+			/>
 			<div className="mb-10 text-center sm:text-left">
 				<h1 className="flex items-center justify-center gap-2.5 font-heading text-3xl font-bold sm:justify-start">
 					Settings

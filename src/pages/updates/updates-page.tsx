@@ -1,3 +1,4 @@
+import { SEO } from "@/components/seo";
 import { APP_INFO } from "@/constants/app-info";
 import { CHANGELOG_DATA } from "@/data/changelog";
 import { useEffect } from "react";
@@ -29,6 +30,12 @@ export function UpdatesPage() {
 
 	return (
 		<div className="relative flex h-full flex-col">
+			<SEO
+				title="Updates"
+				description={`What's new in ${APP_INFO.name}`}
+				canonical="/updates"
+				type="article"
+			/>
 			<div className="mx-auto flex w-full max-w-3xl animate-in flex-col gap-12 px-4 pt-6 pb-24 duration-500 fade-in slide-in-from-bottom-4 md:px-0 md:pt-12 lg:pb-12">
 				{/* Header Section */}
 				<section className="flex w-full flex-col items-center gap-3 text-center sm:items-start sm:text-left">

@@ -74,6 +74,7 @@ Sulok is built with modern, performant, and type-safe web technologies.
 **Architecture & State**
 
 - **React Router DOM v7** (Application routing)
+- **react-helmet-async** (Dynamic SEO metadata)
 - **Zustand** (Global state management)
 - **nuqs** (URL query string state management)
 - **React Hook Form & Zod** (Form validation)

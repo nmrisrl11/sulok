@@ -1,4 +1,5 @@
 import { ExtensionNudgeBanner } from "@/components/extension-nudge-banner";
+import { SEO } from "@/components/seo";
 import { Checkbox } from "@/components/ui/checkbox";
 import { type Folder, type Item } from "@/db/db";
 import { ExplorerDndContext } from "@/features/folders/components/dnd/explorer-dnd-context";
@@ -91,6 +92,7 @@ export function HomePage({ className }: { className?: string }) {
 
 	return (
 		<main className={cn("flex flex-col gap-6 md:gap-8", className)}>
+			<SEO canonical="/" />
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-4 px-2 sm:flex-row sm:items-center sm:justify-between sm:px-0">
 					<h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
