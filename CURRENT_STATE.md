@@ -4,7 +4,7 @@
 
 ## Project Status: 🟢 Development
 
-The project is currently in the **Phase 2: Browser Extension implementation phase**.
+The project is currently in the **Phase 3: Device Sync implementation phase**.
 
 ---
 
@@ -38,11 +38,11 @@ The project is currently in the **Phase 2: Browser Extension implementation phas
 
 ---
 
-## Current Phase: Browser Extension (Phase 2)
+## Current Phase: Device Sync (Phase 3)
 
 ### Next Steps
 
-1. [ ] Begin planning device synchronization (Phase 3).
+1. [ ] Establish WebRTC/PeerJS signaling architecture.
 
 ---
 
@@ -105,7 +105,7 @@ The project is currently in the **Phase 2: Browser Extension implementation phas
 - [x] Responsive/mobile UI
 - [x] PWA/offline support
 
-### Phase 2 — Browser Extension (Current)
+### Phase 2 — Browser Extension (Completed)
 
 - [x] Chrome extension for quick save
 - [x] "Save to Sulok" zero-click context menus
@@ -114,8 +114,9 @@ The project is currently in the **Phase 2: Browser Extension implementation phas
 - [x] Context-aware duplicate and recycle-bin logic (prevents false positive success toasts)
 - [x] Unified Installation UI in the web app (Get App hub)
 - [x] Automated extension distribution build and GitHub release workflow
+- [x] Subtle extension nudges (dismissible banners)
 
-### Phase 3 — Device Sync
+### Phase 3 — Device Sync (Current)
 
 - P2P sync via WebRTC + Peer.js
 - No server required

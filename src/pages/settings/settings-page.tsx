@@ -1,3 +1,4 @@
+import { ExtensionNudgeBanner } from "@/components/extension-nudge-banner";
 import { AppearanceIcon, DataIcon, SoundFxIcon, SuloCustomizationIcon } from "@/components/icons";
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,10 @@ export function SettingsPage() {
 				<p className="mt-2 text-sm text-muted-foreground sm:text-base">
 					Customize your experience and manage your data
 				</p>
+			</div>
+
+			<div className="mb-8">
+				<ExtensionNudgeBanner />
 			</div>
 
 			<div className="flex flex-col gap-10">

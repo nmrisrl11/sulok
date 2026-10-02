@@ -37,6 +37,7 @@ window.addEventListener("message", (event) => {
 	}
 
 	if (data && data.type === "SULOK_EXT_READY") {
+		window.postMessage({ type: "SULOK_EXT_INSTALLED_PONG" }, "*");
 		chrome.storage.local.get("pendingSaves", (result) => {
 			const pendingSaves = (result.pendingSaves as unknown[]) || [];
 			if (pendingSaves.length > 0) {

@@ -9,6 +9,7 @@
 
 ### Added
 
+- Added a smart, dismissible banner to recommend the browser extension to users who haven't installed it yet
 - Integrated Vercel Analytics and Speed Insights to monitor app traffic and performance
 
 ---

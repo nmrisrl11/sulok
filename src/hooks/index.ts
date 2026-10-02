@@ -1,6 +1,7 @@
 export * from "./use-copy-to-clipboard";
 export * from "./use-debounce";
 export * from "./use-debounced-query";
+export * from "./use-extension-installed";
 export * from "./use-global-sound-interactions";
 export * from "./use-install-app";
 export * from "./use-mobile";
