@@ -14,7 +14,7 @@
 - Redesigned the Data & Storage settings page to use a clean, unified card-based layout for both library and settings backups
 - Added a smart, dismissible "Get Sulok" banner to recommend installing the web app (PWA) and browser extension
 - The banner automatically hides during the initial user onboarding flow to prevent visual noise
-- The banner intelligently hides itself once the user installs the web app to their device or installs the browser extension
+- The banner intelligently hides itself when the app runs in standalone mode (PWA installed) or if the browser extension is installed
 - The banner features a fully responsive design, moving the dismiss button to the top-right corner on mobile devices
 - Integrated Vercel Analytics and Speed Insights to monitor app traffic and performance
 - Added dynamic page titles that automatically update based on the specific folder or screen you are currently viewing

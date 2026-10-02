@@ -1,3 +1,10 @@
+import {
+	appearanceSettingsSchema,
+	privacySettingsSchema,
+	soundSettingsSchema,
+	suloSettingsSchema,
+	workspaceThemeSchema,
+} from "@/schemas";
 import type { Settings } from "@/types/settings";
 
 export function exportSettings(settings: Settings, workspaceTheme: string) {
@@ -41,24 +48,29 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 		// We only extract the allowed configuration keys
 		const sanitized: ImportedSettingsPayload = {};
 
-		if (parsed.workspaceTheme && typeof parsed.workspaceTheme === "string") {
-			sanitized.workspaceTheme = parsed.workspaceTheme;
+		if (parsed.workspaceTheme) {
+			const res = workspaceThemeSchema.safeParse(parsed.workspaceTheme);
+			if (res.success) sanitized.workspaceTheme = res.data;
 		}
 
-		if (parsed.appearanceSettings && typeof parsed.appearanceSettings === "object") {
-			sanitized.appearanceSettings = { ...parsed.appearanceSettings };
+		if (parsed.appearanceSettings) {
+			const res = appearanceSettingsSchema.safeParse(parsed.appearanceSettings);
+			if (res.success) sanitized.appearanceSettings = res.data as Settings["appearanceSettings"];
 		}
 
-		if (parsed.soundSettings && typeof parsed.soundSettings === "object") {
-			sanitized.soundSettings = { ...parsed.soundSettings };
+		if (parsed.soundSettings) {
+			const res = soundSettingsSchema.safeParse(parsed.soundSettings);
+			if (res.success) sanitized.soundSettings = res.data as Settings["soundSettings"];
 		}
 
-		if (parsed.suloSettings && typeof parsed.suloSettings === "object") {
-			sanitized.suloSettings = { ...parsed.suloSettings };
+		if (parsed.suloSettings) {
+			const res = suloSettingsSchema.safeParse(parsed.suloSettings);
+			if (res.success) sanitized.suloSettings = res.data as Settings["suloSettings"];
 		}
 
-		if (parsed.privacySettings && typeof parsed.privacySettings === "object") {
-			sanitized.privacySettings = { ...parsed.privacySettings };
+		if (parsed.privacySettings) {
+			const res = privacySettingsSchema.safeParse(parsed.privacySettings);
+			if (res.success) sanitized.privacySettings = res.data as Settings["privacySettings"];
 		}
 
 		return sanitized;
