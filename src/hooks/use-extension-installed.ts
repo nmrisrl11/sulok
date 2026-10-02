@@ -21,8 +21,8 @@ export function useExtensionInstalled() {
 
 		// If no pong received within 1 second, assume not installed
 		const timeout = setTimeout(() => {
-			if (isMounted && isInstalled === null) {
-				setIsInstalled(false);
+			if (isMounted) {
+				setIsInstalled((prev) => (prev === null ? false : prev));
 			}
 		}, 1000);
 
@@ -31,7 +31,7 @@ export function useExtensionInstalled() {
 			window.removeEventListener("message", handleMessage);
 			clearTimeout(timeout);
 		};
-	}, [isInstalled]);
+	}, []);
 
 	return isInstalled;
 }

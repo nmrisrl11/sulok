@@ -10,6 +10,8 @@
 ### Added
 
 - Added a smart, dismissible banner to recommend the browser extension to users who haven't installed it yet
+- The banner automatically hides during the initial user onboarding flow to prevent visual noise
+- The banner features a fully responsive design, moving the dismiss button to the top-right corner on mobile devices
 - Integrated Vercel Analytics and Speed Insights to monitor app traffic and performance
 
 ---
