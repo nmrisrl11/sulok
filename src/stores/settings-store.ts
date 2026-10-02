@@ -33,7 +33,7 @@ export const defaultSettings: Settings = {
 	},
 	onboardingStatus: "in_progress",
 	onboardingStep: 0,
-	hasDismissedExtensionNudge: false,
+	hasDismissedInstallNudge: false,
 };
 
 interface SettingsState {
@@ -204,11 +204,20 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 	) {
 		delete safeSettings.onboardingStep;
 	}
+	const legacySettings = safeSettings as Record<string, unknown>;
 	if (
-		safeSettings.hasDismissedExtensionNudge !== undefined &&
-		typeof safeSettings.hasDismissedExtensionNudge !== "boolean"
+		legacySettings.hasDismissedExtensionNudge !== undefined &&
+		typeof legacySettings.hasDismissedExtensionNudge === "boolean"
 	) {
-		delete safeSettings.hasDismissedExtensionNudge;
+		safeSettings.hasDismissedInstallNudge = legacySettings.hasDismissedExtensionNudge;
+		delete legacySettings.hasDismissedExtensionNudge;
+	}
+
+	if (
+		safeSettings.hasDismissedInstallNudge !== undefined &&
+		typeof safeSettings.hasDismissedInstallNudge !== "boolean"
+	) {
+		delete safeSettings.hasDismissedInstallNudge;
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

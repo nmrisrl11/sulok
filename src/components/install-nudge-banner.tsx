@@ -7,9 +7,9 @@ import { XIcon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export function ExtensionNudgeBanner() {
+export function InstallNudgeBanner() {
 	const isInstalled = useExtensionInstalled();
-	const hasDismissed = useSettingsStore((state) => state.settings.hasDismissedExtensionNudge);
+	const hasDismissed = useSettingsStore((state) => state.settings.hasDismissedInstallNudge);
 	const onboardingStatus = useSettingsStore((state) => state.settings.onboardingStatus);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
@@ -58,7 +58,7 @@ export function ExtensionNudgeBanner() {
 					size="icon"
 					variant="ghost"
 					className="hidden h-8 w-8 shrink-0 text-muted-foreground hover:bg-black/5 hover:text-foreground sm:flex dark:hover:bg-white/10"
-					onClick={() => updateSettings({ hasDismissedExtensionNudge: true })}
+					onClick={() => updateSettings({ hasDismissedInstallNudge: true })}
 					aria-label="Dismiss banner"
 				>
 					<XIcon className="size-4" />
@@ -69,7 +69,7 @@ export function ExtensionNudgeBanner() {
 				size="icon"
 				variant="ghost"
 				className="absolute top-2 right-2 z-20 flex h-8 w-8 text-muted-foreground hover:bg-black/5 hover:text-foreground sm:hidden dark:hover:bg-white/10"
-				onClick={() => updateSettings({ hasDismissedExtensionNudge: true })}
+				onClick={() => updateSettings({ hasDismissedInstallNudge: true })}
 				aria-label="Dismiss banner"
 			>
 				<XIcon className="size-4" />
