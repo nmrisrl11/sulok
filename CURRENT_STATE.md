@@ -115,7 +115,7 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 - [x] Context-aware duplicate and recycle-bin logic (prevents false positive success toasts)
 - [x] Unified Installation UI in the web app (Get App hub)
 - [x] Automated extension distribution build and GitHub release workflow
-- [x] Subtle extension nudges (dismissible banners)
+- [x] Subtle app/extension installation nudges (dismissible banners)
 
 ### Phase 3 — Device Sync (Current)
 

@@ -1,5 +1,5 @@
-import { ExtensionNudgeBanner } from "@/components/extension-nudge-banner";
 import { AppearanceIcon, DataIcon, SoundFxIcon, SuloCustomizationIcon } from "@/components/icons";
+import { InstallNudgeBanner } from "@/components/install-nudge-banner";
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
@@ -141,7 +141,7 @@ export function SettingsPage() {
 			</div>
 
 			<div className="mb-8">
-				<ExtensionNudgeBanner />
+				<InstallNudgeBanner />
 			</div>
 
 			<div className="flex flex-col gap-10">
