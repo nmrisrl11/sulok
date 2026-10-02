@@ -1,4 +1,6 @@
-console.log("Sulok Extension Bridge active.");
+if (import.meta.env.DEV) {
+	console.log("Sulok Extension Bridge active.");
+}
 
 // 1. Send pending saves to the web app as soon as the bridge loads
 chrome.storage.local.get("pendingSaves", (result) => {
@@ -31,8 +33,19 @@ window.addEventListener("message", (event) => {
 			const pendingSaves = (result.pendingSaves as { timestamp: number }[]) || [];
 			const remainingSaves = pendingSaves.filter((s) => !processedTimestamps.has(s.timestamp));
 			chrome.storage.local.set({ pendingSaves: remainingSaves }, () => {
-				console.log("Sulok Extension: Pending saves cleared by web app.");
+				if (import.meta.env.DEV) {
+					console.log("Sulok Extension: Pending saves cleared by web app.");
+				}
 			});
+		});
+	}
+
+	if (data && data.type === "SULOK_EXT_FACTORY_RESET") {
+		chrome.storage.local.clear(() => {
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Factory reset completed.");
+			}
+			window.postMessage({ type: "SULOK_EXT_FACTORY_RESET_DONE" }, "*");
 		});
 	}
 
@@ -48,19 +61,25 @@ window.addEventListener("message", (event) => {
 
 	if (data && data.type === "SULOK_EXT_UPDATE_FOLDERS") {
 		chrome.storage.local.set({ folders: data.payload }, () => {
-			console.log("Sulok Extension: Folders updated from web app.");
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Folders updated from web app.");
+			}
 		});
 	}
 
 	if (data && data.type === "SULOK_EXT_UPDATE_THEME") {
 		chrome.storage.local.set({ theme: data.payload }, () => {
-			console.log("Sulok Extension: Theme updated from web app.");
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Theme updated from web app.");
+			}
 		});
 	}
 
 	if (data && data.type === "SULOK_EXT_UPDATE_URLS") {
 		chrome.storage.local.set({ savedUrls: data.payload }, () => {
-			console.log("Sulok Extension: Saved URLs updated from web app.");
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Saved URLs updated from web app.");
+			}
 		});
 	}
 });

@@ -102,6 +102,7 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 - [x] Import/Export Data (JSON, CSV, TXT) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Backup and Restore for Application Settings (JSON payload with appearance, sound, privacy, and Sulo configurations)
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
+- [x] Danger Zone for destructive settings actions (Delete Library, Reset Settings, Factory Reset)
 - [x] Interactive UI Sound FX (cuelume)
 - [x] Responsive/mobile UI
 - [x] PWA/offline support

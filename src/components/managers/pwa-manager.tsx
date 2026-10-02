@@ -14,7 +14,9 @@ export function PwaManager() {
 		updateServiceWorker,
 	} = useRegisterSW({
 		onRegistered(r) {
-			console.log("SW Registered:", r);
+			if (import.meta.env.DEV) {
+				console.log("SW Registered:", r);
+			}
 			if (r) {
 				// 1. Fallback: Check for updates every hour
 				updateIntervalRef.current = window.setInterval(
@@ -42,7 +44,9 @@ export function PwaManager() {
 			}
 		},
 		onRegisterError(error) {
-			console.error("SW Registration Error:", error);
+			if (import.meta.env.DEV) {
+				console.error("SW Registration Error:", error);
+			}
 		},
 	});
 
