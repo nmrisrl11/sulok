@@ -16,6 +16,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { lazy, Suspense } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const HomePage = lazy(() =>
@@ -44,76 +45,78 @@ function GlobalSoundInteractions() {
 
 function App() {
 	return (
-		<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
-			<AppearanceProvider>
-				<TrashManager />
-				<PwaManager />
-				<GlobalSoundInteractions />
-				<Analytics />
-				<SpeedInsights />
-				<BrowserRouter>
-					<NuqsAdapter>
-						<ExtensionManager />
-						<AppLayout>
-							<ErrorBoundary>
-								<OnboardingProvider>
-									<Routes>
-										<Route
-											path="/"
-											element={
-												<Suspense fallback={<HomeRouteFallback />}>
-													<HomePage />
-												</Suspense>
-											}
-										/>
-										<Route
-											path="/about"
-											element={
-												<Suspense fallback={<AboutSkeleton />}>
-													<AboutPage />
-												</Suspense>
-											}
-										/>
-										<Route
-											path="/updates"
-											element={
-												<Suspense fallback={<UpdatesSkeleton />}>
-													<UpdatesPage />
-												</Suspense>
-											}
-										/>
-										<Route
-											path="/settings"
-											element={
-												<Suspense fallback={<SettingsSkeleton />}>
-													<SettingsPage />
-												</Suspense>
-											}
-										/>
-										<Route
-											path="/install"
-											element={
-												<Suspense fallback={<InstallSkeleton />}>
-													<InstallPage />
-												</Suspense>
-											}
-										/>
-										<Route
-											path="*"
-											element={
-												<Suspense fallback={null}>
-													<NotFoundPage />
-												</Suspense>
-											}
-										/>
-									</Routes>
-								</OnboardingProvider>
-							</ErrorBoundary>
-						</AppLayout>
-					</NuqsAdapter>
-				</BrowserRouter>
-			</AppearanceProvider>
-		</ThemeProvider>
+		<HelmetProvider>
+			<ThemeProvider defaultTheme="system" storageKey="sulok-ui-theme">
+				<AppearanceProvider>
+					<TrashManager />
+					<PwaManager />
+					<GlobalSoundInteractions />
+					<Analytics />
+					<SpeedInsights />
+					<BrowserRouter>
+						<NuqsAdapter>
+							<ExtensionManager />
+							<AppLayout>
+								<ErrorBoundary>
+									<OnboardingProvider>
+										<Routes>
+											<Route
+												path="/"
+												element={
+													<Suspense fallback={<HomeRouteFallback />}>
+														<HomePage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/about"
+												element={
+													<Suspense fallback={<AboutSkeleton />}>
+														<AboutPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/updates"
+												element={
+													<Suspense fallback={<UpdatesSkeleton />}>
+														<UpdatesPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/settings"
+												element={
+													<Suspense fallback={<SettingsSkeleton />}>
+														<SettingsPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/install"
+												element={
+													<Suspense fallback={<InstallSkeleton />}>
+														<InstallPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="*"
+												element={
+													<Suspense fallback={null}>
+														<NotFoundPage />
+													</Suspense>
+												}
+											/>
+										</Routes>
+									</OnboardingProvider>
+								</ErrorBoundary>
+							</AppLayout>
+						</NuqsAdapter>
+					</BrowserRouter>
+				</AppearanceProvider>
+			</ThemeProvider>
+		</HelmetProvider>
 	);
 }
 

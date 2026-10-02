@@ -83,7 +83,7 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 - [x] High-performance list virtualization (TanStack Virtual) for massive local datasets
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
-- [x] SEO, Social Previews (Open Graph), and Agentic Browsing foundations (robots.txt, sitemap.xml, llms.txt)
+- [x] Dynamic SEO (`react-helmet-async`), Social Previews (Open Graph), and Agentic Browsing (robots.txt, sitemap.xml, llms.txt)
 - [x] Expandable Quick Link Action Bar (FAB) at the bottom
 - [x] Smart Clipboard URL detection (global paste support)
 - [x] Global notification system using `goey-toast`

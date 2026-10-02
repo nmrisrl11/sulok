@@ -1,5 +1,6 @@
 import { ExternalLinkIcon, FastIcon, OfflineIcon, ScreenAppIcon } from "@/components/icons";
 import { SuloMascot } from "@/components/logo/sulo-mascot";
+import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { APP_INFO } from "@/constants/app-info";
@@ -214,6 +215,11 @@ export function InstallPage() {
 
 	return (
 		<div className="relative flex h-full flex-col">
+			<SEO
+				title="Get the App"
+				description={`Install ${APP_INFO.name} for offline access and the browser extension for zero-click saving.`}
+				canonical="/install"
+			/>
 			<div className="container mx-auto px-4 py-12 md:px-8 md:py-20 lg:max-w-6xl">
 				<div className="flex animate-in flex-col gap-12 duration-700 fade-in slide-in-from-bottom-8 lg:flex-row lg:gap-20">
 					{/* Left Column: Branding and Details */}

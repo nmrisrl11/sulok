@@ -1,4 +1,5 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
+import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/stores";
 import { Link } from "react-router-dom";
@@ -8,6 +9,7 @@ export function NotFoundPage() {
 
 	return (
 		<div className="flex min-h-[50vh] animate-in flex-col items-center justify-center gap-6 text-center duration-500 fade-in">
+			<SEO title="Page Not Found" robots="noindex, nofollow" />
 			<div className="h-48 w-48 sm:h-64 sm:w-64">
 				<SuloMascot expression={expression} />
 			</div>
