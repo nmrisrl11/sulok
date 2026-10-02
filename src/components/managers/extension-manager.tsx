@@ -14,7 +14,7 @@ import { z } from "zod";
 const savePayloadSchema = z.object({
 	url: z.string().url(),
 	title: z.string().optional(),
-	folderId: z.string().optional(),
+	folderId: z.string().nullable().optional(),
 	timestamp: z.number().optional(),
 });
 
