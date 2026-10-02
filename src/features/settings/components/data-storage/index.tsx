@@ -5,6 +5,7 @@ import { ReferralTrackingSetting } from "./referral-tracking-setting";
 import { RestartAppTourSetting } from "./restart-app-tour-setting";
 import { RestoreLibrarySetting } from "./restore-library-setting";
 import { SyncSettingsSetting } from "./sync-settings-setting";
+import { DangerZoneSection as DangerZoneContent } from "./danger-zone-section";
 
 export function DataStorageSection() {
 	return (
@@ -41,6 +42,15 @@ export function DataStorageSection() {
 							<RestoreLibrarySetting />
 							<SyncSettingsSetting />
 						</div>
+					</SettingsCard>
+				</div>
+
+				<div className="space-y-4">
+					<h3 className="text-xs font-semibold tracking-wider text-destructive uppercase">
+						Danger Zone
+					</h3>
+					<SettingsCard className="p-0 sm:p-0">
+						<DangerZoneContent />
 					</SettingsCard>
 				</div>
 			</div>
