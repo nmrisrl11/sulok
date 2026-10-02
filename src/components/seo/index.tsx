@@ -1,14 +1,7 @@
 import { APP_INFO } from "@/constants/app-info";
 import { Helmet } from "react-helmet-async";
 
-export interface SEOProps {
-	title?: string;
-	description?: string;
-	canonical?: string;
-	type?: "website" | "article";
-	image?: string;
-	robots?: string;
-}
+import type { SEOProps } from "./seo-types";
 
 export function SEO({
 	title,
@@ -21,9 +14,9 @@ export function SEO({
 	const pageTitle = title ? `${title} — ${APP_INFO.name}` : APP_INFO.title;
 	const pageDescription = description || APP_INFO.description;
 
-	// Use window.location.origin if available, fallback to APP_INFO.appUrl (assuming it's a domain)
-	const siteUrl =
-		typeof window !== "undefined" ? window.location.origin : `https://${APP_INFO.appUrl}`;
+	// Always derive siteUrl from APP_INFO.appUrl so that canonical/social preview links
+	// remain accurate even if the app is previewed on alternate hostnames (e.g. localhost, preview deployments).
+	const siteUrl = `https://${APP_INFO.appUrl}`;
 
 	const getAbsoluteUrl = (path: string) => {
 		if (path.startsWith("http")) return path;
