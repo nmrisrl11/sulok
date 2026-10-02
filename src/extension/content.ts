@@ -40,6 +40,15 @@ window.addEventListener("message", (event) => {
 		});
 	}
 
+	if (data && data.type === "SULOK_EXT_FACTORY_RESET") {
+		chrome.storage.local.clear(() => {
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Factory reset completed.");
+			}
+			window.postMessage({ type: "SULOK_EXT_FACTORY_RESET_DONE" }, "*");
+		});
+	}
+
 	if (data && data.type === "SULOK_EXT_READY") {
 		window.postMessage({ type: "SULOK_EXT_INSTALLED_PONG" }, "*");
 		chrome.storage.local.get("pendingSaves", (result) => {

@@ -88,6 +88,7 @@ export function ExtensionManager() {
 
 			const data = event.data;
 			if (data && data.type === "SULOK_EXT_PENDING_SAVES") {
+				if (sessionStorage.getItem("isFactoryResetting") === "true") return;
 				const saves = data.payload;
 				if (!Array.isArray(saves) || saves.length === 0) return;
 

@@ -1,5 +1,6 @@
 import { TrashXMarkIcon } from "@/components/icons";
 import { db } from "@/db/db";
+import { useThemeDispatch } from "@/hooks/use-theme";
 import { setHasDataHint } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { defaultSettings, useConfirmationStore, useSettingsStore } from "@/stores";
@@ -40,6 +41,7 @@ function DangerZoneAction({ title, description, icon: Icon, onClick }: DangerZon
 export function DangerZoneSection() {
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
+	const setTheme = useThemeDispatch();
 
 	const actions = [
 		{
@@ -53,8 +55,10 @@ export function DangerZoneSection() {
 						"Are you sure you want to delete all saved links and folders? This action cannot be undone.",
 					confirmText: "Delete Library",
 					onConfirm: async () => {
-						await db.items.clear();
-						await db.folders.clear();
+						await db.transaction("rw", db.items, db.folders, async () => {
+							await db.items.clear();
+							await db.folders.clear();
+						});
 						setHasDataHint(false);
 						window.location.reload();
 					},
@@ -74,6 +78,7 @@ export function DangerZoneSection() {
 					confirmText: "Reset Settings",
 					onConfirm: () => {
 						updateSettings(defaultSettings);
+						setTheme("system");
 					},
 				});
 			},
@@ -90,7 +95,26 @@ export function DangerZoneSection() {
 						"Are you sure you want to permanently delete all data, configurations, and storage? This will revert the app to a fresh state. This action cannot be undone.",
 					confirmText: "Factory Reset",
 					onConfirm: async () => {
-						await db.delete();
+						sessionStorage.setItem("isFactoryResetting", "true");
+
+						const resetExt = new Promise<void>((resolve) => {
+							const handler = (e: MessageEvent) => {
+								if (e.data?.type === "SULOK_EXT_FACTORY_RESET_DONE") {
+									window.removeEventListener("message", handler);
+									resolve();
+								}
+							};
+							window.addEventListener("message", handler);
+							window.postMessage({ type: "SULOK_EXT_FACTORY_RESET" }, "*");
+							// Fallback if extension is not installed or unresponsive
+							setTimeout(() => {
+								window.removeEventListener("message", handler);
+								resolve();
+							}, 500);
+						});
+
+						await Promise.all([db.delete(), resetExt]);
+
 						localStorage.clear();
 						window.location.reload();
 					},
