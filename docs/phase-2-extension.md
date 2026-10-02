@@ -1,6 +1,6 @@
 # Phase 2: Browser Extension Plan
 
-> **Status:** Phase 2 Core Implemented (Pending Polish)
+> **Status:** Phase 2 Completed
 > **Goal:** Create a Chrome Extension for Sulok that allows seamless, local-first saving of URLs into the user's IndexedDB without requiring a backend server.
 
 ---

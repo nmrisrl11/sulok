@@ -57,5 +57,6 @@ export interface Settings {
 	privacySettings: PrivacySettings;
 	onboardingStatus?: "idle" | "in_progress" | "completed";
 	onboardingStep?: number;
+	hasDismissedExtensionNudge?: boolean;
 	// Sync settings (placeholders for future)
 }

@@ -33,6 +33,7 @@ export const defaultSettings: Settings = {
 	},
 	onboardingStatus: "in_progress",
 	onboardingStep: 0,
+	hasDismissedExtensionNudge: false,
 };
 
 interface SettingsState {
@@ -202,6 +203,12 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 		typeof safeSettings.onboardingStep !== "number"
 	) {
 		delete safeSettings.onboardingStep;
+	}
+	if (
+		safeSettings.hasDismissedExtensionNudge !== undefined &&
+		typeof safeSettings.hasDismissedExtensionNudge !== "boolean"
+	) {
+		delete safeSettings.hasDismissedExtensionNudge;
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

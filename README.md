@@ -196,7 +196,7 @@ _(No `.env` file is required to run the application locally.)_
 
 ## 🔮 Roadmap
 
-We are currently focused on completing Phase 2 of our roadmap. Future plans include:
+We are currently focused on Phase 3 of our roadmap (Device Sync). Future plans include:
 
 - Peer-to-peer (WebRTC) device synchronization without a backend
 

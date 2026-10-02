@@ -1,3 +1,4 @@
+import { ExtensionNudgeBanner } from "@/components/extension-nudge-banner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { type Folder, type Item } from "@/db/db";
 import { ExplorerDndContext } from "@/features/folders/components/dnd/explorer-dnd-context";
@@ -97,6 +98,7 @@ export function HomePage({ className }: { className?: string }) {
 					</h2>
 					<ExplorerNav />
 				</div>
+				<ExtensionNudgeBanner />
 				<ExplorerDndContext>
 					<div className="flex w-full min-w-0 flex-col">
 						<ExplorerToolbar
