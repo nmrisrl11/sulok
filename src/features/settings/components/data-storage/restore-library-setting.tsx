@@ -1,4 +1,5 @@
 import { parseImportFile, type ParsedImportData } from "@/features/settings/utils/import-utils";
+import { useExtensionInstalled } from "@/hooks/use-extension-installed";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { LoaderIcon, UploadCloudIcon, UploadIcon } from "lucide-react";
@@ -46,6 +47,18 @@ export function RestoreLibrarySetting() {
 		}
 	};
 
+	const isExtensionInstalled = useExtensionInstalled();
+
+	const handleExtensionImport = () => {
+		if (isExtensionInstalled) {
+			window.postMessage({ type: "SULOK_EXT_TRIGGER_BOOKMARK_IMPORT_FROM_WEB" }, "*");
+		} else {
+			notify.warning("Sulok Browser Extension is not installed. Please install it first.", {
+				id: "ext-not-installed",
+			});
+		}
+	};
+
 	return (
 		<div className="flex flex-col gap-4 py-5 first:pt-0 last:pb-0 sm:py-6 sm:first:pt-0 sm:last:pb-0">
 			<div>
@@ -53,36 +66,63 @@ export function RestoreLibrarySetting() {
 					<UploadIcon className="h-4 w-4" /> Restore Library
 				</p>
 				<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
-					Bring back your saved corners from a previous backup file.
+					Bring back your saved corners from a previous backup file or import existing bookmarks
+					directly from your browser.
 				</p>
 			</div>
-			<input
-				type="file"
-				ref={fileInputRef}
-				className="hidden"
-				accept=".json,.csv,.txt,.html"
-				onChange={handleFileSelect}
-			/>
-			<button
-				type="button"
-				onClick={() => fileInputRef.current?.click()}
-				className={cn(
-					"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
-					"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
-					"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
-					"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-				)}
-			>
-				<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
-					<UploadCloudIcon className="h-5 w-5" />
-				</div>
-				<div>
-					<h3 className="text-sm font-medium text-foreground">Select backup file</h3>
-					<p className="mt-0.5 text-xs text-muted-foreground">
-						Supports .json, .csv, .txt, and .html files
-					</p>
-				</div>
-			</button>
+
+			<div className="flex flex-col gap-3">
+				<button
+					type="button"
+					onClick={handleExtensionImport}
+					className={cn(
+						"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
+						"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+						"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
+						"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+					)}
+				>
+					<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+						<UploadCloudIcon className="h-5 w-5" />
+					</div>
+					<div>
+						<h3 className="text-sm font-medium text-foreground">Sync Browser Bookmarks</h3>
+						<p className="mt-0.5 text-xs text-muted-foreground">
+							{isExtensionInstalled === true
+								? "Instantly import your current browser's bookmarks"
+								: "Requires the Sulok Browser Extension"}
+						</p>
+					</div>
+				</button>
+
+				<input
+					type="file"
+					ref={fileInputRef}
+					className="hidden"
+					accept=".json,.csv,.txt,.html"
+					onChange={handleFileSelect}
+				/>
+				<button
+					type="button"
+					onClick={() => fileInputRef.current?.click()}
+					className={cn(
+						"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
+						"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+						"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
+						"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+					)}
+				>
+					<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+						<UploadIcon className="h-5 w-5" />
+					</div>
+					<div>
+						<h3 className="text-sm font-medium text-foreground">Upload backup file</h3>
+						<p className="mt-0.5 text-xs text-muted-foreground">
+							Supports .json, .csv, .txt, and .html files
+						</p>
+					</div>
+				</button>
+			</div>
 
 			{parsedData && (
 				<Suspense

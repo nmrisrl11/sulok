@@ -118,6 +118,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Unified Installation UI in the web app (Get App hub)
 - [x] Automated extension distribution build and GitHub release workflow
 - [x] Subtle app/extension installation nudges (dismissible banners)
+- [x] Native Browser Bookmark Sync (local-first parsing directly from Chrome APIs to IndexedDB via extension bridge)
 
 ### Phase 3 — Device Sync (Completed)
 

@@ -213,11 +213,22 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 		try {
 			// Import folders sequentially to maintain ID mapping
 			const idMap = new Map<string, string>();
+			const failedFolderIds = new Set<string>();
 			const folderResults: PromiseSettledResult<string>[] = [];
 
 			for (const folder of foldersToImport) {
 				try {
 					const { isDuplicate: _isDuplicate, parentId, ...folderData } = folder;
+
+					if (parentId && failedFolderIds.has(parentId)) {
+						if (folder.id) failedFolderIds.add(folder.id);
+						folderResults.push({
+							status: "rejected",
+							reason: new Error("Parent folder import failed"),
+						});
+						continue;
+					}
+
 					const resolvedParentId = parentId
 						? idMap.has(parentId)
 							? (idMap.get(parentId) ?? null)
@@ -232,12 +243,18 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 					}
 					folderResults.push({ status: "fulfilled", value: newId });
 				} catch (error) {
+					if (folder.id) failedFolderIds.add(folder.id);
 					folderResults.push({ status: "rejected", reason: error });
 				}
 			}
 
 			const itemPromises = itemsToImport.map((item) => {
 				const { isDuplicate: _isDuplicate, folderId, ...itemData } = item;
+
+				if (folderId && failedFolderIds.has(folderId)) {
+					return Promise.reject(new Error("Parent folder import failed"));
+				}
+
 				const resolvedFolderId = folderId
 					? idMap.has(folderId)
 						? (idMap.get(folderId) ?? undefined)

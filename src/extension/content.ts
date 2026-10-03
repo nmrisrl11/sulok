@@ -3,19 +3,33 @@ if (import.meta.env.DEV) {
 }
 
 // 1. Send pending saves to the web app as soon as the bridge loads
-chrome.storage.local.get("pendingSaves", (result) => {
+chrome.storage.local.get(["pendingSaves", "pending_bookmark_import"], (result) => {
 	const pendingSaves = (result.pendingSaves as unknown[]) || [];
 	if (pendingSaves.length > 0) {
 		window.postMessage({ type: "SULOK_EXT_PENDING_SAVES", payload: pendingSaves }, "*");
+	}
+	if (result.pending_bookmark_import) {
+		window.postMessage(
+			{ type: "SULOK_EXT_BOOKMARK_IMPORT", payload: result.pending_bookmark_import },
+			"*",
+		);
 	}
 });
 
 // 2. Listen for real-time storage changes and forward them to the web app
 chrome.storage.onChanged.addListener((changes, area) => {
-	if (area === "local" && changes.pendingSaves) {
-		const newValue = (changes.pendingSaves.newValue as unknown[]) || [];
-		if (newValue.length > 0) {
-			window.postMessage({ type: "SULOK_EXT_PENDING_SAVES", payload: newValue }, "*");
+	if (area === "local") {
+		if (changes.pendingSaves) {
+			const newValue = (changes.pendingSaves.newValue as unknown[]) || [];
+			if (newValue.length > 0) {
+				window.postMessage({ type: "SULOK_EXT_PENDING_SAVES", payload: newValue }, "*");
+			}
+		}
+		if (changes.pending_bookmark_import && changes.pending_bookmark_import.newValue) {
+			window.postMessage(
+				{ type: "SULOK_EXT_BOOKMARK_IMPORT", payload: changes.pending_bookmark_import.newValue },
+				"*",
+			);
 		}
 	}
 });
@@ -40,6 +54,25 @@ window.addEventListener("message", (event) => {
 		});
 	}
 
+	if (data && data.type === "SULOK_EXT_CLEAR_BOOKMARK_IMPORT") {
+		chrome.storage.local.remove("pending_bookmark_import", () => {
+			if (import.meta.env.DEV) {
+				console.log("Sulok Extension: Bookmark import payload cleared by web app.");
+			}
+		});
+	}
+
+	if (data && data.type === "SULOK_EXT_TRIGGER_BOOKMARK_IMPORT_FROM_WEB") {
+		chrome.runtime.sendMessage(
+			{ type: "SULOK_EXT_TRIGGER_BOOKMARK_IMPORT", fromWebApp: true },
+			() => {
+				if (import.meta.env.DEV) {
+					console.log("Sulok Extension: Triggered bookmark import from web app.");
+				}
+			},
+		);
+	}
+
 	if (data && data.type === "SULOK_EXT_FACTORY_RESET") {
 		chrome.storage.local.clear(() => {
 			if (import.meta.env.DEV) {
@@ -51,10 +84,16 @@ window.addEventListener("message", (event) => {
 
 	if (data && data.type === "SULOK_EXT_READY") {
 		window.postMessage({ type: "SULOK_EXT_INSTALLED_PONG" }, "*");
-		chrome.storage.local.get("pendingSaves", (result) => {
+		chrome.storage.local.get(["pendingSaves", "pending_bookmark_import"], (result) => {
 			const pendingSaves = (result.pendingSaves as unknown[]) || [];
 			if (pendingSaves.length > 0) {
 				window.postMessage({ type: "SULOK_EXT_PENDING_SAVES", payload: pendingSaves }, "*");
+			}
+			if (result.pending_bookmark_import) {
+				window.postMessage(
+					{ type: "SULOK_EXT_BOOKMARK_IMPORT", payload: result.pending_bookmark_import },
+					"*",
+				);
 			}
 		});
 	}
