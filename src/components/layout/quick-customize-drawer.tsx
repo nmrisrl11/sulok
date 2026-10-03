@@ -107,9 +107,14 @@ export function QuickCustomizeDrawer() {
 			<DrawerContent className="flex w-full flex-col gap-0 rounded-none border-l border-border/50 bg-popover p-0 text-popover-foreground shadow-xl transition-all sm:max-w-md">
 				<div className="relative border-b border-border/50 bg-muted/20 p-6 pb-4">
 					<DrawerHeader className="p-0 text-left">
-						<div className="flex items-center gap-2">
-							<WandSparklesIcon className="h-5 w-5 text-primary" />
-							<DrawerTitle className="text-xl">Quick Customize</DrawerTitle>
+						<div className="flex items-center gap-3">
+							<div className="flex items-center gap-2">
+								<WandSparklesIcon className="h-5 w-5 text-primary" />
+								<DrawerTitle className="text-xl">Quick Customize</DrawerTitle>
+							</div>
+							<kbd className="hidden h-5 items-center gap-1 rounded border border-border bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground sm:flex">
+								Shift + C
+							</kbd>
 						</div>
 						<DrawerDescription>Preview changes live without leaving your corner.</DrawerDescription>
 					</DrawerHeader>
