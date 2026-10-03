@@ -23,7 +23,10 @@ export type ParsedImportData = {
 	duplicateCount: number;
 };
 
-export async function parseImportFile(file: File): Promise<ParsedImportData> {
+export async function processImportPayload(parsedData: {
+	folders: unknown[];
+	items: unknown[];
+}): Promise<ParsedImportData> {
 	const existingItems = await ItemRepository.getAll();
 	const existingUrls = new Set(existingItems.map((item) => normalizeUrl(item.url)));
 
@@ -38,9 +41,89 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 		existingFolderIdsByParentAndName.get(parentId)!.set(folder.name.toLowerCase(), folder.id);
 	}
 
+	const validFolders: ParsedImportFolder[] = [];
+	const validItems: ParsedImportItem[] = [];
+	let invalidCount = 0;
+	let duplicateCount = 0;
+
+	const importIdToResolvedId = new Map<string, string>();
+
+	for (const folder of parsedData.folders || []) {
+		const result = importFolderSchema.safeParse(folder);
+		if (result.success) {
+			let checkParentId = result.data.parentId || "root";
+
+			// Resolve mapped parent ID if it points to a duplicate or newly mapped folder
+			if (importIdToResolvedId.has(checkParentId)) {
+				checkParentId = importIdToResolvedId.get(checkParentId)!;
+				result.data.parentId = checkParentId === "root" ? undefined : checkParentId;
+			}
+
+			const folderNameLower = result.data.name.toLowerCase();
+
+			const parentMap = existingFolderIdsByParentAndName.get(checkParentId);
+			const existingFolderId = parentMap ? parentMap.get(folderNameLower) : undefined;
+			const isDuplicate = !!existingFolderId;
+
+			if (isDuplicate) {
+				duplicateCount++;
+				if (result.data.id) {
+					importIdToResolvedId.set(result.data.id, existingFolderId);
+					result.data.id = existingFolderId;
+				}
+			} else {
+				if (result.data.id) {
+					importIdToResolvedId.set(result.data.id, result.data.id);
+				}
+				if (!existingFolderIdsByParentAndName.has(checkParentId)) {
+					existingFolderIdsByParentAndName.set(checkParentId, new Map());
+				}
+				existingFolderIdsByParentAndName.get(checkParentId)!.set(folderNameLower, result.data.id!);
+			}
+
+			validFolders.push({
+				...result.data,
+				isDuplicate,
+			});
+		} else {
+			invalidCount++;
+		}
+	}
+
+	for (const item of parsedData.items || []) {
+		const result = importItemSchema.safeParse(item);
+		if (result.success) {
+			let checkFolderId = result.data.folderId || "root";
+			if (importIdToResolvedId.has(checkFolderId)) {
+				checkFolderId = importIdToResolvedId.get(checkFolderId)!;
+				result.data.folderId = checkFolderId === "root" ? undefined : checkFolderId;
+			}
+
+			const normalizedUrl = normalizeUrl(result.data.url);
+			const isDuplicate = existingUrls.has(normalizedUrl);
+
+			if (isDuplicate) {
+				duplicateCount++;
+			} else {
+				existingUrls.add(normalizedUrl);
+			}
+
+			validItems.push({
+				...result.data,
+				isDuplicate,
+			});
+		} else {
+			invalidCount++;
+		}
+	}
+
+	return { validFolders, validItems, invalidCount, duplicateCount };
+}
+
+export async function parseImportFile(file: File): Promise<ParsedImportData> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
-		reader.onload = (e) => {
+		reader.onload = async (e) => {
 			try {
 				const content = e.target?.result as string;
 				let parsedData: { folders: unknown[]; items: unknown[] } = { folders: [], items: [] };
@@ -64,85 +147,8 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 					return;
 				}
 
-				const validFolders: ParsedImportFolder[] = [];
-				const validItems: ParsedImportItem[] = [];
-				let invalidCount = 0;
-				let duplicateCount = 0;
-
-				const importIdToResolvedId = new Map<string, string>();
-
-				for (const folder of parsedData.folders || []) {
-					const result = importFolderSchema.safeParse(folder);
-					if (result.success) {
-						let checkParentId = result.data.parentId || "root";
-
-						// Resolve mapped parent ID if it points to a duplicate or newly mapped folder
-						if (importIdToResolvedId.has(checkParentId)) {
-							checkParentId = importIdToResolvedId.get(checkParentId)!;
-							result.data.parentId = checkParentId === "root" ? undefined : checkParentId;
-						}
-
-						const folderNameLower = result.data.name.toLowerCase();
-
-						const parentMap = existingFolderIdsByParentAndName.get(checkParentId);
-						const existingFolderId = parentMap ? parentMap.get(folderNameLower) : undefined;
-						const isDuplicate = !!existingFolderId;
-
-						if (isDuplicate) {
-							duplicateCount++;
-							if (result.data.id) {
-								importIdToResolvedId.set(result.data.id, existingFolderId);
-								result.data.id = existingFolderId;
-							}
-						} else {
-							if (result.data.id) {
-								importIdToResolvedId.set(result.data.id, result.data.id);
-							}
-							if (!existingFolderIdsByParentAndName.has(checkParentId)) {
-								existingFolderIdsByParentAndName.set(checkParentId, new Map());
-							}
-							existingFolderIdsByParentAndName
-								.get(checkParentId)!
-								.set(folderNameLower, result.data.id!);
-						}
-
-						validFolders.push({
-							...result.data,
-							isDuplicate,
-						});
-					} else {
-						invalidCount++;
-					}
-				}
-
-				for (const item of parsedData.items || []) {
-					const result = importItemSchema.safeParse(item);
-					if (result.success) {
-						let checkFolderId = result.data.folderId || "root";
-						if (importIdToResolvedId.has(checkFolderId)) {
-							checkFolderId = importIdToResolvedId.get(checkFolderId)!;
-							result.data.folderId = checkFolderId === "root" ? undefined : checkFolderId;
-						}
-
-						const normalizedUrl = normalizeUrl(result.data.url);
-						const isDuplicate = existingUrls.has(normalizedUrl);
-
-						if (isDuplicate) {
-							duplicateCount++;
-						} else {
-							existingUrls.add(normalizedUrl);
-						}
-
-						validItems.push({
-							...result.data,
-							isDuplicate,
-						});
-					} else {
-						invalidCount++;
-					}
-				}
-
-				resolve({ validFolders, validItems, invalidCount, duplicateCount });
+				const result = await processImportPayload(parsedData);
+				resolve(result);
 			} catch {
 				reject(new Error("Failed to parse file. Make sure it is formatted correctly."));
 			}

@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Sulok",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Your corner of the web.",
 	"action": {
 		"default_popup": "src/extension/popup.html",
@@ -18,6 +18,13 @@
 			"run_at": "document_end"
 		}
 	],
-	"permissions": ["activeTab", "contextMenus", "storage", "scripting", "notifications"],
+	"permissions": [
+		"activeTab",
+		"contextMenus",
+		"storage",
+		"scripting",
+		"notifications",
+		"bookmarks"
+	],
 	"host_permissions": ["*://sulok-app.vercel.app/*"]
 }

@@ -73,6 +73,12 @@ function Popup() {
 		});
 	};
 
+	const handleImportBookmarks = () => {
+		chrome.runtime.sendMessage({ type: "SULOK_EXT_TRIGGER_BOOKMARK_IMPORT" }, () => {
+			window.close();
+		});
+	};
+
 	return (
 		<div className="flex w-85 flex-col gap-5 bg-background p-5 font-sans text-foreground">
 			<div className="flex items-center gap-2 border-b border-border pb-3">
@@ -123,19 +129,28 @@ function Popup() {
 				/>
 			</div>
 
-			<Button
-				onClick={handleSave}
-				disabled={saved || !url || status === "duplicate" || status === "trashed"}
-				className="mt-2 w-full transition-all duration-300"
-			>
-				{saved
-					? "Added to your corner!"
-					: status === "duplicate"
-						? "Already in your corner"
-						: status === "trashed"
-							? "In your Recycle Bin"
-							: `Save to ${APP_INFO.name}`}
-			</Button>
+			<div className="mt-2 flex flex-col gap-2">
+				<Button
+					onClick={handleSave}
+					disabled={saved || !url || status === "duplicate" || status === "trashed"}
+					className="w-full transition-all duration-300"
+				>
+					{saved
+						? "Added to your corner!"
+						: status === "duplicate"
+							? "Already in your corner"
+							: status === "trashed"
+								? "In your Recycle Bin"
+								: `Save to ${APP_INFO.name}`}
+				</Button>
+				<Button
+					variant="ghost"
+					onClick={handleImportBookmarks}
+					className="w-full transition-all duration-300"
+				>
+					Sync Browser Bookmarks
+				</Button>
+			</div>
 		</div>
 	);
 }

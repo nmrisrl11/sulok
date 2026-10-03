@@ -1,6 +1,10 @@
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { fetchUrlMetadata } from "@/features/items/hooks/use-metadata";
+import {
+	processImportPayload,
+	type ParsedImportData,
+} from "@/features/settings/utils/import-utils";
 import { useThemeState } from "@/hooks/use-theme";
 import { notify } from "@/lib/notify";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
@@ -8,8 +12,14 @@ import { normalizeUrl } from "@/lib/utils";
 import { useItemStore, useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { z } from "zod";
+
+const ImportPreviewDialog = lazy(() =>
+	import("@/features/settings/components/data-storage/import-preview-dialog").then((m) => ({
+		default: m.ImportPreviewDialog,
+	})),
+);
 
 const savePayloadSchema = z.object({
 	url: z.string().url(),
@@ -80,13 +90,31 @@ export function ExtensionManager() {
 	}, [theme, appearanceSettings]);
 
 	// Listen for pending saves from extension
+	const [bookmarkImportData, setBookmarkImportData] = useState<ParsedImportData | null>(null);
+	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
+
 	useEffect(() => {
 		let syncQueue = Promise.resolve();
 
-		const handleMessage = (event: MessageEvent) => {
+		const handleMessage = async (event: MessageEvent) => {
 			if (event.source !== window) return;
 
 			const data = event.data;
+
+			if (data && data.type === "SULOK_EXT_BOOKMARK_IMPORT") {
+				if (sessionStorage.getItem("isFactoryResetting") === "true") return;
+				const payload = data.payload;
+				if (!payload || !Array.isArray(payload.folders) || !Array.isArray(payload.items)) return;
+
+				try {
+					const parsed = await processImportPayload(payload);
+					setBookmarkImportData(parsed);
+					setIsImportPreviewOpen(true);
+				} catch (e) {
+					console.error("Failed to process extension bookmark import payload", e);
+				}
+			}
+
 			if (data && data.type === "SULOK_EXT_PENDING_SAVES") {
 				if (sessionStorage.getItem("isFactoryResetting") === "true") return;
 				const saves = data.payload;
@@ -205,5 +233,24 @@ export function ExtensionManager() {
 		return () => window.removeEventListener("message", handleMessage);
 	}, [setFolderId, setSearchQuery, setView]);
 
-	return null;
+	return (
+		<>
+			{bookmarkImportData && (
+				<Suspense>
+					<ImportPreviewDialog
+						isOpen={isImportPreviewOpen}
+						onClose={() => {
+							setIsImportPreviewOpen(false);
+							// Give time for exit animation before clearing data
+							setTimeout(() => {
+								setBookmarkImportData(null);
+								window.postMessage({ type: "SULOK_EXT_CLEAR_BOOKMARK_IMPORT" }, "*");
+							}, 300);
+						}}
+						data={bookmarkImportData}
+					/>
+				</Suspense>
+			)}
+		</>
+	);
 }

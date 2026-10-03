@@ -73,6 +73,42 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 		saveToQueue(request.payload);
 		sendResponse({ success: true });
 	}
+
+	if (request.type === "SULOK_EXT_TRIGGER_BOOKMARK_IMPORT") {
+		const fromWebApp = request.fromWebApp;
+
+		import("./bookmark-parser").then(({ parseBookmarksTree }) => {
+			chrome.bookmarks.getTree((nodes) => {
+				const payload = parseBookmarksTree(nodes);
+				chrome.storage.local.set({ pending_bookmark_import: payload }, () => {
+					if (fromWebApp) {
+						// Called from inside the web app itself, do nothing else.
+						// The content script will detect the storage change and show the dialog.
+						sendResponse({ success: true });
+					} else {
+						// Called from the popup
+						// Try to find an existing Sulok tab and focus it, otherwise create a new one
+						chrome.tabs.query({}, (tabs) => {
+							const existingTab = tabs.find(
+								(t) => t.url?.includes(APP_INFO.appUrl) || t.url?.includes("localhost:5173"),
+							);
+							if (existingTab && existingTab.id && existingTab.windowId) {
+								chrome.tabs.update(existingTab.id, { active: true });
+								chrome.windows.update(existingTab.windowId, { focused: true });
+							} else {
+								const targetAppUrl = import.meta.env.DEV
+									? "http://localhost:5173"
+									: `https://${APP_INFO.appUrl}`;
+								chrome.tabs.create({ url: targetAppUrl });
+							}
+							sendResponse({ success: true });
+						});
+					}
+				});
+			});
+		});
+		return true;
+	}
 });
 
 chrome.notifications.onClicked.addListener((notificationId) => {
