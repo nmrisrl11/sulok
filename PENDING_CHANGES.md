@@ -7,6 +7,11 @@
 
 ## Unreleased
 
+### Changed
+
+- Centered the "Data Protected" card layout in Data & Storage settings to prevent uneven empty space when the protect button is hidden.
+- Adjusted "Sync Browser Bookmarks" visibility in Data & Storage settings to correctly show for resized desktop windows while remaining hidden on true mobile devices.
+
 ---
 
 ## Changelog Format

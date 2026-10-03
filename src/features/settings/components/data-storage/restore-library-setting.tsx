@@ -1,5 +1,6 @@
 import { parseImportFile, type ParsedImportData } from "@/features/settings/utils/import-utils";
 import { useExtensionInstalled } from "@/hooks/use-extension-installed";
+import { useInstallApp } from "@/hooks/use-install-app";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
 import { LoaderIcon, UploadCloudIcon, UploadIcon } from "lucide-react";
@@ -48,6 +49,7 @@ export function RestoreLibrarySetting() {
 	};
 
 	const isExtensionInstalled = useExtensionInstalled();
+	const { isDesktop } = useInstallApp();
 
 	const handleExtensionImport = () => {
 		if (isExtensionInstalled) {
@@ -72,28 +74,30 @@ export function RestoreLibrarySetting() {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<button
-					type="button"
-					onClick={handleExtensionImport}
-					className={cn(
-						"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
-						"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
-						"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
-						"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-					)}
-				>
-					<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
-						<UploadCloudIcon className="h-5 w-5" />
-					</div>
-					<div>
-						<h3 className="text-sm font-medium text-foreground">Sync Browser Bookmarks</h3>
-						<p className="mt-0.5 text-xs text-muted-foreground">
-							{isExtensionInstalled === true
-								? "Instantly import your current browser's bookmarks"
-								: "Requires the Sulok Browser Extension"}
-						</p>
-					</div>
-				</button>
+				{isDesktop && (
+					<button
+						type="button"
+						onClick={handleExtensionImport}
+						className={cn(
+							"group flex w-full items-center justify-start gap-4 p-4 text-left transition-all",
+							"rounded-xl border border-border/50 bg-background hover:border-border hover:bg-muted/50",
+							"corner-squircle supports-[corner-shape:squircle]:rounded-4xl",
+							"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+						)}
+					>
+						<div className="rounded-lg border border-border/50 bg-card p-2.5 text-muted-foreground shadow-sm transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
+							<UploadCloudIcon className="h-5 w-5" />
+						</div>
+						<div>
+							<h3 className="text-sm font-medium text-foreground">Sync Browser Bookmarks</h3>
+							<p className="mt-0.5 text-xs text-muted-foreground">
+								{isExtensionInstalled === true
+									? "Instantly import your current browser's bookmarks"
+									: "Requires the Sulok Browser Extension"}
+							</p>
+						</div>
+					</button>
+				)}
 
 				<input
 					type="file"
