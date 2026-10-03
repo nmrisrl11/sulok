@@ -100,7 +100,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization
 - [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, and layout density)
 - [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
-- [x] Import/Export Data (JSON, CSV, TXT, HTML) with robust 1:1 metadata and folder hierarchy preservation
+- [x] Import and export data (JSON, CSV, TXT) and import browser bookmarks (HTML) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Backup and Restore for Application Settings (JSON payload with appearance, sound, privacy, and Sulo configurations)
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
 - [x] Danger Zone for destructive settings actions (Delete Library, Reset Settings, Factory Reset)

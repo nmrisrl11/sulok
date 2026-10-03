@@ -218,8 +218,11 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 			for (const folder of foldersToImport) {
 				try {
 					const { isDuplicate: _isDuplicate, parentId, ...folderData } = folder;
-					const resolvedParentId =
-						parentId && idMap.has(parentId) ? (idMap.get(parentId) ?? null) : null;
+					const resolvedParentId = parentId
+						? idMap.has(parentId)
+							? (idMap.get(parentId) ?? null)
+							: parentId
+						: null;
 					const newId = await FolderRepository.importFolder({
 						...folderData,
 						parentId: resolvedParentId,
@@ -235,8 +238,11 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 
 			const itemPromises = itemsToImport.map((item) => {
 				const { isDuplicate: _isDuplicate, folderId, ...itemData } = item;
-				const resolvedFolderId =
-					folderId && idMap.has(folderId) ? (idMap.get(folderId) ?? undefined) : undefined;
+				const resolvedFolderId = folderId
+					? idMap.has(folderId)
+						? (idMap.get(folderId) ?? undefined)
+						: folderId
+					: undefined;
 				return ItemRepository.importItem({ ...itemData, folderId: resolvedFolderId });
 			});
 			const itemResults = await Promise.allSettled(itemPromises);

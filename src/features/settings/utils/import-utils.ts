@@ -28,14 +28,14 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 	const existingUrls = new Set(existingItems.map((item) => normalizeUrl(item.url)));
 
 	const existingFolders = await FolderRepository.getAll();
-	const existingFolderNamesByParent = new Map<string, Set<string>>();
+	const existingFolderIdsByParentAndName = new Map<string, Map<string, string>>();
 
 	for (const folder of existingFolders) {
 		const parentId = folder.parentId || "root";
-		if (!existingFolderNamesByParent.has(parentId)) {
-			existingFolderNamesByParent.set(parentId, new Set());
+		if (!existingFolderIdsByParentAndName.has(parentId)) {
+			existingFolderIdsByParentAndName.set(parentId, new Map());
 		}
-		existingFolderNamesByParent.get(parentId)!.add(folder.name.toLowerCase());
+		existingFolderIdsByParentAndName.get(parentId)!.set(folder.name.toLowerCase(), folder.id);
 	}
 
 	return new Promise((resolve, reject) => {
@@ -69,22 +69,41 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 				let invalidCount = 0;
 				let duplicateCount = 0;
 
+				const importIdToResolvedId = new Map<string, string>();
+
 				for (const folder of parsedData.folders || []) {
 					const result = importFolderSchema.safeParse(folder);
 					if (result.success) {
-						const parentId = result.data.parentId || "root";
+						let checkParentId = result.data.parentId || "root";
+
+						// Resolve mapped parent ID if it points to a duplicate or newly mapped folder
+						if (importIdToResolvedId.has(checkParentId)) {
+							checkParentId = importIdToResolvedId.get(checkParentId)!;
+							result.data.parentId = checkParentId === "root" ? undefined : checkParentId;
+						}
+
 						const folderNameLower = result.data.name.toLowerCase();
 
-						const parentSet = existingFolderNamesByParent.get(parentId);
-						const isDuplicate = parentSet ? parentSet.has(folderNameLower) : false;
+						const parentMap = existingFolderIdsByParentAndName.get(checkParentId);
+						const existingFolderId = parentMap ? parentMap.get(folderNameLower) : undefined;
+						const isDuplicate = !!existingFolderId;
 
 						if (isDuplicate) {
 							duplicateCount++;
-						} else {
-							if (!existingFolderNamesByParent.has(parentId)) {
-								existingFolderNamesByParent.set(parentId, new Set());
+							if (result.data.id) {
+								importIdToResolvedId.set(result.data.id, existingFolderId);
+								result.data.id = existingFolderId;
 							}
-							existingFolderNamesByParent.get(parentId)!.add(folderNameLower);
+						} else {
+							if (result.data.id) {
+								importIdToResolvedId.set(result.data.id, result.data.id);
+							}
+							if (!existingFolderIdsByParentAndName.has(checkParentId)) {
+								existingFolderIdsByParentAndName.set(checkParentId, new Map());
+							}
+							existingFolderIdsByParentAndName
+								.get(checkParentId)!
+								.set(folderNameLower, result.data.id!);
 						}
 
 						validFolders.push({
@@ -99,6 +118,12 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 				for (const item of parsedData.items || []) {
 					const result = importItemSchema.safeParse(item);
 					if (result.success) {
+						let checkFolderId = result.data.folderId || "root";
+						if (importIdToResolvedId.has(checkFolderId)) {
+							checkFolderId = importIdToResolvedId.get(checkFolderId)!;
+							result.data.folderId = checkFolderId === "root" ? undefined : checkFolderId;
+						}
+
 						const normalizedUrl = normalizeUrl(result.data.url);
 						const isDuplicate = existingUrls.has(normalizedUrl);
 
@@ -354,6 +379,7 @@ function parseHTML(content: string): { folders: unknown[]; items: unknown[] } {
 				if (h3) {
 					const folderId = crypto.randomUUID();
 					const addDate = h3.getAttribute("add_date");
+					const lastModified = h3.getAttribute("last_modified");
 					const name = h3.textContent?.trim() || "Untitled Folder";
 
 					folders.push({
@@ -361,7 +387,7 @@ function parseHTML(content: string): { folders: unknown[]; items: unknown[] } {
 						name,
 						parentId: parentId === "root" ? undefined : parentId,
 						createdAt: addDate ? parseInt(addDate, 10) * 1000 : Date.now(),
-						updatedAt: Date.now(),
+						updatedAt: lastModified ? parseInt(lastModified, 10) * 1000 : Date.now(),
 					});
 
 					// In Netscape HTML, <DL> might be a child of <DT> (due to unclosed tags) or a sibling
