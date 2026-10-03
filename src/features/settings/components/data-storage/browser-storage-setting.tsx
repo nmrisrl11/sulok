@@ -95,12 +95,19 @@ export function BrowserStorageSetting() {
 					className={cn(
 						"flex flex-col justify-center rounded-xl border border-border/50 p-3 corner-squircle supports-[corner-shape:squircle]:rounded-4xl sm:p-4",
 						isPersisted
-							? "border-green-500/20 bg-green-500/5"
+							? "items-center border-green-500/20 bg-green-500/5 text-center"
 							: "border-amber-500/20 bg-amber-500/5",
 					)}
 				>
-					<div className="flex items-center justify-between gap-3">
-						<div className="space-y-0.5">
+					<div
+						className={cn(
+							"flex w-full gap-3",
+							isPersisted
+								? "flex-col items-center justify-center text-center"
+								: "items-center justify-between",
+						)}
+					>
+						<div className={cn("space-y-0.5", isPersisted && "flex flex-col items-center")}>
 							<p
 								className={cn(
 									"flex items-center gap-1.5 text-xs font-semibold",
