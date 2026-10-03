@@ -63,6 +63,20 @@ export function ThemeProvider({
 		[storageKey],
 	);
 
+	useEffect(() => {
+		const handleLocalThemeChange = () => {
+			const storedTheme = localStorage.getItem(storageKey) as Theme;
+			if (storedTheme) {
+				setTheme(storedTheme);
+			}
+		};
+
+		window.addEventListener("local-theme-change", handleLocalThemeChange);
+		return () => {
+			window.removeEventListener("local-theme-change", handleLocalThemeChange);
+		};
+	}, [storageKey]);
+
 	return (
 		<ThemeStateContext.Provider value={theme}>
 			<ThemeDispatchContext.Provider value={handleSetTheme}>

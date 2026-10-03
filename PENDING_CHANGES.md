@@ -7,6 +7,10 @@
 
 ## Unreleased
 
+### Added
+
+- **Device Sync (P2P)**: Seamlessly transfer and merge your library (links, folders, and workspace theme) across devices on your local network using WebRTC, without relying on cloud servers.
+
 ---
 
 ## Changelog Format

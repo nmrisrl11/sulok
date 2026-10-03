@@ -1,11 +1,12 @@
 import { SettingsCard } from "../settings-card";
 import { BrowserStorageSetting } from "./browser-storage-setting";
+import { DangerZoneSection as DangerZoneContent } from "./danger-zone-section";
+import { DeviceSyncSetting } from "./device-sync-setting";
 import { ExportLibrarySetting } from "./export-library-setting";
 import { ReferralTrackingSetting } from "./referral-tracking-setting";
 import { RestartAppTourSetting } from "./restart-app-tour-setting";
 import { RestoreLibrarySetting } from "./restore-library-setting";
 import { SyncSettingsSetting } from "./sync-settings-setting";
-import { DangerZoneSection as DangerZoneContent } from "./danger-zone-section";
 
 export function DataStorageSection() {
 	return (
@@ -38,6 +39,7 @@ export function DataStorageSection() {
 					</h3>
 					<SettingsCard className="p-0 sm:p-0">
 						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
+							<DeviceSyncSetting />
 							<ExportLibrarySetting />
 							<RestoreLibrarySetting />
 							<SyncSettingsSetting />
