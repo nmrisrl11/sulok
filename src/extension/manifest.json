@@ -13,7 +13,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["*://sulok-app.vercel.app/*"],
+			"matches": ["https://sulok-app.vercel.app/*"],
 			"js": ["src/extension/content.ts"],
 			"run_at": "document_end"
 		}
@@ -26,5 +26,5 @@
 		"notifications",
 		"bookmarks"
 	],
-	"host_permissions": ["*://sulok-app.vercel.app/*"]
+	"host_permissions": ["https://sulok-app.vercel.app/*"]
 }

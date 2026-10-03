@@ -12,7 +12,7 @@ import { normalizeUrl } from "@/lib/utils";
 import { useItemStore, useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState, useRef } from "react";
 import { z } from "zod";
 
 const ImportPreviewDialog = lazy(() =>
@@ -92,6 +92,7 @@ export function ExtensionManager() {
 	// Listen for pending saves from extension
 	const [bookmarkImportData, setBookmarkImportData] = useState<ParsedImportData | null>(null);
 	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
+	const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	useEffect(() => {
 		let syncQueue = Promise.resolve();
@@ -105,6 +106,11 @@ export function ExtensionManager() {
 				if (sessionStorage.getItem("isFactoryResetting") === "true") return;
 				const payload = data.payload;
 				if (!payload || !Array.isArray(payload.folders) || !Array.isArray(payload.items)) return;
+
+				if (cleanupTimerRef.current) {
+					clearTimeout(cleanupTimerRef.current);
+					cleanupTimerRef.current = null;
+				}
 
 				try {
 					const parsed = await processImportPayload(payload);
@@ -242,7 +248,8 @@ export function ExtensionManager() {
 						onClose={() => {
 							setIsImportPreviewOpen(false);
 							// Give time for exit animation before clearing data
-							setTimeout(() => {
+							if (cleanupTimerRef.current) clearTimeout(cleanupTimerRef.current);
+							cleanupTimerRef.current = setTimeout(() => {
 								setBookmarkImportData(null);
 								window.postMessage({ type: "SULOK_EXT_CLEAR_BOOKMARK_IMPORT" }, "*");
 							}, 300);
