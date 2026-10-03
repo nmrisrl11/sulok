@@ -28,14 +28,14 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 	const existingUrls = new Set(existingItems.map((item) => normalizeUrl(item.url)));
 
 	const existingFolders = await FolderRepository.getAll();
-	const existingFolderNamesByParent = new Map<string, Set<string>>();
+	const existingFolderIdsByParentAndName = new Map<string, Map<string, string>>();
 
 	for (const folder of existingFolders) {
 		const parentId = folder.parentId || "root";
-		if (!existingFolderNamesByParent.has(parentId)) {
-			existingFolderNamesByParent.set(parentId, new Set());
+		if (!existingFolderIdsByParentAndName.has(parentId)) {
+			existingFolderIdsByParentAndName.set(parentId, new Map());
 		}
-		existingFolderNamesByParent.get(parentId)!.add(folder.name.toLowerCase());
+		existingFolderIdsByParentAndName.get(parentId)!.set(folder.name.toLowerCase(), folder.id);
 	}
 
 	return new Promise((resolve, reject) => {
@@ -57,8 +57,10 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 					parsedData = parseCSV(content);
 				} else if (file.name.endsWith(".txt") || file.type === "text/plain") {
 					parsedData = parseTXT(content);
+				} else if (file.name.endsWith(".html") || file.type === "text/html") {
+					parsedData = parseHTML(content);
 				} else {
-					reject(new Error("Unsupported file format. Please upload JSON, CSV, or TXT."));
+					reject(new Error("Unsupported file format. Please upload JSON, CSV, TXT, or HTML."));
 					return;
 				}
 
@@ -67,22 +69,41 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 				let invalidCount = 0;
 				let duplicateCount = 0;
 
+				const importIdToResolvedId = new Map<string, string>();
+
 				for (const folder of parsedData.folders || []) {
 					const result = importFolderSchema.safeParse(folder);
 					if (result.success) {
-						const parentId = result.data.parentId || "root";
+						let checkParentId = result.data.parentId || "root";
+
+						// Resolve mapped parent ID if it points to a duplicate or newly mapped folder
+						if (importIdToResolvedId.has(checkParentId)) {
+							checkParentId = importIdToResolvedId.get(checkParentId)!;
+							result.data.parentId = checkParentId === "root" ? undefined : checkParentId;
+						}
+
 						const folderNameLower = result.data.name.toLowerCase();
 
-						const parentSet = existingFolderNamesByParent.get(parentId);
-						const isDuplicate = parentSet ? parentSet.has(folderNameLower) : false;
+						const parentMap = existingFolderIdsByParentAndName.get(checkParentId);
+						const existingFolderId = parentMap ? parentMap.get(folderNameLower) : undefined;
+						const isDuplicate = !!existingFolderId;
 
 						if (isDuplicate) {
 							duplicateCount++;
-						} else {
-							if (!existingFolderNamesByParent.has(parentId)) {
-								existingFolderNamesByParent.set(parentId, new Set());
+							if (result.data.id) {
+								importIdToResolvedId.set(result.data.id, existingFolderId);
+								result.data.id = existingFolderId;
 							}
-							existingFolderNamesByParent.get(parentId)!.add(folderNameLower);
+						} else {
+							if (result.data.id) {
+								importIdToResolvedId.set(result.data.id, result.data.id);
+							}
+							if (!existingFolderIdsByParentAndName.has(checkParentId)) {
+								existingFolderIdsByParentAndName.set(checkParentId, new Map());
+							}
+							existingFolderIdsByParentAndName
+								.get(checkParentId)!
+								.set(folderNameLower, result.data.id!);
 						}
 
 						validFolders.push({
@@ -97,6 +118,12 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 				for (const item of parsedData.items || []) {
 					const result = importItemSchema.safeParse(item);
 					if (result.success) {
+						let checkFolderId = result.data.folderId || "root";
+						if (importIdToResolvedId.has(checkFolderId)) {
+							checkFolderId = importIdToResolvedId.get(checkFolderId)!;
+							result.data.folderId = checkFolderId === "root" ? undefined : checkFolderId;
+						}
+
 						const normalizedUrl = normalizeUrl(result.data.url);
 						const isDuplicate = existingUrls.has(normalizedUrl);
 
@@ -329,6 +356,99 @@ function parseTXT(content: string): { folders: unknown[]; items: unknown[] } {
 			.map((l) => l.trim())
 			.filter(Boolean);
 		return { folders: [], items: lines.map((line) => ({ url: line })) };
+	}
+
+	return { folders, items };
+}
+
+function parseHTML(content: string): { folders: unknown[]; items: unknown[] } {
+	const folders: Record<string, unknown>[] = [];
+	const items: Record<string, unknown>[] = [];
+
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(content, "text/html");
+
+	const parseDL = (dlElement: Element, parentId: string) => {
+		const children = dlElement.children;
+		for (let i = 0; i < children.length; i++) {
+			const child = children[i];
+			if (child.tagName.toLowerCase() === "dt") {
+				const h3 = child.querySelector("h3");
+				const a = child.querySelector("a");
+
+				if (h3) {
+					const folderId = crypto.randomUUID();
+					const addDate = h3.getAttribute("add_date");
+					const lastModified = h3.getAttribute("last_modified");
+					const name = h3.textContent?.trim() || "Untitled Folder";
+
+					folders.push({
+						id: folderId,
+						name,
+						parentId: parentId === "root" ? undefined : parentId,
+						createdAt: addDate ? parseInt(addDate, 10) * 1000 : Date.now(),
+						updatedAt: lastModified ? parseInt(lastModified, 10) * 1000 : Date.now(),
+					});
+
+					// In Netscape HTML, <DL> might be a child of <DT> (due to unclosed tags) or a sibling
+					let dlToParse: Element | null = null;
+
+					// 1. Check if it's nested inside the DT
+					const childDl = child.querySelector("dl");
+					if (childDl) {
+						dlToParse = childDl;
+					} else {
+						// 2. Check if it's a sibling, possibly wrapped in a <DD> or separated by <P>
+						let nextSibling = child.nextElementSibling;
+						while (
+							nextSibling &&
+							(nextSibling.tagName.toLowerCase() === "p" ||
+								nextSibling.tagName.toLowerCase() === "dd")
+						) {
+							if (nextSibling.tagName.toLowerCase() === "dd") {
+								const nestedInDd = nextSibling.querySelector("dl");
+								if (nestedInDd) {
+									dlToParse = nestedInDd;
+									break;
+								}
+							}
+							nextSibling = nextSibling.nextElementSibling;
+						}
+
+						if (!dlToParse && nextSibling && nextSibling.tagName.toLowerCase() === "dl") {
+							dlToParse = nextSibling;
+						}
+					}
+
+					if (dlToParse) {
+						parseDL(dlToParse, folderId);
+					}
+				} else if (a) {
+					const itemId = crypto.randomUUID();
+					const href = a.getAttribute("href") || "";
+					const addDate = a.getAttribute("add_date");
+					const icon = a.getAttribute("icon");
+					const title = a.textContent?.trim() || href;
+
+					if (href) {
+						items.push({
+							id: itemId,
+							url: href,
+							title,
+							logo: icon || undefined,
+							folderId: parentId === "root" ? undefined : parentId,
+							createdAt: addDate ? parseInt(addDate, 10) * 1000 : Date.now(),
+							updatedAt: Date.now(),
+						});
+					}
+				}
+			}
+		}
+	};
+
+	const rootDl = doc.querySelector("dl");
+	if (rootDl) {
+		parseDL(rootDl, "root");
 	}
 
 	return { folders, items };

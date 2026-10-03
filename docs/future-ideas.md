@@ -8,17 +8,12 @@
 
 These are standard expectations for bookmarking and web library apps that are not yet present in Sulok.
 
-### 1. Netscape Bookmark HTML Import
-
-- **Why it matters:** Every major browser (Chrome, Firefox, Safari) exports bookmarks as a standard HTML file (`bookmarks.html`). Currently, Sulok supports JSON, CSV, and TXT import, which creates a huge friction point for new users trying to migrate their existing browser bookmarks.
-- **Implementation idea:** Add an HTML parser to the `src/lib/sync-utils.ts` (or a dedicated import parser) that can read the nested `<DL><DT><A>` structure of Netscape bookmark files and map it to Sulok's folder tree.
-
-### 2. PWA Web Share Target API (Mobile)
+### 1. PWA Web Share Target API (Mobile)
 
 - **Why it matters:** Sulok is a PWA, but on mobile devices (Android), users save links primarily via the native OS Share Sheet.
 - **Implementation idea:** Implement the [Web Share Target API](https://developer.mozilla.org/en-US/docs/Web/Manifest/share_target) in `public/manifest.webmanifest`. This allows the Sulok PWA to appear as a share destination, receiving the URL and title directly from other mobile apps (like Twitter, Chrome, Safari) via a standard `POST` or `GET` request.
 
-### 3. Manual Tags / Labels
+### 2. Manual Tags / Labels
 
 - **Why it matters:** Strict folder trees are great for structure, but links often belong to multiple contexts (e.g., a React tutorial could be in `Programming` but also tagged `#to-read`).
 - **Implementation idea:** Add a lightweight array of strings (`tags: string[]`) to the item schema. Keep it strictly manual (no AI auto-tagging) to respect the "intentional curation" philosophy. Add a tag filter to the main Explorer UI.

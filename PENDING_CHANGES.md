@@ -9,6 +9,7 @@
 
 ### Added
 
+- **Netscape HTML Import**: Added support for importing standard browser bookmark HTML files (`bookmarks.html`), making it easier to migrate existing bookmarks from Chrome, Firefox, Safari, and other major browsers.
 - **Quick Customize**: Added a visual `Shift + C` keyboard shortcut hint to the Quick Customize drawer header.
 - **Device Sync (P2P)**: Seamlessly transfer and merge your library (links, folders, and workspace theme) across devices on your local network using WebRTC. Note: PeerJS uses cloud-hosted signaling and public STUN/TURN servers by default to establish the connection, which may relay data if direct P2P fails.
 
