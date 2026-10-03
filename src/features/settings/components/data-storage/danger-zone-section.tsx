@@ -4,6 +4,7 @@ import { useThemeDispatch } from "@/hooks/use-theme";
 import { setHasDataHint } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { defaultSettings, useConfirmationStore, useSettingsStore } from "@/stores";
+import { useLiveQuery } from "dexie-react-hooks";
 import { RefreshCcwIcon, ShieldAlertIcon } from "lucide-react";
 import { type ElementType } from "react";
 
@@ -43,28 +44,39 @@ export function DangerZoneSection() {
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const setTheme = useThemeDispatch();
 
+	const hasData = useLiveQuery(async () => {
+		const itemsCount = await db.items.count();
+		const foldersCount = await db.folders.count();
+		return itemsCount > 0 || foldersCount > 0;
+	}, []);
+
 	const actions = [
-		{
-			title: "Delete Library",
-			description: "Permanently remove all saved links and folders. This action cannot be undone.",
-			icon: TrashXMarkIcon,
-			onClick: () => {
-				confirm({
-					title: "Delete Library",
-					description:
-						"Are you sure you want to delete all saved links and folders? This action cannot be undone.",
-					confirmText: "Delete Library",
-					onConfirm: async () => {
-						await db.transaction("rw", db.items, db.folders, async () => {
-							await db.items.clear();
-							await db.folders.clear();
-						});
-						setHasDataHint(false);
-						window.location.reload();
+		...(hasData
+			? [
+					{
+						title: "Delete Library",
+						description:
+							"Permanently remove all saved links and folders. This action cannot be undone.",
+						icon: TrashXMarkIcon,
+						onClick: () => {
+							confirm({
+								title: "Delete Library",
+								description:
+									"Are you sure you want to delete all saved links and folders? This action cannot be undone.",
+								confirmText: "Delete Library",
+								onConfirm: async () => {
+									await db.transaction("rw", db.items, db.folders, async () => {
+										await db.items.clear();
+										await db.folders.clear();
+									});
+									setHasDataHint(false);
+									window.location.reload();
+								},
+							});
+						},
 					},
-				});
-			},
-		},
+				]
+			: []),
 		{
 			title: "Reset Settings",
 			description:
