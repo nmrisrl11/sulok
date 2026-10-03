@@ -14,6 +14,27 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.12.0",
+		date: "Oct 03, 2026",
+		title: "Device Sync, Bookmark Sync & HTML Import",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Device Sync & Sharing: You can now seamlessly transfer and merge your entire library—including links, folders, and your workspace theme—across devices on your local network without creating an account.",
+					"Bookmark Migration Made Easy: We've completely overhauled importing! You can now seamlessly import your existing bookmarks directly via the Sulok Browser Extension with a single click, or manually upload a standard Netscape HTML (`bookmarks.html`) file from Chrome, Safari, Firefox, and other major browsers.",
+					"Quick Customize Shortcut: Added a handy `Shift + C` keyboard shortcut hint to the Quick Customize drawer header so you can personalize your workspace even faster.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Squashed Bugs & Refinements: Fixed a sync bug where the 'Favorite' status of your links and folders wouldn't transfer correctly between devices. We also cleaned up the Danger Zone settings by automatically hiding the 'Delete Library' option if your library is already empty.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.11.0",
 		date: "Oct 02, 2026",
 		title: "Data Protection, Analytics, & Settings Backups",
