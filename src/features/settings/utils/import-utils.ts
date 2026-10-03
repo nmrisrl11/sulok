@@ -57,8 +57,10 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 					parsedData = parseCSV(content);
 				} else if (file.name.endsWith(".txt") || file.type === "text/plain") {
 					parsedData = parseTXT(content);
+				} else if (file.name.endsWith(".html") || file.type === "text/html") {
+					parsedData = parseHTML(content);
 				} else {
-					reject(new Error("Unsupported file format. Please upload JSON, CSV, or TXT."));
+					reject(new Error("Unsupported file format. Please upload JSON, CSV, TXT, or HTML."));
 					return;
 				}
 
@@ -329,6 +331,98 @@ function parseTXT(content: string): { folders: unknown[]; items: unknown[] } {
 			.map((l) => l.trim())
 			.filter(Boolean);
 		return { folders: [], items: lines.map((line) => ({ url: line })) };
+	}
+
+	return { folders, items };
+}
+
+function parseHTML(content: string): { folders: unknown[]; items: unknown[] } {
+	const folders: Record<string, unknown>[] = [];
+	const items: Record<string, unknown>[] = [];
+
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(content, "text/html");
+
+	const parseDL = (dlElement: Element, parentId: string) => {
+		const children = dlElement.children;
+		for (let i = 0; i < children.length; i++) {
+			const child = children[i];
+			if (child.tagName.toLowerCase() === "dt") {
+				const h3 = child.querySelector("h3");
+				const a = child.querySelector("a");
+
+				if (h3) {
+					const folderId = crypto.randomUUID();
+					const addDate = h3.getAttribute("add_date");
+					const name = h3.textContent?.trim() || "Untitled Folder";
+
+					folders.push({
+						id: folderId,
+						name,
+						parentId: parentId === "root" ? undefined : parentId,
+						createdAt: addDate ? parseInt(addDate, 10) * 1000 : Date.now(),
+						updatedAt: Date.now(),
+					});
+
+					// In Netscape HTML, <DL> might be a child of <DT> (due to unclosed tags) or a sibling
+					let dlToParse: Element | null = null;
+
+					// 1. Check if it's nested inside the DT
+					const childDl = child.querySelector("dl");
+					if (childDl) {
+						dlToParse = childDl;
+					} else {
+						// 2. Check if it's a sibling, possibly wrapped in a <DD> or separated by <P>
+						let nextSibling = child.nextElementSibling;
+						while (
+							nextSibling &&
+							(nextSibling.tagName.toLowerCase() === "p" ||
+								nextSibling.tagName.toLowerCase() === "dd")
+						) {
+							if (nextSibling.tagName.toLowerCase() === "dd") {
+								const nestedInDd = nextSibling.querySelector("dl");
+								if (nestedInDd) {
+									dlToParse = nestedInDd;
+									break;
+								}
+							}
+							nextSibling = nextSibling.nextElementSibling;
+						}
+
+						if (!dlToParse && nextSibling && nextSibling.tagName.toLowerCase() === "dl") {
+							dlToParse = nextSibling;
+						}
+					}
+
+					if (dlToParse) {
+						parseDL(dlToParse, folderId);
+					}
+				} else if (a) {
+					const itemId = crypto.randomUUID();
+					const href = a.getAttribute("href") || "";
+					const addDate = a.getAttribute("add_date");
+					const icon = a.getAttribute("icon");
+					const title = a.textContent?.trim() || href;
+
+					if (href) {
+						items.push({
+							id: itemId,
+							url: href,
+							title,
+							logo: icon || undefined,
+							folderId: parentId === "root" ? undefined : parentId,
+							createdAt: addDate ? parseInt(addDate, 10) * 1000 : Date.now(),
+							updatedAt: Date.now(),
+						});
+					}
+				}
+			}
+		}
+	};
+
+	const rootDl = doc.querySelector("dl");
+	if (rootDl) {
+		parseDL(rootDl, "root");
 	}
 
 	return { folders, items };

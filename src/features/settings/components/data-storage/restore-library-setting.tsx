@@ -60,7 +60,7 @@ export function RestoreLibrarySetting() {
 				type="file"
 				ref={fileInputRef}
 				className="hidden"
-				accept=".json,.csv,.txt"
+				accept=".json,.csv,.txt,.html"
 				onChange={handleFileSelect}
 			/>
 			<button
@@ -79,7 +79,7 @@ export function RestoreLibrarySetting() {
 				<div>
 					<h3 className="text-sm font-medium text-foreground">Select backup file</h3>
 					<p className="mt-0.5 text-xs text-muted-foreground">
-						Supports .json, .csv, and .txt files
+						Supports .json, .csv, .txt, and .html files
 					</p>
 				</div>
 			</button>

@@ -34,7 +34,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
 - **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, custom folder colors, and mascot customization via a Quick Customize menu.
 - **🚀 Local-First Performance**: Lightning-fast operations powered by IndexedDB, heavily optimized React state isolation, buttery-smooth list virtualization, and zero-latency UI responses.
-- **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
+- **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT, HTML) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
 - **🔄 Settings Backup & Restore**: Securely backup and restore all your personalization choices, themes, and application configurations via a unified JSON file.
 - **🌐 Fully Offline Capable**: PWA configured with hourly update polling. Designed to work completely offline for local data and existing items (initial metadata fetching requires network access).
 - **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
