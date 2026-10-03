@@ -126,8 +126,8 @@ export function DeviceSyncSetting() {
 	};
 
 	const handleConnect = () => {
-		if (connectCode.trim().length !== 6) {
-			notify.error("Please enter a valid 6-character code.", { id: "p2p-sync-invalid-code" });
+		if (connectCode.trim().length !== 10) {
+			notify.error("Please enter a valid 10-character code.", { id: "p2p-sync-invalid-code" });
 			return;
 		}
 
@@ -285,24 +285,24 @@ export function DeviceSyncSetting() {
 				isOpen={isClientModalOpen}
 				onClose={handleCloseClient}
 				title="Receive Data"
-				description="Enter the 6-character code from your other device to securely merge data."
+				description="Enter the 10-character code from your other device to securely merge data."
 			>
 				<div className="flex w-full flex-col gap-4">
 					{syncState === "idle" || syncState === "error" ? (
 						<div className="flex w-full flex-col gap-4">
 							<Input
-								placeholder="e.g. A1B2C3"
+								placeholder="e.g. A1B2C3D4E5"
 								value={connectCode}
 								onChange={(e) => setConnectCode(e.target.value.toUpperCase())}
 								className="h-14 bg-background text-center font-mono text-xl font-semibold tracking-[0.2em] uppercase"
-								maxLength={6}
+								maxLength={10}
 								id="receive-code"
 								autoComplete="off"
 							/>
 							<Button
 								className="h-12 w-full"
 								onClick={handleConnect}
-								disabled={connectCode.length !== 6}
+								disabled={connectCode.length !== 10}
 							>
 								Connect & Sync
 							</Button>

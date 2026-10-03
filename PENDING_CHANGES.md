@@ -9,7 +9,11 @@
 
 ### Added
 
-- **Device Sync (P2P)**: Seamlessly transfer and merge your library (links, folders, and workspace theme) across devices on your local network using WebRTC, without relying on cloud servers.
+- **Device Sync (P2P)**: Seamlessly transfer and merge your library (links, folders, and workspace theme) across devices on your local network using WebRTC. Note: PeerJS uses cloud-hosted signaling and public STUN/TURN servers by default to establish the connection, which may relay data if direct P2P fails.
+
+### Fixed
+
+- **Device Sync**: Fixed an issue where the "Favorite" status of links and folders was stripped during device synchronization and not properly transferred to the receiving device.
 
 ---
 

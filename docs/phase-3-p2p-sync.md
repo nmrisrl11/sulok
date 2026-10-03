@@ -1,6 +1,6 @@
 # Phase 3: Device Synchronization (P2P WebRTC)
 
-> **Status:** Planning / In Progress
+> **Status:** Completed
 > **Goal:** Implement a secure, Peer-to-Peer (P2P) device synchronization feature using WebRTC (via PeerJS). This allows users to seamlessly transfer or merge their Sulok library across devices without relying on a backend server, adhering strictly to the local-first philosophy.
 
 ---
@@ -19,7 +19,7 @@
 
 - **Action:** User initiates "Send" mode.
 - **Process:**
-  - Generates a unique, readable 6-character PeerJS connection ID (e.g., `A1B2C3`).
+  - Generates a unique, readable 10-character PeerJS connection ID (e.g., `A1B2C3D4E5`).
   - Displays a responsive Modal (Desktop) or Drawer (Mobile) with the code prominently displayed in a large, monospace font (Geist Mono).
   - Automatically packages the current state from Dexie (Folders, Items) and Zustand (Settings) into a secure `Blob`.
   - Waits for a client connection and transfers the payload upon a successful WebRTC handshake.
@@ -29,7 +29,7 @@
 
 - **Action:** User initiates "Receive" mode.
 - **Process:**
-  - Opens a responsive Modal/Drawer prompting the user for the 6-character code.
+  - Opens a responsive Modal/Drawer prompting the user for the 10-character code.
   - Validates the code length and connects to the host.
   - Receives the JSON payload, strictly validates it using existing Zod domain schemas, and merges it into the local Dexie database.
   - Updates the Zustand state for global Settings (while stripping device-specific configurations like onboarding status or UI toggles).
@@ -75,8 +75,8 @@
   - Implement `exportDataForSync` to generate the Blob payload.
   - Implement `importDataFromSync` with Zod validation and atomic Dexie transactions.
 - [x] **Step 4: UI Components**
-  - Build `P2PSyncSection` in `features/settings/components/data-storage/p2p-sync-section.tsx`.
-  - Build `SyncHostDialog` and `SyncClientDialog` ensuring mobile/desktop responsiveness.
+  - Build `DeviceSyncSetting` in `features/settings/components/data-storage/device-sync-setting.tsx`.
+  - Use the shared `SyncModalWrapper` to handle responsive Dialog (desktop) and Drawer (mobile) layouts for both host and client flows.
 - [x] **Step 5: Testing & Refinement**
   - Verify cross-device connections (e.g., Desktop to Mobile over local Wi-Fi).
   - Handle edge cases: invalid connection codes, network drops mid-transfer, corrupted payloads.

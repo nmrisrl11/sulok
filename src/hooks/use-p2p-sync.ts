@@ -4,16 +4,42 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export type SyncState = "idle" | "connecting" | "hosting" | "transferring" | "error" | "success";
 
 const generateSyncId = () => {
-	return Math.random().toString(36).substring(2, 8).toUpperCase();
+	const array = new Uint32Array(2);
+	crypto.getRandomValues(array);
+	return Array.from(array)
+		.map((x) => x.toString(36))
+		.join("")
+		.substring(0, 10)
+		.toUpperCase();
 };
 
 export function useP2PSync() {
 	const [syncState, setSyncState] = useState<SyncState>("idle");
 	const [peerId, setPeerId] = useState<string>("");
+
 	const peerRef = useRef<Peer | null>(null);
 	const connRef = useRef<DataConnection | null>(null);
+	const syncStateRef = useRef<SyncState>("idle");
+	const cleanupTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const connectionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const updateSyncState = useCallback((newState: SyncState | ((prev: SyncState) => SyncState)) => {
+		setSyncState((prev) => {
+			const next = typeof newState === "function" ? newState(prev) : newState;
+			syncStateRef.current = next;
+			return next;
+		});
+	}, []);
 
 	const cleanup = useCallback(() => {
+		if (cleanupTimeoutRef.current) {
+			clearTimeout(cleanupTimeoutRef.current);
+			cleanupTimeoutRef.current = null;
+		}
+		if (connectionTimeoutRef.current) {
+			clearTimeout(connectionTimeoutRef.current);
+			connectionTimeoutRef.current = null;
+		}
 		if (connRef.current) {
 			connRef.current.close();
 			connRef.current = null;
@@ -22,9 +48,9 @@ export function useP2PSync() {
 			peerRef.current.destroy();
 			peerRef.current = null;
 		}
-		setSyncState("idle");
+		updateSyncState("idle");
 		setPeerId("");
-	}, []);
+	}, [updateSyncState]);
 
 	useEffect(() => {
 		return () => cleanup();
@@ -33,20 +59,43 @@ export function useP2PSync() {
 	const startHosting = useCallback(
 		(onProvideData: (send: (data: Blob) => void) => void, onSuccess: () => void) => {
 			cleanup();
-			setSyncState("connecting");
+			updateSyncState("connecting");
 
 			const newPeerId = generateSyncId();
 			const peer = new Peer(newPeerId);
 			peerRef.current = peer;
 
+			connectionTimeoutRef.current = setTimeout(() => {
+				if (syncStateRef.current === "connecting" || syncStateRef.current === "hosting") {
+					if (peerRef.current) {
+						peerRef.current.destroy();
+						peerRef.current = null;
+					}
+					updateSyncState("error");
+				}
+			}, 60000); // 1 min timeout for handshake
+
 			peer.on("open", (id) => {
 				setPeerId(id);
-				setSyncState("hosting");
+				updateSyncState("hosting");
 			});
 
 			peer.on("connection", (conn) => {
+				if (connRef.current) {
+					// Reject any connections after the first one
+					conn.on("open", () => {
+						conn.close();
+					});
+					return;
+				}
+
 				connRef.current = conn;
-				setSyncState("transferring");
+				updateSyncState("transferring");
+
+				if (connectionTimeoutRef.current) {
+					clearTimeout(connectionTimeoutRef.current);
+					connectionTimeoutRef.current = null;
+				}
 
 				conn.on("open", () => {
 					onProvideData((blob) => {
@@ -56,48 +105,51 @@ export function useP2PSync() {
 
 				conn.on("data", (data) => {
 					if (data === "ACK") {
-						setSyncState("success");
+						updateSyncState("success");
 						onSuccess();
-						setTimeout(cleanup, 2000);
+						cleanupTimeoutRef.current = setTimeout(cleanup, 2000);
 					}
 				});
 
 				conn.on("error", () => {
-					setSyncState("error");
+					updateSyncState("error");
 				});
 
 				conn.on("close", () => {
-					setSyncState((prev) => {
-						if (prev !== "success") return "error";
-						return prev;
-					});
+					if (syncStateRef.current !== "success") {
+						updateSyncState("error");
+					}
 				});
 			});
 
 			peer.on("error", (err) => {
+				if (connectionTimeoutRef.current) {
+					clearTimeout(connectionTimeoutRef.current);
+					connectionTimeoutRef.current = null;
+				}
 				console.error("PeerJS error:", err);
-				setSyncState("error");
+				updateSyncState("error");
 			});
 		},
-		[cleanup],
+		[cleanup, updateSyncState],
 	);
 
 	const connectToHost = useCallback(
 		(hostId: string, onReceiveData: (data: unknown, ack: () => void) => void) => {
 			cleanup();
-			setSyncState("connecting");
+			updateSyncState("connecting");
 
 			const peer = new Peer();
 			peerRef.current = peer;
 
-			const connectionTimeout = setTimeout(() => {
-				setSyncState((prev) => {
-					if (prev === "connecting") {
-						if (peerRef.current) peerRef.current.destroy();
-						return "error";
+			connectionTimeoutRef.current = setTimeout(() => {
+				if (syncStateRef.current === "connecting") {
+					if (peerRef.current) {
+						peerRef.current.destroy();
+						peerRef.current = null;
 					}
-					return prev;
-				});
+					updateSyncState("error");
+				}
 			}, 15000);
 
 			peer.on("open", () => {
@@ -105,39 +157,50 @@ export function useP2PSync() {
 				connRef.current = conn;
 
 				conn.on("open", () => {
-					clearTimeout(connectionTimeout);
-					setSyncState("transferring");
+					if (connectionTimeoutRef.current) {
+						clearTimeout(connectionTimeoutRef.current);
+						connectionTimeoutRef.current = null;
+					}
+					updateSyncState("transferring");
 				});
 
 				conn.on("data", (data) => {
 					onReceiveData(data, () => {
 						conn.send("ACK");
-						setSyncState("success");
-						setTimeout(cleanup, 2000);
+						updateSyncState("success");
+						cleanupTimeoutRef.current = setTimeout(cleanup, 2000);
 					});
 				});
 
 				conn.on("error", () => {
-					clearTimeout(connectionTimeout);
-					setSyncState("error");
+					if (connectionTimeoutRef.current) {
+						clearTimeout(connectionTimeoutRef.current);
+						connectionTimeoutRef.current = null;
+					}
+					updateSyncState("error");
 				});
 
 				conn.on("close", () => {
-					clearTimeout(connectionTimeout);
-					setSyncState((prev) => {
-						if (prev !== "success") return "error";
-						return prev;
-					});
+					if (connectionTimeoutRef.current) {
+						clearTimeout(connectionTimeoutRef.current);
+						connectionTimeoutRef.current = null;
+					}
+					if (syncStateRef.current !== "success") {
+						updateSyncState("error");
+					}
 				});
 			});
 
 			peer.on("error", (err) => {
-				clearTimeout(connectionTimeout);
+				if (connectionTimeoutRef.current) {
+					clearTimeout(connectionTimeoutRef.current);
+					connectionTimeoutRef.current = null;
+				}
 				console.error("PeerJS error:", err);
-				setSyncState("error");
+				updateSyncState("error");
 			});
 		},
-		[cleanup],
+		[cleanup, updateSyncState],
 	);
 
 	const cancelSync = useCallback(() => {

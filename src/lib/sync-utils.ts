@@ -1,4 +1,5 @@
 import { db } from "@/db/db";
+import { parseImportedSettings } from "@/features/settings/utils/settings-sync-utils";
 import { setHasDataHint } from "@/lib/storage";
 import {
 	importFolderSchema,
@@ -72,9 +73,10 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 					...f,
 					id: f.id as string,
 					parentId: f.parentId ?? null,
-					order: 0,
+					order: f.order ?? 0,
 					createdAt: f.createdAt ?? Date.now(),
 					updatedAt: f.updatedAt ?? Date.now(),
+					isFavorite: f.isFavorite ?? undefined,
 				})),
 			);
 		}
@@ -87,6 +89,7 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 					folderId: i.folderId ?? undefined,
 					createdAt: i.createdAt ?? Date.now(),
 					updatedAt: i.updatedAt ?? Date.now(),
+					isFavorite: i.isFavorite ?? undefined,
 				})),
 			);
 		}
@@ -97,14 +100,37 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 	}
 
 	if (settings && typeof settings === "object") {
-		const {
-			onboardingStatus: _onboardingStatus,
-			onboardingStep: _onboardingStep,
-			hasDismissedInstallNudge: _hasDismissedInstallNudge,
-			...safeSettingsToImport
-		} = settings;
+		try {
+			const parsedSettings = parseImportedSettings(JSON.stringify(settings));
+			const currentSettings = useSettingsStore.getState().settings;
 
-		useSettingsStore.getState().updateSettings(safeSettingsToImport);
+			const newSettings = { ...currentSettings };
+			if (parsedSettings.appearanceSettings) {
+				newSettings.appearanceSettings = {
+					...newSettings.appearanceSettings,
+					...parsedSettings.appearanceSettings,
+				};
+			}
+			if (parsedSettings.soundSettings) {
+				newSettings.soundSettings = {
+					...newSettings.soundSettings,
+					...parsedSettings.soundSettings,
+				};
+			}
+			if (parsedSettings.suloSettings) {
+				newSettings.suloSettings = { ...newSettings.suloSettings, ...parsedSettings.suloSettings };
+			}
+			if (parsedSettings.privacySettings) {
+				newSettings.privacySettings = {
+					...newSettings.privacySettings,
+					...parsedSettings.privacySettings,
+				};
+			}
+
+			useSettingsStore.getState().updateSettings(newSettings);
+		} catch (e) {
+			console.warn("Invalid settings payload during sync:", e);
+		}
 	}
 
 	if (theme && typeof theme === "string") {
