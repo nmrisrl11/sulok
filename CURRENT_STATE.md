@@ -4,7 +4,7 @@
 
 ## Project Status: 🟢 Development
 
-The project is currently in the **Phase 3: Device Sync implementation phase**.
+The project is currently in active development, having recently completed **Phase 3: Device Sync**.
 
 ---
 
@@ -38,11 +38,12 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 
 ---
 
-## Current Phase: Device Sync (Phase 3)
+## Current Phase: Active Development
 
 ### Next Steps
 
-1. [ ] Establish WebRTC/PeerJS signaling architecture.
+1. [ ] Gather user feedback and refine existing features.
+2. [ ] Plan next phase (if any).
 
 ---
 
@@ -118,11 +119,11 @@ The project is currently in the **Phase 3: Device Sync implementation phase**.
 - [x] Automated extension distribution build and GitHub release workflow
 - [x] Subtle app/extension installation nudges (dismissible banners)
 
-### Phase 3 — Device Sync (Current)
+### Phase 3 — Device Sync (Completed)
 
-- P2P sync via WebRTC + Peer.js
-- No server required
-- Device discovery and pairing
+- [x] P2P sync via WebRTC + Peer.js
+- [x] No server required
+- [x] Device discovery and pairing
 
 ---
 

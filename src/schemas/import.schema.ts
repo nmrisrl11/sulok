@@ -33,6 +33,7 @@ export const importItemSchema = z.object({
 	image: z.string().optional(),
 	logo: z.string().optional(),
 	folderId: z.string().optional(),
+	isFavorite: z.boolean().optional(),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()
@@ -59,6 +60,8 @@ export const importFolderSchema = z.object({
 	id: z.string().optional(),
 	name: folderSchema.shape.name,
 	parentId: z.string().optional().nullable(),
+	order: z.number().optional(),
+	isFavorite: z.boolean().optional(),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()

@@ -40,6 +40,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
 - **📰 Built-in Changelog**: Stay up to date with a dedicated Updates page seamlessly integrated with the app's dynamic versioning.
 - **🧩 Browser Extension**: A fully-featured Chrome Extension companion for zero-click saving via smart context menus, featuring a highly-performant searchable folder popup.
+- **📡 Device Sync (P2P)**: Seamlessly transfer and merge your library across devices on your local network using WebRTC. Note: PeerJS uses cloud-hosted signaling and public STUN/TURN servers by default to establish the connection, which may relay data if direct P2P fails.
 
 ---
 
@@ -52,8 +53,7 @@ Sulok is built on a **local-first architecture**.
 - **Browser Storage:** Folders and items are saved locally on your device using IndexedDB, while theme and settings use localStorage.
 - **External Requests:** The app fetches link metadata (like Open Graph tags) when adding a new item, and requests favicons (via Google's Favicon API) whenever an item card renders.
 
-_Note: Device synchronization is planned for future releases to help you securely move your data between devices._
-
+_Note: Device synchronization is securely negotiated via WebRTC. PeerJS uses cloud-hosted signaling and default STUN/TURN servers to establish the connection, which may relay data if direct P2P fails._
 ---
 
 ## 🛠️ Tech Stack
@@ -198,8 +198,6 @@ _(No `.env` file is required to run the application locally.)_
 
 ## 🔮 Roadmap
 
-We are currently focused on Phase 3 of our roadmap (Device Sync). Future plans include:
-
-- Peer-to-peer (WebRTC) device synchronization without a backend
+We have recently completed Phase 3 of our roadmap (Device Sync). Future updates will focus on gathering user feedback and refining existing features.
 
 _(Check `CURRENT_STATE.md` for detailed tracking)._

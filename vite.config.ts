@@ -123,7 +123,14 @@ export default defineConfig({
 									: lastSegment.split("/")[0];
 
 								if (
-									["react", "react-dom", "react-router", "react-router-dom"].includes(packageName)
+									[
+										"react",
+										"react-dom",
+										"react-router",
+										"react-router-dom",
+										"react-helmet-async",
+										"react-error-boundary",
+									].includes(packageName)
 								) {
 									return "vendor-react";
 								}
@@ -131,9 +138,15 @@ export default defineConfig({
 									return "vendor-animation";
 								}
 								if (
-									["lucide-react", "@radix-ui", "clsx", "tailwind-merge", "vaul"].includes(
-										packageName,
-									) ||
+									[
+										"lucide-react",
+										"@radix-ui",
+										"clsx",
+										"tailwind-merge",
+										"vaul",
+										"goey-toast",
+										"cmdk",
+									].includes(packageName) ||
 									packageName.startsWith("@radix-ui/")
 								) {
 									return "vendor-ui";
@@ -154,6 +167,18 @@ export default defineConfig({
 								}
 								if (["react-joyride", "react-floater"].includes(packageName)) {
 									return "vendor-onboarding";
+								}
+								if (["peerjs"].includes(packageName)) {
+									return "vendor-p2p";
+								}
+								if (["@vercel/analytics", "@vercel/speed-insights"].includes(packageName)) {
+									return "vendor-analytics";
+								}
+								if (["zustand", "nuqs"].includes(packageName)) {
+									return "vendor-state";
+								}
+								if (["cuelume"].includes(packageName)) {
+									return "vendor-audio";
 								}
 								return "vendor-core";
 							}
