@@ -40,6 +40,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
 - **📰 Built-in Changelog**: Stay up to date with a dedicated Updates page seamlessly integrated with the app's dynamic versioning.
 - **🧩 Browser Extension**: A fully-featured Chrome Extension companion for zero-click saving via smart context menus, featuring a highly-performant searchable folder popup and native one-click browser bookmark syncing.
+- **📱 Web Share Target**: Share links directly from other apps on Android and ChromeOS to Sulok via the native OS share menu.
 - **📡 Device Sync (P2P)**: Seamlessly transfer and merge your library across devices on your local network using WebRTC. Note: PeerJS uses cloud-hosted signaling and public STUN/TURN servers by default to establish the connection, which may relay data if direct P2P fails.
 
 ---

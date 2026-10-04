@@ -7,6 +7,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added support for the native OS Share menu (Web Share Target). You can now seamlessly share links from other apps directly to Sulok on Android and ChromeOS.
+
 ### Changed
 
 - Centered the "Data Protected" card layout in Data & Storage settings to prevent uneven empty space when the protect button is hidden.

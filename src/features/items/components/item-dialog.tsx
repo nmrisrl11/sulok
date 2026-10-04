@@ -33,6 +33,7 @@ export function ItemDialog() {
 	const setDialogOpen = useItemStore((state) => state.setDialogOpen);
 	const editingItem = useItemStore((state) => state.editingItem);
 	const initialUrl = useItemStore((state) => state.initialUrl);
+	const initialTitle = useItemStore((state) => state.initialTitle);
 	const initialFolderId = useItemStore((state) => state.initialFolderId);
 	const addItem = useItemStore((state) => state.addItem);
 	const updateItem = useItemStore((state) => state.updateItem);
@@ -43,6 +44,7 @@ export function ItemDialog() {
 	// to prevent the form from resetting or flashing while animating out.
 	const [activeItem, setActiveItem] = useState(editingItem);
 	const [activeUrl, setActiveUrl] = useState(initialUrl);
+	const [activeTitle, setActiveTitle] = useState(initialTitle);
 	const [activeFolderId, setActiveFolderId] = useState(initialFolderId);
 
 	// Derive state during render to avoid cascading renders from useEffect
@@ -51,6 +53,9 @@ export function ItemDialog() {
 	}
 	if (isDialogOpen && activeUrl !== initialUrl) {
 		setActiveUrl(initialUrl);
+	}
+	if (isDialogOpen && activeTitle !== initialTitle) {
+		setActiveTitle(initialTitle);
 	}
 	if (isDialogOpen && activeFolderId !== initialFolderId) {
 		setActiveFolderId(initialFolderId);
@@ -124,6 +129,7 @@ export function ItemDialog() {
 			defaultValues={
 				activeItem || {
 					url: activeUrl || "",
+					title: activeTitle || "",
 					folderId: activeFolderId || "unorganized",
 				}
 			}
