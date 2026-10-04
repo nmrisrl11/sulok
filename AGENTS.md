@@ -174,6 +174,7 @@ sulok/
 - **Chrome Extension Web App Handshake:** The content script (`content.ts`) and React app (`extension-manager.tsx`) must synchronize startup using an explicit handshake. The React app must broadcast a `SULOK_EXT_READY` event when mounted, and the content script must wait for this signal before transmitting its queue of pending saves, resolving any startup order race conditions.
 - **Chrome Extension Security & CSP:** Never hardcode `localhost` permissions or `unsafe-inline` Content Security Policies directly into `manifest.json`. The Vite configuration (`vite.ext.config.ts`) must dynamically inject permissive CSPs and localhost host permissions exclusively in development mode (`mode === "development"`), falling back to a strictly locked-down CSP for production builds.
 - **PWA Lazy Loading Chunk Errors:** Do not implement complex custom `ErrorBoundary` logic to catch and unmount lazy-loaded components (e.g., `lazy(() => import(...))`) that fail to load offline on the Vite dev server. The `vite-plugin-pwa` combined with `workbox` automatically precaches all `.js` chunks during a production build (`npm run build`). Therefore, network fetch errors for lazy chunks are inherently a dev-only issue and do not affect offline production usage.
+- **Web Share Target API:** When configuring the Web Share Target API in the PWA manifest, always explicitly set the `enctype` (e.g., `enctype: "application/x-www-form-urlencoded"` for GET requests) to prevent Chrome DevTools warnings.
 
 ## What NOT To Do
 

@@ -12,3 +12,8 @@ export const typeFilterParser = parseAsString.withDefault("all");
 export const folderIdParser = parseAsString.withDefault("");
 export const searchQueryParser = parseAsString.withDefault("");
 export const mixDataParser = parseAsBoolean.withDefault(false);
+
+// Web Share Target Parsers
+export const shareTargetTitleParser = parseAsString.withDefault("");
+export const shareTargetTextParser = parseAsString.withDefault("");
+export const shareTargetUrlParser = parseAsString.withDefault("");

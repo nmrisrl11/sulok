@@ -37,6 +37,9 @@ const SettingsPage = lazy(() =>
 const InstallPage = lazy(() =>
 	import("@/pages/install/install-page").then((m) => ({ default: m.InstallPage })),
 );
+const ShareTargetPage = lazy(() =>
+	import("@/pages/share-target/share-target-page").then((m) => ({ default: m.ShareTargetPage })),
+);
 
 function GlobalSoundInteractions() {
 	useGlobalSoundInteractions();
@@ -97,6 +100,14 @@ function App() {
 												element={
 													<Suspense fallback={<InstallSkeleton />}>
 														<InstallPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/share-target"
+												element={
+													<Suspense fallback={null}>
+														<ShareTargetPage />
 													</Suspense>
 												}
 											/>

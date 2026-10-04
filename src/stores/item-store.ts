@@ -6,12 +6,13 @@ interface ItemState {
 	isDialogOpen: boolean;
 	editingItem: Item | null;
 	initialUrl: string | null;
+	initialTitle: string | null;
 	initialFolderId: string | null;
 	selectedIds: string[];
 
 	// Actions
 	setDialogOpen: (open: boolean) => void;
-	openCreateDialog: (url?: string, folderId?: string | null) => void;
+	openCreateDialog: (url?: string, folderId?: string | null, title?: string) => void;
 	openEditDialog: (item: Item) => void;
 
 	// DB Actions
@@ -37,24 +38,37 @@ export const useItemStore = create<ItemState>((set, get) => ({
 	isDialogOpen: false,
 	editingItem: null,
 	initialUrl: null,
+	initialTitle: null,
 	initialFolderId: null,
 	selectedIds: [],
 
 	setDialogOpen: (open) =>
 		set(() => ({
 			isDialogOpen: open,
-			...(open === false && { editingItem: null, initialUrl: null, initialFolderId: null }),
+			...(open === false && {
+				editingItem: null,
+				initialUrl: null,
+				initialTitle: null,
+				initialFolderId: null,
+			}),
 		})),
 
-	openCreateDialog: (url, folderId) =>
+	openCreateDialog: (url, folderId, title) =>
 		set({
 			isDialogOpen: true,
 			editingItem: null,
 			initialUrl: url || null,
+			initialTitle: title || null,
 			initialFolderId: folderId || null,
 		}),
 	openEditDialog: (item) =>
-		set({ isDialogOpen: true, editingItem: item, initialUrl: null, initialFolderId: null }),
+		set({
+			isDialogOpen: true,
+			editingItem: item,
+			initialUrl: null,
+			initialTitle: null,
+			initialFolderId: null,
+		}),
 
 	addItem: async (data) => {
 		await ItemRepository.save(data);

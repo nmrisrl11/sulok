@@ -108,12 +108,12 @@ export function ItemForm({
 			setValue("image", defaultValues?.image || "");
 			setValue("logo", defaultValues?.logo || "");
 		} else if (fetchedMetadata) {
-			setValue("title", fetchedMetadata.title || "");
-			setValue("description", fetchedMetadata.description || "");
-			setValue("image", fetchedMetadata.image || "");
-			setValue("logo", fetchedMetadata.logo || "");
+			setValue("title", fetchedMetadata.title || defaultValues?.title || "");
+			setValue("description", fetchedMetadata.description || defaultValues?.description || "");
+			setValue("image", fetchedMetadata.image || defaultValues?.image || "");
+			setValue("logo", fetchedMetadata.logo || defaultValues?.logo || "");
 		} else if (error) {
-			setValue("title", "");
+			setValue("title", defaultValues?.title || "");
 			setValue("description", "");
 			setValue("image", "");
 			setValue("logo", "");
