@@ -16,6 +16,10 @@
 - Centered the "Data Protected" card layout in Data & Storage settings to prevent uneven empty space when the protect button is hidden.
 - Adjusted "Sync Browser Bookmarks" visibility in Data & Storage settings to correctly show for resized desktop windows while remaining hidden on true mobile devices.
 
+### Fixed
+
+- Improved link extraction when sharing from other apps (Web Share Target) to properly ignore trailing sentence punctuation and invalid schemes.
+
 ---
 
 ## Changelog Format

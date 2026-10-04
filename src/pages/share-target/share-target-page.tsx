@@ -36,7 +36,27 @@ export function ShareTargetPage() {
 		}
 
 		if (extractedUrl) {
-			openCreateDialog(extractedUrl, null, extractedTitle);
+			// Remove trailing sentence punctuation
+			extractedUrl = extractedUrl.replace(/[.,!?)]+$/, "");
+
+			// Reject non-HTTP(S) schemes while allowing scheme-less hosts
+			let isValidScheme = true;
+			const hasScheme = /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(extractedUrl);
+
+			if (hasScheme) {
+				try {
+					const parsed = new URL(extractedUrl);
+					if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+						isValidScheme = false;
+					}
+				} catch {
+					isValidScheme = false;
+				}
+			}
+
+			if (isValidScheme) {
+				openCreateDialog(extractedUrl, null, extractedTitle);
+			}
 		}
 
 		// Always redirect to home after processing

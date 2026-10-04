@@ -113,7 +113,7 @@ export function ItemForm({
 			setValue("image", fetchedMetadata.image || defaultValues?.image || "");
 			setValue("logo", fetchedMetadata.logo || defaultValues?.logo || "");
 		} else if (error) {
-			setValue("title", "");
+			setValue("title", defaultValues?.title || "");
 			setValue("description", "");
 			setValue("image", "");
 			setValue("logo", "");
