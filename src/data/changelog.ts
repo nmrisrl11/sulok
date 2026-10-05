@@ -14,6 +14,26 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.13.0",
+		date: "Oct 05, 2026",
+		title: "Native OS Share & Command Palette Upgrades",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Seamless OS Sharing: You can now share links directly from other apps straight into Sulok using the native Android and ChromeOS share menu! The smart link extractor automatically strips out messy text and trailing punctuation from shared messages so you only get the link.",
+					"Powerful Command Palette: Finding your links just got easier! The Command Palette now instantly matches website domains, intelligently displays the parent folder context for every search result, and seamlessly renders up to 50 matches at lightning speed.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Polished UI Details: The Command Palette and main Explorer now feature sleek, custom scroll-fade masking at the top and bottom edges. We also perfected the global squircle corner radiuses on all Command Palette menus, and optimized the layout of the Data & Storage settings to adapt beautifully to resized desktop windows.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.12.0",
 		date: "Oct 03, 2026",
 		title: "Device Sync, Bookmark Sync & HTML Import",
