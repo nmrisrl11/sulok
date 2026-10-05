@@ -42,7 +42,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 	const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
 	const [view] = useQueryState("view", viewParser);
-	const [folderId] = useQueryState("folder", folderIdParser);
+	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
 	const [isFlat, setIsFlat] = useQueryState("flat", isFlatParser);
@@ -255,7 +255,14 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 										? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 								)}
-								onClick={() => setIsFlat(isFlat ? null : true)}
+								onClick={() => {
+									if (!isFlat) {
+										setIsFlat(true);
+										setFolderId(null);
+									} else {
+										setIsFlat(null);
+									}
+								}}
 								title={isFlat ? "Show Folder Hierarchy" : "Show All Links"}
 								aria-label={isFlat ? "Show Folder Hierarchy" : "Show All Links"}
 							>

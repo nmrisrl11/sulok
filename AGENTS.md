@@ -161,6 +161,7 @@ sulok/
 - **Mobile Touch Targets ("Fat Finger" Rule):** When designing interactive elements for mobile (like dropdown items or icon buttons), explicitly increase vertical/horizontal padding (e.g., `py-2.5 md:py-1.5`) to ensure the hit area is large enough for comfortable tapping, even if internal icons/text are styled compactly.
 - **Pagination:** Avoid traditional table pagination. Since the app is local-first (Dexie), rely on native page scrolling for lists, and upgrade to virtualization only when rendering performance degrades.
 - **Search Scope Clearance:** When navigating into a folder from a search result or breadcrumb, always explicitly clear the search query parameter (e.g., `setSearchQuery(null)`) to ensure the UI successfully exits "Search Mode" and displays the destination folder's normal contents.
+- **Global View Scope Clearance:** When activating a global view mode (like "Show All Links" / `isFlat`) that bypasses folder boundaries, explicitly clear the active folder context (e.g., `setFolderId(null)`) to return the user to the root view. This prevents a misleading UI state where breadcrumbs imply a scoped folder view while the content displays global data.
 - **Changelog Copywriting & Release Workflow:**
   - `PENDING_CHANGES.md` acts as a staging area for raw, atomic bullet points as features are built.
   - When migrating entries from `PENDING_CHANGES.md` to `src/data/changelog.ts` during a release, you MUST NOT copy the raw bullet points verbatim.

@@ -121,7 +121,7 @@ export function useHomeData() {
 	useEffect(() => {
 		clearItemSelection();
 		clearFolderSelection();
-	}, [view, folderId, clearItemSelection, clearFolderSelection]);
+	}, [view, folderId, isFlat, clearItemSelection, clearFolderSelection]);
 
 	useEffect(() => {
 		return () => {
