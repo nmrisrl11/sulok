@@ -203,6 +203,17 @@ export const ItemCard = memo(
 												}
 												useItemStore.getState().openEditDialog(item, "note");
 											}}
+											onKeyDown={(e) => {
+												if (e.key === "Enter" || e.key === " ") {
+													e.preventDefault();
+													e.stopPropagation();
+													if (isSelectionMode) {
+														toggleSelection(item.id);
+														return;
+													}
+													useItemStore.getState().openEditDialog(item, "note");
+												}
+											}}
 											className="flex shrink-0 cursor-pointer items-center gap-1 rounded-sm border border-border/50 bg-secondary/80 px-1.5 py-0.5 text-secondary-foreground transition-colors corner-squircle hover:bg-secondary supports-[corner-shape:squircle]:rounded-full"
 											title="Edit Note"
 										>

@@ -345,7 +345,11 @@ function parseTXT(content: string): { folders: unknown[]; items: unknown[] } {
 			} else if (lowerLine.startsWith("updatedat: ")) {
 				obj.updatedAt = line.substring(11).trim();
 			} else if (lowerLine.startsWith("note: ")) {
-				obj.note = line.substring(6).trim();
+				try {
+					obj.note = decodeURIComponent(line.substring(6).trim());
+				} catch {
+					obj.note = line.substring(6).trim();
+				}
 			} else if (!obj.url && line.startsWith("http")) {
 				obj.url = line;
 			}

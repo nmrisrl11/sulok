@@ -152,7 +152,7 @@ export async function exportData(format: "json" | "csv" | "txt") {
 			if (item.folderId) block += `\nFolderId: ${item.folderId}`;
 			if (item.createdAt) block += `\nCreatedAt: ${formatDate(item.createdAt)}`;
 			if (item.updatedAt) block += `\nUpdatedAt: ${formatDate(item.updatedAt)}`;
-			if (item.note) block += `\nNote: ${item.note}`;
+			if (item.note) block += `\nNote: ${encodeURIComponent(item.note)}`;
 			return block;
 		});
 

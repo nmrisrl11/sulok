@@ -146,7 +146,7 @@ export function ItemForm({
 			description: getValues("description") || metadata?.description || "",
 			image: getValues("image") || metadata?.image || undefined,
 			logo: getValues("logo") || metadata?.logo || undefined,
-			note: getValues("note") || undefined,
+			note: data.note || undefined,
 			folderId: getValues("folderId") === "unorganized" ? undefined : getValues("folderId"),
 		});
 	};
