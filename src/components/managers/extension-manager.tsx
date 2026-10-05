@@ -1,3 +1,4 @@
+import { ITEM_NOTE_MAX_LENGTH } from "@/constants/validation-constants";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import { fetchUrlMetadata } from "@/features/items/hooks/use-metadata";
@@ -12,7 +13,7 @@ import { normalizeUrl } from "@/lib/utils";
 import { useItemStore, useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQueryState } from "nuqs";
-import { lazy, Suspense, useEffect, useState, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { z } from "zod";
 
 const ImportPreviewDialog = lazy(() =>
@@ -26,6 +27,7 @@ const savePayloadSchema = z.object({
 	title: z.string().optional(),
 	folderId: z.string().nullable().optional(),
 	timestamp: z.number().optional(),
+	note: z.string().optional(),
 });
 
 type SavePayload = z.infer<typeof savePayloadSchema>;
@@ -162,6 +164,7 @@ export function ExtensionManager() {
 								image,
 								logo,
 								isFavorite: false,
+								note: save.note ? save.note.substring(0, ITEM_NOTE_MAX_LENGTH) : undefined,
 							});
 							addedCount++;
 						} catch (e) {
