@@ -1,4 +1,4 @@
-import { CustomHeartFilledIcon, FolderIcon } from "@/components/icons";
+import { CustomHeartFilledIcon, FolderIcon, NoteIcon } from "@/components/icons";
 import { SiteFavicon } from "@/components/site-favicon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -198,6 +198,28 @@ export const ItemGridCard = memo(
 							<CustomHeartFilledIcon className="size-3.5 shrink-0 text-red-500" />
 						)}
 						<span className="truncate text-center text-sm font-medium">{titleToDisplay}</span>
+						{!!item.note && view !== "trash" && (
+							<div
+								role="button"
+								tabIndex={0}
+								onClick={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									if (isSelectionMode) {
+										toggleSelection(item.id);
+										return;
+									}
+									useItemStore.getState().openEditDialog(item, "note");
+								}}
+								className="flex shrink-0 cursor-pointer items-center gap-1 rounded-sm border border-border/50 bg-secondary/80 px-1.5 py-0.5 text-secondary-foreground transition-colors corner-squircle hover:bg-secondary supports-[corner-shape:squircle]:rounded-full"
+								title="Edit Note"
+							>
+								<NoteIcon className="size-2.5" />
+								<span className="text-[9px] leading-none font-medium tracking-widest uppercase opacity-80">
+									Note
+								</span>
+							</div>
+						)}
 					</div>
 					{view === "trash" && item.deletedAt && (
 						<span className="mt-0.5 truncate text-center font-mono text-[10px] text-muted-foreground">
@@ -229,5 +251,6 @@ export const ItemGridCard = memo(
 		prev.item.logo === next.item.logo &&
 		prev.item.isFavorite === next.item.isFavorite &&
 		prev.item.folderId === next.item.folderId &&
+		prev.item.note === next.item.note &&
 		prev.isOverlay === next.isOverlay,
 );

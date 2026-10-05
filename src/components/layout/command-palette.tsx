@@ -1,12 +1,16 @@
 import {
+	AboutIcon,
 	AppearanceIcon,
 	DataIcon,
 	FolderIcon,
 	FolderLinkIcon,
 	FollowFolderIcon,
+	GetAppIcon,
 	RecycleBinIcon,
+	SettingsIcon,
 	SoundFxIcon,
 	SuloCustomizationIcon,
+	UpdatesIcon,
 } from "@/components/icons";
 import { SiteFavicon } from "@/components/site-favicon";
 import {
@@ -20,7 +24,7 @@ import {
 import { APP_INFO } from "@/constants/app-info";
 import { useCommandSearch, useDebounce } from "@/hooks";
 import { useCommandStore, useSettingsStore } from "@/stores";
-import { DownloadIcon, InfoIcon, SettingsIcon, SparklesIcon } from "lucide-react";
+
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -36,9 +40,9 @@ const CORNER_ITEMS = [
 ];
 
 const PAGES_ITEMS = [
-	{ value: "page-install", label: "Get App", icon: DownloadIcon, path: "/install" },
-	{ value: "page-updates", label: "Updates", icon: SparklesIcon, path: "/updates" },
-	{ value: "page-about", label: "About", icon: InfoIcon, path: "/about" },
+	{ value: "page-install", label: "Get App", icon: GetAppIcon, path: "/install" },
+	{ value: "page-updates", label: "Updates", icon: UpdatesIcon, path: "/updates" },
+	{ value: "page-about", label: "About", icon: AboutIcon, path: "/about" },
 	{ value: "page-settings", label: "Settings", icon: SettingsIcon, path: "/settings" },
 ];
 

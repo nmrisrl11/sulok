@@ -35,6 +35,7 @@ export function ItemDialog() {
 	const initialUrl = useItemStore((state) => state.initialUrl);
 	const initialTitle = useItemStore((state) => state.initialTitle);
 	const initialFolderId = useItemStore((state) => state.initialFolderId);
+	const initialFocusField = useItemStore((state) => state.initialFocusField);
 	const addItem = useItemStore((state) => state.addItem);
 	const updateItem = useItemStore((state) => state.updateItem);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -138,6 +139,7 @@ export function ItemDialog() {
 			onCancel={() => setDialogOpen(false)}
 			isSubmitting={isSubmitting}
 			submitError={submitError}
+			initialFocusField={initialFocusField}
 		/>
 	);
 

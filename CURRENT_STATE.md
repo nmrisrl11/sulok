@@ -97,6 +97,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Recycle Bin auto-cleanup and retention UI (30 days)
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
+- [x] Personal Notes / Annotations (squircle indicator, quick edit shortcut, and import preview detection)
 - [x] Global Settings Page (tabbed layout) with Premium Segmented Controls
 - [x] Modular Settings Architecture (isolated component code-splitting across all sections: Appearance, Sound FX, Sulo Customization, Data & Storage)
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization

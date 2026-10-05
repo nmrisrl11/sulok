@@ -265,6 +265,7 @@ function parseCSV(content: string): { folders: unknown[]; items: unknown[] } {
 				obj.folderId = currentRow[7]?.trim();
 				obj.createdAt = currentRow[8]?.trim();
 				obj.updatedAt = currentRow[9]?.trim();
+				obj.note = currentRow[10]?.trim();
 
 				for (const k in obj) {
 					if (/^'[=+\-@]/.test(obj[k] as string)) {
@@ -343,6 +344,8 @@ function parseTXT(content: string): { folders: unknown[]; items: unknown[] } {
 				obj.createdAt = line.substring(11).trim();
 			} else if (lowerLine.startsWith("updatedat: ")) {
 				obj.updatedAt = line.substring(11).trim();
+			} else if (lowerLine.startsWith("note: ")) {
+				obj.note = line.substring(6).trim();
 			} else if (!obj.url && line.startsWith("http")) {
 				obj.url = line;
 			}

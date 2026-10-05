@@ -47,7 +47,8 @@ export function useCommandSearch(query: string) {
 					item.title?.toLowerCase().includes(q) ||
 					item.url.toLowerCase().includes(q) ||
 					domainMatch ||
-					item.description?.toLowerCase().includes(q)
+					item.description?.toLowerCase().includes(q) ||
+					item.note?.toLowerCase().includes(q)
 				);
 			})
 			.slice(0, 50);

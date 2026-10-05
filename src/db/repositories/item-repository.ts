@@ -55,7 +55,8 @@ export const ItemRepository = {
 				(item) =>
 					item.title?.toLowerCase().includes(query) ||
 					item.url.toLowerCase().includes(query) ||
-					item.description?.toLowerCase().includes(query),
+					item.description?.toLowerCase().includes(query) ||
+					item.note?.toLowerCase().includes(query),
 			);
 		}
 
