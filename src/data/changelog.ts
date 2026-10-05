@@ -14,6 +14,26 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "1.0.0",
+		date: "Oct 05, 2026",
+		title: "The Official Version 1.0 Release",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Welcome to Sulok 1.0! We've officially reached our v1 milestone, marking the completion of our core roadmap. Everything from the highly-performant local database, zero-click Browser Extension, and Peer-to-Peer Device Sync is now stable and out of beta.",
+					"A fully-featured Personal Web Library: Your links and folders are yours. You now have full access to drag-and-drop organization, seamless PWA offline support, dynamic workspace themes, and deep personalization (including our interactive mascot, Sulo) without ever creating an account.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Graduated from Beta: This release officially transitions Sulok from active development into a stable, production-ready product. Future updates will focus on community feedback and refining this core local-first experience.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.14.0",
 		date: "Oct 05, 2026",
 		title: "Personal Notes, Flat View, & UI Polish",

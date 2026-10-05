@@ -180,8 +180,8 @@ export function DeviceSyncSetting() {
 				<div>
 					<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 						<SendIcon className="h-4 w-4" /> Device Sync (P2P)
-						<span className="inline-flex items-center rounded-md border border-amber-500/20 bg-amber-500/10 px-1.5 py-0 text-[10px] font-semibold text-amber-600 transition-colors">
-							Beta
+						<span className="inline-flex items-center rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0 text-[10px] font-semibold text-green-600 transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-full">
+							Recommended
 						</span>
 					</p>
 					<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
