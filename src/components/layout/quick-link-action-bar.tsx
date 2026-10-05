@@ -49,25 +49,15 @@ export function QuickLinkActionBar() {
 			}
 		};
 
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-				e.preventDefault();
-				setIsExpanded(true);
-				setTimeout(() => inputRef.current?.focus(), 50);
-			}
-		};
-
 		const handleOpenQuickLink = (_e: Event) => {
 			setIsExpanded(true);
 			setTimeout(() => inputRef.current?.focus(), 50);
 		};
 
 		document.addEventListener("paste", handleGlobalPaste);
-		document.addEventListener("keydown", handleKeyDown);
 		document.addEventListener("open-quick-link", handleOpenQuickLink);
 		return () => {
 			document.removeEventListener("paste", handleGlobalPaste);
-			document.removeEventListener("keydown", handleKeyDown);
 			document.removeEventListener("open-quick-link", handleOpenQuickLink);
 		};
 	}, [error, urlSchema, setIsExpanded]);

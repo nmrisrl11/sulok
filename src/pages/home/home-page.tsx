@@ -117,7 +117,7 @@ export function HomePage({ className }: { className?: string }) {
 						/>
 						<div
 							ref={scrollRef}
-							className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto pr-2 pb-4"
+							className="custom-scrollbar relative mt-2 max-h-[55vh] overflow-y-auto scroll-fade-effect-y pr-2 pb-4"
 						>
 							<ExplorerMain
 								folders={homeData.folders}

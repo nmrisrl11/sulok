@@ -8,3 +8,4 @@ export * from "./move-store";
 export * from "./settings-store";
 export * from "./time-store";
 export * from "./ui-store";
+export * from "./use-command-store";

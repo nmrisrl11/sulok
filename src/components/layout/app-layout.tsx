@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import {
 	useActionDrawerStore,
+	useCommandStore,
 	useConfirmationStore,
 	useFolderStore,
 	useItemStore,
@@ -41,18 +42,25 @@ const QuickCustomizeDrawer = lazy(() =>
 		default: m.QuickCustomizeDrawer,
 	})),
 );
+const CommandPalette = lazy(() =>
+	import("./command-palette").then((m) => ({
+		default: m.CommandPalette,
+	})),
+);
 
 function GlobalDialogs() {
 	const isItemDialogOpen = useItemStore((state) => state.isDialogOpen);
 	const isFolderDialogOpen = useFolderStore((state) => state.isDialogOpen);
 	const isConfirmationDialogOpen = useConfirmationStore((state) => state.isOpen);
 	const isMoveDialogOpen = useMoveStore((state) => state.isOpen);
+	const isCommandOpen = useCommandStore((state) => state.isOpen);
 
 	const [hasLoadedItemDialog, setHasLoadedItemDialog] = useState(isItemDialogOpen);
 	const [hasLoadedFolderDialog, setHasLoadedFolderDialog] = useState(isFolderDialogOpen);
 	const [hasLoadedMoveDialog, setHasLoadedMoveDialog] = useState(isMoveDialogOpen);
 	const [hasLoadedConfirmationDialog, setHasLoadedConfirmationDialog] =
 		useState(isConfirmationDialogOpen);
+	const [hasLoadedCommandPalette, setHasLoadedCommandPalette] = useState(isCommandOpen);
 
 	if (isItemDialogOpen && !hasLoadedItemDialog) {
 		setHasLoadedItemDialog(true);
@@ -68,6 +76,10 @@ function GlobalDialogs() {
 
 	if (isMoveDialogOpen && !hasLoadedMoveDialog) {
 		setHasLoadedMoveDialog(true);
+	}
+
+	if (isCommandOpen && !hasLoadedCommandPalette) {
+		setHasLoadedCommandPalette(true);
 	}
 
 	return (
@@ -97,6 +109,13 @@ function GlobalDialogs() {
 				<ErrorBoundary>
 					<Suspense fallback={null}>
 						<MoveDialog />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+			{hasLoadedCommandPalette && (
+				<ErrorBoundary>
+					<Suspense fallback={null}>
+						<CommandPalette />
 					</Suspense>
 				</ErrorBoundary>
 			)}
@@ -157,6 +176,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
 					return;
 				e.preventDefault();
 				toggleQuickCustomize();
+			}
+
+			// Global shortcut for Command Palette (Ctrl+K or Cmd+K)
+			if ((e.key === "k" || e.key === "p") && (e.metaKey || e.ctrlKey)) {
+				// We don't block input elements for Ctrl+K, since it's a standard command palette shortcut
+				e.preventDefault();
+				useCommandStore.getState().toggle();
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
