@@ -1,10 +1,4 @@
-import {
-	FolderPlusCircleIcon,
-	GridIcon,
-	ListIcon,
-	MergeIcon,
-	TrashXMarkIcon,
-} from "@/components/icons";
+import { FolderPlusCircleIcon, GridIcon, ListIcon, TrashXMarkIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,6 +15,7 @@ import { useDebouncedQuery } from "@/hooks";
 import { notify } from "@/lib/notify";
 import {
 	folderIdParser,
+	isFlatParser,
 	mixDataParser,
 	searchQueryParser,
 	sortOptionParser,
@@ -30,7 +25,7 @@ import {
 } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
 import { useConfirmationStore, useFolderStore, useLogoStore } from "@/stores";
-import { PlusIcon, SearchIcon } from "lucide-react";
+import { CombineIcon, FolderTreeIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { memo } from "react";
 import { ExplorerBreadcrumb } from "./explorer-breadcrumb";
@@ -50,6 +45,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 	const [folderId] = useQueryState("folder", folderIdParser);
 	const [sortOption, setSortOption] = useQueryState("sort", sortOptionParser);
 	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
+	const [isFlat, setIsFlat] = useQueryState("flat", isFlatParser);
 	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
 
 	const openCreateDialog = useFolderStore((state) => state.openCreateDialog);
@@ -78,13 +74,14 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 	};
 
 	const hasFiltersActive =
-		!!searchQuery || typeFilter !== "all" || sortOption !== "date-desc" || mixData;
+		!!searchQuery || typeFilter !== "all" || sortOption !== "date-desc" || mixData || isFlat;
 
 	const handleResetFilters = () => {
 		setSearchQuery(null);
 		setTypeFilter("all");
 		setSortOption("date-desc");
 		setMixData(false);
+		setIsFlat(null);
 	};
 
 	const getSelectValueDisplay = () => {
@@ -227,63 +224,100 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 					<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
 
 					{/* Actions Row */}
-					<div className="col-span-2 flex items-center justify-between gap-2 sm:col-span-1 sm:w-auto sm:flex-none sm:justify-end sm:gap-1">
-						<div className="flex items-center gap-1">
+					<div className="col-span-2 flex w-full flex-col items-center justify-between gap-2 sm:col-span-1 sm:w-auto sm:flex-none sm:flex-row sm:justify-end sm:gap-1">
+						{/* Mix & Flat View Group */}
+						<div className="flex w-full shrink-0 items-center gap-1 rounded-lg bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto">
+							<Button
+								variant="ghost"
+								size="sm"
+								disabled={!!isFlat}
+								className={cn(
+									"h-8 flex-1 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none sm:px-0",
+									mixData && !isFlat
+										? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
+										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+									isFlat && "opacity-50 grayscale",
+								)}
+								onClick={() => setMixData(mixData ? false : true)}
+								title={mixData ? "Separate Folders and Links" : "Mix Folders and Links"}
+								aria-label={mixData ? "Separate Folders and Links" : "Mix Folders and Links"}
+							>
+								<CombineIcon className="mr-2 size-4 sm:mr-0" />
+								<span className="sm:sr-only">{mixData ? "Separate" : "Mix"}</span>
+							</Button>
+
 							<Button
 								variant="ghost"
 								size="sm"
 								className={cn(
-									"h-8 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:px-0",
-									mixData
+									"h-8 flex-1 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none sm:px-0",
+									isFlat
 										? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 										: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 								)}
-								onClick={() => setMixData(mixData ? false : true)}
-								title={mixData ? "Separate Folders and Links" : "Mix Folders and Links"}
+								onClick={() => setIsFlat(isFlat ? null : true)}
+								title={isFlat ? "Show Folder Hierarchy" : "Show All Links"}
+								aria-label={isFlat ? "Show Folder Hierarchy" : "Show All Links"}
 							>
-								<MergeIcon className="mr-2 size-4 sm:mr-0" />
-								<span className="sm:sr-only">{mixData ? "Separate Data" : "Mix Data"}</span>
+								<FolderTreeIcon className="mr-2 size-4 sm:mr-0" />
+								<span className="sm:sr-only">{isFlat ? "Hierarchy" : "All Links"}</span>
 							</Button>
+						</div>
 
-							<div className="mx-1 h-4 w-px bg-border/50" />
+						{/* Desktop Separator between Groups */}
+						<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
 
-							<div className="flex shrink-0 items-center gap-1">
+						{/* List/Grid & Clear Group (Same row on mobile) */}
+						<div className="flex w-full items-center gap-1 sm:w-auto">
+							<div className="flex w-full flex-1 shrink-0 items-center gap-1 rounded-lg bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto sm:flex-none">
 								<Button
 									variant="ghost"
 									size="sm"
 									title="List View"
 									aria-label="List View"
-									className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "list" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={cn(
+										"h-8 flex-1 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none sm:px-0",
+										viewMode === "list"
+											? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
+											: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+									)}
 									onClick={() => setViewMode("list")}
 								>
-									<ListIcon className="size-4" />
+									<ListIcon className="mr-2 size-4 sm:mr-0" />
+									<span className="sm:sr-only">List</span>
 								</Button>
 								<Button
 									variant="ghost"
 									size="sm"
 									title="Grid View"
 									aria-label="Grid View"
-									className={`size-8 rounded-md px-0 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle ${viewMode === "grid" ? "border-0 bg-background text-foreground shadow-engraved hover:bg-background" : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
+									className={cn(
+										"h-8 flex-1 rounded-md px-3 text-xs font-medium supports-[corner-shape:squircle]:rounded-lg supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none sm:px-0",
+										viewMode === "grid"
+											? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
+											: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+									)}
 									onClick={() => setViewMode("grid")}
 								>
-									<GridIcon className="size-4" />
+									<GridIcon className="mr-2 size-4 sm:mr-0" />
+									<span className="sm:sr-only">Grid</span>
 								</Button>
 							</div>
-						</div>
 
-						{hasFiltersActive && (
-							<div className="flex items-center gap-1">
-								<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
-								<Button
-									variant="ghost"
-									size="sm"
-									onClick={handleResetFilters}
-									className="h-8 shrink-0 rounded-md px-3 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
-								>
-									Clear
-								</Button>
-							</div>
-						)}
+							{hasFiltersActive && (
+								<div className="flex shrink-0 items-center gap-1">
+									<div className="mx-1 h-4 w-px bg-border/50" />
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={handleResetFilters}
+										className="h-8 shrink-0 rounded-md px-3 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle"
+									>
+										Clear
+									</Button>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			)}

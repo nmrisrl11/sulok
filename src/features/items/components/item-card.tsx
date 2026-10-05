@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder, Item } from "@/db/db";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { useIsSelectionMode } from "@/hooks";
-import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
+import { folderIdParser, isFlatParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useActionDrawerStore, useActiveDragStore, useItemStore, useTimeStore } from "@/stores";
 import { useDraggable } from "@dnd-kit/core";
@@ -37,6 +37,7 @@ export const ItemCard = memo(
 
 		const [view] = useQueryState("view", viewParser);
 		const [searchQuery, setSearchQuery] = useQueryState("q", searchQueryParser);
+		const [isFlat, setIsFlat] = useQueryState("flat", isFlatParser);
 		const [, setFolderId] = useQueryState("folder", folderIdParser);
 		const today = useTimeStore((state) => state.today);
 
@@ -227,13 +228,14 @@ export const ItemCard = memo(
 									</span>
 								)}
 							</a>
-							{searchQuery && view !== "trash" && (
+							{((searchQuery && view !== "trash") || (isFlat && view !== "trash")) && (
 								<button
 									type="button"
 									onClick={(e) => {
 										e.preventDefault();
 										e.stopPropagation();
 										setSearchQuery(null);
+										setIsFlat(null);
 										setFolderId(item.folderId || null);
 									}}
 									className="mt-1.5 flex w-fit items-center gap-1.5 rounded-md border border-border/50 bg-secondary/50 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground transition-colors corner-squircle hover:bg-secondary hover:text-foreground supports-[corner-shape:squircle]:rounded-xl"

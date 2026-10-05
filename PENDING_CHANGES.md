@@ -9,6 +9,7 @@
 
 ### Added
 
+- **Flat View Mode:** Added a dedicated toggle icon in the Explorer Toolbar to instantly switch your library between standard folder hierarchy ("Show Folder Hierarchy") and a flat, unified list of all your saved links ("Show All Links").
 - **Native Tooltips:** Added helpful hover tooltips to the Header's Search and Quick Customize icons to explicitly surface their keyboard shortcuts (`Cmd/Ctrl+K` and `Shift+C`).
 - **Personal Notes & Annotations:** You can now add an optional personal note or reminder to any link you save. This makes intentional curation much easier—never forget _why_ you saved something!
   - Added a new distinct UI "Note" squircle indicator to link cards.

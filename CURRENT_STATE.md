@@ -75,6 +75,7 @@ The project is currently in active development, having recently completed **Phas
 
 - [x] Folder CRUD (tree structure)
 - [x] Item CRUD (save, edit, delete, bulk delete)
+- [x] Flat View Mode (Toggle between standard folder hierarchy and all links)
 - [x] Enhanced Empty State UI design
 - [x] Co-located feature-level loading Skeletons
 - [x] Route-specific loading architecture (Suspense fallbacks)
