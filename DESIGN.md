@@ -180,7 +180,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Global quick-action and search interface (`Ctrl+K`).
 - Renders as a centered dialog with a backdrop.
 - Must support the global squircle corner radius setting on both the outer container and inner command items.
-- Utilizes the `.scroll-fade` utility class to create smooth gradient masking at the top and bottom edges of the scrolling item list.
+- Utilizes the `.scroll-fade-effect-y` utility class to create smooth gradient masking at the top and bottom edges of the scrolling item list. This class must be conditionally applied only when there are enough results to overflow the container, to prevent static clipping when the list is short.
 - During searches, matched links display their parent folder as a contextual hint.
 - Uses custom search logic (`shouldFilter={false}`) rather than `cmdk`'s default filter to allow domain matching.
 

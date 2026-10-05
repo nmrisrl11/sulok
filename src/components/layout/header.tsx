@@ -58,6 +58,7 @@ export function Header() {
 					<button
 						type="button"
 						id="command-palette-btn"
+						title="Search (Cmd+K / Ctrl+K)"
 						onClick={() => {
 							// Using dynamic import or direct store access to avoid circular dependency if any
 							import("@/stores").then((m) => m.useCommandStore.getState().toggle());
@@ -72,6 +73,7 @@ export function Header() {
 					<button
 						type="button"
 						id="quick-customize-btn"
+						title="Quick Customize (Shift+C)"
 						onClick={() => useUIStore.getState().toggleQuickCustomize()}
 						onMouseEnter={() => setTemporaryExpression("curious", 10000)}
 						onMouseLeave={clearTemporaryExpression}

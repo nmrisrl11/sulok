@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/command";
 import { APP_INFO } from "@/constants/app-info";
 import { useCommandSearch, useDebounce } from "@/hooks";
+import { cn } from "@/lib/utils";
 import { useCommandStore, useSettingsStore } from "@/stores";
 
 import { useCallback, useMemo, useState } from "react";
@@ -175,7 +176,7 @@ export function CommandPalette() {
 		);
 	}, [items, query, folderMap, isReferralTrackingEnabled, runCommand, navigate]);
 
-	const renderStaticGroups = useMemo(() => {
+	const filteredStaticGroups = useMemo(() => {
 		const q = query.toLowerCase().trim();
 		const groups = [
 			{ heading: "Your Corner", items: CORNER_ITEMS },
@@ -195,7 +196,11 @@ export function CommandPalette() {
 					.filter((group) => group.items.length > 0)
 			: groups;
 
-		return filteredGroups.map((group) => (
+		return filteredGroups;
+	}, [query]);
+
+	const renderStaticGroups = useMemo(() => {
+		return filteredStaticGroups.map((group) => (
 			<CommandGroup key={group.heading} heading={group.heading}>
 				{group.items.map((item) => {
 					const Icon = item.icon;
@@ -213,13 +218,20 @@ export function CommandPalette() {
 				})}
 			</CommandGroup>
 		));
-	}, [query, navigate, runCommand]);
+	}, [filteredStaticGroups, navigate, runCommand]);
+
+	const totalResults =
+		folders.length +
+		items.length +
+		filteredStaticGroups.reduce((acc, group) => acc + group.items.length, 0);
 
 	return (
 		<CommandDialog open={isOpen} onOpenChange={setIsOpen} shouldFilter={false}>
 			<CommandInput placeholder="Search your corner..." value={query} onValueChange={setQuery} />
 			<div className="mx-3 mb-3 rounded-xl bg-background ring-1 ring-border corner-squircle supports-[corner-shape:squircle]:rounded-4xl">
-				<CommandList className="max-h-75 overflow-y-auto scroll-fade-effect-y">
+				<CommandList
+					className={cn("max-h-75 overflow-y-auto", totalResults > 4 && "scroll-fade-effect-y")}
+				>
 					<CommandEmpty className="flex flex-col items-center justify-center gap-1 px-4 py-6 text-center text-sm">
 						<span className="text-muted-foreground">No results found for</span>
 						<span className="max-w-full truncate font-medium">"{query}"</span>
