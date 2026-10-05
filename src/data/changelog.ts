@@ -14,6 +14,27 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "0.14.0",
+		date: "Oct 05, 2026",
+		title: "Personal Notes, Flat View, & UI Polish",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Personal Notes & Annotations: Never forget why you saved a link! You can now add personal notes and reminders to any item in your library. Notes feature a distinct new UI indicator that doubles as a quick-edit shortcut, and they are fully supported across local-first syncing, data exports, and the browser extension. We've also introduced a new 'With Notes' filter so you can instantly surface your annotated links.",
+					"Flat View Mode: Want to see everything at once? You can now instantly toggle the Explorer between your standard folder hierarchy and a beautiful, flat list of all your saved links via a new dedicated icon in the toolbar.",
+					"Keyboard Shortcut Tooltips: Navigating like a pro is easier than ever. We've added helpful native hover tooltips to the Header's Search and Quick Customize icons to explicitly surface their handy keyboard shortcuts (`Cmd/Ctrl+K` and `Shift+C`).",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"UI Polish & Bug Fixes: We resolved a visual clipping bug in the Command Palette where the smooth scroll-fade effect would incorrectly mask short lists. We also perfected favicon alignment on list cards for links without custom logos, and fixed an issue where invisible items could remain selected in the background when toggling the new Flat View mode.",
+				],
+			},
+		],
+	},
+	{
 		version: "0.13.0",
 		date: "Oct 05, 2026",
 		title: "Native OS Share & Command Palette Upgrades",
