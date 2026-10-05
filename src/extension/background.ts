@@ -39,6 +39,7 @@ interface SaveData {
 	title: string;
 	folderId: string | null;
 	timestamp: number;
+	note?: string;
 }
 
 let saveQueueLock = Promise.resolve();

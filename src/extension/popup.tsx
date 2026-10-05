@@ -2,9 +2,11 @@ import { SiteFavicon } from "@/components/site-favicon";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import { APP_INFO } from "@/constants/app-info";
+import { ITEM_NOTE_MAX_LENGTH } from "@/constants/validation-constants";
 import { normalizeUrl } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { type FolderRef } from "./types";
 import { VirtualFolderCombobox } from "./virtual-folder-combobox";
 
@@ -16,6 +18,8 @@ function Popup() {
 	const [status, setStatus] = useState<"new" | "duplicate" | "trashed">("new");
 	const [folders, setFolders] = useState<FolderRef[]>([]);
 	const [selectedFolderId, setSelectedFolderId] = useState<string>("unorganized");
+	const [note, setNote] = useState("");
+	const noteId = useId();
 
 	useEffect(() => {
 		// Get current tab info
@@ -59,12 +63,14 @@ function Popup() {
 			title: string;
 			folderId: string | null;
 			timestamp: number;
+			note?: string;
 		}
 		const newSave: SaveData = {
 			url,
 			title,
 			folderId: selectedFolderId === "unorganized" ? null : selectedFolderId,
 			timestamp: Date.now(),
+			note: note.trim() || undefined,
 		};
 
 		chrome.runtime.sendMessage({ type: "SULOK_EXT_SAVE_POPUP", payload: newSave }, () => {
@@ -117,7 +123,7 @@ function Popup() {
 
 			<div className="flex flex-col gap-2">
 				<Label
-					className="text-xs font-semibold tracking-wider text-muted-foreground uppercase"
+					className="text-xs font-semibold tracking-wider text-muted-foreground"
 					htmlFor="folder"
 				>
 					Save to corner
@@ -127,6 +133,31 @@ function Popup() {
 					value={selectedFolderId}
 					onValueChange={setSelectedFolderId}
 				/>
+			</div>
+
+			<div className="flex flex-col gap-2">
+				<Label
+					className="flex items-center gap-2 text-xs font-semibold tracking-wider text-muted-foreground"
+					htmlFor={noteId}
+				>
+					Why are you saving this?
+					<span className="text-[10px] font-normal text-muted-foreground normal-case">
+						(Optional)
+					</span>
+				</Label>
+				<div className="relative">
+					<Textarea
+						id={noteId}
+						value={note}
+						onChange={(e) => setNote(e.target.value)}
+						placeholder="Leave a memo for your future self..."
+						maxLength={ITEM_NOTE_MAX_LENGTH}
+						className="custom-scrollbar field-sizing-content min-h-20 resize-none pb-7 text-sm"
+					/>
+					<span className="pointer-events-none absolute right-2.5 bottom-2 text-[10px] tracking-tight text-muted-foreground/60">
+						{note.length || 0} / {ITEM_NOTE_MAX_LENGTH}
+					</span>
+				</div>
 			</div>
 
 			<div className="mt-2 flex flex-col gap-2">

@@ -15,6 +15,7 @@
   - Clicking the note pill works as an instant shortcut, automatically opening the editor and dropping your cursor right into the note field.
   - The import preview screen also identifies which incoming links contain personal notes.
   - Fully integrated with local-first export/import (JSON, CSV, TXT) and on-device syncing.
+  - **Browser Extension:** The extension popup now fully supports adding personal notes! The UI perfectly mirrors the web app's style and character tracking, and notes are instantly synced back to your local corner upon saving.
 
 ### Fixed
 
