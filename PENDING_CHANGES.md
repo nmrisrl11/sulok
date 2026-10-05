@@ -9,9 +9,14 @@
 
 ### Added
 
+- Command Palette search now matches domains and displays the parent folder context for each result.
 - Added support for the native OS Share menu (Web Share Target). You can now seamlessly share links from other apps directly to Sulok on Android and ChromeOS.
 
 ### Changed
+
+- The Command Palette and main Home page now use a sleek custom scroll-fade effect at the top and bottom edges.
+- Removed arbitrary display limits during active searches in the Command Palette, allowing all matched results to be displayed.
+- The Command Palette container and internal items now support the global squircle corner radius setting.
 
 - Centered the "Data Protected" card layout in Data & Storage settings to prevent uneven empty space when the protect button is hidden.
 - Adjusted "Sync Browser Bookmarks" visibility in Data & Storage settings to correctly show for resized desktop windows while remaining hidden on true mobile devices.

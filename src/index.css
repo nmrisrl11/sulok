@@ -2,6 +2,8 @@
 @plugin "@toolwind/corner-shape";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./scroll-fade-effect.css";
+
 @font-face {
 	font-family: "Manrope Variable";
 	font-style: normal;

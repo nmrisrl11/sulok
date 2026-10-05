@@ -81,7 +81,9 @@ The project is currently in active development, having recently completed **Phas
 - [x] Drag-and-drop organization
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls
+- [x] Command Palette Search Refinements (Domain-based search, parent-folder context hints)
 - [x] High-performance list virtualization (TanStack Virtual) for massive local datasets
+- [x] Custom CSS scroll-fade effects for major scrolling containers (Explorer, Command Palette)
 - [x] Favicon fetching
 - [x] Metadata preview on Add (OG Fetch)
 - [x] Dynamic SEO (`react-helmet-async`), Social Previews (Open Graph), and Agentic Browsing (robots.txt, sitemap.xml, llms.txt)

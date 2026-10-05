@@ -1,3 +1,4 @@
+export * from "./use-command-search";
 export * from "./use-copy-to-clipboard";
 export * from "./use-debounce";
 export * from "./use-debounced-query";
