@@ -24,7 +24,7 @@ export function HomeSkeleton({ className }: { className?: string }) {
 				</div>
 				<div className="flex w-full min-w-0 flex-col">
 					{/* ExplorerToolbar mock */}
-					<div className="mb-6 flex flex-col gap-4">
+					<div className="mb-4 flex flex-col gap-4">
 						<div className="flex min-h-10 flex-row items-center justify-between gap-2 px-1">
 							<div className="flex items-center gap-2">
 								<Skeleton className="h-5 w-5 rounded-md" />
@@ -53,18 +53,23 @@ export function HomeSkeleton({ className }: { className?: string }) {
 
 							<div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:flex sm:w-auto sm:flex-none sm:items-center sm:gap-2">
 								<Skeleton className="h-8 w-full rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-32 sm:flex-none" />
-								<Skeleton className="h-8 w-full rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-45 sm:flex-none" />
+								<Skeleton className="h-8 w-full rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:w-[170px] sm:flex-none" />
 							</div>
 
 							<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
 
-							<div className="col-span-2 flex items-center justify-between gap-2 sm:col-span-1 sm:w-auto sm:flex-none sm:justify-end sm:gap-1">
-								<div className="flex items-center gap-1">
-									<Skeleton className="h-8 w-16 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:w-8" />
-									<div className="mx-1 h-4 w-px bg-border/50" />
-									<div className="flex shrink-0 items-center gap-1">
-										<Skeleton className="size-8 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle" />
-										<Skeleton className="size-8 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle" />
+							<div className="col-span-2 flex w-full flex-col items-center justify-between gap-2 sm:col-span-1 sm:w-auto sm:flex-none sm:flex-row sm:justify-end sm:gap-1">
+								<div className="flex w-full shrink-0 items-center gap-1 rounded-lg bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto">
+									<Skeleton className="h-8 flex-1 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none" />
+									<Skeleton className="h-8 flex-1 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none" />
+								</div>
+
+								<div className="mx-1 hidden h-4 w-px bg-border/50 sm:block" />
+
+								<div className="flex w-full items-center gap-1 sm:w-auto">
+									<div className="flex w-full flex-1 shrink-0 items-center gap-1 rounded-lg bg-muted/40 p-0.5 corner-squircle supports-[corner-shape:squircle]:rounded-xl sm:w-auto sm:flex-none">
+										<Skeleton className="h-8 flex-1 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none" />
+										<Skeleton className="h-8 flex-1 rounded-md bg-background/50 supports-[corner-shape:squircle]:rounded-xl supports-[corner-shape:squircle]:corner-squircle sm:size-8 sm:flex-none" />
 									</div>
 								</div>
 							</div>

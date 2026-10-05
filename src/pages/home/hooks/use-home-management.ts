@@ -2,6 +2,7 @@ import { FolderRepository } from "@/db/repositories/folder-repository";
 import { ItemRepository } from "@/db/repositories/item-repository";
 import {
 	folderIdParser,
+	isFlatParser,
 	mixDataParser,
 	searchQueryParser,
 	sortOptionParser,
@@ -21,6 +22,7 @@ export function useHomeData() {
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [viewMode, setViewMode] = useQueryState("mode", viewModeParser);
 	const [mixData, setMixData] = useQueryState("mix", mixDataParser);
+	const [isFlat, setIsFlat] = useQueryState("flat", isFlatParser);
 	const [typeFilter, setTypeFilter] = useQueryState("type", typeFilterParser);
 
 	const clearItemSelection = useItemStore((state) => state.clearSelection);
@@ -38,15 +40,16 @@ export function useHomeData() {
 				q: searchQuery,
 				sort: dbSort,
 				dir: dbDir,
-				folderId:
-					view === "all"
+				folderId: isFlat
+					? undefined
+					: view === "all"
 						? folderId || null
 						: view === "favorites"
 							? folderId || undefined
 							: undefined,
 				view,
 			}),
-		[searchQuery, dbSort, dbDir, folderId, view],
+		[searchQuery, dbSort, dbDir, folderId, view, isFlat],
 	);
 
 	const foldersData = useLiveQuery(
@@ -88,7 +91,7 @@ export function useHomeData() {
 	}, [itemsData]);
 
 	let items = itemsData ?? [];
-	let folders = foldersData ?? [];
+	let folders = isFlat ? [] : (foldersData ?? []);
 	const totalItems = totalItemsData ?? 0;
 
 	if (typeFilter === "folders") {
@@ -118,7 +121,7 @@ export function useHomeData() {
 	useEffect(() => {
 		clearItemSelection();
 		clearFolderSelection();
-	}, [view, folderId, clearItemSelection, clearFolderSelection]);
+	}, [view, folderId, isFlat, clearItemSelection, clearFolderSelection]);
 
 	useEffect(() => {
 		return () => {
@@ -140,6 +143,8 @@ export function useHomeData() {
 		setViewMode,
 		mixData,
 		setMixData,
+		isFlat,
+		setIsFlat,
 		typeFilter,
 		setTypeFilter,
 		isFiltersActive,

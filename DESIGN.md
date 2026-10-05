@@ -189,7 +189,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Implements a "Title & Toolbar" pattern.
 - The top row (breadcrumbs + actions) acts as a "naked" header without a background pill, maximizing space. Breadcrumbs intelligently adapt to screen size, displaying up to 6 items on desktop and strictly 3 items on mobile.
 - Utility rows (Search & View modes) are placed in a floating pill container (`bg-muted/30 backdrop-blur-md`).
-- On mobile, it utilizes a responsive 3-row grid structure (Search, Filter, Actions) to remain accessible without horizontal overflow.
+- On mobile, it utilizes a responsive multi-row grid structure (Search, Filters, View Modifiers) to remain accessible without horizontal overflow.
 - **Mathematical Consistency**: For perfect nesting aesthetics, the inner inputs and buttons use a smaller border radius (e.g., `rounded-md` or `rounded-lg`) to perfectly nest inside the outer container's larger radius (`rounded-xl` or `rounded-2xl` with squircle) after accounting for the container's padding.
 - **Independent Breadcrumb Roots**: Top-level views like Favorites and Recycle Bin must be rendered as independent roots in the breadcrumb, not as children of the Library.
 
