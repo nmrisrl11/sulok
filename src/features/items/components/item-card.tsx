@@ -152,10 +152,7 @@ export const ItemCard = memo(
 							onClick={(e) => {
 								if (view === "trash" || isSelectionMode) e.preventDefault();
 							}}
-							className={cn(
-								"shrink-0 rounded-sm focus-visible:outline-none",
-								!item.logo && "flex size-10 items-center justify-center bg-muted/50",
-							)}
+							className="shrink-0 rounded-sm focus-visible:outline-none"
 							tabIndex={-1}
 							aria-hidden="true"
 						>

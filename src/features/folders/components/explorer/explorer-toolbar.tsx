@@ -94,6 +94,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 		if (typeFilter === "favorites") return "Favorites";
 		if (typeFilter === "folders") return "Folders Only";
 		if (typeFilter === "links") return "Links Only";
+		if (typeFilter === "with-notes") return "With Notes";
 		return "All Types";
 	};
 
@@ -182,6 +183,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 									<SelectItem value="favorites">Favorites</SelectItem>
 									<SelectItem value="folders">Folders Only</SelectItem>
 									<SelectItem value="links">Links Only</SelectItem>
+									<SelectItem value="with-notes">With Notes</SelectItem>
 								</SelectGroup>
 								{availableDomains.length > 0 && (
 									<>

@@ -16,10 +16,12 @@
   - The import preview screen also identifies which incoming links contain personal notes.
   - Fully integrated with local-first export/import (JSON, CSV, TXT) and on-device syncing.
   - **Browser Extension:** The extension popup now fully supports adding personal notes! The UI perfectly mirrors the web app's style and character tracking, and notes are instantly synced back to your local corner upon saving.
+- **With Notes Filter:** Added a new "With Notes" filter option to the Explorer toolbar dropdown. This allows you to instantly filter the explorer to only display links that contain personal notes or annotations.
 
 ### Fixed
 
 - **Command Palette UI:** Fixed a visual clipping bug where the smooth scroll-fade effect would incorrectly mask the bottom of the list when there were too few search results to require scrolling.
+- **Favicon Alignment:** Fixed a visual alignment issue on list cards where links without a custom logo fallback would render at a different width than standard favicons, pushing their titles out of alignment. All favicons now strictly respect a uniform 24x24 pixel grid.
 
 ---
 
