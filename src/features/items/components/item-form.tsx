@@ -9,7 +9,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { APP_INFO } from "@/constants/app-info";
+import { ITEM_NOTE_MAX_LENGTH } from "@/constants/validation-constants";
 import { FolderRepository } from "@/db/repositories/folder-repository";
 import { useDebounce } from "@/hooks";
 import { formatUrl } from "@/lib/utils";
@@ -28,6 +30,7 @@ interface ItemFormProps {
 	isSubmitting?: boolean;
 	submitError?: string | null;
 	isEditing?: boolean;
+	initialFocusField?: "note" | null;
 }
 
 export function ItemForm({
@@ -37,6 +40,7 @@ export function ItemForm({
 	isSubmitting,
 	submitError,
 	isEditing = false,
+	initialFocusField,
 }: ItemFormProps) {
 	const {
 		register,
@@ -44,6 +48,7 @@ export function ItemForm({
 		setValue,
 		getValues,
 		control,
+		setFocus,
 		formState: { errors },
 	} = useForm<ItemFormValues>({
 		resolver: zodResolver(itemSchema),
@@ -53,16 +58,27 @@ export function ItemForm({
 			description: defaultValues?.description || "",
 			image: defaultValues?.image || "",
 			logo: defaultValues?.logo || "",
+			note: defaultValues?.note || "",
 			folderId: defaultValues?.folderId || "unorganized", // Using "unorganized" as a special ID for null/none
 		},
 	});
 
 	const folders = useLiveQuery(() => FolderRepository.getAll()) || [];
 	const selectedFolderId = useWatch({ control, name: "folderId" });
+	const noteValue = useWatch({ control, name: "note" });
 
 	const rawUrl = useWatch({ control, name: "url" }) || "";
 	const debouncedUrl = useDebounce(rawUrl, 500);
 	const formattedUrl = formatUrl(debouncedUrl);
+
+	useEffect(() => {
+		if (initialFocusField) {
+			const timeout = setTimeout(() => {
+				setFocus(initialFocusField);
+			}, 100);
+			return () => clearTimeout(timeout);
+		}
+	}, [initialFocusField, setFocus]);
 
 	let fetchUrl = formattedUrl;
 	try {
@@ -130,6 +146,7 @@ export function ItemForm({
 			description: getValues("description") || metadata?.description || "",
 			image: getValues("image") || metadata?.image || undefined,
 			logo: getValues("logo") || metadata?.logo || undefined,
+			note: data.note || undefined,
 			folderId: getValues("folderId") === "unorganized" ? undefined : getValues("folderId"),
 		});
 	};
@@ -180,6 +197,28 @@ export function ItemForm({
 							))}
 						</SelectContent>
 					</Select>
+				</div>
+
+				<div className="space-y-2">
+					<Label htmlFor="note" className="flex items-center gap-2">
+						Why are you saving this?
+						<span className="text-xs font-normal text-muted-foreground">(Optional)</span>
+					</Label>
+					<div className="relative">
+						<Textarea
+							id="note"
+							placeholder="Leave a memo for your future self..."
+							className="field-sizing-content min-h-20 resize-none pb-7"
+							maxLength={ITEM_NOTE_MAX_LENGTH}
+							{...register("note")}
+						/>
+						<span className="pointer-events-none absolute right-2.5 bottom-2 text-[10px] tracking-tight text-muted-foreground/60">
+							{noteValue?.length || 0} / {ITEM_NOTE_MAX_LENGTH}
+						</span>
+					</div>
+					{errors.note && (
+						<p className="text-sm font-medium text-destructive">{errors.note.message}</p>
+					)}
 				</div>
 
 				<div className="flex flex-col gap-2">

@@ -1,3 +1,4 @@
+import { ITEM_NOTE_MAX_LENGTH } from "@/constants/validation-constants";
 import { formatUrl } from "@/lib/utils";
 import { z } from "zod";
 import { folderSchema } from "./folder.schema";
@@ -34,6 +35,10 @@ export const importItemSchema = z.object({
 	logo: z.string().optional(),
 	folderId: z.string().optional(),
 	isFavorite: z.boolean().optional(),
+	note: z.preprocess(
+		(val) => (val === null ? undefined : val),
+		z.string().max(ITEM_NOTE_MAX_LENGTH).optional(),
+	),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()

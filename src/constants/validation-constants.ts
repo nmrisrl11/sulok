@@ -1,0 +1,5 @@
+export const ITEM_TITLE_MAX_LENGTH = 100;
+export const ITEM_DESCRIPTION_MAX_LENGTH = 500;
+export const ITEM_NOTE_MAX_LENGTH = 2000;
+export const FOLDER_NAME_MIN_LENGTH = 1;
+export const FOLDER_NAME_MAX_LENGTH = 50;

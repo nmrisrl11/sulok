@@ -5,6 +5,7 @@ import {
 	ExternalLinkIcon,
 	FileEditIcon,
 	FolderIcon,
+	NoteIcon,
 	TrashClockIcon,
 	TrashUndoIcon,
 	TrashXMarkIcon,
@@ -183,11 +184,46 @@ export const ItemCard = memo(
 								>
 									{titleToDisplay}
 								</span>
-								{item.title && item.title !== item.url && (
-									<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
-										{item.url}
-									</span>
-								)}
+								<div className="mt-0.5 flex items-center gap-1.5 truncate">
+									{item.title && item.title !== item.url && (
+										<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+											{item.url}
+										</span>
+									)}
+									{!!item.note && view !== "trash" && (
+										<div
+											role="button"
+											tabIndex={0}
+											onClick={(e) => {
+												e.preventDefault();
+												e.stopPropagation();
+												if (isSelectionMode) {
+													toggleSelection(item.id);
+													return;
+												}
+												useItemStore.getState().openEditDialog(item, "note");
+											}}
+											onKeyDown={(e) => {
+												if (e.key === "Enter" || e.key === " ") {
+													e.preventDefault();
+													e.stopPropagation();
+													if (isSelectionMode) {
+														toggleSelection(item.id);
+														return;
+													}
+													useItemStore.getState().openEditDialog(item, "note");
+												}
+											}}
+											className="flex shrink-0 cursor-pointer items-center gap-1 rounded-sm border border-border/50 bg-secondary/80 px-1.5 py-0.5 text-secondary-foreground transition-colors corner-squircle hover:bg-secondary supports-[corner-shape:squircle]:rounded-full"
+											title="Edit Note"
+										>
+											<NoteIcon className="size-2.5" />
+											<span className="text-[9px] leading-none font-medium tracking-widest uppercase opacity-80">
+												Note
+											</span>
+										</div>
+									)}
+								</div>
 								{view === "trash" && item.deletedAt && (
 									<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
 										{getTrashRetentionText(item.deletedAt, today)}
@@ -342,5 +378,6 @@ export const ItemCard = memo(
 		prev.item.logo === next.item.logo &&
 		prev.item.isFavorite === next.item.isFavorite &&
 		prev.item.folderId === next.item.folderId &&
+		prev.item.note === next.item.note &&
 		prev.isOverlay === next.isOverlay,
 );

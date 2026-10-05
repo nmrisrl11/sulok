@@ -13,6 +13,7 @@ export interface Item {
 	updatedAt: number;
 	deletedAt?: number;
 	isFavorite?: boolean;
+	note?: string;
 }
 
 export interface Folder {

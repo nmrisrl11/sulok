@@ -1,4 +1,4 @@
-import { FolderIcon } from "@/components/icons";
+import { FolderIcon, NoteIcon } from "@/components/icons";
 import { SiteFavicon } from "@/components/site-favicon";
 import { Button } from "@/components/ui/button";
 import {
@@ -138,9 +138,22 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 											/>
 											<div className="min-w-0 flex-1">
 												<p className="truncate text-sm font-medium">{item.title || hostname}</p>
-												<p className="truncate font-mono text-[11px] text-muted-foreground">
-													{item.url}
-												</p>
+												<div className="mt-0.5 flex items-center gap-1.5 truncate">
+													<span className="truncate font-mono text-[11px] text-muted-foreground">
+														{item.url}
+													</span>
+													{!!item.note && (
+														<div
+															className="flex shrink-0 items-center gap-1 rounded-sm border border-border/50 bg-secondary/80 px-1.5 py-0.5 text-secondary-foreground corner-squircle supports-[corner-shape:squircle]:rounded-full"
+															title="Contains a note"
+														>
+															<NoteIcon className="size-2.5" />
+															<span className="text-[9px] leading-none font-medium tracking-widest uppercase opacity-80">
+																Note
+															</span>
+														</div>
+													)}
+												</div>
 											</div>
 										</div>
 										{item.isDuplicate && (

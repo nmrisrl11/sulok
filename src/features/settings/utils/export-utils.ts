@@ -69,6 +69,7 @@ export async function exportData(format: "json" | "csv" | "txt") {
 			"folderId_or_parentId",
 			"createdAt",
 			"updatedAt",
+			"note",
 		];
 
 		const folderRows = folders.map((folder) => {
@@ -83,6 +84,7 @@ export async function exportData(format: "json" | "csv" | "txt") {
 				folder.parentId || "",
 				folder.createdAt,
 				folder.updatedAt,
+				"",
 			]
 				.map((val, index) => {
 					let finalVal = val;
@@ -112,6 +114,7 @@ export async function exportData(format: "json" | "csv" | "txt") {
 				item.folderId || "",
 				item.createdAt,
 				item.updatedAt,
+				item.note || "",
 			]
 				.map((val, index) => {
 					let finalVal = val;
@@ -149,6 +152,7 @@ export async function exportData(format: "json" | "csv" | "txt") {
 			if (item.folderId) block += `\nFolderId: ${item.folderId}`;
 			if (item.createdAt) block += `\nCreatedAt: ${formatDate(item.createdAt)}`;
 			if (item.updatedAt) block += `\nUpdatedAt: ${formatDate(item.updatedAt)}`;
+			if (item.note) block += `\nNote: ${encodeURIComponent(item.note)}`;
 			return block;
 		});
 

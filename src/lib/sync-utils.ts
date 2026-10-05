@@ -90,6 +90,7 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 					createdAt: i.createdAt ?? Date.now(),
 					updatedAt: i.updatedAt ?? Date.now(),
 					isFavorite: i.isFavorite ?? undefined,
+					note: i.note ?? undefined,
 				})),
 			);
 		}

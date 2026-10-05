@@ -29,7 +29,14 @@ export * from "./features/screen-app-icon";
 export * from "./items/copy-icon";
 export * from "./items/external-link-icon";
 export * from "./items/file-edit-icon";
+export * from "./items/note-icon";
 export * from "./items/page-icon";
+
+// System
+export * from "./system/about-icon";
+export * from "./system/get-app-icon";
+export * from "./system/settings-icon";
+export * from "./system/updates-icon";
 
 // Sound
 export * from "./sound/bloom-icon";

@@ -8,12 +8,13 @@ interface ItemState {
 	initialUrl: string | null;
 	initialTitle: string | null;
 	initialFolderId: string | null;
+	initialFocusField: "note" | null;
 	selectedIds: string[];
 
 	// Actions
 	setDialogOpen: (open: boolean) => void;
 	openCreateDialog: (url?: string, folderId?: string | null, title?: string) => void;
-	openEditDialog: (item: Item) => void;
+	openEditDialog: (item: Item, focusField?: "note") => void;
 
 	// DB Actions
 	addItem: (data: Omit<Item, "id" | "createdAt" | "updatedAt">) => Promise<void>;
@@ -40,6 +41,7 @@ export const useItemStore = create<ItemState>((set, get) => ({
 	initialUrl: null,
 	initialTitle: null,
 	initialFolderId: null,
+	initialFocusField: null,
 	selectedIds: [],
 
 	setDialogOpen: (open) =>
@@ -50,6 +52,7 @@ export const useItemStore = create<ItemState>((set, get) => ({
 				initialUrl: null,
 				initialTitle: null,
 				initialFolderId: null,
+				initialFocusField: null,
 			}),
 		})),
 
@@ -60,14 +63,16 @@ export const useItemStore = create<ItemState>((set, get) => ({
 			initialUrl: url || null,
 			initialTitle: title || null,
 			initialFolderId: folderId || null,
+			initialFocusField: null,
 		}),
-	openEditDialog: (item) =>
+	openEditDialog: (item, focusField) =>
 		set({
 			isDialogOpen: true,
 			editingItem: item,
 			initialUrl: null,
 			initialTitle: null,
 			initialFolderId: null,
+			initialFocusField: focusField || null,
 		}),
 
 	addItem: async (data) => {
