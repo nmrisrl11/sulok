@@ -98,6 +98,9 @@ export function useHomeData() {
 	} else if (typeFilter === "favorites") {
 		items = items.filter((i) => i.isFavorite);
 		folders = folders.filter((f) => f.isFavorite);
+	} else if (typeFilter === "with-notes") {
+		folders = [];
+		items = items.filter((i) => i.note && i.note.trim().length > 0);
 	} else if (typeFilter.startsWith("domain:")) {
 		folders = [];
 		const domain = typeFilter.slice(7);
