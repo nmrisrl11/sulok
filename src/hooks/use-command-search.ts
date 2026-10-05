@@ -23,32 +23,34 @@ export function useCommandSearch(query: string) {
 		// If no query, return 5 recent items/folders by default
 		if (!q) {
 			return {
-				folders: allFolders.slice(0, 5),
+				folders: [...allFolders].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 5),
 				items: allItems.slice(0, 5),
 				folderMap,
 			};
 		}
 
-		// Filter folders (no limit when searching)
-		const filteredFolders = allFolders.filter((f) => f.name.toLowerCase().includes(q));
+		// Filter folders (limit to 50 when searching)
+		const filteredFolders = allFolders.filter((f) => f.name.toLowerCase().includes(q)).slice(0, 50);
 
-		// Filter items (search by title, url, domain, or description - no limit when searching)
-		const filteredItems = allItems.filter((item) => {
-			const domainMatch = (() => {
-				try {
-					return new URL(item.url).hostname.replace(/^www\./, "").includes(q);
-				} catch {
-					return false;
-				}
-			})();
+		// Filter items (search by title, url, domain, or description - limit to 50 when searching)
+		const filteredItems = allItems
+			.filter((item) => {
+				const domainMatch = (() => {
+					try {
+						return new URL(item.url).hostname.replace(/^www\./, "").includes(q);
+					} catch {
+						return false;
+					}
+				})();
 
-			return (
-				item.title?.toLowerCase().includes(q) ||
-				item.url.toLowerCase().includes(q) ||
-				domainMatch ||
-				item.description?.toLowerCase().includes(q)
-			);
-		});
+				return (
+					item.title?.toLowerCase().includes(q) ||
+					item.url.toLowerCase().includes(q) ||
+					domainMatch ||
+					item.description?.toLowerCase().includes(q)
+				);
+			})
+			.slice(0, 50);
 
 		return {
 			folders: filteredFolders,

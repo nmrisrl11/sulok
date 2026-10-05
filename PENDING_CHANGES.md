@@ -15,7 +15,7 @@
 ### Changed
 
 - The Command Palette and main Home page now use a sleek custom scroll-fade effect at the top and bottom edges.
-- Removed arbitrary display limits during active searches in the Command Palette, allowing all matched results to be displayed.
+- Expanded Command Palette search limits, allowing up to 50 matching results to be displayed instantly while maintaining rendering performance.
 - The Command Palette container and internal items now support the global squircle corner radius setting.
 
 - Centered the "Data Protected" card layout in Data & Storage settings to prevent uneven empty space when the protect button is hidden.

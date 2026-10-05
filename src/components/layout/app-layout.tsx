@@ -53,7 +53,7 @@ function GlobalDialogs() {
 	const isFolderDialogOpen = useFolderStore((state) => state.isDialogOpen);
 	const isConfirmationDialogOpen = useConfirmationStore((state) => state.isOpen);
 	const isMoveDialogOpen = useMoveStore((state) => state.isOpen);
-	const { isOpen: isCommandOpen } = useCommandStore();
+	const isCommandOpen = useCommandStore((state) => state.isOpen);
 
 	const [hasLoadedItemDialog, setHasLoadedItemDialog] = useState(isItemDialogOpen);
 	const [hasLoadedFolderDialog, setHasLoadedFolderDialog] = useState(isFolderDialogOpen);
