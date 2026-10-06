@@ -46,41 +46,43 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 
 	const foldersToImport = parsedData.validFolders.filter((f) => !f.isDuplicate);
 
-	const existingItems = await db.items.toArray();
-	const existingItemsByUrl = new Map(existingItems.map((item) => [normalizeUrl(item.url), item]));
-
-	const itemsToPut: import("@/db/db").Item[] = [];
-
-	for (const { isDuplicate, ...item } of parsedData.validItems) {
-		if (isDuplicate) {
-			const existingItem = existingItemsByUrl.get(normalizeUrl(item.url));
-			if (existingItem) {
-				const incomingUpdatedAt = item.updatedAt || Date.now();
-				const existingUpdatedAt = existingItem.updatedAt || 0;
-				if (incomingUpdatedAt > existingUpdatedAt) {
-					itemsToPut.push({
-						...existingItem,
-						...item,
-						id: existingItem.id, // retain original ID
-						createdAt: item.createdAt ?? existingItem.createdAt,
-						updatedAt: incomingUpdatedAt,
-					});
-				}
-			}
-		} else {
-			itemsToPut.push({
-				...item,
-				id: item.id as string,
-				folderId: item.folderId ?? undefined,
-				createdAt: item.createdAt ?? Date.now(),
-				updatedAt: item.updatedAt ?? Date.now(),
-				isFavorite: item.isFavorite ?? undefined,
-				note: item.note ?? undefined,
-			});
-		}
-	}
+	let hasDataToPut = foldersToImport.length > 0;
 
 	await db.transaction("rw", db.folders, db.items, async () => {
+		const existingItems = await db.items.toArray();
+		const existingItemsByUrl = new Map(existingItems.map((item) => [normalizeUrl(item.url), item]));
+
+		const itemsToPut: import("@/db/db").Item[] = [];
+
+		for (const { isDuplicate, ...item } of parsedData.validItems) {
+			if (isDuplicate) {
+				const existingItem = existingItemsByUrl.get(normalizeUrl(item.url));
+				if (existingItem) {
+					const incomingUpdatedAt = item.updatedAt || Date.now();
+					const existingUpdatedAt = existingItem.updatedAt || 0;
+					if (incomingUpdatedAt > existingUpdatedAt) {
+						itemsToPut.push({
+							...existingItem,
+							...item,
+							id: existingItem.id, // retain original ID
+							createdAt: item.createdAt ?? existingItem.createdAt,
+							updatedAt: incomingUpdatedAt,
+						});
+					}
+				}
+			} else {
+				itemsToPut.push({
+					...item,
+					id: item.id as string,
+					folderId: item.folderId ?? undefined,
+					createdAt: item.createdAt ?? Date.now(),
+					updatedAt: item.updatedAt ?? Date.now(),
+					isFavorite: item.isFavorite ?? undefined,
+					note: item.note ?? undefined,
+				});
+			}
+		}
+
 		if (foldersToImport.length > 0) {
 			await db.folders.bulkPut(
 				foldersToImport.map((f) => ({
@@ -97,10 +99,11 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 
 		if (itemsToPut.length > 0) {
 			await db.items.bulkPut(itemsToPut);
+			hasDataToPut = true;
 		}
 	});
 
-	if (itemsToPut.length > 0) {
+	if (hasDataToPut) {
 		setHasDataHint(true);
 	}
 

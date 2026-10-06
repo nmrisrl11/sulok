@@ -103,6 +103,19 @@ export function SiteFavicon({
 		);
 	}
 
+	const logoSrc = (() => {
+		if (bypassCache && logo && logo.startsWith("http")) {
+			try {
+				const u = new URL(logo);
+				u.searchParams.set("bypass_cache", "1");
+				return u.toString();
+			} catch {
+				return logo;
+			}
+		}
+		return logo;
+	})();
+
 	return (
 		<div
 			className={cn(
@@ -112,11 +125,7 @@ export function SiteFavicon({
 		>
 			{logo && !logoError ? (
 				<img
-					src={
-						bypassCache && logo.startsWith("http")
-							? `${logo}${logo.includes("?") ? "&" : "?"}bypass_cache=1`
-							: logo
-					}
+					src={logoSrc}
 					alt="favicon"
 					className={cn("h-3/4 w-3/4 object-contain", needsInvert && "invert")}
 					loading="lazy"
