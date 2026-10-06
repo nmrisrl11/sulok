@@ -135,6 +135,7 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 												logo={item.logo}
 												className="h-5 w-5 shrink-0"
 												size={64}
+												bypassCache={true}
 											/>
 											<div className="min-w-0 flex-1">
 												<p className="truncate text-sm font-medium">{item.title || hostname}</p>

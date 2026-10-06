@@ -77,7 +77,10 @@ export default defineConfig({
 							navigateFallback: "/index.html",
 							runtimeCaching: [
 								{
-									urlPattern: /^https:\/\/www\.google\.com\/s2\/favicons/,
+									urlPattern: ({ url }) =>
+										url.hostname === "www.google.com" &&
+										url.pathname.startsWith("/s2/favicons") &&
+										!url.searchParams.has("bypass_cache"),
 									handler: "StaleWhileRevalidate",
 									options: {
 										cacheName: "google-favicons-cache",
@@ -92,7 +95,9 @@ export default defineConfig({
 									},
 								},
 								{
-									urlPattern: ({ url }) => /\.(?:png|jpg|jpeg|svg|gif|webp)$/i.test(url.pathname),
+									urlPattern: ({ url }) =>
+										/\.(?:png|jpg|jpeg|svg|gif|webp)$/i.test(url.pathname) &&
+										!url.searchParams.has("bypass_cache"),
 									handler: "StaleWhileRevalidate",
 									options: {
 										cacheName: "external-images-cache",
