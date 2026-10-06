@@ -8,6 +8,7 @@ interface SiteFaviconProps {
 	className?: string;
 	size?: number; // size in pixels, used for fetching from Google
 	smartInvert?: boolean;
+	bypassCache?: boolean;
 }
 
 export function SiteFavicon({
@@ -16,6 +17,7 @@ export function SiteFavicon({
 	className,
 	size = 64,
 	smartInvert = false,
+	bypassCache = false,
 }: SiteFaviconProps) {
 	const [error, setError] = useState(false);
 	const [logoError, setLogoError] = useState(false);
@@ -110,7 +112,11 @@ export function SiteFavicon({
 		>
 			{logo && !logoError ? (
 				<img
-					src={logo}
+					src={
+						bypassCache && logo.startsWith("http")
+							? `${logo}${logo.includes("?") ? "&" : "?"}bypass_cache=1`
+							: logo
+					}
 					alt="favicon"
 					className={cn("h-3/4 w-3/4 object-contain", needsInvert && "invert")}
 					loading="lazy"
@@ -119,7 +125,7 @@ export function SiteFavicon({
 				/>
 			) : (
 				<img
-					src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
+					src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}${bypassCache ? "&bypass_cache=1" : ""}`}
 					alt="favicon"
 					className="h-3/4 w-3/4 object-contain"
 					loading="lazy"

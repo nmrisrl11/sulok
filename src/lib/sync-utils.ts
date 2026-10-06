@@ -1,12 +1,6 @@
 import { db } from "@/db/db";
 import { parseImportedSettings } from "@/features/settings/utils/settings-sync-utils";
 import { setHasDataHint } from "@/lib/storage";
-import {
-	importFolderSchema,
-	importItemSchema,
-	type ImportFolder,
-	type ImportItem,
-} from "@/schemas/import.schema";
 import { workspaceThemeSchema } from "@/schemas/settings.schema";
 import { useSettingsStore } from "@/stores/settings-store";
 
@@ -42,34 +36,54 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 
 	const { folders, items, settings, theme } = payload;
 
-	const validatedFolders: ImportFolder[] = [];
-	if (Array.isArray(folders)) {
-		for (const folder of folders) {
-			const result = importFolderSchema.safeParse(folder);
-			if (result.success) {
-				validatedFolders.push(result.data);
-			} else {
-				console.warn("Skipping invalid folder during sync:", result.error);
-			}
-		}
-	}
+	const { processImportPayload } = await import("@/features/settings/utils/import-utils");
+	const parsedData = await processImportPayload({
+		folders: Array.isArray(folders) ? folders : [],
+		items: Array.isArray(items) ? items : [],
+	});
 
-	const validatedItems: ImportItem[] = [];
-	if (Array.isArray(items)) {
-		for (const item of items) {
-			const result = importItemSchema.safeParse(item);
-			if (result.success) {
-				validatedItems.push(result.data);
-			} else {
-				console.warn("Skipping invalid item during sync:", result.error);
+	const { normalizeUrl } = await import("@/lib/utils");
+
+	const foldersToImport = parsedData.validFolders.filter((f) => !f.isDuplicate);
+
+	const existingItems = await db.items.toArray();
+	const existingItemsByUrl = new Map(existingItems.map((item) => [normalizeUrl(item.url), item]));
+
+	const itemsToPut: import("@/db/db").Item[] = [];
+
+	for (const { isDuplicate, ...item } of parsedData.validItems) {
+		if (isDuplicate) {
+			const existingItem = existingItemsByUrl.get(normalizeUrl(item.url));
+			if (existingItem) {
+				const incomingUpdatedAt = item.updatedAt || Date.now();
+				const existingUpdatedAt = existingItem.updatedAt || 0;
+				if (incomingUpdatedAt > existingUpdatedAt) {
+					itemsToPut.push({
+						...existingItem,
+						...item,
+						id: existingItem.id, // retain original ID
+						createdAt: item.createdAt ?? existingItem.createdAt,
+						updatedAt: incomingUpdatedAt,
+					});
+				}
 			}
+		} else {
+			itemsToPut.push({
+				...item,
+				id: item.id as string,
+				folderId: item.folderId ?? undefined,
+				createdAt: item.createdAt ?? Date.now(),
+				updatedAt: item.updatedAt ?? Date.now(),
+				isFavorite: item.isFavorite ?? undefined,
+				note: item.note ?? undefined,
+			});
 		}
 	}
 
 	await db.transaction("rw", db.folders, db.items, async () => {
-		if (validatedFolders.length > 0) {
+		if (foldersToImport.length > 0) {
 			await db.folders.bulkPut(
-				validatedFolders.map((f) => ({
+				foldersToImport.map((f) => ({
 					...f,
 					id: f.id as string,
 					parentId: f.parentId ?? null,
@@ -81,22 +95,12 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 			);
 		}
 
-		if (validatedItems.length > 0) {
-			await db.items.bulkPut(
-				validatedItems.map((i) => ({
-					...i,
-					id: i.id as string,
-					folderId: i.folderId ?? undefined,
-					createdAt: i.createdAt ?? Date.now(),
-					updatedAt: i.updatedAt ?? Date.now(),
-					isFavorite: i.isFavorite ?? undefined,
-					note: i.note ?? undefined,
-				})),
-			);
+		if (itemsToPut.length > 0) {
+			await db.items.bulkPut(itemsToPut);
 		}
 	});
 
-	if (validatedItems.length > 0) {
+	if (itemsToPut.length > 0) {
 		setHasDataHint(true);
 	}
 

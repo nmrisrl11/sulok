@@ -39,6 +39,17 @@ function DangerZoneAction({ title, description, icon: Icon, onClick }: DangerZon
 	);
 }
 
+const clearCaches = async () => {
+	if ("caches" in window) {
+		try {
+			const keys = await caches.keys();
+			await Promise.all(keys.map((key) => caches.delete(key)));
+		} catch {
+			// ignore cache deletion errors
+		}
+	}
+};
+
 export function DangerZoneSection() {
 	const confirm = useConfirmationStore((state) => state.confirm);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
@@ -69,6 +80,7 @@ export function DangerZoneSection() {
 										await db.items.clear();
 										await db.folders.clear();
 									});
+									await clearCaches();
 									setHasDataHint(false);
 									window.location.reload();
 								},
@@ -125,7 +137,7 @@ export function DangerZoneSection() {
 							}, 500);
 						});
 
-						await Promise.all([db.delete(), resetExt]);
+						await Promise.all([db.delete(), resetExt, clearCaches()]);
 
 						localStorage.clear();
 						window.location.reload();
