@@ -1,6 +1,6 @@
 import { FolderIcon as CustomFolderIcon, TrashUndoIcon, TrashXMarkIcon } from "@/components/icons";
 import { APP_INFO } from "@/constants/app-info";
-import { useIsTouchDevice } from "@/hooks";
+import { useMockAnimation } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { GlobeIcon, MousePointer2Icon } from "lucide-react";
 
@@ -32,11 +32,11 @@ const BOTTOM_LINKS = [
 ];
 
 export function SafetyNetMock() {
-	const mobileSimulate = useIsTouchDevice();
+	const { isActive, prefersReducedMotion } = useMockAnimation(1500);
 
 	return (
-		<div className="group relative flex h-72 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
-			<div className="relative z-10 flex w-full max-w-70 flex-col gap-1 p-4">
+		<div className="relative flex h-72 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
+			<div className="relative z-10 flex w-full flex-col gap-1 p-4">
 				{/* Top Faded Folders */}
 				{TOP_FOLDERS.map((folder, i) => (
 					<div
@@ -62,9 +62,9 @@ export function SafetyNetMock() {
 				<div
 					className={cn(
 						"relative flex items-center justify-between rounded-xl border px-3 py-3 transition-all duration-300 corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-						"border-transparent bg-transparent",
-						"group-hover:border-border/50 group-hover:bg-background group-hover:shadow-sm",
-						mobileSimulate && "border-border/50 bg-background shadow-sm",
+						isActive
+							? "border-border/50 bg-background shadow-sm"
+							: "border-transparent bg-transparent",
 					)}
 				>
 					<div className="flex min-w-0 flex-1 items-center gap-3">
@@ -74,8 +74,7 @@ export function SafetyNetMock() {
 						<div
 							className={cn(
 								"flex flex-col overflow-hidden transition-all duration-300",
-								"group-hover:pr-18",
-								mobileSimulate && "pr-18",
+								isActive ? "pr-18" : "",
 							)}
 						>
 							<span className="truncate text-sm leading-none font-medium text-foreground">
@@ -97,15 +96,13 @@ export function SafetyNetMock() {
 						<div
 							className={cn(
 								"flex h-9 items-center rounded-lg border bg-muted/40 p-0.5 opacity-0 transition-all duration-500 corner-squircle supports-[corner-shape:squircle]:rounded-xl",
-								"group-hover:opacity-100",
-								mobileSimulate && "opacity-100",
+								isActive && "opacity-100",
 							)}
 						>
 							<div
 								className={cn(
 									"flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-full",
-									"group-hover:bg-muted group-hover:text-foreground dark:group-hover:bg-muted/50",
-									mobileSimulate && "bg-muted text-foreground dark:bg-muted/50",
+									isActive ? "bg-muted text-foreground dark:bg-muted/50" : "",
 								)}
 							>
 								<TrashUndoIcon className="h-4 w-4" />
@@ -121,16 +118,14 @@ export function SafetyNetMock() {
 					<div
 						className={cn(
 							"absolute top-1/2 right-14 z-20 h-5 w-5 translate-y-6 opacity-0 drop-shadow-md transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-							"group-hover:translate-x-3 group-hover:translate-y-1 group-hover:scale-95 group-hover:opacity-100",
-							mobileSimulate && "translate-x-3 translate-y-1 opacity-100",
+							isActive ? "translate-x-3 translate-y-1 scale-95 opacity-100" : "",
 						)}
 					>
 						<MousePointer2Icon className="h-full w-full fill-foreground text-foreground" />
 						<div
 							className={cn(
 								"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/40 opacity-0 transition-all duration-700",
-								"group-hover:animate-ping group-hover:opacity-100",
-								mobileSimulate && "hidden",
+								isActive && !prefersReducedMotion && "animate-ping opacity-100",
 							)}
 						/>
 					</div>
