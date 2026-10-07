@@ -121,7 +121,7 @@ export function SyncSettingsSetting() {
 					<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 						<SettingsIcon className="h-4 w-4" /> Settings Data (JSON)
 					</p>
-					<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
+					<p className="mt-1 text-xs text-muted-foreground">
 						Backup or restore your app configurations, appearance, and personal preferences.
 					</p>
 				</div>

@@ -1,5 +1,6 @@
 import {
 	appearanceSettingsSchema,
+	backupReminderFrequencySchema,
 	privacySettingsSchema,
 	soundSettingsSchema,
 	suloSettingsSchema,
@@ -23,6 +24,7 @@ export function exportSettings(settings: Settings, workspaceTheme: string) {
 
 export interface ImportedSettingsPayload extends Partial<Settings> {
 	workspaceTheme?: string;
+	backupReminderFrequency?: number | "off";
 }
 
 export function parseImportedSettings(text: string): ImportedSettingsPayload {
@@ -39,7 +41,8 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 			"appearanceSettings" in parsed ||
 			"soundSettings" in parsed ||
 			"suloSettings" in parsed ||
-			"privacySettings" in parsed;
+			"privacySettings" in parsed ||
+			"backupReminderFrequency" in parsed;
 
 		if (!hasSettingsKeys) {
 			throw new Error("File does not contain valid Sulok settings.");
@@ -71,6 +74,11 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 		if (parsed.privacySettings) {
 			const res = privacySettingsSchema.safeParse(parsed.privacySettings);
 			if (res.success) sanitized.privacySettings = res.data as Settings["privacySettings"];
+		}
+
+		if ("backupReminderFrequency" in parsed && parsed.backupReminderFrequency !== undefined) {
+			const res = backupReminderFrequencySchema.safeParse(parsed.backupReminderFrequency);
+			if (res.success) sanitized.backupReminderFrequency = res.data;
 		}
 
 		return sanitized;

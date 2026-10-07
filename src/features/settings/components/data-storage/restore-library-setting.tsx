@@ -67,7 +67,7 @@ export function RestoreLibrarySetting() {
 				<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 					<UploadIcon className="h-4 w-4" /> Restore Library
 				</p>
-				<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
+				<p className="mt-1 text-xs text-muted-foreground">
 					Bring back your saved corners from a previous backup file or import existing bookmarks
 					directly from your browser.
 				</p>

@@ -184,7 +184,7 @@ export function DeviceSyncSetting() {
 							Recommended
 						</span>
 					</p>
-					<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
+					<p className="mt-1 text-xs text-muted-foreground">
 						Transfer your links, folders, and workspace theme directly to another device over your
 						local network. No cloud required.
 					</p>
