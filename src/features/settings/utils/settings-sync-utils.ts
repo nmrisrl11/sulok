@@ -1,5 +1,7 @@
+import { BACKUP_MINIMUM_DATA_THRESHOLD } from "@/constants/validation-constants";
 import {
 	appearanceSettingsSchema,
+	backupReminderFrequencySchema,
 	privacySettingsSchema,
 	soundSettingsSchema,
 	suloSettingsSchema,
@@ -8,7 +10,16 @@ import {
 import type { Settings } from "@/types/settings";
 
 export function exportSettings(settings: Settings, workspaceTheme: string) {
-	const content = JSON.stringify({ ...settings, workspaceTheme }, null, 2);
+	const {
+		onboardingStatus: _onboardingStatus,
+		onboardingStep: _onboardingStep,
+		hasDismissedInstallNudge: _hasDismissedInstallNudge,
+		lastBackupDate: _lastBackupDate,
+		isBackupReminderSnoozed: _isBackupReminderSnoozed,
+		...settingsToExport
+	} = settings;
+
+	const content = JSON.stringify({ ...settingsToExport, workspaceTheme }, null, 2);
 	const blob = new Blob([content], { type: "application/json" });
 	const url = URL.createObjectURL(blob);
 
@@ -23,6 +34,7 @@ export function exportSettings(settings: Settings, workspaceTheme: string) {
 
 export interface ImportedSettingsPayload extends Partial<Settings> {
 	workspaceTheme?: string;
+	backupReminderFrequency?: number | "off";
 }
 
 export function parseImportedSettings(text: string): ImportedSettingsPayload {
@@ -39,7 +51,8 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 			"appearanceSettings" in parsed ||
 			"soundSettings" in parsed ||
 			"suloSettings" in parsed ||
-			"privacySettings" in parsed;
+			"privacySettings" in parsed ||
+			"backupReminderFrequency" in parsed;
 
 		if (!hasSettingsKeys) {
 			throw new Error("File does not contain valid Sulok settings.");
@@ -73,6 +86,11 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 			if (res.success) sanitized.privacySettings = res.data as Settings["privacySettings"];
 		}
 
+		if ("backupReminderFrequency" in parsed && parsed.backupReminderFrequency !== undefined) {
+			const res = backupReminderFrequencySchema.safeParse(parsed.backupReminderFrequency);
+			if (res.success) sanitized.backupReminderFrequency = res.data;
+		}
+
 		return sanitized;
 	} catch (e) {
 		if (e instanceof Error) {
@@ -80,4 +98,23 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 		}
 		throw new Error("Failed to parse settings file. It may be corrupted or invalid.");
 	}
+}
+
+export function isBackupOverdue(
+	backupReminderFrequency: number | "off",
+	lastBackupDate: string | null | undefined,
+	itemCount: number | undefined,
+	folderCount: number | undefined,
+	now: number,
+	isBackupReminderSnoozed?: boolean,
+) {
+	if (backupReminderFrequency === "off" || isBackupReminderSnoozed) return false;
+	if (!lastBackupDate) {
+		const totalData = (itemCount ?? 0) + (folderCount ?? 0);
+		return totalData >= BACKUP_MINIMUM_DATA_THRESHOLD;
+	}
+
+	const lastBackup = new Date(lastBackupDate);
+	const daysSinceBackup = (now - lastBackup.getTime()) / (1000 * 60 * 60 * 24);
+	return daysSinceBackup > backupReminderFrequency;
 }

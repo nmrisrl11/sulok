@@ -10,6 +10,7 @@ import {
 } from "@/stores";
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ErrorBoundary } from "../error-boundary";
+import { BackupReminderBanner } from "./backup-reminder-banner";
 import { BottomActionSystem } from "./bottom-action-system";
 import { Footer } from "./footer";
 import { Header } from "./header";
@@ -193,6 +194,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
 		<div className="flex min-h-dvh flex-col bg-background pb-[calc(5rem+env(safe-area-inset-bottom))]">
 			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
 				<Header />
+
+				<BackupReminderBanner />
 
 				<main className="flex flex-1 flex-col gap-12 p-4 md:gap-16 md:py-6">
 					{children}

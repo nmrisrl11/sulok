@@ -3,3 +3,4 @@ export const ITEM_DESCRIPTION_MAX_LENGTH = 500;
 export const ITEM_NOTE_MAX_LENGTH = 2000;
 export const FOLDER_NAME_MIN_LENGTH = 1;
 export const FOLDER_NAME_MAX_LENGTH = 50;
+export const BACKUP_MINIMUM_DATA_THRESHOLD = 5;

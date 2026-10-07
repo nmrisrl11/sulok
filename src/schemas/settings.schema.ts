@@ -102,3 +102,5 @@ export const workspaceThemeSchema = z.enum([
 	"midnight",
 	"mocha",
 ]);
+
+export const backupReminderFrequencySchema = z.union([z.number(), z.literal("off")]);

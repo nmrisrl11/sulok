@@ -65,7 +65,7 @@ export function BrowserStorageSetting() {
 				<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 					<HardDriveIcon className="h-4 w-4" /> Local Storage
 				</p>
-				<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
+				<p className="mt-1 text-xs text-muted-foreground">
 					Monitor your library's storage usage. Browsers may automatically clear unprotected data to
 					free up space.
 				</p>

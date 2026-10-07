@@ -2,6 +2,7 @@ import { db } from "@/db/db";
 import { exportData } from "@/features/settings/utils/export-utils";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
+import { useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { AlertCircleIcon, BracesIcon, DownloadIcon, FileTextIcon, TableIcon } from "lucide-react";
 import { type ReactNode } from "react";
@@ -47,16 +48,23 @@ function ExportOptionButton({
 }
 
 export function ExportLibrarySetting() {
-	const itemCount = useLiveQuery(() => db.items.count()) ?? 0;
-	const folderCount = useLiveQuery(() => db.folders.count()) ?? 0;
+	const itemCount = useLiveQuery(() => db.items.filter((i) => !i.deletedAt).count()) ?? 0;
+	const folderCount = useLiveQuery(() => db.folders.filter((f) => !f.deletedAt).count()) ?? 0;
 	const hasData = itemCount > 0 || folderCount > 0;
 
 	const handleExport = (format: "json" | "csv" | "txt") => {
-		exportData(format).catch((error) => {
-			notify.error(error instanceof Error ? error.message : "Failed to export data", {
-				id: "export-error",
+		exportData(format)
+			.then(() => {
+				useSettingsStore.getState().updateSettings({
+					lastBackupDate: new Date().toISOString(),
+					isBackupReminderSnoozed: false,
+				});
+			})
+			.catch((error) => {
+				notify.error(error instanceof Error ? error.message : "Failed to export data", {
+					id: "export-error",
+				});
 			});
-		});
 	};
 
 	return (
@@ -65,7 +73,7 @@ export function ExportLibrarySetting() {
 				<p className="flex items-center gap-2 text-sm font-medium text-foreground">
 					<DownloadIcon className="h-4 w-4" /> Export Library
 				</p>
-				<p className="mt-1 w-full text-xs text-muted-foreground sm:max-w-[85%]">
+				<p className="mt-1 text-xs text-muted-foreground">
 					Create an offline archive of your library to keep your data safe.
 				</p>
 			</div>

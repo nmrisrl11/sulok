@@ -106,6 +106,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
 - [x] Import and export data (JSON, CSV, TXT) and import browser bookmarks (HTML) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Backup and Restore for Application Settings (JSON payload with appearance, sound, privacy, and Sulo configurations)
+- [x] Smart Backup Reminders to encourage regular library exports, configurable in Settings
 - [x] Privacy & Storage Settings (Referral tracking toggle, database usage metrics)
 - [x] Danger Zone for destructive settings actions (Delete Library, Reset Settings, Factory Reset)
 - [x] Interactive UI Sound FX (cuelume)

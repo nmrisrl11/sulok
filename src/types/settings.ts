@@ -58,5 +58,7 @@ export interface Settings {
 	onboardingStatus?: "idle" | "in_progress" | "completed";
 	onboardingStep?: number;
 	hasDismissedInstallNudge?: boolean;
-	// Sync settings (placeholders for future)
+	lastBackupDate?: string | null;
+	backupReminderFrequency?: number | "off";
+	isBackupReminderSnoozed?: boolean;
 }
