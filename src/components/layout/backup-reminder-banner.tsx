@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { BACKUP_MINIMUM_DATA_THRESHOLD } from "@/constants/validation-constants";
 import { db } from "@/db/db";
+import { isBackupOverdue } from "@/features/settings/utils/settings-sync-utils";
 import { useExtensionInstalled } from "@/hooks";
 import { useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DownloadIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function getContextText(items?: number, folders?: number) {
@@ -32,6 +32,9 @@ export function BackupReminderBanner() {
 	const backupReminderFrequency = useSettingsStore(
 		(state) => state.settings.backupReminderFrequency ?? 7,
 	);
+	const isBackupReminderSnoozed = useSettingsStore(
+		(state) => state.settings.isBackupReminderSnoozed,
+	);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 	const onboardingStatus = useSettingsStore((state) => state.settings.onboardingStatus);
 	const hasDismissedInstallNudge = useSettingsStore(
@@ -39,9 +42,13 @@ export function BackupReminderBanner() {
 	);
 	const isInstalled = useExtensionInstalled();
 
-	// Local state to hide it until the next render if they close it this session
-	const [isDismissed, setIsDismissed] = useState(false);
-	const [now] = useState(() => Date.now());
+	const [now, setNow] = useState(() => Date.now());
+
+	useEffect(() => {
+		const interval = setInterval(() => setNow(Date.now()), 60000);
+		return () => clearInterval(interval);
+	}, []);
+
 	const [isStandalone] = useState(() => {
 		if (typeof window === "undefined") return false;
 		return window.matchMedia("(display-mode: standalone)").matches;
@@ -50,14 +57,15 @@ export function BackupReminderBanner() {
 	const itemCount = useLiveQuery(() => db.items.filter((i) => !i.deletedAt).count());
 	const folderCount = useLiveQuery(() => db.folders.filter((f) => !f.deletedAt).count());
 
-	const isOverdue = () => {
-		if (backupReminderFrequency === "off") return false;
-		if (!lastBackupDate) return true;
-
-		const lastBackup = new Date(lastBackupDate);
-		const daysSinceBackup = (now - lastBackup.getTime()) / (1000 * 60 * 60 * 24);
-		return daysSinceBackup > backupReminderFrequency;
-	};
+	const isOverdue = () =>
+		isBackupOverdue(
+			backupReminderFrequency,
+			lastBackupDate,
+			itemCount,
+			folderCount,
+			now,
+			isBackupReminderSnoozed,
+		);
 
 	const willInstallNudgeShow = !(
 		isInstalled === null ||
@@ -68,23 +76,19 @@ export function BackupReminderBanner() {
 	);
 
 	if (
-		isDismissed ||
 		!isOverdue() ||
 		onboardingStatus === "in_progress" ||
 		willInstallNudgeShow ||
 		itemCount === undefined ||
-		folderCount === undefined ||
-		itemCount + folderCount < BACKUP_MINIMUM_DATA_THRESHOLD
+		folderCount === undefined
 	) {
 		return null;
 	}
 
 	const handleRemindLater = () => {
-		// Just snooze it for now by updating lastBackupDate to now
 		updateSettings({
-			lastBackupDate: new Date().toISOString(),
+			isBackupReminderSnoozed: true,
 		});
-		setIsDismissed(true);
 	};
 
 	return (
@@ -101,7 +105,7 @@ export function BackupReminderBanner() {
 				<div className="flex w-full items-center justify-center gap-4 pt-1 sm:w-auto sm:justify-end sm:pt-0">
 					<div className="flex items-center gap-2">
 						<Button asChild size="sm" className="h-7 text-xs">
-							<Link to="/settings?tab=data#backup-restore" onClick={() => setIsDismissed(true)}>
+							<Link to="/settings?tab=data#backup-restore">
 								<DownloadIcon className="mr-1.5 h-3.5 w-3.5" /> Backup Now
 							</Link>
 						</Button>

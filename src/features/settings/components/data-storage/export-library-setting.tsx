@@ -57,6 +57,7 @@ export function ExportLibrarySetting() {
 			.then(() => {
 				useSettingsStore.getState().updateSettings({
 					lastBackupDate: new Date().toISOString(),
+					isBackupReminderSnoozed: false,
 				});
 			})
 			.catch((error) => {

@@ -60,5 +60,5 @@ export interface Settings {
 	hasDismissedInstallNudge?: boolean;
 	lastBackupDate?: string | null;
 	backupReminderFrequency?: number | "off";
-	// Sync settings (placeholders for future)
+	isBackupReminderSnoozed?: boolean;
 }

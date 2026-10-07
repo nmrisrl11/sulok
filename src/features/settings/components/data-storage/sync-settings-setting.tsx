@@ -86,6 +86,10 @@ export function SyncSettingsSetting() {
 				};
 			}
 
+			if (importedSettings.backupReminderFrequency !== undefined) {
+				safeSettingsToImport.backupReminderFrequency = importedSettings.backupReminderFrequency;
+			}
+
 			if (importedSettings.workspaceTheme) {
 				setTheme(importedSettings.workspaceTheme as Theme);
 			}

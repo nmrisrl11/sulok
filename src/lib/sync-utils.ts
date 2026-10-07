@@ -14,6 +14,8 @@ export async function exportDataForSync(): Promise<Blob> {
 		onboardingStatus: _onboardingStatus,
 		onboardingStep: _onboardingStep,
 		hasDismissedInstallNudge: _hasDismissedInstallNudge,
+		lastBackupDate: _lastBackupDate,
+		isBackupReminderSnoozed: _isBackupReminderSnoozed,
 		...settingsToExport
 	} = settings;
 
@@ -133,6 +135,9 @@ export async function importDataFromSync(payloadJson: string): Promise<void> {
 					...newSettings.privacySettings,
 					...parsedSettings.privacySettings,
 				};
+			}
+			if (parsedSettings.backupReminderFrequency !== undefined) {
+				newSettings.backupReminderFrequency = parsedSettings.backupReminderFrequency;
 			}
 
 			useSettingsStore.getState().updateSettings(newSettings);

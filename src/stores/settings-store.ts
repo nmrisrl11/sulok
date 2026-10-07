@@ -36,6 +36,7 @@ export const defaultSettings: Settings = {
 	hasDismissedInstallNudge: false,
 	lastBackupDate: null,
 	backupReminderFrequency: 7,
+	isBackupReminderSnoozed: false,
 };
 
 interface SettingsState {
@@ -234,9 +235,16 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 
 	if (safeSettings.backupReminderFrequency !== undefined) {
 		const val = safeSettings.backupReminderFrequency;
-		if (val !== "off" && (typeof val !== "number" || !Number.isFinite(val))) {
+		if (val !== "off" && (typeof val !== "number" || !Number.isFinite(val) || val <= 0)) {
 			delete safeSettings.backupReminderFrequency;
 		}
+	}
+
+	if (
+		safeSettings.isBackupReminderSnoozed !== undefined &&
+		typeof safeSettings.isBackupReminderSnoozed !== "boolean"
+	) {
+		delete safeSettings.isBackupReminderSnoozed;
 	}
 
 	const mergedSettings = deepMerge<Settings>(defaultSettings, safeSettings);

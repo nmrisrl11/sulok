@@ -1,3 +1,4 @@
+import { BACKUP_MINIMUM_DATA_THRESHOLD } from "@/constants/validation-constants";
 import {
 	appearanceSettingsSchema,
 	backupReminderFrequencySchema,
@@ -9,7 +10,16 @@ import {
 import type { Settings } from "@/types/settings";
 
 export function exportSettings(settings: Settings, workspaceTheme: string) {
-	const content = JSON.stringify({ ...settings, workspaceTheme }, null, 2);
+	const {
+		onboardingStatus: _onboardingStatus,
+		onboardingStep: _onboardingStep,
+		hasDismissedInstallNudge: _hasDismissedInstallNudge,
+		lastBackupDate: _lastBackupDate,
+		isBackupReminderSnoozed: _isBackupReminderSnoozed,
+		...settingsToExport
+	} = settings;
+
+	const content = JSON.stringify({ ...settingsToExport, workspaceTheme }, null, 2);
 	const blob = new Blob([content], { type: "application/json" });
 	const url = URL.createObjectURL(blob);
 
@@ -88,4 +98,23 @@ export function parseImportedSettings(text: string): ImportedSettingsPayload {
 		}
 		throw new Error("Failed to parse settings file. It may be corrupted or invalid.");
 	}
+}
+
+export function isBackupOverdue(
+	backupReminderFrequency: number | "off",
+	lastBackupDate: string | null | undefined,
+	itemCount: number | undefined,
+	folderCount: number | undefined,
+	now: number,
+	isBackupReminderSnoozed?: boolean,
+) {
+	if (backupReminderFrequency === "off" || isBackupReminderSnoozed) return false;
+	if (!lastBackupDate) {
+		const totalData = (itemCount ?? 0) + (folderCount ?? 0);
+		return totalData >= BACKUP_MINIMUM_DATA_THRESHOLD;
+	}
+
+	const lastBackup = new Date(lastBackupDate);
+	const daysSinceBackup = (now - lastBackup.getTime()) / (1000 * 60 * 60 * 24);
+	return daysSinceBackup > backupReminderFrequency;
 }

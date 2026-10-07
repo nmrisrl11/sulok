@@ -1,5 +1,5 @@
-import { BACKUP_MINIMUM_DATA_THRESHOLD } from "@/constants/validation-constants";
 import { db } from "@/db/db";
+import { isBackupOverdue } from "@/features/settings/utils/settings-sync-utils";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -17,6 +17,9 @@ export function BackupReminderSetting() {
 	const lastBackupDate = useSettingsStore((state) => state.settings.lastBackupDate);
 	const backupReminderFrequency = useSettingsStore(
 		(state) => state.settings.backupReminderFrequency ?? 7,
+	);
+	const isBackupReminderSnoozed = useSettingsStore(
+		(state) => state.settings.isBackupReminderSnoozed,
 	);
 	const updateSettings = useSettingsStore((state) => state.updateSettings);
 
@@ -36,17 +39,15 @@ export function BackupReminderSetting() {
 		return `Last backed up: ${rtf.format(daysDifference, "day")}`;
 	};
 
-	const isOverdue = () => {
-		if (backupReminderFrequency === "off") return false;
-		if (!lastBackupDate) {
-			const totalData = (itemCount ?? 0) + (folderCount ?? 0);
-			return totalData >= BACKUP_MINIMUM_DATA_THRESHOLD;
-		}
-
-		const lastBackup = new Date(lastBackupDate);
-		const daysSinceBackup = (now - lastBackup.getTime()) / (1000 * 60 * 60 * 24);
-		return daysSinceBackup > backupReminderFrequency;
-	};
+	const isOverdue = () =>
+		isBackupOverdue(
+			backupReminderFrequency,
+			lastBackupDate,
+			itemCount,
+			folderCount,
+			now,
+			isBackupReminderSnoozed,
+		);
 
 	return (
 		<div className="flex flex-col gap-4 py-5 first:pt-0 last:pb-0 sm:py-6 sm:first:pt-0 sm:last:pb-0">
