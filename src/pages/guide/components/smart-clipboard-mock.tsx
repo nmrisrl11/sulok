@@ -67,6 +67,7 @@ export function SmartClipboardMock() {
 					<div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted/30 transition-colors">
 						<SuloMascot
 							expression={defaultExpression}
+							aria-hidden={isActive}
 							className={cn(
 								"absolute inset-0 m-auto h-5 w-5 transition-all duration-500",
 								isActive ? "scale-110 opacity-0" : "scale-100 opacity-100",
@@ -74,6 +75,7 @@ export function SmartClipboardMock() {
 						/>
 						<SuloMascot
 							expression="curious"
+							aria-hidden={!isActive}
 							className={cn(
 								"absolute inset-0 m-auto h-5 w-5 transition-all duration-500",
 								isActive ? "scale-110 opacity-100" : "scale-90 opacity-0",
