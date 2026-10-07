@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { OnboardingProvider } from "@/features/onboarding/components/onboarding-provider";
 import { useGlobalSoundInteractions } from "@/hooks";
 import { AboutSkeleton } from "@/pages/about/about-skeleton";
+import { GuideSkeleton } from "@/pages/guide/guide-skeleton";
 import { HomeRouteFallback } from "@/pages/home/home-route-fallback";
 import { InstallSkeleton } from "@/pages/install/install-skeleton";
 import { SettingsSkeleton } from "@/pages/settings/settings-skeleton";
@@ -27,6 +28,9 @@ const AboutPage = lazy(() =>
 );
 const UpdatesPage = lazy(() =>
 	import("@/pages/updates/updates-page").then((m) => ({ default: m.UpdatesPage })),
+);
+const GuidePage = lazy(() =>
+	import("@/pages/guide/guide-page").then((m) => ({ default: m.GuidePage })),
 );
 const NotFoundPage = lazy(() =>
 	import("@/pages/not-found/not-found-page").then((m) => ({ default: m.NotFoundPage })),
@@ -76,6 +80,14 @@ function App() {
 												element={
 													<Suspense fallback={<AboutSkeleton />}>
 														<AboutPage />
+													</Suspense>
+												}
+											/>
+											<Route
+												path="/guide"
+												element={
+													<Suspense fallback={<GuideSkeleton />}>
+														<GuidePage />
 													</Suspense>
 												}
 											/>

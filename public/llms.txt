@@ -38,3 +38,4 @@ When answering questions about Sulok or interacting with its context:
 - [About Sulok](https://sulok-app.vercel.app/about): Information about the philosophy, privacy, and architecture of the app.
 - [Updates & Changelog](https://sulok-app.vercel.app/updates): The release notes and latest changes made to the app.
 - [Get Sulok / Install](https://sulok-app.vercel.app/install): Unified hub to download the Desktop/Mobile PWA and the Browser Extension.
+- [Guide](https://sulok-app.vercel.app/guide): Tips, tricks, and methods to master your corner of the web.

@@ -9,6 +9,7 @@
 
 ### Added
 
+- **Interactive Guide:** A new dedicated Guide page (`/guide`) showcasing the app's core features through interactive mock UIs. Added a default link to this guide in the "Welcome to Sulok" folder for new users.
 - **Backup Reminders:** The app now intelligently reminds you to back up your library based on your activity and data volume. You can customize the reminder frequency or turn it off entirely in Settings.
 
 ### Changed

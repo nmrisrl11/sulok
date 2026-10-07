@@ -5,6 +5,7 @@ export * from "./use-debounced-query";
 export * from "./use-extension-installed";
 export * from "./use-global-sound-interactions";
 export * from "./use-install-app";
+export * from "./use-is-touch-device";
 export * from "./use-mobile";
 export * from "./use-selection-mode";
 export * from "./use-sound-effects";

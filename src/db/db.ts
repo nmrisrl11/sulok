@@ -100,6 +100,18 @@ db.on("populate", (transaction) => {
 		updatedAt: now,
 	});
 
+	transaction.table("items").add({
+		id: crypto.randomUUID(),
+		folderId: welcomeFolderId,
+		url: `https://${APP_INFO.appUrl}/guide`,
+		title: `Guide — ${APP_INFO.name}`,
+		description: "Tips, tricks, and methods to master your corner of the web.",
+		image: `https://${APP_INFO.appUrl}/og-image.png`,
+		logo: `https://${APP_INFO.appUrl}/favicon.svg`,
+		createdAt: now + 1,
+		updatedAt: now + 1,
+	});
+
 	setHasDataHint(true);
 });
 
