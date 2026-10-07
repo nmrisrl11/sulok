@@ -2,22 +2,7 @@ import { ResetButton } from "@/components/reset-button";
 import { useTheme, useThemeDispatch, type Theme } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
-
-const WORKSPACE_THEMES = [
-	{
-		id: "system",
-		label: "System",
-		bg: "linear-gradient(135deg, #f7f5f0 50%, #1e1b18 50%)",
-		fg: "#888",
-		type: "system",
-	},
-	{ id: "light", label: "Cream", bg: "#f7f5f0", fg: "#1e1b18", type: "light" },
-	{ id: "sepia", label: "Sepia", bg: "#F4ECD8", fg: "#4A3C31", type: "light" },
-	{ id: "sand", label: "Sand", bg: "#EAE6DF", fg: "#45423E", type: "light" },
-	{ id: "dark", label: "Charcoal", bg: "#1e1b18", fg: "#f7f5f0", type: "dark" },
-	{ id: "midnight", label: "Midnight", bg: "#0B1120", fg: "#F8FAFC", type: "dark" },
-	{ id: "mocha", label: "Mocha", bg: "#241C18", fg: "#F5EFEB", type: "dark" },
-] as const;
+import { WORKSPACE_THEMES } from "./constants";
 
 export function WorkspaceThemeControl({
 	variant = "default",

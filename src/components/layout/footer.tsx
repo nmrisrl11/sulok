@@ -25,15 +25,15 @@ export function Footer() {
 	const footerItems: FooterItem[] = [
 		{
 			type: "link",
-			label: "Manage Data",
-			to: "/settings?tab=data",
-			title: "Import, export, or clear your local data",
-		},
-		{
-			type: "link",
 			label: "Get App",
 			to: "/install",
 			title: `Get ${APP_INFO.name} on your device`,
+		},
+		{
+			type: "link",
+			label: "Guide",
+			to: "/guide",
+			title: `Tips and tricks for ${APP_INFO.name}`,
 		},
 		{
 			type: "link",

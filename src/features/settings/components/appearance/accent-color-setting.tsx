@@ -3,22 +3,9 @@ import { useTheme } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
 import { CheckIcon, PlusIcon } from "lucide-react";
+import { ACCENT_PRESETS } from "./constants";
 import { DebouncedColorPicker } from "./debounced-color-picker";
 
-type AccentPreset = {
-	id: string;
-	label: string;
-	color?: string;
-};
-
-const ACCENT_PRESETS: AccentPreset[] = [
-	{ id: "foreground", label: "Default" },
-	{ id: "#0ea5e9", label: "Cyan", color: "#0ea5e9" },
-	{ id: "#f97316", label: "Orange", color: "#f97316" },
-	{ id: "#22c55e", label: "Green", color: "#22c55e" },
-	{ id: "#a855f7", label: "Purple", color: "#a855f7" },
-	{ id: "#f43f5e", label: "Rose", color: "#f43f5e" },
-];
 export function AccentColorControl({
 	"aria-label": ariaLabel,
 	variant = "default",

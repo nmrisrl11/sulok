@@ -3,14 +3,8 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
 import type { CornerStyle } from "@/types/settings";
-import { Settings2Icon, SquareIcon, SquircleIcon } from "lucide-react";
 import { useState } from "react";
-
-const CORNER_STYLES = [
-	{ id: "squircle", label: "Squircle", icon: SquircleIcon },
-	{ id: "standard", label: "Standard", icon: SquareIcon },
-	{ id: "custom", label: "Custom", icon: Settings2Icon },
-] as const;
+import { CORNER_STYLES } from "./constants";
 
 export function CornerRadiusControl({ variant = "default" }: { variant?: "default" | "compact" }) {
 	const cornerStyle = useSettingsStore((state) => state.settings.appearanceSettings.cornerStyle);

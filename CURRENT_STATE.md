@@ -113,6 +113,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Responsive/mobile UI
 - [x] PWA/offline support
 - [x] PWA Web Share Target API support (Android/ChromeOS)
+- [x] Comprehensive Guide page with interactive UI mocks demonstrating core features
 
 ### Phase 2 — Browser Extension (Completed)
 
