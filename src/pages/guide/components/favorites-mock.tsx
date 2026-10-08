@@ -4,9 +4,10 @@ import {
 	CustomHeartIcon,
 } from "@/components/icons";
 import { APP_INFO } from "@/constants/app-info";
-import { useMockAnimation } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { GlobeIcon, MousePointer2Icon } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import { CheckCircle2Icon, GlobeIcon, MousePointer2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const TOP_FOLDERS = [
 	{ name: "Research", opacity: "opacity-30" },
@@ -19,7 +20,40 @@ const BOTTOM_LINKS = [
 ];
 
 export function FavoritesMock() {
-	const { isActive, prefersReducedMotion } = useMockAnimation(1500);
+	const prefersReducedMotion = useReducedMotion() === true;
+	const [step, setStep] = useState(0);
+
+	useEffect(() => {
+		if (prefersReducedMotion) return;
+		let isMounted = true;
+		const runLoop = async () => {
+			while (isMounted) {
+				setStep(0); // Idle
+				await new Promise((r) => setTimeout(r, 1000));
+				if (!isMounted) break;
+
+				setStep(1); // Moving to heart
+				await new Promise((r) => setTimeout(r, 800));
+				if (!isMounted) break;
+
+				setStep(2); // Click (ping and heart turns red)
+				await new Promise((r) => setTimeout(r, 400));
+				if (!isMounted) break;
+
+				setStep(3); // Success message
+				await new Promise((r) => setTimeout(r, 1800));
+			}
+		};
+		runLoop();
+		return () => {
+			isMounted = false;
+		};
+	}, [prefersReducedMotion]);
+
+	const isHovering = prefersReducedMotion || step >= 1;
+	const isFavorited = !prefersReducedMotion && (step === 2 || step === 3);
+	const showPing = !prefersReducedMotion && step === 2;
+	const showSuccess = !prefersReducedMotion && step === 3;
 
 	return (
 		<div className="relative flex h-72 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
@@ -53,7 +87,7 @@ export function FavoritesMock() {
 				<div
 					className={cn(
 						"relative flex items-center justify-between rounded-xl border bg-background px-3 py-3 shadow-sm transition-all duration-300 corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
-						isActive ? "border-primary/30 shadow-md" : "border-border/50",
+						isFavorited ? "border-primary/30 shadow-md" : "border-border/50",
 					)}
 				>
 					<div className="flex items-center gap-3 overflow-hidden">
@@ -72,19 +106,23 @@ export function FavoritesMock() {
 					<div
 						className={cn(
 							"relative ml-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-300",
-							isActive ? "bg-rose-500/10 text-rose-500" : "",
+							isFavorited
+								? "bg-rose-500/10 text-rose-500"
+								: isHovering
+									? "bg-muted text-foreground"
+									: "",
 						)}
 					>
 						<CustomHeartIcon
 							className={cn(
 								"h-4 w-4 transition-all duration-300",
-								isActive ? "scale-0 opacity-0" : "scale-100 opacity-100",
+								isFavorited ? "scale-0 opacity-0" : "scale-100 opacity-100",
 							)}
 						/>
 						<CustomHeartFilledIcon
 							className={cn(
 								"absolute h-4 w-4 transition-all duration-300",
-								isActive ? "scale-100 opacity-100" : "scale-0 opacity-0",
+								isFavorited ? "scale-100 opacity-100" : "scale-0 opacity-0",
 							)}
 						/>
 					</div>
@@ -92,16 +130,29 @@ export function FavoritesMock() {
 					{/* Simulated Cursor - Moved to bottom right corner of the heart icon */}
 					<div
 						className={cn(
-							"absolute top-1/2 right-1.5 z-20 h-5 w-5 drop-shadow-md transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-							isActive ? "translate-y-2 scale-95 opacity-100" : "translate-y-8 opacity-0",
+							"absolute top-1/2 right-1.5 z-20 h-5 w-5 drop-shadow-md transition-all ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+							isHovering
+								? "translate-x-1.5 translate-y-1.5 scale-95 opacity-100"
+								: "translate-y-8 opacity-0",
+							prefersReducedMotion ? "delay-0 duration-0" : "duration-700",
 						)}
 					>
 						<MousePointer2Icon className="h-full w-full fill-foreground text-foreground" />
 						<div
+							key={step} // Force re-mount of ping
 							className={cn(
-								"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-500/40 opacity-0 transition-all duration-700",
-								isActive && !prefersReducedMotion && "animate-ping opacity-100",
+								"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-500/40",
+								showPing && !prefersReducedMotion ? "animate-ping opacity-100" : "opacity-0",
 							)}
+							style={
+								showPing && !prefersReducedMotion
+									? {
+											animationIterationCount: 1,
+											animationFillMode: "forwards",
+											animationDuration: "500ms",
+										}
+									: {}
+							}
 						/>
 					</div>
 				</div>
@@ -125,6 +176,22 @@ export function FavoritesMock() {
 						</div>
 					</div>
 				))}
+			</div>
+
+			{/* Bottom Centered Success Toast */}
+			<div
+				aria-hidden={prefersReducedMotion || !showSuccess}
+				className={cn(
+					"absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+					showSuccess && !prefersReducedMotion
+						? "translate-y-0 scale-100 opacity-100 delay-300"
+						: "translate-y-4 scale-95 opacity-0",
+				)}
+			>
+				<div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-green-600 shadow-lg">
+					<CheckCircle2Icon className="h-3.5 w-3.5" />
+					<span className="whitespace-nowrap">Added to Favorites</span>
+				</div>
 			</div>
 		</div>
 	);

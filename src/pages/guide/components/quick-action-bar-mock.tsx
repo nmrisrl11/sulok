@@ -1,16 +1,25 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
+import { useMockAnimation } from "@/hooks";
+import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores";
-import { CornerDownLeftIcon } from "lucide-react";
+import { CornerDownLeftIcon, MousePointer2Icon } from "lucide-react";
 
 export function QuickActionBarMock() {
 	const defaultExpression = useSettingsStore(
 		(state) => state.settings.suloSettings.expressionQuickAction,
 	);
+	const { isActive, prefersReducedMotion } = useMockAnimation(2500);
 
 	return (
-		<div className="group relative flex h-60 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
+		<div className="relative flex h-60 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
 			{/* Fake App Background */}
-			<div className="absolute inset-0 flex opacity-20 transition-opacity duration-500 group-hover:opacity-10">
+			<div
+				className={cn(
+					"absolute inset-0 flex transition-opacity duration-500",
+					isActive ? "opacity-10 delay-500" : "opacity-20 delay-0",
+					prefersReducedMotion && isActive && "delay-0",
+				)}
+			>
 				{/* Faint Sidebar */}
 				<div className="flex w-24 flex-col gap-3 border-r border-border/50 p-4">
 					<div className="h-4 w-full rounded bg-foreground/20" />
@@ -30,28 +39,74 @@ export function QuickActionBarMock() {
 				</div>
 			</div>
 
-			{/* Hint Text */}
-			<div className="absolute top-1/2 -translate-y-1/2 text-center text-sm font-medium text-muted-foreground transition-opacity duration-300 group-hover:opacity-0 max-sm:hidden">
-				Hover over the FAB
-			</div>
+			{/* Fake Cursor simulating the click */}
+			{!prefersReducedMotion && (
+				<div
+					className={cn(
+						"absolute z-20 h-5 w-5 drop-shadow-md transition-all ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+						isActive
+							? "top-48.75 left-[52%] scale-95 opacity-100 delay-0 duration-500"
+							: "top-10 left-[40%] scale-100 opacity-100 delay-0 duration-500",
+					)}
+				>
+					<MousePointer2Icon
+						className="h-full w-full text-foreground"
+						style={{ fill: "currentColor" }}
+					/>
+					<div
+						className={cn(
+							"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/40 transition-opacity",
+							isActive ? "opacity-100 delay-500 duration-100" : "opacity-0 delay-0 duration-0",
+							isActive && "animate-ping",
+						)}
+						style={{
+							animationDelay: isActive ? "500ms" : "0ms",
+							animationIterationCount: 1,
+							animationFillMode: "forwards",
+						}}
+					/>
+				</div>
+			)}
 
-			{/* FAB Mock (Interactive via Group Hover) */}
-			<div className="absolute right-0 bottom-6 left-0 mx-auto flex items-center justify-center">
-				<div className="flex h-13 w-13 items-center gap-3 overflow-hidden rounded-full border border-border bg-card/90 p-1.5 pr-1.5 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-500 ease-out corner-squircle group-hover:w-65 group-hover:pr-2 supports-[corner-shape:squircle]:rounded-2xl max-sm:w-65 max-sm:pr-2">
+			{/* FAB Mock (Animated via state) */}
+			<div className="absolute right-0 bottom-6 left-0 z-10 mx-auto flex items-center justify-center">
+				<div
+					className={cn(
+						"flex h-13 items-center gap-3 overflow-hidden rounded-full border border-border bg-card/90 p-1.5 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-500 ease-out corner-squircle supports-[corner-shape:squircle]:rounded-2xl",
+						isActive ? "w-65 pr-2 delay-500" : "w-13 pr-1.5 delay-0",
+						prefersReducedMotion && isActive && "delay-0",
+					)}
+				>
 					{/* Mascot Icon */}
 					<div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted/30 transition-colors">
 						<SuloMascot
 							expression={defaultExpression}
-							className="absolute inset-0 m-auto h-5 w-5 opacity-100 transition-all duration-500 group-hover:scale-110 group-hover:opacity-0 max-sm:scale-110 max-sm:opacity-0"
+							aria-hidden={isActive}
+							className={cn(
+								"absolute inset-0 m-auto h-5 w-5 transition-all duration-500",
+								isActive ? "scale-110 opacity-0 delay-500" : "scale-100 opacity-100 delay-0",
+								prefersReducedMotion && isActive && "delay-0",
+							)}
 						/>
 						<SuloMascot
 							expression="curious"
-							className="absolute inset-0 m-auto h-5 w-5 scale-90 opacity-0 transition-all duration-500 group-hover:scale-110 group-hover:opacity-100 max-sm:scale-110 max-sm:opacity-100"
+							aria-hidden={!isActive}
+							className={cn(
+								"absolute inset-0 m-auto h-5 w-5 transition-all duration-500",
+								isActive ? "scale-110 opacity-100 delay-500" : "scale-90 opacity-0 delay-0",
+								prefersReducedMotion && isActive && "delay-0",
+							)}
 						/>
 					</div>
 
 					{/* Expanded Content */}
-					<div className="flex min-w-47.5 flex-1 items-center gap-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100 max-sm:opacity-100">
+					<div
+						className={cn(
+							"flex min-w-47.5 flex-1 items-center gap-2 transition-opacity duration-500",
+							isActive ? "opacity-100 delay-500" : "opacity-0 delay-0",
+							prefersReducedMotion && isActive && "delay-0",
+						)}
+					>
 						<span className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
 							Drop a link to your corner...
 						</span>

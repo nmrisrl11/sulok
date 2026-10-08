@@ -4,9 +4,6 @@ import { useReducedMotion } from "framer-motion";
 import {
 	CheckCircle2Icon,
 	CloudUploadIcon,
-	FileCodeIcon,
-	FileSpreadsheetIcon,
-	FileTextIcon,
 	MousePointer2Icon,
 	SettingsIcon,
 	UploadIcon,
@@ -36,41 +33,34 @@ const MOCK_PREVIEW_ITEMS = [
 	},
 ];
 
-const FILE_TYPES = [
-	{ label: "JSON", icon: <span className="text-sm font-bold text-yellow-500">{"{}"}</span> },
-	{ label: "CSV", icon: <FileSpreadsheetIcon className="h-5 w-5 text-green-600" /> },
-	{ label: "TXT", icon: <FileTextIcon className="h-5 w-5 text-blue-600" /> },
-	{ label: "HTML", icon: <FileCodeIcon className="h-5 w-5 text-orange-500" /> },
-];
-
 const SETTING_OPTIONS = [
 	{
 		id: "sync",
 		icon: CloudUploadIcon,
-		opacity: "opacity-40",
-		isDummy: true,
-		titleWidth: "w-32",
-		descWidth: "w-48",
+		title: "Sync Browser Bookmarks",
+		description: "Instantly import your browser's...",
+		opacity: "opacity-100",
+		isDummy: false,
 	},
 	{
 		id: "upload",
 		icon: UploadIcon,
-		title: "Upload backup file",
-		description: "Supports .json, .csv, .txt, and .html files",
-		opacity: "opacity-100",
-		isDummy: false,
+		opacity: "opacity-40",
+		isDummy: true,
+		titleWidth: "w-24",
+		descWidth: "w-40",
 	},
 	{
 		id: "settings",
 		icon: SettingsIcon,
 		opacity: "opacity-20",
 		isDummy: true,
-		titleWidth: "w-28",
-		descWidth: "w-40",
+		titleWidth: "w-32",
+		descWidth: "w-48",
 	},
 ];
 
-export function ImportDataMock() {
+export function SyncBrowserBookmarksMock() {
 	const prefersReducedMotion = useReducedMotion() === true;
 	const [step, setStep] = useState(0);
 
@@ -81,38 +71,30 @@ export function ImportDataMock() {
 		let isMounted = true;
 		const runLoop = async () => {
 			while (isMounted) {
-				setStep(0); // Idle
+				setStep(0); // Reset / Idle at bottom
 				await new Promise((r) => setTimeout(r, 1000));
 				if (!isMounted) break;
 
-				setStep(1); // Move to Upload backup file Option
-				await new Promise((r) => setTimeout(r, 800));
+				setStep(1); // Cursor moves to Sync Button
+				await new Promise((r) => setTimeout(r, 800)); // Travel time
 				if (!isMounted) break;
 
-				setStep(2); // Click Upload backup file Option
-				await new Promise((r) => setTimeout(r, 400));
+				setStep(2); // Cursor clicks Sync Button
+				await new Promise((r) => setTimeout(r, 400)); // Click duration
 				if (!isMounted) break;
 
-				setStep(3); // File Picker Opens, move to JSON
-				await new Promise((r) => setTimeout(r, 800));
+				setStep(3); // Dialog opens & Cursor moves to Import button
+				await new Promise((r) => setTimeout(r, 800)); // Travel time
 				if (!isMounted) break;
 
-				setStep(4); // Click JSON
-				await new Promise((r) => setTimeout(r, 400));
+				setStep(4); // Cursor clicks Import Button
+				await new Promise((r) => setTimeout(r, 1000)); // Linger on success
 				if (!isMounted) break;
 
-				setStep(5); // Import Preview Opens, move to Import button
-				await new Promise((r) => setTimeout(r, 800));
-				if (!isMounted) break;
-
-				setStep(6); // Click Import
-				await new Promise((r) => setTimeout(r, 1000));
-				if (!isMounted) break;
-
-				setStep(7); // Dialog closes, Toast appears
+				setStep(5); // Dialog closes, Toast appears
 				await new Promise((r) => setTimeout(r, 2500)); // Linger on success toast
 
-				setStep(8); // Toast fades out before restart
+				setStep(6); // Toast fades out before restart
 				await new Promise((r) => setTimeout(r, 800));
 			}
 		};
@@ -122,19 +104,15 @@ export function ImportDataMock() {
 		};
 	}, [prefersReducedMotion]);
 
-	const isFilePickerOpen = prefersReducedMotion || step === 3 || step === 4;
-	const isImportPreviewOpen = !prefersReducedMotion && (step === 5 || step === 6);
-	const showPing = !prefersReducedMotion && (step === 2 || step === 4 || step === 6);
-
+	const isDialogOpen = prefersReducedMotion || step === 3 || step === 4;
+	const showPing = !prefersReducedMotion && (step === 2 || step === 4);
 	const cursorPosition = prefersReducedMotion
-		? "top-[172px] left-[25%]" // Just about to click JSON, offset to not obscure text
-		: step === 5 || step === 6
-			? "top-[245px] left-[73%]" // Import button position
-			: step === 3 || step === 4
-				? "top-[172px] left-[25%]" // JSON file option in file picker
-				: step === 0 || step === 7 || step === 8
-					? "top-[240px] left-[88%]" // Idle
-					: "top-[145px] left-[50%]"; // Over Upload Backup block
+		? "top-[255px] left-[70%]" // Offset slightly to reveal button text
+		: step === 3 || step === 4
+			? "top-[245px] left-[73%]" // Direct click on Import button
+			: step === 0 || step === 5 || step === 6
+				? "top-[240px] left-[88%]"
+				: "top-[78px] left-[50%]";
 
 	return (
 		<div
@@ -190,56 +168,15 @@ export function ImportDataMock() {
 			<div
 				className={cn(
 					"absolute inset-0 z-10 bg-background/60 backdrop-blur-[2px] transition-opacity duration-500",
-					isFilePickerOpen || isImportPreviewOpen
-						? "opacity-100 delay-0"
-						: "pointer-events-none opacity-0 delay-0",
+					isDialogOpen ? "opacity-100 delay-0" : "pointer-events-none opacity-0 delay-0",
 				)}
 			/>
-
-			{/* Mock File Picker (OS Level Style) */}
-			<div
-				className={cn(
-					"absolute z-20 flex w-64 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-all duration-300",
-					isFilePickerOpen
-						? "scale-100 opacity-100 delay-100"
-						: "pointer-events-none scale-95 opacity-0 delay-0",
-				)}
-			>
-				{/* File Picker Header */}
-				<div className="flex h-8 items-center justify-between border-b border-border/50 bg-muted/40 px-3 text-[10px] font-medium text-muted-foreground">
-					<span>Open backup file</span>
-					<div className="flex gap-1.5 opacity-80">
-						<div className="h-2 w-2 rounded-full bg-red-400" />
-						<div className="h-2 w-2 rounded-full bg-amber-400" />
-						<div className="h-2 w-2 rounded-full bg-green-400" />
-					</div>
-				</div>
-				{/* File Picker Content */}
-				<div className="grid grid-cols-4 gap-2 bg-card p-3">
-					{FILE_TYPES.map((file, i) => (
-						<div
-							key={i}
-							className={cn(
-								"flex flex-col items-center gap-1.5 rounded-lg border p-2 transition-colors",
-								file.label === "JSON" && (prefersReducedMotion || step === 4)
-									? "border-blue-500/30 bg-blue-500/10"
-									: "border-transparent hover:bg-muted/50",
-							)}
-						>
-							<div className="flex h-8 w-8 items-center justify-center rounded border border-border/50 bg-background shadow-sm">
-								{file.icon}
-							</div>
-							<span className="text-[8px] font-medium text-foreground">{file.label}</span>
-						</div>
-					))}
-				</div>
-			</div>
 
 			{/* The Import Preview Dialog */}
 			<div
 				className={cn(
 					"absolute top-4 bottom-4 z-20 flex w-64 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-all duration-500",
-					isImportPreviewOpen
+					isDialogOpen
 						? "scale-100 opacity-100 delay-100"
 						: "pointer-events-none scale-95 opacity-0 delay-0",
 				)}
@@ -255,13 +192,13 @@ export function ImportDataMock() {
 					{/* Stats */}
 					<div className="flex gap-4">
 						<div className="flex flex-col">
-							<div className="text-sm font-bold">47</div>
+							<div className="text-sm font-bold">4</div>
 							<div className="text-[8px] font-medium tracking-wider text-muted-foreground uppercase">
 								To Import
 							</div>
 						</div>
 						<div className="flex flex-col">
-							<div className="text-sm font-bold text-muted-foreground">0</div>
+							<div className="text-sm font-bold text-muted-foreground">1</div>
 							<div className="text-[8px] font-medium tracking-wider text-muted-foreground uppercase">
 								Duplicates
 							</div>
@@ -293,12 +230,12 @@ export function ImportDataMock() {
 					<div
 						className={cn(
 							"rounded-md px-3 py-1.5 text-[9px] font-medium shadow-sm transition-colors duration-300",
-							step === 6
+							step === 4
 								? "bg-primary/80 text-primary-foreground"
 								: "bg-primary text-primary-foreground",
 						)}
 					>
-						Import 47 entries
+						Import 4 entries
 					</div>
 				</div>
 			</div>
@@ -337,14 +274,14 @@ export function ImportDataMock() {
 			<div
 				className={cn(
 					"absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-					!prefersReducedMotion && step === 7
+					!prefersReducedMotion && step === 5
 						? "translate-y-0 scale-100 opacity-100 delay-300"
 						: "translate-y-4 scale-95 opacity-0",
 				)}
 			>
 				<div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-green-600 shadow-lg dark:border dark:border-border">
 					<CheckCircle2Icon className="h-3.5 w-3.5" />
-					<span className="whitespace-nowrap">Successfully imported 47 entries</span>
+					<span className="whitespace-nowrap">Successfully imported 4 entries</span>
 				</div>
 			</div>
 		</div>
