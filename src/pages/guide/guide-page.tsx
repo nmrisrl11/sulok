@@ -6,7 +6,9 @@ import {
 	DownloadIcon,
 	FolderIcon,
 	FolderTreeIcon,
+	MonitorSmartphoneIcon,
 	MousePointerClickIcon,
+	RefreshCcwIcon,
 	SearchIcon,
 	SparklesIcon,
 	WandSparklesIcon,
@@ -15,6 +17,7 @@ import {
 import type { ElementType, ReactNode } from "react";
 import { CommandPaletteMock } from "./components/command-palette-mock";
 import { ContextMenuMock } from "./components/context-menu-mock";
+import { DeviceSyncMock } from "./components/device-sync-mock";
 import { DragAndDropMock } from "./components/drag-and-drop-mock";
 import { FavoritesMock } from "./components/favorites-mock";
 import { ImportDataMock } from "./components/import-data-mock";
@@ -25,6 +28,7 @@ import { QuickSavePopupMock } from "./components/quick-save-popup-mock";
 import { SafetyNetMock } from "./components/safety-net-mock";
 import { ShowAllLinksMock } from "./components/show-all-links-mock";
 import { SmartClipboardMock } from "./components/smart-clipboard-mock";
+import { SyncBrowserBookmarksMock } from "./components/sync-browser-bookmarks-mock";
 
 function GuideSection({ title, children }: { title: string; children: ReactNode }) {
 	return (
@@ -142,13 +146,6 @@ export function GuidePage() {
 					>
 						<QuickActionBarMock />
 					</GuideItem>
-					<GuideItem
-						title="Importing & Syncing"
-						description={`Moving from another tool? Instantly sync your browser bookmarks or upload existing data from HTML, CSV, JSON, or TXT files. ${APP_INFO.name} will seamlessly preserve your folders.`}
-						icon={DownloadIcon}
-					>
-						<ImportDataMock />
-					</GuideItem>
 				</GuideSection>
 
 				<GuideSection title="Organizing Your Corner">
@@ -175,26 +172,31 @@ export function GuidePage() {
 					</GuideItem>
 				</GuideSection>
 
+				<GuideSection title="Data Portability & Syncing">
+					<GuideItem
+						title="Device Sync (P2P)"
+						description={`Securely connect and merge your library across devices on your local network. No accounts required—just generate a code and ${APP_INFO.name} handles the rest.`}
+						icon={MonitorSmartphoneIcon}
+					>
+						<DeviceSyncMock />
+					</GuideItem>
+					<GuideItem
+						title="Sync Browser Bookmarks"
+						description={`Instantly import all your native browser bookmarks with a single click using the ${APP_INFO.name} extension. We'll perfectly preserve your nested folders and site icons.`}
+						icon={RefreshCcwIcon}
+					>
+						<SyncBrowserBookmarksMock />
+					</GuideItem>
+					<GuideItem
+						title="Importing Backups"
+						description={`Moving from another tool? Instantly upload existing data from HTML, CSV, JSON, or TXT files. ${APP_INFO.name} will seamlessly preserve your folders and metadata.`}
+						icon={DownloadIcon}
+					>
+						<ImportDataMock />
+					</GuideItem>
+				</GuideSection>
+
 				<GuideSection title="Pro Tips & Hidden Features">
-					<GuideItem
-						title="The Command Palette"
-						description={
-							<>
-								Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to instantly search your entire library. It
-								even shows the parent folder as a hint so you know exactly where a link lives.
-							</>
-						}
-						icon={SearchIcon}
-					>
-						<CommandPaletteMock />
-					</GuideItem>
-					<GuideItem
-						title="Show All Links"
-						description="Want to see everything you've ever saved at once? Click the 'Show All Links' icon in the Explorer Toolbar to flatten your library into one massive, sortable list."
-						icon={FolderTreeIcon}
-					>
-						<ShowAllLinksMock />
-					</GuideItem>
 					<GuideItem
 						title="Quick Customize"
 						description={
@@ -214,6 +216,25 @@ export function GuidePage() {
 						icon={TrashClockIcon}
 					>
 						<SafetyNetMock />
+					</GuideItem>
+					<GuideItem
+						title="The Command Palette"
+						description={
+							<>
+								Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to instantly search your entire library. It
+								even shows the parent folder as a hint so you know exactly where a link lives.
+							</>
+						}
+						icon={SearchIcon}
+					>
+						<CommandPaletteMock />
+					</GuideItem>
+					<GuideItem
+						title="Show All Links"
+						description="Want to see everything you've ever saved at once? Click the 'Show All Links' icon in the Explorer Toolbar to flatten your library into one massive, sortable list."
+						icon={FolderTreeIcon}
+					>
+						<ShowAllLinksMock />
 					</GuideItem>
 				</GuideSection>
 			</div>

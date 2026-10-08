@@ -93,7 +93,7 @@ export function SmartClipboardMock() {
 						<span className="min-w-0 flex-1 truncate text-sm text-foreground">
 							{`https://${APP_INFO.appUrl}`}
 						</span>
-						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow transition-transform duration-300 corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow transition-transform duration-300 corner-squircle supports-[corner-shape:squircle]:rounded-xl">
 							<CornerDownLeftIcon className="h-4 w-4" />
 						</div>
 					</div>
