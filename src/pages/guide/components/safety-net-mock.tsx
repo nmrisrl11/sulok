@@ -238,6 +238,7 @@ export function SafetyNetMock() {
 
 			{/* Bottom Centered Success Toast */}
 			<div
+				aria-hidden={prefersReducedMotion || !isRestored}
 				className={cn(
 					"absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
 					!prefersReducedMotion && isRestored
@@ -247,7 +248,7 @@ export function SafetyNetMock() {
 			>
 				<div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-green-600 shadow-lg dark:border dark:border-border">
 					<CheckCircle2Icon className="h-3.5 w-3.5" />
-					<span>Link restored</span>
+					<span className="whitespace-nowrap">Link restored</span>
 				</div>
 			</div>
 		</div>

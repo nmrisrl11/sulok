@@ -180,6 +180,7 @@ export function FavoritesMock() {
 
 			{/* Bottom Centered Success Toast */}
 			<div
+				aria-hidden={prefersReducedMotion || !showSuccess}
 				className={cn(
 					"absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
 					showSuccess && !prefersReducedMotion
@@ -189,7 +190,7 @@ export function FavoritesMock() {
 			>
 				<div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-green-600 shadow-lg">
 					<CheckCircle2Icon className="h-3.5 w-3.5" />
-					<span>Added to Favorites</span>
+					<span className="whitespace-nowrap">Added to Favorites</span>
 				</div>
 			</div>
 		</div>

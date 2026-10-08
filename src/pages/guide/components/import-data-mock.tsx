@@ -137,7 +137,10 @@ export function ImportDataMock() {
 					: "top-[145px] left-[50%]"; // Over Upload Backup block
 
 	return (
-		<div className="relative flex h-70 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
+		<div
+			aria-hidden="true"
+			className="relative flex h-70 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85"
+		>
 			{/* Fake App Background (Settings UI) */}
 			<div className="absolute inset-0 flex flex-col gap-3 p-4 transition-all duration-500">
 				{/* Header Section */}

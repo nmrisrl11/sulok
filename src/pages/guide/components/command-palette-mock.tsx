@@ -133,16 +133,22 @@ export function CommandPaletteMock() {
 								>
 									<CustomFolderIcon className="h-3.5 w-3.5 shrink-0" />
 									<span className="truncate text-[13px]">
-										{folder.name.split("").map((char, index) => {
-											const isMatch =
-												searchTerm.toLowerCase().includes(char.toLowerCase()) &&
-												index < searchTerm.length;
-											return (
-												<span key={index} className={cn(isMatch && "font-bold")}>
-													{char}
-												</span>
-											);
-										})}
+										{(() => {
+											const matchIndex = searchTerm
+												? folder.name.toLowerCase().indexOf(searchTerm.toLowerCase())
+												: -1;
+											return folder.name.split("").map((char, index) => {
+												const isMatch =
+													matchIndex !== -1 &&
+													index >= matchIndex &&
+													index < matchIndex + searchTerm.length;
+												return (
+													<span key={index} className={cn(isMatch && "font-bold")}>
+														{char}
+													</span>
+												);
+											});
+										})()}
 									</span>
 								</div>
 							);

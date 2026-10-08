@@ -16,6 +16,7 @@
 
 - Improved Device Sync deduplication: Syncing data from another device now intelligently merges folders and updates duplicate links using a "Latest Wins" approach, keeping your newest modifications intact.
 - Danger Zone actions ("Delete Library" and "Factory Reset") now thoroughly clean up offline cache storage in addition to local data.
+- Improved accessibility across the app's interactive Guide by properly hiding decorative animation elements and visually inactive toasts from screen readers.
 
 ### Fixed
 
