@@ -94,10 +94,15 @@ export function ContextMenuMock() {
 					<div
 						className={cn(
 							"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/40 transition-opacity",
-							isActive ? "opacity-100 delay-[900ms] duration-300" : "opacity-0 delay-0 duration-0",
+							isActive ? "opacity-100 delay-[900ms] duration-100" : "opacity-0 delay-0 duration-0",
 							!prefersReducedMotion && isActive && "animate-ping",
 							prefersReducedMotion && "opacity-0", // No ping effect in reduced motion
 						)}
+						style={{
+							animationDelay: isActive ? "900ms" : "0ms",
+							animationIterationCount: 1,
+							animationFillMode: "forwards",
+						}}
 					/>
 				</div>
 			</div>

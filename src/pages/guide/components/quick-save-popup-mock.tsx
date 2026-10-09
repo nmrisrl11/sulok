@@ -51,9 +51,18 @@ export function QuickSavePopupMock() {
 								/>
 								<div
 									className={cn(
-										"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/40 opacity-0 transition-all duration-700",
-										isActive && !prefersReducedMotion && "animate-ping opacity-100",
+										"absolute top-0 left-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/40 transition-opacity",
+										isActive
+											? "opacity-100 delay-700 duration-100"
+											: "opacity-0 delay-0 duration-0",
+										isActive && !prefersReducedMotion && "animate-ping",
+										prefersReducedMotion && "opacity-0",
 									)}
+									style={{
+										animationDelay: isActive ? "700ms" : "0ms",
+										animationIterationCount: 1,
+										animationFillMode: "forwards",
+									}}
 								/>
 							</div>
 						</div>

@@ -24,6 +24,7 @@
 - Fixed a bug where the browser extension could break after a Factory Reset on the web app.
 - Fixed the Backup Reminder setting incorrectly displaying an overdue warning for new users before they had enough saved data.
 - Fixed an issue where exporting settings or syncing between devices would incorrectly include local backup reminder preferences, which could unintentionally override settings on the receiving device.
+- Fixed an issue where the animated cursor's pulsing dot in the interactive Guide was still visible even when reduced motion was enabled.
 
 ---
 

@@ -21,31 +21,39 @@ export function CommandPaletteMock() {
 		const runLoop = async () => {
 			while (isMounted) {
 				setStep(0); // Idle
-				await new Promise((r) => setTimeout(r, 1500));
+				await new Promise((r) => setTimeout(r, 1000));
+				if (!isMounted) break;
+
+				setStep(1); // Mouse moves to search bar
+				await new Promise((r) => setTimeout(r, 700));
+				if (!isMounted) break;
+
+				setStep(2); // Mouse clicks search bar
+				await new Promise((r) => setTimeout(r, 300));
 				if (!isMounted) break;
 
 				// Typing "Travel"
 				const typeDelays = [150, 100, 120, 180, 100, 150];
 				for (let i = 1; i <= 6; i++) {
-					setStep(i);
+					setStep(2 + i);
 					await new Promise((r) => setTimeout(r, typeDelays[i - 1]));
 					if (!isMounted) break;
 				}
 				if (!isMounted) break;
 
-				setStep(7); // Pause after typing
+				setStep(9); // Pause after typing
 				await new Promise((r) => setTimeout(r, 600));
 				if (!isMounted) break;
 
-				setStep(8); // Mouse moves to item
+				setStep(10); // Mouse moves to item
 				await new Promise((r) => setTimeout(r, 800));
 				if (!isMounted) break;
 
-				setStep(9); // Mouse clicks item
+				setStep(11); // Mouse clicks item
 				await new Promise((r) => setTimeout(r, 400));
 				if (!isMounted) break;
 
-				setStep(10); // Hold before reset
+				setStep(12); // Hold before reset
 				await new Promise((r) => setTimeout(r, 1500));
 			}
 		};
@@ -56,12 +64,12 @@ export function CommandPaletteMock() {
 	}, [prefersReducedMotion]);
 
 	const getSearchTerm = (s: number) => {
-		if (s === 1) return "T";
-		if (s === 2) return "Tr";
-		if (s === 3) return "Tra";
-		if (s === 4) return "Trav";
-		if (s === 5) return "Trave";
-		if (s >= 6) return "Travel";
+		if (s === 3) return "T";
+		if (s === 4) return "Tr";
+		if (s === 5) return "Tra";
+		if (s === 6) return "Trav";
+		if (s === 7) return "Trave";
+		if (s >= 8) return "Travel";
 		return "";
 	};
 
@@ -70,9 +78,9 @@ export function CommandPaletteMock() {
 		f.name.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
 
-	const isHoveringItem = prefersReducedMotion || step >= 8;
-	const showPing = !prefersReducedMotion && step === 9;
-	const isInputFocused = prefersReducedMotion || step > 0;
+	const isHoveringItem = prefersReducedMotion || step >= 10;
+	const showPing = !prefersReducedMotion && (step === 2 || step === 11);
+	const isInputFocused = prefersReducedMotion || step >= 2;
 
 	return (
 		<div className="relative flex h-72 w-full shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-inner select-none corner-squircle supports-[corner-shape:squircle]:rounded-3xl supports-[corner-shape:squircle]:corner-squircle sm:w-85">
@@ -164,8 +172,17 @@ export function CommandPaletteMock() {
 				<div
 					className={cn(
 						"absolute z-20 h-5 w-5 drop-shadow-md transition-all ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-						isHoveringItem ? "top-22.5 left-33 scale-95 opacity-100" : "top-30 left-45 opacity-0",
-						prefersReducedMotion ? "delay-0 duration-0" : "duration-700",
+						prefersReducedMotion && "opacity-0 delay-0 duration-0",
+						!prefersReducedMotion &&
+							(step === 0 || step === 12) &&
+							"top-30 left-45 opacity-0 duration-700",
+						!prefersReducedMotion &&
+							step >= 1 &&
+							step < 10 &&
+							"top-8 left-20 scale-95 opacity-100 duration-700",
+						!prefersReducedMotion &&
+							step >= 10 &&
+							"top-22.5 left-33 scale-95 opacity-100 duration-700",
 					)}
 				>
 					<MousePointer2Icon className="h-full w-full fill-foreground text-foreground" />
