@@ -10,6 +10,7 @@ import {
 	MousePointer2Icon,
 	SettingsIcon,
 	UploadIcon,
+	FileBracesIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -37,7 +38,8 @@ const MOCK_PREVIEW_ITEMS = [
 ];
 
 const FILE_TYPES = [
-	{ label: "JSON", icon: <span className="text-sm font-bold text-yellow-500">{"{}"}</span> },
+	// { label: "JSON", icon: <span className="text-sm font-bold text-yellow-500">{"{}"}</span> },
+	{ label: "JSON", icon: <FileBracesIcon className="h-5 w-5 text-yellow-600" /> },
 	{ label: "CSV", icon: <FileSpreadsheetIcon className="h-5 w-5 text-green-600" /> },
 	{ label: "TXT", icon: <FileTextIcon className="h-5 w-5 text-blue-600" /> },
 	{ label: "HTML", icon: <FileCodeIcon className="h-5 w-5 text-orange-500" /> },
