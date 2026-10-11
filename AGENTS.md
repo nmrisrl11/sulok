@@ -185,6 +185,7 @@ sulok/
 - **Chrome Extension Security & CSP:** Never hardcode `localhost` permissions or `unsafe-inline` Content Security Policies directly into `manifest.json`. The Vite configuration (`vite.ext.config.ts`) must dynamically inject permissive CSPs and localhost host permissions exclusively in development mode (`mode === "development"`), falling back to a strictly locked-down CSP for production builds.
 - **PWA Lazy Loading Chunk Errors:** Do not implement complex custom `ErrorBoundary` logic to catch and unmount lazy-loaded components (e.g., `lazy(() => import(...))`) that fail to load offline on the Vite dev server. The `vite-plugin-pwa` combined with `workbox` automatically precaches all `.js` chunks during a production build (`npm run build`). Therefore, network fetch errors for lazy chunks are inherently a dev-only issue and do not affect offline production usage.
 - **Web Share Target API:** When configuring the Web Share Target API in the PWA manifest, always explicitly set the `enctype` (e.g., `enctype: "application/x-www-form-urlencoded"` for GET requests) to prevent Chrome DevTools warnings.
+- **PWA Manifest Screenshots:** When configuring screenshots for the Web App Manifest in `src/constants/pwa-screenshots.ts`, ensure wide form factor (`wide`, 1920x1080) and narrow form factor (`narrow`, 1080x1920) entries have consistent, descriptive labels and point to actual verified JPEG assets located in `public/rich-install-ui/desktop/` and `public/rich-install-ui/mobile/`.
 
 ## What NOT To Do
 

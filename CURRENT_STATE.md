@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — Sulok
 
-> Last updated: 2026-10-04
+> Last updated: 2026-10-11
 
 ## Project Status: 🟢 Development
 
@@ -34,7 +34,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Interactive NomiBot component with physics-based animations in the global footer
 - [x] Unified AppLayout with global Header and Footer structure
 - [x] Vite Rollup code splitting (manualChunks) optimizations
-- [x] PWA configured with responsive update checking (on visibility change) and hourly polling fallback
+- [x] PWA configured with responsive update checking (on visibility change), hourly polling fallback, and rich installation screenshots
 
 ---
 
@@ -113,6 +113,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Responsive/mobile UI
 - [x] PWA/offline support
 - [x] PWA Web Share Target API support (Android/ChromeOS)
+- [x] PWA Rich Install UI configured with high-resolution desktop (1920x1080) and mobile (1080x1920) screenshots
 - [x] Comprehensive Guide page with interactive UI mocks demonstrating core features
 
 ### Phase 2 — Browser Extension (Completed)
