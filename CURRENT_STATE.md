@@ -31,7 +31,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Workspace Theme system (Dark, Light, Sepia, Sand, Midnight, Mocha)
 - [x] Brand mascot (Sulo) & interactive morphing logo implemented
 - [x] Sulo mascot contextual whisper feedback on header
-- [x] Interactive NomiBot component with physics-based animations in the global footer
+- [x] Interactive NomiBot component with physics-based animations on the About page
 - [x] Unified AppLayout with global Header and Footer structure
 - [x] Vite Rollup code splitting (manualChunks) optimizations
 - [x] PWA configured with responsive update checking (on visibility change), hourly polling fallback, and rich installation screenshots

@@ -7,7 +7,7 @@ import { SearchIcon, WandSparklesIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const navLinks: { to: string; label: string; expression: SuloExpression }[] = [
-	{ to: "/about", label: "About", expression: "shy" },
+	{ to: "/guide", label: "Guide", expression: "curious" },
 	{ to: "/settings", label: "Settings", expression: "attentive" },
 ];
 

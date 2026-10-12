@@ -54,6 +54,7 @@
 - File tree structure for folder/link hierarchy.
 - Drag-and-drop for organization.
 - Sidebar navigation exists for the main file explorer (Library), keeping navigation structured.
+- **Global Navigation & Meta Attribution**: Maintain a strict separation between in-app utilities and meta links. The Header is reserved for active tools (Guide, Settings, Search, Quick Customize). The Footer is reserved for secondary product links (About, Get App, Updates, App Tour) and must remain a single, quiet horizontal line without stacked branding. Developer provenance credits (Nomer with NomiBot) and app version belong on the About page.
 
 ### Interaction
 

@@ -1,9 +1,12 @@
+import { NomiBot } from "@/components/nomi-bot";
 import { SEO } from "@/components/seo";
 import { APP_INFO } from "@/constants/app-info";
 import { CHANGELOG_DATA } from "@/data/changelog";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export function AboutPage() {
+	const [isBotHovered, setIsBotHovered] = useState(false);
+
 	return (
 		<div className="mx-auto flex w-full max-w-2xl animate-in flex-col gap-10 px-4 pt-6 duration-500 fade-in slide-in-from-bottom-4 md:px-6 md:pt-12">
 			<SEO title="About" canonical="/about" />
@@ -45,22 +48,29 @@ export function AboutPage() {
 				</div>
 			</section>
 
-			<section className="mt-8 flex flex-col items-center gap-4 border-t border-border pt-8 sm:items-start">
-				<p className="text-sm text-muted-foreground">Version {CHANGELOG_DATA[0].version}</p>
-				<div className="flex gap-4">
-					<Link
-						to="/"
-						className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+			<section className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground sm:flex-row">
+				<p>Version {CHANGELOG_DATA[0].version}</p>
+				<span className="flex items-center">
+					Developed by:
+					<a
+						href="https://www.nmrisrl.dev/"
+						target="_blank"
+						rel="noopener noreferrer"
+						title="Visit Developer's Website"
+						onMouseEnter={() => setIsBotHovered(true)}
+						onMouseLeave={() => setIsBotHovered(false)}
+						className="group ml-1 flex items-center font-medium transition-colors hover:text-foreground"
 					>
-						Go to your corner &rarr;
-					</Link>
-					<Link
-						to="/updates"
-						className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-					>
-						See what's new &rarr;
-					</Link>
-				</div>
+						Nomer with{" "}
+						<NomiBot
+							isHovered={isBotHovered}
+							className="ml-1 h-5 w-5"
+							showBody={false}
+							headBounce={false}
+							eyeAnimation="look-left"
+						/>
+					</a>
+				</span>
 			</section>
 		</div>
 	);

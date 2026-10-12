@@ -32,11 +32,11 @@ export function AboutSkeleton() {
 				</div>
 			</section>
 
-			<section className="mt-8 flex flex-col items-center gap-4 border-t border-border pt-8 sm:items-start">
+			<section className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
 				<Skeleton className="h-4 w-24" />
-				<div className="flex gap-4">
-					<Skeleton className="h-5 w-36" />
-					<Skeleton className="h-5 w-32" />
+				<div className="flex items-center gap-1.5">
+					<Skeleton className="h-4 w-36" />
+					<Skeleton className="h-5 w-5 rounded-full" />
 				</div>
 			</section>
 		</div>
