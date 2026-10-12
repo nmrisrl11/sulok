@@ -7,25 +7,7 @@
 
 ## Unreleased
 
-### Added
-
-- **PWA Rich Install Preview:** Added high-resolution mobile screenshots to the web app manifest, providing rich preview cards showcasing real app features during mobile installation prompts.
-- **Interactive Guide:** A new dedicated Guide page (`/guide`) showcasing the app's core features through interactive mock UIs. Added a default link to this guide in the "Welcome to Sulok" folder for new users. The mock UIs now feature smooth, continuous automatic animations that support both desktop and mobile, while fully respecting system reduced-motion preferences.
-- **Backup Reminders:** The app now intelligently reminds you to back up your library based on your activity and data volume. You can customize the reminder frequency or turn it off entirely in Settings.
-
-### Changed
-
-- Improved Device Sync deduplication: Syncing data from another device now intelligently merges folders and updates duplicate links using a "Latest Wins" approach, keeping your newest modifications intact.
-- Danger Zone actions ("Delete Library" and "Factory Reset") now thoroughly clean up offline cache storage in addition to local data.
-- Improved accessibility across the app's interactive Guide by properly hiding decorative animation elements and visually inactive toasts from screen readers.
-
-### Fixed
-
-- Fixed an issue where previewing bookmarks during import would aggressively cache images and favicons before saving them.
-- Fixed a bug where the browser extension could break after a Factory Reset on the web app.
-- Fixed the Backup Reminder setting incorrectly displaying an overdue warning for new users before they had enough saved data.
-- Fixed an issue where exporting settings or syncing between devices would incorrectly include local backup reminder preferences, which could unintentionally override settings on the receiving device.
-- Fixed an issue where the animated cursor's pulsing dot in the interactive Guide was still visible even when reduced motion was enabled.
+No pending changes yet.
 
 ---
 

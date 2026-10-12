@@ -14,6 +14,37 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "1.1.0",
+		date: "Oct 12, 2026",
+		title: "Interactive Guide, Smart Backup Reminders, & Install Previews",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Interactive App Guide: Getting started with Sulok is more intuitive and fun than ever! We've introduced a brand-new interactive Guide page (`/guide`) showcasing the app's superpowers through live, animated UI mockups. It features continuous micro-animations across desktop and mobile, full respect for system reduced-motion preferences, and a convenient link in your default 'Welcome to Sulok' folder.",
+					"Smart Backup Reminders: Keep your personal corner safe without the mental overhead. Sulok now intelligently reminds you when it's time to export a backup based on your activity and library size. You can easily tweak reminder intervals, snooze alerts, or customize your schedule directly in Settings.",
+					"Rich Installation Previews: Installing Sulok on mobile now looks better than ever! We've upgraded the Progressive Web App manifest with high-definition screenshots, giving you rich, app-store style preview cards when adding Sulok to your home screen.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Smarter Device Sync: Syncing between devices is now smoother and conflict-free! Sulok uses an intelligent 'Latest Wins' strategy to merge folders and update duplicate links, ensuring your newest edits and additions always stay intact.",
+					"Thorough Cache Cleaning: Resetting or clearing your library in the Danger Zone now deeply flushes offline cache storage alongside your local database, ensuring a truly fresh, pristine state.",
+					"Accessible Experience: Polished the interactive Guide for screen readers and assistive technology by cleanly hiding decorative animation elements and inactive toasts.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Reliable Backup Reminders & Sync: Fixed an issue where new libraries would prematurely show overdue backup warnings before reaching the data threshold, and ensured local reminder preferences are cleanly isolated when exporting settings or syncing between devices.",
+					"Import & Extension Resilience: Addressed an issue where bookmark previews during import would prematurely cache external images and favicons before saving, and fixed a bug where the companion browser extension could lose its sync bridge after a web app Factory Reset.",
+					"Reduced Motion Refinements: Fixed an issue in the interactive Guide where the cursor's animated pulsing dot lingered on-screen even when system reduced motion was enabled.",
+				],
+			},
+		],
+	},
+	{
 		version: "1.0.0",
 		date: "Oct 05, 2026",
 		title: "The Official Version 1.0 Release",
