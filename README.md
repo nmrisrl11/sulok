@@ -38,7 +38,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **🔄 Settings Backup & Restore**: Securely backup and restore all your personalization choices, themes, and application configurations via a unified JSON file.
 - **🔔 Smart Backup Reminders**: Proactive, configurable reminders to ensure your local library is regularly backed up.
 - **🌐 Fully Offline Capable**: PWA configured with hourly update polling. Designed to work completely offline for local data and existing items (initial metadata fetching requires network access).
-- **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot in the footer.
+- **🎉 Sulo Mascot & NomiBot**: A responsive, interactive brand mascot that reacts to your actions, complete with an interactive physics-based NomiBot on the About page.
 - **📰 Built-in Changelog**: Stay up to date with a dedicated Updates page seamlessly integrated with the app's dynamic versioning.
 - **🗺️ Interactive Guide**: Learn how to master your corner of the web with a comprehensive, interactive guide page.
 - **🧩 Browser Extension**: A fully-featured Chrome Extension companion for zero-click saving via smart context menus, featuring a highly-performant searchable folder popup and native one-click browser bookmark syncing.

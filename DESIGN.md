@@ -206,6 +206,18 @@ Minimal shadows. Prefer border/background differentiation.
 - **Scroll Snap:** Tab list containers must use `snap-x` and individual tabs `snap-start` for tactile mobile scrolling.
 - **Auto-Scrolling:** When a tab becomes active (e.g., via click or deep link), it must automatically scroll into the center of the view (using `scrollIntoView({ behavior: 'smooth', inline: 'center' })`) to ensure the user's current context is always visible.
 
+### Global Navigation (Header & Footer)
+
+- **Header (App Utility Hub):** The header navbar is strictly dedicated to active workspace tools and utility navigation:
+  - Links: `Guide` (`/guide`) and `Settings` (`/settings`).
+  - Actions: Search (`Cmd+K`) and Quick Customize (`Shift+C`).
+  - Sulo Mascot: Triggers contextual expressions on hover (`Guide` &rarr; `curious`, `Settings` &rarr; `attentive`, `Search` &rarr; `attentive`, `Quick Customize` &rarr; `curious`).
+  - The navigation items are housed in a floating pill with `shadow-inner` and `backdrop-blur-md` on the right side of the header.
+- **Footer (Meta Product Hub):** The global footer is rendered quietly across all pages as a single, horizontal, wrap-friendly text line:
+  - Links: `About • Get App • Updates • App Tour`.
+  - It maintains a minimal vertical footprint to avoid visual clutter and prevent collisions with floating bottom controls (`BottomActionSystem` / Sulo FAB) and mobile home bars.
+- **Provenance Metadata (About Page):** Developer attribution (`Developed by: Nomer with NomiBot`) and app version information belong together at the bottom of the `About` page rather than being rendered as persistent stacked text in the global footer.
+
 ### Bulk Action Bar
 
 - Floating pill-shaped bar positioned at `bottom-center` (coordinated via `BottomActionSystem`).
