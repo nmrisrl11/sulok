@@ -96,7 +96,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Responsive forms and dialogs (Item, Folder, Move dialogs use Drawer on mobile)
 - [x] Smart Selection UX (clicking items/folders in selection mode toggles selection)
 - [x] Favorites feature for folders and items (list/grid view & bulk actions)
-- [x] Recycle Bin auto-cleanup and retention UI (30 days)
+- [x] Recycle Bin auto-cleanup and retention UI (30 days) with cascade deletion isolation and independent item preservation
 - [x] Updates page (Changelog integration)
 - [x] Dynamic app versioning driven by changelog data
 - [x] Personal Notes / Annotations (squircle indicator, quick edit shortcut, import preview detection, and browser extension support)

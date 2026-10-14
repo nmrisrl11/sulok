@@ -12,6 +12,7 @@ export interface Item {
 	createdAt: number;
 	updatedAt: number;
 	deletedAt?: number;
+	cascadeParentId?: string;
 	isFavorite?: boolean;
 	note?: string;
 }
@@ -24,6 +25,7 @@ export interface Folder {
 	updatedAt: number;
 	order: number;
 	deletedAt?: number;
+	cascadeParentId?: string;
 	isFavorite?: boolean;
 }
 
@@ -69,6 +71,33 @@ db.version(5)
 	})
 	.upgrade((_trans) => {
 		// Add soft delete and favorite indexes
+	});
+
+db.version(6)
+	.stores({
+		items: "id, folderId, url, title, createdAt, updatedAt, deletedAt, cascadeParentId, isFavorite",
+		folders:
+			"id, parentId, name, createdAt, updatedAt, order, deletedAt, cascadeParentId, isFavorite",
+	})
+	.upgrade(async (trans) => {
+		const folders = await trans.table("folders").toArray();
+		const deletedFolders = folders.filter((f) => !!f.deletedAt);
+
+		for (const folder of deletedFolders) {
+			await trans
+				.table("folders")
+				.where("parentId")
+				.equals(folder.id)
+				.filter((f: Folder) => !!f.deletedAt && f.deletedAt === folder.deletedAt)
+				.modify({ cascadeParentId: folder.id });
+
+			await trans
+				.table("items")
+				.where("folderId")
+				.equals(folder.id)
+				.filter((item: Item) => !!item.deletedAt && item.deletedAt === folder.deletedAt)
+				.modify({ cascadeParentId: folder.id });
+		}
 	});
 
 db.on("populate", (transaction) => {

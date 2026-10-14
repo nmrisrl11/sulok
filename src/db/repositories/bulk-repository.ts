@@ -5,29 +5,56 @@ export const BulkRepository = {
 	async softDelete(itemIds: string[], folderIds: string[]): Promise<void> {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, db.items, async () => {
+			if (itemIds.length > 0) {
+				for (const id of itemIds) {
+					await db.items.update(id, { deletedAt: now, cascadeParentId: undefined, updatedAt: now });
+				}
+			}
+
 			if (folderIds.length > 0) {
 				for (const id of folderIds) {
-					const foldersToUpdate = new Set<string>([id]);
+					await db.folders.update(id, {
+						deletedAt: now,
+						cascadeParentId: undefined,
+						updatedAt: now,
+					});
+
+					const cascadeFolderIds: string[] = [];
 					let queue = [id];
 
 					while (queue.length > 0) {
 						const currentId = queue.shift()!;
-						const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
+						const children = await db.folders
+							.filter((f) => f.parentId === currentId && !f.deletedAt)
+							.toArray();
 						for (const child of children) {
-							foldersToUpdate.add(child.id);
+							cascadeFolderIds.push(child.id);
 							queue.push(child.id);
 						}
 					}
 
-					const fIds = Array.from(foldersToUpdate);
-					await db.folders.where("id").anyOf(fIds).modify({ deletedAt: now, updatedAt: now });
-					await db.items.where("folderId").anyOf(fIds).modify({ deletedAt: now, updatedAt: now });
-				}
-			}
+					if (cascadeFolderIds.length > 0) {
+						await db.folders
+							.where("id")
+							.anyOf(cascadeFolderIds)
+							.modify({ deletedAt: now, cascadeParentId: id, updatedAt: now });
+					}
 
-			if (itemIds.length > 0) {
-				for (const id of itemIds) {
-					await db.items.update(id, { deletedAt: now, updatedAt: now });
+					const allAffectedFolderIds = [id, ...cascadeFolderIds];
+
+					const activeItems = await db.items
+						.where("folderId")
+						.anyOf(allAffectedFolderIds)
+						.filter((item) => !item.deletedAt && !itemIds.includes(item.id))
+						.toArray();
+
+					const activeItemIds = activeItems.map((i) => i.id);
+					if (activeItemIds.length > 0) {
+						await db.items
+							.where("id")
+							.anyOf(activeItemIds)
+							.modify({ deletedAt: now, cascadeParentId: id, updatedAt: now });
+					}
 				}
 			}
 		});
@@ -49,24 +76,12 @@ export const BulkRepository = {
 	},
 
 	async hardDelete(itemIds: string[], folderIds: string[]): Promise<void> {
+		const { FolderRepository } = await import("./folder-repository");
+
 		await db.transaction("rw", db.folders, db.items, async () => {
 			if (folderIds.length > 0) {
 				for (const id of folderIds) {
-					const foldersToDelete = new Set<string>([id]);
-					let queue = [id];
-
-					while (queue.length > 0) {
-						const currentId = queue.shift()!;
-						const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
-						for (const child of children) {
-							foldersToDelete.add(child.id);
-							queue.push(child.id);
-						}
-					}
-
-					const fIds = Array.from(foldersToDelete);
-					await db.items.where("folderId").anyOf(fIds).delete();
-					await db.folders.bulkDelete(fIds);
+					await FolderRepository.delete(id);
 				}
 			}
 

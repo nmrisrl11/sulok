@@ -68,9 +68,13 @@
 - **List UX (Folders vs Items)**: Folders and links must be distinctly separated in list views (Folders first, then Items). Sorting applies independently within these groups. Do not completely merge them.
 - **Animated List Sorting**: When changing sorting options in the main explorer, items glide smoothly into their new positions using hardware-accelerated FLIP transitions via the Web Animations API. Compute coordinates relative to the common container element, elevate virtual row z-index during the glide, and always respect `prefers-reduced-motion`.
 - **Contextual Action Bars**: Bulk action bars must be scoped to the page component they operate on (e.g., `HomePage`) rather than being rendered globally in the layout, to prevent them from persisting across unrelated views.
-- **Recycle Bin Context**:
+- **Recycle Bin Context & Cascade Isolation**:
   - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.
-  - Deleting a parent folder hides its children from the UI. Restoring the parent restores the entire tree.
+  - Deleting a parent folder cascade-deletes only active children (setting `cascadeParentId = folderId`). Items and subfolders already in the Recycle Bin independently beforehand remain untouched and visible in the trash.
+  - In the Recycle Bin view, only directly deleted entries (`!cascadeParentId`) are rendered.
+  - Restoring a parent folder (or clicking Undo) only restores the folder and its cascaded children (`cascadeParentId === folderId`), keeping individually trashed items safe in the Recycle Bin.
+  - Restoring an item or folder whose parent is in the Recycle Bin or missing must safely unorganize it to root (`folderId: undefined` / `parentId: null`).
+  - Permanently deleting a folder only removes active/cascaded items; individually trashed items have their `folderId` cleared to `undefined`.
 - **Drag & Drop UX**:
   - Ensure `pointerWithin` collision is used to prevent elements from snapping to distant drop zones.
   - Apply `select-none touch-callout-none` to all draggable items to prevent mobile long-press context menus and text selection from interrupting the drag flow.
@@ -209,11 +213,12 @@ src/
 - **Atomic Validation:** When enforcing uniqueness or checking for duplicates before saving, perform the read check and the write operation inside the same Dexie transaction to ensure atomic consistency.
 - Validate all input with Zod before writing to the database.
 
-### Import/Export
+### Import/Export & Device Sync
 
-- Export format is JSON.
+- Export formats are JSON, CSV, and TXT.
 - Exported data must be self-contained (no external references).
-- Import must validate and deduplicate before inserting.
+- Data exports and P2P device sync strictly exclude items and folders in the Recycle Bin (`!deletedAt`) to keep archives clean and prevent sync trash pollution.
+- Import must validate and deduplicate before inserting. If an imported link currently exists in the local Recycle Bin, it is gracefully revived into the active library with the imported data.
 
 ---
 

@@ -25,9 +25,7 @@ export const FolderRepository = {
 		let results = await db.folders.toArray();
 
 		if (view === "trash") {
-			const deletedFolders = results.filter((f) => f.deletedAt);
-			const deletedFolderIds = new Set(deletedFolders.map((f) => f.id));
-			results = deletedFolders.filter((f) => !f.parentId || !deletedFolderIds.has(f.parentId));
+			results = results.filter((f) => f.deletedAt && !f.cascadeParentId);
 		} else if (view === "favorites" && parentId === undefined) {
 			results = results.filter((f) => !f.deletedAt && f.isFavorite);
 		} else {
@@ -193,13 +191,15 @@ export const FolderRepository = {
 
 	async delete(id: string): Promise<void> {
 		await db.transaction("rw", db.folders, db.items, async () => {
-			// Find all subfolders recursively
+			// Find all subfolders recursively that were deleted with this folder (or active subfolders)
 			const foldersToDelete = new Set<string>([id]);
 			let queue = [id];
 
 			while (queue.length > 0) {
 				const currentId = queue.shift()!;
-				const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
+				const children = await db.folders
+					.filter((f) => f.parentId === currentId && (f.cascadeParentId === id || !f.deletedAt))
+					.toArray();
 				for (const child of children) {
 					foldersToDelete.add(child.id);
 					queue.push(child.id);
@@ -208,8 +208,42 @@ export const FolderRepository = {
 
 			const folderIds = Array.from(foldersToDelete);
 
-			// Delete all items in these folders
-			await db.items.where("folderId").anyOf(folderIds).delete();
+			// Delete items that were cascade-deleted with this folder or active in it
+			const itemsToDelete = await db.items
+				.where("folderId")
+				.anyOf(folderIds)
+				.filter((item) => item.cascadeParentId === id || !item.deletedAt)
+				.toArray();
+			const itemIdsToDelete = itemsToDelete.map((i) => i.id);
+			if (itemIdsToDelete.length > 0) {
+				await db.items.bulkDelete(itemIdsToDelete);
+			}
+
+			// Items in these folders that were individually deleted beforehand:
+			// Unset their folderId so they remain safe in the Recycle Bin as unorganized
+			const itemsToOrphan = await db.items
+				.where("folderId")
+				.anyOf(folderIds)
+				.filter((item) => !!item.deletedAt && item.cascadeParentId !== id)
+				.toArray();
+			for (const item of itemsToOrphan) {
+				await db.items.update(item.id, { folderId: undefined });
+			}
+
+			// Child folders that were individually deleted beforehand:
+			// Unset their parentId so they remain safe in the Recycle Bin as root
+			const foldersToOrphan = await db.folders
+				.filter(
+					(f) =>
+						f.parentId !== null &&
+						folderIds.includes(f.parentId) &&
+						!!f.deletedAt &&
+						f.cascadeParentId !== id,
+				)
+				.toArray();
+			for (const f of foldersToOrphan) {
+				await db.folders.update(f.id, { parentId: null });
+			}
 
 			// Delete the folders
 			await db.folders.bulkDelete(folderIds);
@@ -219,21 +253,7 @@ export const FolderRepository = {
 	async deleteMany(ids: string[]): Promise<void> {
 		await db.transaction("rw", db.folders, db.items, async () => {
 			for (const id of ids) {
-				const foldersToDelete = new Set<string>([id]);
-				let queue = [id];
-
-				while (queue.length > 0) {
-					const currentId = queue.shift()!;
-					const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
-					for (const child of children) {
-						foldersToDelete.add(child.id);
-						queue.push(child.id);
-					}
-				}
-
-				const folderIds = Array.from(foldersToDelete);
-				await db.items.where("folderId").anyOf(folderIds).delete();
-				await db.folders.bulkDelete(folderIds);
+				await FolderRepository.delete(id);
 			}
 		});
 	},
@@ -242,24 +262,51 @@ export const FolderRepository = {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, db.items, async () => {
 			for (const id of ids) {
-				const foldersToUpdate = new Set<string>([id]);
+				// Mark the target folder as deleted directly
+				await db.folders.update(id, {
+					deletedAt: now,
+					cascadeParentId: undefined,
+					updatedAt: now,
+				});
+
+				// Find all active (non-deleted) descendant folders recursively
+				const cascadeFolderIds: string[] = [];
 				let queue = [id];
 
 				while (queue.length > 0) {
 					const currentId = queue.shift()!;
-					const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
+					const children = await db.folders
+						.filter((f) => f.parentId === currentId && !f.deletedAt)
+						.toArray();
 					for (const child of children) {
-						foldersToUpdate.add(child.id);
+						cascadeFolderIds.push(child.id);
 						queue.push(child.id);
 					}
 				}
 
-				const folderIds = Array.from(foldersToUpdate);
-				await db.folders.where("id").anyOf(folderIds).modify({ deletedAt: now, updatedAt: now });
-				await db.items
+				if (cascadeFolderIds.length > 0) {
+					await db.folders
+						.where("id")
+						.anyOf(cascadeFolderIds)
+						.modify({ deletedAt: now, cascadeParentId: id, updatedAt: now });
+				}
+
+				const allAffectedFolderIds = [id, ...cascadeFolderIds];
+
+				// Only cascade delete items that are NOT already deleted!
+				const activeItems = await db.items
 					.where("folderId")
-					.anyOf(folderIds)
-					.modify({ deletedAt: now, updatedAt: now });
+					.anyOf(allAffectedFolderIds)
+					.filter((item) => !item.deletedAt)
+					.toArray();
+
+				const activeItemIds = activeItems.map((i) => i.id);
+				if (activeItemIds.length > 0) {
+					await db.items
+						.where("id")
+						.anyOf(activeItemIds)
+						.modify({ deletedAt: now, cascadeParentId: id, updatedAt: now });
+				}
 			}
 		});
 	},
@@ -268,48 +315,61 @@ export const FolderRepository = {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, db.items, async () => {
 			for (const id of ids) {
-				const foldersToUpdate = new Set<string>([id]);
-				let queue = [id];
+				const folder = await db.folders.get(id);
+				if (!folder) continue;
 
-				while (queue.length > 0) {
-					const currentId = queue.shift()!;
-					const children = await db.folders.filter((f) => f.parentId === currentId).toArray();
-					for (const child of children) {
-						foldersToUpdate.add(child.id);
-						queue.push(child.id);
+				let targetParentId = folder.parentId;
+				if (targetParentId) {
+					const parent = await db.folders.get(targetParentId);
+					if (!parent || parent.deletedAt) {
+						targetParentId = null;
 					}
 				}
 
-				const folderIds = Array.from(foldersToUpdate);
+				// Check for name collisions among active (non-deleted) siblings in the target parent
+				const siblings = await db.folders
+					.filter((f) => f.parentId === targetParentId && !f.deletedAt && f.id !== id)
+					.toArray();
 
-				for (const fId of folderIds) {
-					const folder = await db.folders.get(fId);
-					if (!folder) continue;
+				const reservedNames = new Set(siblings.map((f) => f.name.toLowerCase()));
+				let finalName = folder.name;
 
-					// Check for name collisions among active (non-deleted) siblings in the target parent
-					const siblings = await db.folders
-						.filter((f) => f.parentId === folder.parentId && !f.deletedAt && f.id !== fId)
+				if (reservedNames.has(finalName.toLowerCase())) {
+					finalName = generateUniqueName(finalName, reservedNames);
+				}
+
+				await db.folders.update(id, {
+					parentId: targetParentId,
+					name: finalName,
+					deletedAt: undefined,
+					cascadeParentId: undefined,
+					updatedAt: now,
+				});
+
+				// Find and restore any child folders that were cascade-deleted with this folder
+				const cascadeFolders = await db.folders.filter((f) => f.cascadeParentId === id).toArray();
+				for (const child of cascadeFolders) {
+					const childSiblings = await db.folders
+						.filter((f) => f.parentId === child.parentId && !f.deletedAt && f.id !== child.id)
 						.toArray();
-
-					const reservedNames = new Set(siblings.map((f) => f.name.toLowerCase()));
-					let finalName = folder.name;
-
-					if (reservedNames.has(finalName.toLowerCase())) {
-						finalName = generateUniqueName(finalName, reservedNames);
+					const childReserved = new Set(childSiblings.map((f) => f.name.toLowerCase()));
+					let childName = child.name;
+					if (childReserved.has(childName.toLowerCase())) {
+						childName = generateUniqueName(childName, childReserved);
 					}
-
-					await db.folders.update(fId, {
-						name: finalName,
+					await db.folders.update(child.id, {
+						name: childName,
 						deletedAt: undefined,
+						cascadeParentId: undefined,
 						updatedAt: now,
 					});
 				}
 
-				// Also restore items inside these folders
-				const itemsToRestore = await db.items.where("folderId").anyOf(folderIds).toArray();
-				const itemIds = itemsToRestore.map((i) => i.id);
-				if (itemIds.length > 0) {
-					await ItemRepository.restoreMany(itemIds);
+				// Find and restore any items that were cascade-deleted with this folder
+				const cascadeItems = await db.items.filter((i) => i.cascadeParentId === id).toArray();
+				const cascadeItemIds = cascadeItems.map((i) => i.id);
+				if (cascadeItemIds.length > 0) {
+					await ItemRepository.restoreMany(cascadeItemIds);
 				}
 			}
 		});

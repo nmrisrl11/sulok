@@ -49,6 +49,7 @@ export const itemSchema = z.object({
 	logo: z.string().optional(),
 	folderId: z.string().optional(),
 	deletedAt: z.number().optional(),
+	cascadeParentId: z.string().optional(),
 	isFavorite: z.boolean().optional(),
 	note: z
 		.string()
