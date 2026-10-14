@@ -11,6 +11,7 @@ export const folderSchema = z.object({
 		}),
 	parentId: z.string().nullable().optional(),
 	deletedAt: z.number().optional(),
+	cascadeParentId: z.string().optional(),
 	isFavorite: z.boolean().optional(),
 });
 

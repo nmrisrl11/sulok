@@ -29,12 +29,7 @@ export const ItemRepository = {
 		let results = await db.items.toArray();
 
 		if (view === "trash") {
-			const deletedFolders = await db.folders.filter((f) => !!f.deletedAt).toArray();
-			const deletedFolderIds = new Set(deletedFolders.map((f) => f.id));
-
-			results = results.filter(
-				(item) => item.deletedAt && (!item.folderId || !deletedFolderIds.has(item.folderId)),
-			);
+			results = results.filter((item) => item.deletedAt && !item.cascadeParentId);
 		} else if (view === "favorites" && folderId === undefined) {
 			results = results.filter((item) => !item.deletedAt && item.isFavorite);
 		} else {
@@ -187,6 +182,7 @@ export const ItemRepository = {
 					await db.items.update(existing.id, {
 						...parsedData,
 						deletedAt: undefined,
+						cascadeParentId: undefined,
 						updatedAt: now,
 					});
 					return;
@@ -301,17 +297,25 @@ export const ItemRepository = {
 		const now = Date.now();
 		await db.transaction("rw", db.items, async () => {
 			for (const id of ids) {
-				await db.items.update(id, { deletedAt: now, updatedAt: now });
+				await db.items.update(id, { deletedAt: now, cascadeParentId: undefined, updatedAt: now });
 			}
 		});
 	},
 
 	async restoreMany(ids: string[]): Promise<void> {
 		const now = Date.now();
-		await db.transaction("rw", db.items, async () => {
+		await db.transaction("rw", db.folders, db.items, async () => {
 			for (const id of ids) {
 				const item = await db.items.get(id);
 				if (!item) continue;
+
+				let targetFolderId = item.folderId;
+				if (targetFolderId) {
+					const parentFolder = await db.folders.get(targetFolderId);
+					if (!parentFolder || parentFolder.deletedAt) {
+						targetFolderId = undefined;
+					}
+				}
 
 				let finalTitle = item.title || "";
 				if (finalTitle) {
@@ -319,7 +323,7 @@ export const ItemRepository = {
 					const siblings = await db.items
 						.filter(
 							(i) =>
-								(i.folderId || null) === (item.folderId || null) && !i.deletedAt && i.id !== id,
+								(i.folderId || null) === (targetFolderId || null) && !i.deletedAt && i.id !== id,
 						)
 						.toArray();
 
@@ -332,7 +336,9 @@ export const ItemRepository = {
 
 				await db.items.update(id, {
 					title: finalTitle,
+					folderId: targetFolderId,
 					deletedAt: undefined,
+					cascadeParentId: undefined,
 					updatedAt: now,
 				});
 			}

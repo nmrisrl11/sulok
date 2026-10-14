@@ -12,6 +12,7 @@ export interface Item {
 	createdAt: number;
 	updatedAt: number;
 	deletedAt?: number;
+	cascadeParentId?: string;
 	isFavorite?: boolean;
 	note?: string;
 }
@@ -24,6 +25,7 @@ export interface Folder {
 	updatedAt: number;
 	order: number;
 	deletedAt?: number;
+	cascadeParentId?: string;
 	isFavorite?: boolean;
 }
 
@@ -69,6 +71,54 @@ db.version(5)
 	})
 	.upgrade((_trans) => {
 		// Add soft delete and favorite indexes
+	});
+
+db.version(6)
+	.stores({
+		items: "id, folderId, url, title, createdAt, updatedAt, deletedAt, cascadeParentId, isFavorite",
+		folders:
+			"id, parentId, name, createdAt, updatedAt, order, deletedAt, cascadeParentId, isFavorite",
+	})
+	.upgrade(async (trans) => {
+		const folders: Folder[] = await trans.table("folders").toArray();
+		const foldersById = new Map<string, Folder>(folders.map((f) => [f.id, f]));
+		const deletedFolders = folders.filter((f) => !!f.deletedAt);
+
+		function getTopmostDeletedAncestor(folder: Folder): Folder {
+			let current = folder;
+			const visited = new Set<string>([current.id]);
+			while (current.parentId) {
+				const parent = foldersById.get(current.parentId);
+				if (!parent || !parent.deletedAt || parent.deletedAt !== folder.deletedAt) {
+					break;
+				}
+				if (visited.has(parent.id)) {
+					break; // cycle guard
+				}
+				visited.add(parent.id);
+				current = parent;
+			}
+			return current;
+		}
+
+		for (const folder of deletedFolders) {
+			const rootAncestor = getTopmostDeletedAncestor(folder);
+
+			if (folder.id !== rootAncestor.id) {
+				await trans
+					.table("folders")
+					.where("id")
+					.equals(folder.id)
+					.modify({ cascadeParentId: rootAncestor.id });
+			}
+
+			await trans
+				.table("items")
+				.where("folderId")
+				.equals(folder.id)
+				.filter((item: Item) => !!item.deletedAt && item.deletedAt === folder.deletedAt)
+				.modify({ cascadeParentId: rootAncestor.id });
+		}
 	});
 
 db.on("populate", (transaction) => {
