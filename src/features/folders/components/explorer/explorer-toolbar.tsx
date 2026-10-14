@@ -84,6 +84,11 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 		setIsFlat(null);
 	};
 
+	const handleViewModeChange = (mode: "list" | "grid") => {
+		if (mode === viewMode) return;
+		setViewMode(mode);
+	};
+
 	const getSelectValueDisplay = () => {
 		if (typeFilter.startsWith("domain:")) {
 			return typeFilter.slice(7);
@@ -288,7 +293,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 											? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 											: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 									)}
-									onClick={() => setViewMode("list")}
+									onClick={() => handleViewModeChange("list")}
 								>
 									<ListIcon className="mr-2 size-4 sm:mr-0" />
 									<span className="sm:sr-only">List</span>
@@ -304,7 +309,7 @@ export const ExplorerToolbar = memo(function ExplorerToolbar({
 											? "border-0 bg-background text-foreground shadow-engraved hover:bg-background"
 											: "text-muted-foreground hover:bg-background/50 hover:text-foreground",
 									)}
-									onClick={() => setViewMode("grid")}
+									onClick={() => handleViewModeChange("grid")}
 								>
 									<GridIcon className="mr-2 size-4 sm:mr-0" />
 									<span className="sm:sr-only">Grid</span>
