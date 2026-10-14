@@ -7,6 +7,10 @@
 
 ## Unreleased
 
+### Added
+
+- **Animated List Sorting**: Smooth, hardware-accelerated FLIP transitions when changing sort options in the main explorer, powered natively by the Web Animations API with zero external dependencies and zero layout lag.
+
 ### Changed
 
 - Swapped **About** and **Guide** navigation placement: promoted **Guide** to the top header alongside **Settings** for instant access to workflows and shortcuts, and positioned **About** in the global footer as part of the meta product hub (`About • Get App • Updates • App Tour`).

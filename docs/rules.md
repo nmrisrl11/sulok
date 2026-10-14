@@ -66,6 +66,7 @@
 - **List UX (Checkboxes)**: Checkboxes on items and folders in the main explorer should be hidden on desktop by default, appearing only on hover or when focused/selected. On mobile/touch devices, keep them visible.
 - **Duplicate Link Prevention**: When a user attempts to add an existing URL, instantly notify them with a "Go to link" action (or "Restore" if in the trash) to guide them to the existing item, instead of simply blocking the creation with an error. This reinforces the "Save it now, find it later" brand philosophy.
 - **List UX (Folders vs Items)**: Folders and links must be distinctly separated in list views (Folders first, then Items). Sorting applies independently within these groups. Do not completely merge them.
+- **Animated List Sorting**: When changing sorting options in the main explorer, items glide smoothly into their new positions using hardware-accelerated FLIP transitions via the Web Animations API. Compute coordinates relative to the common container element, elevate virtual row z-index during the glide, and always respect `prefers-reduced-motion`.
 - **Contextual Action Bars**: Bulk action bars must be scoped to the page component they operate on (e.g., `HomePage`) rather than being rendered globally in the layout, to prevent them from persisting across unrelated views.
 - **Recycle Bin Context**:
   - Clicking on a deleted folder or item in the trash should strictly toggle selection. It should NOT open the link or navigate into the folder.

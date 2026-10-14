@@ -1,4 +1,5 @@
 import { type Folder, type Item } from "@/db/db";
+import { useListSortAnimation } from "@/features/folders/hooks/use-list-sort-animation";
 import { ItemCard } from "@/features/items/components/item-card";
 import { ItemCardSkeleton } from "@/features/items/components/item-card-skeleton";
 import { ItemGridCard } from "@/features/items/components/item-grid-card";
@@ -13,7 +14,7 @@ import {
 import { getHasDataHint } from "@/lib/storage";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useQueryState } from "nuqs";
-import { memo, useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { FolderCard } from "../folder/folder-card";
 import { FolderCardSkeleton } from "../folder/folder-card-skeleton";
 import { FolderEmptyState } from "../folder/folder-empty-state";
@@ -170,7 +171,7 @@ function ExplorerMainContent({
 	const [viewMode] = useQueryState("mode", viewModeParser);
 	const [mixData] = useQueryState("mix", mixDataParser);
 	const [sortOption] = useQueryState("sort", sortOptionParser);
-	const [, setFolderId] = useQueryState("folder", folderIdParser);
+	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
 
 	const handleFolderNavigate = useCallback(
@@ -185,6 +186,25 @@ function ExplorerMainContent({
 	const columns = viewMode === "grid" ? gridCols : 1;
 
 	const dataToChunk = useMemo(() => {
+		const sortEntities = <T extends Folder | Item>(arr: T[], isFolder: boolean) => {
+			const sorted = [...arr];
+			sorted.sort((a, b) => {
+				if (sortOption.startsWith("name")) {
+					const nameA = (
+						isFolder ? (a as Folder).name : (a as Item).title || (a as Item).url || ""
+					).toLowerCase();
+					const nameB = (
+						isFolder ? (b as Folder).name : (b as Item).title || (b as Item).url || ""
+					).toLowerCase();
+					return sortOption === "name-asc"
+						? nameA.localeCompare(nameB)
+						: nameB.localeCompare(nameA);
+				}
+				return sortOption === "date-asc" ? a.createdAt - b.createdAt : b.createdAt - a.createdAt;
+			});
+			return sorted;
+		};
+
 		if (mixData) {
 			const mixed = [...folders, ...items] as (Folder | Item)[];
 			mixed.sort((a, b) => {
@@ -202,15 +222,19 @@ function ExplorerMainContent({
 			return mixed;
 		}
 
+		const sortedFolders = sortEntities(folders, true);
+		const sortedItems = sortEntities(items, false);
+
 		if (viewMode === "grid") {
-			return [...folders, ...items];
+			return [...sortedFolders, ...sortedItems];
 		}
 
 		// List separated mode
 		const list: EntityRow[] = [];
-		if (folders.length > 0) list.push(...folders);
-		if (folders.length > 0 && items.length > 0) list.push({ id: "divider", isDivider: true });
-		if (items.length > 0) list.push(...items);
+		if (sortedFolders.length > 0) list.push(...sortedFolders);
+		if (sortedFolders.length > 0 && sortedItems.length > 0)
+			list.push({ id: "divider", isDivider: true });
+		if (sortedItems.length > 0) list.push(...sortedItems);
 		return list;
 	}, [folders, items, mixData, sortOption, viewMode]);
 
@@ -238,6 +262,14 @@ function ExplorerMainContent({
 	const virtualItems = rowVirtualizer.getVirtualItems();
 	const deferredVirtualItems = useDeferredValue(virtualItems);
 
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useListSortAnimation({
+		containerRef,
+		sortOption,
+		folderId: folderId || undefined,
+	});
+
 	if (isLoading) {
 		const hasDataHint = getHasDataHint();
 		if (!hasDataHint) {
@@ -262,6 +294,7 @@ function ExplorerMainContent({
 
 	return (
 		<div
+			ref={containerRef}
 			id="explorer-main"
 			style={{
 				height: `${rowVirtualizer.getTotalSize()}px`,
