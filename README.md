@@ -27,7 +27,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure with drag-and-drop support.
 - **⭐ Favorites**: Mark important folders and links as favorites to quickly access them from a dedicated view.
 - **🗑️ Recycle Bin**: Safely soft-delete items with a 30-day retention and auto-cleanup system.
-- **🔍 Smart Filtering**: Instantly filter your library by domains or favorites directly from the toolbar.
+- **🔍 Smart Filtering & Sorting**: Instantly filter your library by domains or favorites, with smooth hardware-accelerated animated list sorting directly from the toolbar.
 - **📝 Item Management**: Save, edit, delete, and bulk-manage links with auto-fetched metadata (titles, descriptions, and images).
 - **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar with smart clipboard detection.
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, responsive global action drawers, and custom scrollbars.

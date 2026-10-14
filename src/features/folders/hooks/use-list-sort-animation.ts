@@ -1,5 +1,10 @@
 import { useLayoutEffect, useRef } from "react";
 
+interface RelativeRect {
+	left: number;
+	top: number;
+}
+
 interface UseListSortAnimationProps {
 	containerRef: React.RefObject<HTMLDivElement | null>;
 	sortOption: string;
@@ -11,10 +16,11 @@ export function useListSortAnimation({
 	sortOption,
 	folderId,
 }: UseListSortAnimationProps) {
-	const lastRectsRef = useRef<Map<string, DOMRect>>(new Map());
+	const lastRectsRef = useRef<Map<string, RelativeRect>>(new Map());
 	const prevSortRef = useRef(sortOption);
 	const prevFolderRef = useRef(folderId);
 
+	// Primary animation effect: handles folder changes and sort animations
 	useLayoutEffect(() => {
 		const container = containerRef.current;
 		if (!container) return;
@@ -36,6 +42,7 @@ export function useListSortAnimation({
 
 		if (isSortChange && !prefersReducedMotion) {
 			const prevRects = lastRectsRef.current;
+			const containerRect = container.getBoundingClientRect();
 			const elements = container.querySelectorAll<HTMLElement>("[data-flip-id]");
 
 			elements.forEach((el) => {
@@ -43,7 +50,11 @@ export function useListSortAnimation({
 				if (!id) return;
 
 				const prevRect = prevRects.get(id);
-				const newRect = el.getBoundingClientRect();
+				const elRect = el.getBoundingClientRect();
+				const newRect: RelativeRect = {
+					left: elRect.left - containerRect.left,
+					top: elRect.top - containerRect.top,
+				};
 
 				if (prevRect) {
 					const dx = prevRect.left - newRect.left;
@@ -95,16 +106,38 @@ export function useListSortAnimation({
 				}
 			});
 		}
-
-		// Snapshot current visible bounding rects for the next sort operation
-		const nextMap = new Map<string, DOMRect>();
-		const currentElements = container.querySelectorAll<HTMLElement>("[data-flip-id]");
-		currentElements.forEach((el) => {
-			const id = el.dataset.flipId;
-			if (id) {
-				nextMap.set(id, el.getBoundingClientRect());
-			}
-		});
-		lastRectsRef.current = nextMap;
 	}, [containerRef, sortOption, folderId]);
+
+	// Separate layout effect that runs after every commit to keep snapshots current
+	// relative to the container across loading, navigation, scrolling, and item changes
+	useLayoutEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		const containerRect = container.getBoundingClientRect();
+		const nextMap = new Map<string, RelativeRect>();
+		const elements = container.querySelectorAll<HTMLElement>("[data-flip-id]");
+
+		elements.forEach((el) => {
+			const id = el.dataset.flipId;
+			if (!id) return;
+
+			// If the element is currently animating, preserve its resting destination rect
+			if (el.dataset.flipAnimating === "true") {
+				const existing = lastRectsRef.current.get(id);
+				if (existing) {
+					nextMap.set(id, existing);
+					return;
+				}
+			}
+
+			const elRect = el.getBoundingClientRect();
+			nextMap.set(id, {
+				left: elRect.left - containerRect.left,
+				top: elRect.top - containerRect.top,
+			});
+		});
+
+		lastRectsRef.current = nextMap;
+	});
 }

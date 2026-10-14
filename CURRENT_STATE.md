@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — Sulok
 
-> Last updated: 2026-10-12
+> Last updated: 2026-10-14
 
 ## Project Status: 🟢 Development
 
@@ -82,6 +82,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Drag-and-drop organization
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls
+- [x] Hardware-accelerated animated list sorting (FLIP transitions via Web Animations API with container-relative coordinate tracking)
 - [x] Command Palette Search Refinements (Domain-based search, parent-folder context hints)
 - [x] High-performance list virtualization (TanStack Virtual) for massive local datasets
 - [x] Custom CSS scroll-fade effects for major scrolling containers (Explorer, Command Palette)

@@ -239,6 +239,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Sorting applies independently within these groups to maintain a predictable, standard file-manager UX (e.g. Google Drive, Terabox).
 - When mixed mode is enabled, folders and links are rendered in one combined list with a single ordering.
 - Do not use dense multi-column grids for content-heavy lists unless explicitly requested; rely on clean, vertical stacks with comfortable spacing.
+- **Animated List Sorting**: When changing sorting options (e.g. Title, Date Added) in the main explorer, items smoothly glide into their newly ordered positions using hardware-accelerated FLIP transitions (`cubic-bezier(0.16, 1, 0.3, 1)` over 320ms). Animating virtual rows temporarily elevate their z-index and active cards apply subtle elevation (`data-[flip-animating=true]:bg-card/95 data-[flip-animating=true]:shadow-md`) to float cleanly over sibling rows without visual clipping. System reduced-motion preferences (`prefers-reduced-motion: reduce`) are strictly respected by disabling animation.
 
 ### Empty States
 
