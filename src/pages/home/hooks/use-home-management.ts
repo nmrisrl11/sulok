@@ -30,16 +30,10 @@ export function useHomeData() {
 
 	const isFiltersActive = searchQuery !== "" || sortOption !== "date-desc" || typeFilter !== "all";
 
-	// Parse sort option for DB query
-	const dbSort = sortOption.startsWith("name") ? "title" : "createdAt";
-	const dbDir = sortOption.endsWith("asc") ? "asc" : "desc";
-
 	const itemsData = useLiveQuery(
 		() =>
 			ItemRepository.query({
 				q: searchQuery,
-				sort: dbSort,
-				dir: dbDir,
 				folderId: isFlat
 					? undefined
 					: view === "all"
@@ -49,7 +43,7 @@ export function useHomeData() {
 							: undefined,
 				view,
 			}),
-		[searchQuery, dbSort, dbDir, folderId, view, isFlat],
+		[searchQuery, folderId, view, isFlat],
 	);
 
 	const foldersData = useLiveQuery(
@@ -63,10 +57,8 @@ export function useHomeData() {
 							? folderId || undefined
 							: undefined,
 				q: searchQuery,
-				sort: dbSort,
-				dir: dbDir,
 			}),
-		[view, folderId, searchQuery, dbSort, dbDir],
+		[view, folderId, searchQuery],
 	);
 
 	const totalItemsData = useLiveQuery(() => ItemRepository.count(), []);
