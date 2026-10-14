@@ -80,23 +80,44 @@ db.version(6)
 			"id, parentId, name, createdAt, updatedAt, order, deletedAt, cascadeParentId, isFavorite",
 	})
 	.upgrade(async (trans) => {
-		const folders = await trans.table("folders").toArray();
+		const folders: Folder[] = await trans.table("folders").toArray();
+		const foldersById = new Map<string, Folder>(folders.map((f) => [f.id, f]));
 		const deletedFolders = folders.filter((f) => !!f.deletedAt);
 
+		function getTopmostDeletedAncestor(folder: Folder): Folder {
+			let current = folder;
+			const visited = new Set<string>([current.id]);
+			while (current.parentId) {
+				const parent = foldersById.get(current.parentId);
+				if (!parent || !parent.deletedAt || parent.deletedAt !== folder.deletedAt) {
+					break;
+				}
+				if (visited.has(parent.id)) {
+					break; // cycle guard
+				}
+				visited.add(parent.id);
+				current = parent;
+			}
+			return current;
+		}
+
 		for (const folder of deletedFolders) {
-			await trans
-				.table("folders")
-				.where("parentId")
-				.equals(folder.id)
-				.filter((f: Folder) => !!f.deletedAt && f.deletedAt === folder.deletedAt)
-				.modify({ cascadeParentId: folder.id });
+			const rootAncestor = getTopmostDeletedAncestor(folder);
+
+			if (folder.id !== rootAncestor.id) {
+				await trans
+					.table("folders")
+					.where("id")
+					.equals(folder.id)
+					.modify({ cascadeParentId: rootAncestor.id });
+			}
 
 			await trans
 				.table("items")
 				.where("folderId")
 				.equals(folder.id)
 				.filter((item: Item) => !!item.deletedAt && item.deletedAt === folder.deletedAt)
-				.modify({ cascadeParentId: folder.id });
+				.modify({ cascadeParentId: rootAncestor.id });
 		}
 	});
 

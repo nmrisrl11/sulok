@@ -75,6 +75,8 @@
   - Restoring a parent folder (or clicking Undo) only restores the folder and its cascaded children (`cascadeParentId === folderId`), keeping individually trashed items safe in the Recycle Bin.
   - Restoring an item or folder whose parent is in the Recycle Bin or missing must safely unorganize it to root (`folderId: undefined` / `parentId: null`).
   - Permanently deleting a folder only removes active/cascaded items; individually trashed items have their `folderId` cleared to `undefined`.
+  - When performing batch soft-deletion of folders, load each target folder and skip updating it if it was already cascade-deleted by an earlier processed ancestor in the ongoing transaction (`folder.deletedAt === now && folder.cascadeParentId`), preventing accidental detachment of nested subfolders.
+  - In database migrations or schema upgrades resolving cascade deletion hierarchy, assign `cascadeParentId` to the topmost ancestor in the matching `deletedAt` chain (with cycle and missing parent guards) so multi-level descendants restore cleanly with the root ancestor.
 - **Drag & Drop UX**:
   - Ensure `pointerWithin` collision is used to prevent elements from snapping to distant drop zones.
   - Apply `select-none touch-callout-none` to all draggable items to prevent mobile long-press context menus and text selection from interrupting the drag flow.

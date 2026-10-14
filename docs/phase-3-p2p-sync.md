@@ -21,7 +21,7 @@
 - **Process:**
   - Generates a unique, readable 10-character PeerJS connection ID (e.g., `A1B2C3D4E5`).
   - Displays a responsive Modal (Desktop) or Drawer (Mobile) with the code prominently displayed in a large, monospace font (Geist Mono).
-  - Automatically packages the current state from Dexie (Folders, Items) and Zustand (Settings) into a secure `Blob`.
+  - Automatically packages the current state from Dexie (active Folders and Items, strictly excluding the Recycle Bin) and Zustand (Settings) into a secure `Blob`.
   - Waits for a client connection and transfers the payload upon a successful WebRTC handshake.
   - Displays a success state and automatically cleans up the connection.
 

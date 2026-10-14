@@ -262,6 +262,11 @@ export const FolderRepository = {
 		const now = Date.now();
 		await db.transaction("rw", db.folders, db.items, async () => {
 			for (const id of ids) {
+				const folder = await db.folders.get(id);
+				if (!folder || (folder.deletedAt === now && folder.cascadeParentId)) {
+					continue;
+				}
+
 				// Mark the target folder as deleted directly
 				await db.folders.update(id, {
 					deletedAt: now,

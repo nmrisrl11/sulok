@@ -13,6 +13,11 @@ export const BulkRepository = {
 
 			if (folderIds.length > 0) {
 				for (const id of folderIds) {
+					const folder = await db.folders.get(id);
+					if (!folder || (folder.deletedAt === now && folder.cascadeParentId)) {
+						continue;
+					}
+
 					await db.folders.update(id, {
 						deletedAt: now,
 						cascadeParentId: undefined,
