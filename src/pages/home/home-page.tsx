@@ -116,7 +116,7 @@ export function HomePage({ className }: { className?: string }) {
 		async (link: ExternalLinkData) => {
 			if (view === "trash") {
 				notify.warning("Cannot add links to the Recycle Bin.", {
-					id: "trash-drop-disabled",
+					id: `trash-drop-disabled-${link.url}`,
 				});
 				return;
 			}
@@ -191,7 +191,7 @@ export function HomePage({ className }: { className?: string }) {
 		const handleWindowDrop = async (e: DragEvent) => {
 			useExternalDragStore.getState().clearExternalDrag();
 
-			if (!isExternalLinkDrag(e) || view === "trash") return;
+			if (!isExternalLinkDrag(e)) return;
 			e.preventDefault();
 			if (!e.dataTransfer) return;
 			const link = extractExternalLink(e.dataTransfer);

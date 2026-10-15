@@ -187,11 +187,19 @@ export async function saveExternalLinkToFolder({
 
 	// Save new item
 	const cleanTitle = title?.trim() ? title.trim().slice(0, ITEM_TITLE_MAX_LENGTH) : undefined;
-	const createdItem = await ItemRepository.save({
-		url: validUrl,
-		title: cleanTitle,
-		folderId: folderId || undefined,
-	});
+	let createdItem: Item;
+	try {
+		createdItem = await ItemRepository.save({
+			url: validUrl,
+			title: cleanTitle,
+			folderId: folderId || undefined,
+		});
+	} catch (error) {
+		console.error("Failed to save dropped link:", error);
+		const message = error instanceof Error ? error.message : "Failed to save link";
+		notify.error(message, { id: `external-link-save-error-${validUrl}` });
+		return;
+	}
 
 	const destination = folderName || "Library";
 	notify.success(`Saved to ${destination}`, {
