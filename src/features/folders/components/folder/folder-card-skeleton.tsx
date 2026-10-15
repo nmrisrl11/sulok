@@ -1,7 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { viewParser } from "@/lib/search-params";
 import { useSettingsStore } from "@/stores";
+import { useQueryState } from "nuqs";
 
-export function FolderCardSkeleton() {
+interface FolderCardSkeletonProps {
+	view?: string;
+}
+
+export function FolderCardSkeleton({ view: viewProp }: FolderCardSkeletonProps = {}) {
+	const [queryView] = useQueryState("view", viewParser);
+	const view = viewProp ?? queryView;
 	const showFolderItemCounts = useSettingsStore(
 		(state) => state.settings.appearanceSettings.showFolderItemCounts ?? true,
 	);
@@ -13,7 +21,9 @@ export function FolderCardSkeleton() {
 				<Skeleton className="size-6 shrink-0 rounded-md" />
 				<div className="flex w-full max-w-xs flex-col items-start gap-1 overflow-hidden">
 					<Skeleton className="h-4 w-1/3 rounded-sm" />
-					{showFolderItemCounts && <Skeleton className="h-3 w-16 rounded-sm" />}
+					{(view === "trash" || showFolderItemCounts) && (
+						<Skeleton className="h-3 w-16 rounded-sm" />
+					)}
 				</div>
 			</div>
 			<div className="hidden shrink-0 items-center gap-1 sm:flex sm:gap-2">

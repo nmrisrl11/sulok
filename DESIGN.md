@@ -150,7 +150,7 @@ Minimal shadows. Prefer border/background differentiation.
 - **Folder Item Counts:** Live item/link counts are displayed directly under the folder name in monospace typography (`font-mono text-[11px] tracking-tight text-muted-foreground` in list view, `text-[10px]` in grid view), mirroring the URL subtext styling of `ItemCard` for visual balance without adding cognitive load.
 - **Display Toggle Preference:** Users can toggle folder item counts on or off via `Settings > Appearance > Interface & Layout` or directly inside the `Quick Customize` drawer (`Shift + C`). When disabled, folder cards revert to a clean single-line title across list and grid views, Recycle Bin displays only the retention countdown (`Y days left`), and Command Palette folder rows collapse to a compact single-line layout.
 - **Trash State:** In the Recycle Bin, folders pair the live item count with remaining retention days (e.g., `X items • Y days left`) in clean, icon-less monospace text.
-- **Skeleton Parity:** Co-located skeletons (`FolderCardSkeleton`, `FolderGridCardSkeleton`) mirror the single-line or two-line stacked structure depending on the active setting to avoid layout shifts during asynchronous IndexedDB loading.
+- **Skeleton Parity:** Co-located skeletons (`FolderCardSkeleton`, `FolderGridCardSkeleton`) mirror the single-line or two-line stacked structure depending on whether folder item counts are enabled or the view is the Recycle Bin (where retention countdown is always rendered) to avoid layout shifts during asynchronous IndexedDB loading.
 
 ### Folder Tree
 

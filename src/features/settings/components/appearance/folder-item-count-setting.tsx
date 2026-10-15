@@ -54,7 +54,7 @@ export function FolderItemCountSetting() {
 			<div className="space-y-1">
 				<div className="flex items-center justify-between gap-4">
 					<h3 className="text-sm font-medium text-foreground">Folder Item Counts</h3>
-					<ResetButton onClick={handleReset} aria-label="Reset folder item counts" />
+					<ResetButton onClick={handleReset} label="Reset folder item counts" />
 				</div>
 				<p className="w-full text-sm text-muted-foreground sm:max-w-md">
 					Display the total count of items and links inside each folder across list and grid views.
