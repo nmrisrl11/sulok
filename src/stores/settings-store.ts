@@ -16,6 +16,7 @@ export const defaultSettings: Settings = {
 		folderColorBack: "#56b2e3",
 		folderColorFront: "#98cfef",
 		folderColorPaper: "#ffffff",
+		showFolderItemCounts: true,
 	},
 	soundSettings: DEFAULT_SOUND_SETTINGS,
 	suloSettings: {
@@ -140,6 +141,13 @@ const mergeState = (persistedState: unknown, currentState: SettingsState) => {
 					delete appearance[key];
 				}
 			}
+		}
+
+		if (
+			appearance.showFolderItemCounts !== undefined &&
+			typeof appearance.showFolderItemCounts !== "boolean"
+		) {
+			delete appearance.showFolderItemCounts;
 		}
 	}
 

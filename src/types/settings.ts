@@ -20,6 +20,7 @@ export interface AppearanceSettings {
 	folderColorBack: string;
 	folderColorFront: string;
 	folderColorPaper: string;
+	showFolderItemCounts: boolean;
 }
 
 export interface SoundSettings {

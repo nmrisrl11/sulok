@@ -18,6 +18,7 @@ import {
 	AccentColorControl,
 	CornerRadiusControl,
 	FolderColorControl,
+	FolderItemCountControl,
 	LayoutDensityControl,
 	WorkspaceThemeControl,
 } from "@/features/settings/components/appearance/controls";
@@ -68,6 +69,7 @@ export function QuickCustomizeDrawer() {
 				customCornerRadius: 16,
 				layoutDensity: "compact",
 				customLayoutDensity: 12,
+				showFolderItemCounts: true,
 			},
 		});
 	};
@@ -199,6 +201,18 @@ export function QuickCustomizeDrawer() {
 										</div>
 										<div className="p-1">
 											<LayoutDensityControl variant="compact" />
+										</div>
+									</div>
+
+									<div className="space-y-3">
+										<div>
+											<h4 className="text-sm font-medium">Folder Item Counts</h4>
+											<p className="mb-3 text-xs text-muted-foreground">
+												Show the number of items and links inside each folder.
+											</p>
+										</div>
+										<div className="p-1">
+											<FolderItemCountControl variant="compact" />
 										</div>
 									</div>
 								</div>

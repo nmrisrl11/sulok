@@ -4,7 +4,13 @@ import { ItemCard } from "@/features/items/components/item-card";
 import { ItemGridCard } from "@/features/items/components/item-grid-card";
 import { notify } from "@/lib/notify";
 import { viewModeParser } from "@/lib/search-params";
-import { useActiveDragStore, useFolderStore, useItemStore, type DragData } from "@/stores";
+import {
+	useActiveDragStore,
+	useFolderStore,
+	useItemStore,
+	useSettingsStore,
+	type DragData,
+} from "@/stores";
 import {
 	DndContext,
 	DragOverlay,
@@ -273,6 +279,9 @@ function DragOverlayContent({
 }) {
 	const { over } = useDndContext();
 	const overData = over?.data?.current as DropData | undefined;
+	const showFolderItemCounts = useSettingsStore(
+		(state) => state.settings.appearanceSettings.showFolderItemCounts ?? true,
+	);
 
 	let dropStatus: "valid" | "same-folder" | "self" = "valid";
 	if (overData) {
@@ -333,9 +342,19 @@ function DragOverlayContent({
 		>
 			{activeData.type === "folder" ? (
 				viewMode === "grid" ? (
-					<FolderGridCard folder={activeData.entity as Folder} isOverlay />
+					<FolderGridCard
+						folder={activeData.entity as Folder}
+						itemCount={activeData.itemCount}
+						showItemCount={showFolderItemCounts}
+						isOverlay
+					/>
 				) : (
-					<FolderCard folder={activeData.entity as Folder} isOverlay />
+					<FolderCard
+						folder={activeData.entity as Folder}
+						itemCount={activeData.itemCount}
+						showItemCount={showFolderItemCounts}
+						isOverlay
+					/>
 				)
 			) : viewMode === "grid" ? (
 				<ItemGridCard item={activeData.entity as Item} isOverlay />

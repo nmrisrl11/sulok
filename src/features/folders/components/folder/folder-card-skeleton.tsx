@@ -1,12 +1,20 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSettingsStore } from "@/stores";
 
 export function FolderCardSkeleton() {
+	const showFolderItemCounts = useSettingsStore(
+		(state) => state.settings.appearanceSettings.showFolderItemCounts ?? true,
+	);
+
 	return (
 		<div className="flex items-center justify-between gap-3 rounded-lg border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) corner-squircle supports-[corner-shape:squircle]:rounded-2xl">
 			<div className="flex min-w-0 flex-1 items-center gap-3">
 				<Skeleton className="size-4 shrink-0 rounded-sm" />
 				<Skeleton className="size-6 shrink-0 rounded-md" />
-				<Skeleton className="h-4 w-1/3 rounded-sm" />
+				<div className="flex w-full max-w-xs flex-col items-start gap-1 overflow-hidden">
+					<Skeleton className="h-4 w-1/3 rounded-sm" />
+					{showFolderItemCounts && <Skeleton className="h-3 w-16 rounded-sm" />}
+				</div>
 			</div>
 			<div className="hidden shrink-0 items-center gap-1 sm:flex sm:gap-2">
 				<Skeleton className="h-9 w-24 rounded-lg corner-squircle supports-[corner-shape:squircle]:rounded-xl" />

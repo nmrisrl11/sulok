@@ -12,6 +12,28 @@ export const FolderRepository = {
 			.toArray();
 	},
 
+	async getItemCounts(): Promise<Record<string, number>> {
+		const counts: Record<string, number> = {};
+
+		// Count items grouped by folder (active items to their folderId, trashed items cascaded with a folder to cascadeParentId)
+		await db.items
+			.filter((item) => (!item.deletedAt && !!item.folderId) || !!item.cascadeParentId)
+			.each((item) => {
+				const fId = item.cascadeParentId || item.folderId!;
+				counts[fId] = (counts[fId] || 0) + 1;
+			});
+
+		// Count subfolders grouped by parent folder (active subfolders to parentId, trashed subfolders cascaded with a folder to cascadeParentId)
+		await db.folders
+			.filter((folder) => (!folder.deletedAt && !!folder.parentId) || !!folder.cascadeParentId)
+			.each((folder) => {
+				const pId = folder.cascadeParentId || folder.parentId!;
+				counts[pId] = (counts[pId] || 0) + 1;
+			});
+
+		return counts;
+	},
+
 	async query(
 		params: {
 			view?: "all" | "favorites" | "trash";

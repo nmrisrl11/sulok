@@ -16,8 +16,19 @@ export function useCommandSearch(query: string) {
 		const q = query.toLowerCase().trim();
 
 		const folderMap = new Map<string, Folder>();
+		const folderCounts: Record<string, number> = {};
+
 		for (const f of allFolders) {
 			folderMap.set(f.id, f);
+			if (f.parentId) {
+				folderCounts[f.parentId] = (folderCounts[f.parentId] || 0) + 1;
+			}
+		}
+
+		for (const item of allItems) {
+			if (item.folderId) {
+				folderCounts[item.folderId] = (folderCounts[item.folderId] || 0) + 1;
+			}
 		}
 
 		// If no query, return 5 recent items/folders by default
@@ -26,6 +37,7 @@ export function useCommandSearch(query: string) {
 				folders: [...allFolders].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 5),
 				items: allItems.slice(0, 5),
 				folderMap,
+				folderCounts,
 			};
 		}
 
@@ -57,6 +69,7 @@ export function useCommandSearch(query: string) {
 			folders: filteredFolders,
 			items: filteredItems,
 			folderMap,
+			folderCounts,
 		};
 	}, [query, allItems, allFolders]);
 

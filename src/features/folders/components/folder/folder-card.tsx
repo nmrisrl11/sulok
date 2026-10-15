@@ -23,10 +23,14 @@ import { memo } from "react";
 export const FolderCard = memo(
 	function FolderCard({
 		folder,
+		itemCount = 0,
+		showItemCount = true,
 		isOverlay,
 		onNavigate,
 	}: {
 		folder: Folder;
+		itemCount?: number;
+		showItemCount?: boolean;
 		isOverlay?: boolean;
 		onNavigate?: (id: string) => void;
 	}) {
@@ -47,7 +51,7 @@ export const FolderCard = memo(
 			isDragging,
 		} = useDraggable({
 			id: `drag-${folder.id}`,
-			data: { type: "folder", entity: folder },
+			data: { type: "folder", entity: folder, itemCount },
 			disabled: view === "trash",
 		});
 
@@ -135,11 +139,16 @@ export const FolderCard = memo(
 					<FolderIcon className="size-6 shrink-0" />
 					<div className="flex flex-col items-start overflow-hidden">
 						<span className="truncate text-sm font-medium text-foreground">{folder.name}</span>
-						{view === "trash" && folder.deletedAt && (
-							<span className="mt-1 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+						{view === "trash" && folder.deletedAt ? (
+							<span className="mt-0.5 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+								{showItemCount && `${itemCount} ${itemCount === 1 ? "item" : "items"} • `}
 								{getTrashRetentionText(folder.deletedAt, today)}
 							</span>
-						)}
+						) : showItemCount ? (
+							<span className="mt-0.5 truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+								{itemCount} {itemCount === 1 ? "item" : "items"}
+							</span>
+						) : null}
 					</div>
 				</div>
 
@@ -240,6 +249,9 @@ export const FolderCard = memo(
 	(prev, next) =>
 		prev.folder.name === next.folder.name &&
 		prev.folder.isFavorite === next.folder.isFavorite &&
+		prev.folder.deletedAt === next.folder.deletedAt &&
+		prev.itemCount === next.itemCount &&
+		prev.showItemCount === next.showItemCount &&
 		prev.isOverlay === next.isOverlay &&
 		prev.onNavigate === next.onNavigate,
 );

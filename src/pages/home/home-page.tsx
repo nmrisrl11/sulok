@@ -122,6 +122,7 @@ export function HomePage({ className }: { className?: string }) {
 							<ExplorerMain
 								folders={homeData.folders}
 								items={homeData.items}
+								folderCounts={homeData.folderCounts}
 								isLoading={homeData.isLoading}
 								scrollRef={scrollRef}
 							/>

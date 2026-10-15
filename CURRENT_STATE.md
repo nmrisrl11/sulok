@@ -74,6 +74,7 @@ The project is currently in active development, having recently completed **Phas
 ### Phase 1 — Core (Current)
 
 - [x] Folder CRUD (tree structure)
+- [x] Live folder item counts across List, Grid, Recycle Bin, and Command Palette views with user-configurable display settings
 - [x] Item CRUD (save, edit, delete, bulk delete)
 - [x] Flat View Mode (Toggle between standard folder hierarchy and all links)
 - [x] Enhanced Empty State UI design
@@ -103,7 +104,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Global Settings Page (tabbed layout) with Premium Segmented Controls
 - [x] Modular Settings Architecture (isolated component code-splitting across all sections: Appearance, Sound FX, Sulo Customization, Data & Storage)
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization
-- [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, and layout density)
+- [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, layout density, and folder item count toggles)
 - [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
 - [x] Import and export data (JSON, CSV, TXT) and import browser bookmarks (HTML) with robust 1:1 metadata and folder hierarchy preservation
 - [x] Backup and Restore for Application Settings (JSON payload with appearance, sound, privacy, and Sulo configurations)

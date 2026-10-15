@@ -141,7 +141,16 @@ Minimal shadows. Prefer border/background differentiation.
 - During search, items display a clickable folder badge indicating their location.
 - Desktop hover action buttons are grouped inside a floating pill container (`bg-muted/40` frosted background, squircle corners, logical vertical dividers) to form a unified tool palette. Mobile actions (and desktop overflow) remain accessible via a global Action Drawer (which adapts to a centered action sheet on desktop). Do not use tooltips for these self-explanatory action icons.
 - Primary content (favicon and text) acts as a clickable link.
-- **Trash State:** When viewed in the Recycle Bin, items and folders display their permanent deletion countdown as subtle, icon-less monospace text (`font-mono text-muted-foreground`) to avoid drawing unnecessary attention.
+- **Trash State:** When viewed in the Recycle Bin, items display their permanent deletion countdown as subtle, icon-less monospace text (`font-mono text-muted-foreground`) to avoid drawing unnecessary attention.
+
+### Folder Cards & Rows
+
+- Folder icon on the left (using bespoke 3-layer `FolderIcon` with theme-reactive CSS variables).
+- Title + item count stacked on the right in both list and grid views.
+- **Folder Item Counts:** Live item/link counts are displayed directly under the folder name in monospace typography (`font-mono text-[11px] tracking-tight text-muted-foreground` in list view, `text-[10px]` in grid view), mirroring the URL subtext styling of `ItemCard` for visual balance without adding cognitive load.
+- **Display Toggle Preference:** Users can toggle folder item counts on or off via `Settings > Appearance > Interface & Layout` or directly inside the `Quick Customize` drawer (`Shift + C`). When disabled, folder cards revert to a clean single-line title across list and grid views, Recycle Bin displays only the retention countdown (`Y days left`), and Command Palette folder rows collapse to a compact single-line layout.
+- **Trash State:** In the Recycle Bin, folders pair the live item count with remaining retention days (e.g., `X items • Y days left`) in clean, icon-less monospace text.
+- **Skeleton Parity:** Co-located skeletons (`FolderCardSkeleton`, `FolderGridCardSkeleton`) mirror the single-line or two-line stacked structure depending on the active setting to avoid layout shifts during asynchronous IndexedDB loading.
 
 ### Folder Tree
 
@@ -155,7 +164,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Global contextual side sheet triggered via `Shift + C`.
 - The trigger icon (sparkles) is grouped alongside the main navigation links in the header, separated by a vertical divider, for a cohesive layout.
 - Renders without a backdrop filter to allow the user to view real-time changes applied to the underlying app layout.
-- Utilizes a `variant="compact"` prop for individual setting controls (Theme, Mascot, Audio) to switch from horizontal flowing layouts (used in full Settings) to vertically stacked, dense column structures.
+- Utilizes a `variant="compact"` prop for individual setting controls (Theme, Mascot, Audio, Folder Item Counts) to switch from horizontal flowing layouts (used in full Settings) to vertically stacked, dense column structures.
 
 ### Settings Panels
 
@@ -182,6 +191,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Must support the global squircle corner radius setting on both the outer container and inner command items.
 - Utilizes the `.scroll-fade-effect-y` utility class to create smooth gradient masking at the top and bottom edges of the scrolling item list. This class must be conditionally applied only when there are enough results to overflow the container, to prevent static clipping when the list is short.
 - During searches, matched links display their parent folder as a contextual hint.
+- Folder command items use a stacked layout with vertical padding (`py-2`) displaying the folder name on the primary line and the monospace item count (`X items` or `Empty`) below it, matching the visual rhythm and balance of link items.
 - Uses custom search logic (`shouldFilter={false}`) rather than `cmdk`'s default filter to allow domain matching.
 
 ### Explorer Toolbar
