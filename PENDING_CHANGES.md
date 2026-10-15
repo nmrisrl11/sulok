@@ -9,6 +9,8 @@
 
 ### Added
 
+- **Folder Item Counts**: Displayed live item and link counts directly under folder names in list, grid, Recycle Bin (`X items • Y days left`), and Command Palette views using monospace typography (`font-mono text-muted-foreground`), matching the URL styling of link cards and providing immediate context without needing to open folders.
+- **Folder Item Counts Display Setting**: Added a dedicated toggle under **Interface & Layout** in **Settings > Appearance** and inside the **Quick Customize** side drawer (`Shift + C`), allowing users to easily toggle folder item counts on or off across list, grid, Recycle Bin, and Command Palette views.
 - **Animated List Sorting**: Smooth, hardware-accelerated FLIP transitions when changing sort options in the main explorer, powered natively by the Web Animations API with zero external dependencies and zero layout lag.
 
 ### Changed

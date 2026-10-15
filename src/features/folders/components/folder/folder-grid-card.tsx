@@ -14,10 +14,14 @@ import { memo } from "react";
 export const FolderGridCard = memo(
 	function FolderGridCard({
 		folder,
+		itemCount = 0,
+		showItemCount = true,
 		isOverlay,
 		onNavigate,
 	}: {
 		folder: Folder;
+		itemCount?: number;
+		showItemCount?: boolean;
 		isOverlay?: boolean;
 		onNavigate?: (id: string) => void;
 	}) {
@@ -36,7 +40,7 @@ export const FolderGridCard = memo(
 			isDragging,
 		} = useDraggable({
 			id: `drag-${folder.id}`,
-			data: { type: "folder", entity: folder },
+			data: { type: "folder", entity: folder, itemCount },
 			disabled: view === "trash",
 		});
 
@@ -156,11 +160,16 @@ export const FolderGridCard = memo(
 						)}
 						<span className="truncate text-center text-sm font-medium">{folder.name}</span>
 					</div>
-					{view === "trash" && folder.deletedAt && (
+					{view === "trash" && folder.deletedAt ? (
 						<span className="mt-0.5 truncate text-center font-mono text-[10px] text-muted-foreground">
+							{showItemCount && `${itemCount} ${itemCount === 1 ? "item" : "items"} • `}
 							{getTrashRetentionText(folder.deletedAt, today)}
 						</span>
-					)}
+					) : showItemCount ? (
+						<span className="truncate text-center font-mono text-[10px] text-muted-foreground">
+							{itemCount} {itemCount === 1 ? "item" : "items"}
+						</span>
+					) : null}
 				</div>
 			</div>
 		);
@@ -168,6 +177,9 @@ export const FolderGridCard = memo(
 	(prev, next) =>
 		prev.folder.name === next.folder.name &&
 		prev.folder.isFavorite === next.folder.isFavorite &&
+		prev.folder.deletedAt === next.folder.deletedAt &&
+		prev.itemCount === next.itemCount &&
+		prev.showItemCount === next.showItemCount &&
 		prev.isOverlay === next.isOverlay &&
 		prev.onNavigate === next.onNavigate,
 );

@@ -71,10 +71,13 @@ export function CommandPalette() {
 	const navigate = useNavigate();
 
 	const debouncedQuery = useDebounce(query, 150);
-	const { folders, items, folderMap } = useCommandSearch(debouncedQuery);
+	const { folders, items, folderMap, folderCounts } = useCommandSearch(debouncedQuery);
 
 	const isReferralTrackingEnabled = useSettingsStore(
 		(state) => state.settings.privacySettings?.enableReferralTracking,
+	);
+	const showFolderItemCounts = useSettingsStore(
+		(state) => state.settings.appearanceSettings.showFolderItemCounts ?? true,
 	);
 
 	const runCommand = useCallback(
@@ -89,20 +92,30 @@ export function CommandPalette() {
 		if (folders.length === 0) return null;
 		return (
 			<CommandGroup heading="Folders">
-				{folders.map((folder) => (
-					<CommandItem
-						key={folder.id}
-						value={`folder-${folder.id}-${folder.name}`}
-						onSelect={() => runCommand(() => navigate(`/?folder=${folder.id}`))}
-						className="gap-2 rounded-md"
-					>
-						<FolderIcon className="mr-2 h-4 w-4 shrink-0" />
-						<span>{folder.name}</span>
-					</CommandItem>
-				))}
+				{folders.map((folder) => {
+					const count = folderCounts[folder.id] ?? 0;
+					return (
+						<CommandItem
+							key={folder.id}
+							value={`folder-${folder.id}-${folder.name}`}
+							onSelect={() => runCommand(() => navigate(`/?folder=${folder.id}`))}
+							className={cn("gap-2 rounded-md", showFolderItemCounts && "py-2")}
+						>
+							<FolderIcon className="mr-2 h-4 w-4 shrink-0 text-muted-foreground" />
+							<div className="flex flex-col items-start overflow-hidden">
+								<span className="truncate">{folder.name}</span>
+								{showFolderItemCounts && (
+									<span className="truncate font-mono text-[11px] tracking-tight text-muted-foreground">
+										{count} {count === 1 ? "item" : "items"}
+									</span>
+								)}
+							</div>
+						</CommandItem>
+					);
+				})}
 			</CommandGroup>
 		);
-	}, [folders, navigate, runCommand]);
+	}, [folders, folderCounts, showFolderItemCounts, navigate, runCommand]);
 
 	const renderItems = useMemo(() => {
 		if (items.length === 0) return null;

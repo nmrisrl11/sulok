@@ -12,6 +12,7 @@ import {
 	viewModeParser,
 } from "@/lib/search-params";
 import { getHasDataHint } from "@/lib/storage";
+import { useSettingsStore } from "@/stores";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useQueryState } from "nuqs";
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
@@ -56,11 +57,13 @@ export function ExplorerMainSkeleton() {
 export const ExplorerMain = memo(function ExplorerMain({
 	folders,
 	items,
+	folderCounts = {},
 	isLoading,
 	scrollRef,
 }: {
 	folders: Folder[];
 	items: Item[];
+	folderCounts?: Record<string, number>;
 	isLoading: boolean;
 	scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
@@ -68,6 +71,7 @@ export const ExplorerMain = memo(function ExplorerMain({
 		<ExplorerMainContent
 			folders={folders}
 			items={items}
+			folderCounts={folderCounts}
 			isLoading={isLoading}
 			scrollRef={scrollRef}
 		/>
@@ -98,6 +102,8 @@ const VirtualRow = memo(function VirtualRow({
 	start,
 	chunk,
 	viewMode,
+	folderCounts,
+	showFolderItemCounts = true,
 	measureElement,
 	onFolderNavigate,
 }: {
@@ -105,6 +111,8 @@ const VirtualRow = memo(function VirtualRow({
 	start: number;
 	chunk: EntityRow[];
 	viewMode: string;
+	folderCounts: Record<string, number>;
+	showFolderItemCounts?: boolean;
 	measureElement: (node: HTMLElement | null) => void;
 	onFolderNavigate: (id: string) => void;
 }) {
@@ -123,10 +131,13 @@ const VirtualRow = memo(function VirtualRow({
 				<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 					{chunk.map((entity) => {
 						if (!("url" in entity)) {
+							const folder = entity as Folder;
 							return (
 								<FolderGridCard
-									key={entity.id}
-									folder={entity as Folder}
+									key={folder.id}
+									folder={folder}
+									itemCount={folderCounts[folder.id] ?? 0}
+									showItemCount={showFolderItemCounts}
 									onNavigate={onFolderNavigate}
 								/>
 							);
@@ -141,10 +152,13 @@ const VirtualRow = memo(function VirtualRow({
 							return <div key="divider" className="my-2 border-b border-border/50" />;
 						}
 						if (!("url" in entity)) {
+							const folder = entity as Folder;
 							return (
 								<FolderCard
-									key={entity.id}
-									folder={entity as Folder}
+									key={folder.id}
+									folder={folder}
+									itemCount={folderCounts[folder.id] ?? 0}
+									showItemCount={showFolderItemCounts}
 									onNavigate={onFolderNavigate}
 								/>
 							);
@@ -160,11 +174,13 @@ const VirtualRow = memo(function VirtualRow({
 function ExplorerMainContent({
 	folders,
 	items,
+	folderCounts = {},
 	isLoading,
 	scrollRef,
 }: {
 	folders: Folder[];
 	items: Item[];
+	folderCounts?: Record<string, number>;
 	isLoading: boolean;
 	scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
@@ -173,6 +189,9 @@ function ExplorerMainContent({
 	const [sortOption] = useQueryState("sort", sortOptionParser);
 	const [folderId, setFolderId] = useQueryState("folder", folderIdParser);
 	const [, setSearchQuery] = useQueryState("q", searchQueryParser);
+	const showFolderItemCounts = useSettingsStore(
+		(state) => state.settings.appearanceSettings.showFolderItemCounts ?? true,
+	);
 
 	const handleFolderNavigate = useCallback(
 		(id: string) => {
@@ -312,6 +331,8 @@ function ExplorerMainContent({
 						start={virtualRow.start}
 						chunk={chunk}
 						viewMode={viewMode}
+						folderCounts={folderCounts}
+						showFolderItemCounts={showFolderItemCounts}
 						measureElement={rowVirtualizer.measureElement}
 						onFolderNavigate={handleFolderNavigate}
 					/>

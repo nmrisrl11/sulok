@@ -24,7 +24,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 
 ## ✨ Features
 
-- **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure with drag-and-drop support.
+- **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure with drag-and-drop support and live item counts.
 - **⭐ Favorites**: Mark important folders and links as favorites to quickly access them from a dedicated view.
 - **🗑️ Recycle Bin**: Safely soft-delete items with a 30-day retention and auto-cleanup system, featuring cascade deletion isolation to preserve independently trashed links.
 - **🔍 Smart Filtering & Sorting**: Instantly filter your library by domains or favorites, with smooth hardware-accelerated animated list sorting directly from the toolbar.
@@ -32,7 +32,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 - **⚡ Quick Add Toolbar**: Rapidly paste, preview, and save new URLs from an expandable, interactive floating action bar with smart clipboard detection.
 - **🎨 Beautiful UI**: A highly polished, responsive design featuring iOS-style squircle corners, fluid animations, responsive global action drawers, and custom scrollbars.
 - **🔊 Interactive Sounds**: Engaging, configurable UI sound effects powered by cuelume.
-- **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, custom folder colors, and mascot customization via a Quick Customize menu.
+- **⚙️ Deep Personalization**: Extensive workspace themes, layout density options, custom folder colors, folder item count display toggles, and mascot customization via a Quick Customize menu.
 - **🚀 Local-First Performance**: Lightning-fast operations powered by IndexedDB, heavily optimized React state isolation, buttery-smooth list virtualization, and zero-latency UI responses.
 - **📦 Full Data Portability**: Import and export your entire library (JSON, CSV, TXT) and import browser bookmarks (HTML) with robust 1:1 preservation of custom metadata, historical dates, and site logos.
 - **🔄 Settings Backup & Restore**: Securely backup and restore all your personalization choices, themes, and application configurations via a unified JSON file.

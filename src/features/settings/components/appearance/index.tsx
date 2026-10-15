@@ -6,6 +6,7 @@ import { SettingsCard } from "../settings-card";
 import { AccentColorSetting } from "./accent-color-setting";
 import { CornerRadiusSetting } from "./corner-radius-setting";
 import { FolderCustomizationSetting } from "./folder-customization-setting";
+import { FolderItemCountSetting } from "./folder-item-count-setting";
 import { LayoutDensitySetting } from "./layout-density-setting";
 import { WorkspaceThemeSetting } from "./workspace-theme-setting";
 
@@ -64,6 +65,7 @@ export function AppearanceSection() {
 						<div className="flex flex-col divide-y divide-border/50 px-5 py-5 sm:px-6 sm:py-6">
 							<CornerRadiusSetting />
 							<LayoutDensitySetting />
+							<FolderItemCountSetting />
 						</div>
 					</SettingsCard>
 				</div>

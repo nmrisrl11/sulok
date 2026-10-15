@@ -48,6 +48,7 @@ export const appearanceSettingsSchema = z
 		folderColorBack: z.string().optional(),
 		folderColorFront: z.string().optional(),
 		folderColorPaper: z.string().optional(),
+		showFolderItemCounts: z.boolean().optional(),
 	})
 	.strip();
 

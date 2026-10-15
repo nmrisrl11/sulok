@@ -4,6 +4,7 @@ import { create } from "zustand";
 export type DragData = {
 	type: "folder" | "item";
 	entity: Folder | Item;
+	itemCount?: number;
 	isBulk?: boolean;
 	itemIds?: string[];
 	folderIds?: string[];

@@ -62,10 +62,15 @@ export function useHomeData() {
 	);
 
 	const totalItemsData = useLiveQuery(() => ItemRepository.count(), []);
+	const folderCountsData = useLiveQuery(() => FolderRepository.getItemCounts(), []);
 
 	const isLoading =
-		itemsData === undefined || totalItemsData === undefined || foldersData === undefined;
+		itemsData === undefined ||
+		totalItemsData === undefined ||
+		foldersData === undefined ||
+		folderCountsData === undefined;
 	const isTotalLoading = totalItemsData === undefined;
+	const folderCounts = useMemo(() => folderCountsData ?? {}, [folderCountsData]);
 
 	const availableDomains = useMemo(() => {
 		if (!itemsData) return [];
@@ -142,6 +147,7 @@ export function useHomeData() {
 		isFiltersActive,
 		items,
 		folders,
+		folderCounts,
 		totalItems,
 		isLoading,
 		isTotalLoading,
