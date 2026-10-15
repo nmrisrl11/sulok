@@ -14,6 +14,38 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "1.2.0",
+		date: "Oct 15, 2026",
+		title: "Folder Item Counts, Animated Sorting, & Navigation Refinements",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Live Folder Item Counts & Customization: See how much is tucked away in every folder at a glance! Sulok now displays live item and link counts directly beneath folder names across list, grid, Recycle Bin (`X items • Y days left`), and Command Palette views in clean monospace styling. Prefer a more minimalist aesthetic? Easily toggle folder item counts on or off at any time under **Interface & Layout** in **Settings > Appearance** or via the **Quick Customize** drawer (`Shift + C`).",
+					"Hardware-Accelerated Animated Sorting: Reordering your corner now feels buttery smooth and responsive. Switching sort orders in the main explorer features fluid FLIP animations powered natively by the Web Animations API—delivering zero layout lag and zero third-party animation overhead.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Streamlined Navigation & Footer: Accessing guidance and meta info is more natural and balanced than ever. We've promoted the **Guide** to the top header right alongside **Settings** for quick access to interactive walkthroughs and shortcuts, and positioned **About** into the global footer (`About • Get App • Updates • App Tour`). The footer has also been streamlined into a single quiet row, with the developer credit relocated to the bottom of the About page beside the version badge.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Recycle Bin Hierarchy & Independent Restoration: Resolved an issue where moving a parent folder to the Recycle Bin would unintentionally absorb links that had already been deleted individually into the trash beforehand. Individually trashed items and folders now strictly retain their independent lifecycles and retention counters in the Recycle Bin without getting lost or improperly restored.",
+				],
+			},
+			{
+				category: "Removed",
+				items: [
+					"About Page Navigation Cleanup: Removed redundant navigation links from the bottom of the About page to keep the story and product details clean and focused.",
+				],
+			},
+		],
+	},
+	{
 		version: "1.1.0",
 		date: "Oct 12, 2026",
 		title: "Interactive Guide, Smart Backup Reminders, & Install Previews",
