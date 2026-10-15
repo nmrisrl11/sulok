@@ -102,10 +102,11 @@ export const ItemRepository = {
 		return await db.items.count();
 	},
 
-	async save(item: Omit<Item, "id" | "createdAt" | "updatedAt">): Promise<void> {
+	async save(item: Omit<Item, "id" | "createdAt" | "updatedAt">): Promise<Item> {
 		const parsedData = itemSchema.parse(item);
 		const url = parsedData.url as string;
 		const now = Date.now();
+		let createdRecord: Item;
 
 		await db.transaction("rw", db.items, async () => {
 			const existing = await ItemRepository.findByUrl(url);
@@ -131,17 +132,18 @@ export const ItemRepository = {
 				}
 			}
 
-			const record: Item = {
+			createdRecord = {
 				id: crypto.randomUUID(),
 				...parsedData,
 				url,
 				createdAt: now,
 				updatedAt: now,
 			};
-			await db.items.put(record);
+			await db.items.put(createdRecord);
 		});
 
 		setHasDataHint(true);
+		return createdRecord!;
 	},
 
 	async importItem(

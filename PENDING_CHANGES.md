@@ -9,6 +9,8 @@
 
 ### Added
 
+- **External Link Drag-and-Drop:** Drag any bookmark link from your browser's bookmark bar, address bar, or external windows directly into Sulok. Dropping onto a specific folder card or breadcrumb instantly saves the link directly inside that folder with undo support and automatic background metadata fetch. Dropping onto the Explorer main area opens the Item Dialog with the title, URL, and active folder pre-filled for immediate preview and editing.
+
 ### Changed
 
 ### Fixed

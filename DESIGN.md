@@ -251,6 +251,13 @@ Minimal shadows. Prefer border/background differentiation.
 - Do not use dense multi-column grids for content-heavy lists unless explicitly requested; rely on clean, vertical stacks with comfortable spacing.
 - **Animated List Sorting**: When changing sorting options (e.g. Title, Date Added) in the main explorer, items smoothly glide into their newly ordered positions using hardware-accelerated FLIP transitions (`cubic-bezier(0.16, 1, 0.3, 1)` over 320ms). Animating virtual rows temporarily elevate their z-index and active cards apply subtle elevation (`data-[flip-animating=true]:bg-card/95 data-[flip-animating=true]:shadow-md`) to float cleanly over sibling rows without visual clipping. System reduced-motion preferences (`prefers-reduced-motion: reduce`) are strictly respected by disabling animation.
 
+### External Link Dropzones
+
+- **Explorer Dropzone Indicator:** When an external link (from a browser bookmark bar, address bar, or external window) is dragged over the main explorer, a subtle dashed boundary (`border-dashed border-2 border-primary/40`) wraps the explorer container. A centered floating pill badge (`Drop link to add to [Active Folder / Library]`) provides clear contextual feedback.
+- **Folder Cards & Breadcrumbs:** Folder cards and breadcrumb items act as targeted dropzones with focused highlight states (`ring-2 ring-primary bg-primary/5`).
+- **Mutual Exclusion & Visual Clashing Prevention:** To prevent visual clutter and conflicting UI states, hovering over an individual folder card or breadcrumb drop target exclusively activates that child target and immediately hides the outer Explorer dashed border and floating badge.
+- **Responsive Cleanup:** The drop overlay cleanly and immediately dismisses upon drop, on cancellation (`Escape`), or when the drag gesture leaves the browser window.
+
 ### Empty States
 
 - Centered text with Fraunces heading.

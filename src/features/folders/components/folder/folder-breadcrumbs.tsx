@@ -15,21 +15,40 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Folder } from "@/db/db";
-import { useIsMobile } from "@/hooks";
+import { useExternalLinkDrop, useIsMobile } from "@/hooks";
+import { saveExternalLinkToFolder } from "@/lib/external-link-drag";
 import { cn } from "@/lib/utils";
 import { useDroppable } from "@dnd-kit/core";
-import { forwardRef, Fragment, type ElementType } from "react";
+import { forwardRef, Fragment, useMemo, type ElementType } from "react";
 
 const DroppableBreadcrumbNode = forwardRef<
 	HTMLButtonElement,
 	React.ButtonHTMLAttributes<HTMLButtonElement> & {
 		folderId: string | null;
+		folderName?: string;
 		isVirtualRoot?: string;
 	}
->(({ folderId, isVirtualRoot, className, children, ...props }, ref) => {
+>(({ folderId, folderName, isVirtualRoot, className, children, ...props }, ref) => {
 	const { setNodeRef, isOver } = useDroppable({
 		id: `drop-breadcrumb-${folderId ?? "root"}`,
 		data: { type: "breadcrumb", folderId, isVirtualRoot },
+	});
+
+	const externalDropTarget = useMemo(
+		() => ({ type: "breadcrumb" as const, id: folderId, name: folderName }),
+		[folderId, folderName],
+	);
+
+	const { isExternalOver, dragProps } = useExternalLinkDrop({
+		target: externalDropTarget,
+		onDropLink: (link) =>
+			saveExternalLinkToFolder({
+				url: link.url,
+				title: link.title,
+				folderId,
+				folderName: folderName || (folderId === null ? "Library" : undefined),
+			}),
+		disabled: Boolean(isVirtualRoot),
 	});
 
 	return (
@@ -40,10 +59,12 @@ const DroppableBreadcrumbNode = forwardRef<
 				if (typeof ref === "function") ref(node);
 				else if (ref) ref.current = node;
 			}}
+			{...dragProps}
 			className={cn(
 				"flex items-center gap-1.5 transition-colors outline-none",
 				"focus-visible:text-foreground focus-visible:underline focus-visible:decoration-ring focus-visible:decoration-2 focus-visible:underline-offset-4",
-				isOver && "text-primary underline decoration-primary decoration-2 underline-offset-4",
+				(isOver || isExternalOver) &&
+					"text-primary underline decoration-primary decoration-2 underline-offset-4",
 				className,
 			)}
 			{...props}
@@ -56,11 +77,13 @@ DroppableBreadcrumbNode.displayName = "DroppableBreadcrumbNode";
 
 function DroppableLeafNode({
 	folderId,
+	folderName,
 	children,
 	className,
 	isVirtualRoot,
 }: {
 	folderId: string | null;
+	folderName?: string;
 	children: React.ReactNode;
 	className?: string;
 	isVirtualRoot?: string;
@@ -70,11 +93,30 @@ function DroppableLeafNode({
 		data: { type: "breadcrumb", folderId, isVirtualRoot },
 	});
 
+	const externalDropTarget = useMemo(
+		() => ({ type: "breadcrumb" as const, id: folderId, name: folderName }),
+		[folderId, folderName],
+	);
+
+	const { isExternalOver, dragProps } = useExternalLinkDrop({
+		target: externalDropTarget,
+		onDropLink: (link) =>
+			saveExternalLinkToFolder({
+				url: link.url,
+				title: link.title,
+				folderId,
+				folderName: folderName || (folderId === null ? "Library" : undefined),
+			}),
+		disabled: Boolean(isVirtualRoot),
+	});
+
 	return (
 		<span
 			ref={setNodeRef}
+			{...dragProps}
 			className={cn(
-				isOver && "text-primary underline decoration-primary decoration-2 underline-offset-4",
+				(isOver || isExternalOver) &&
+					"text-primary underline decoration-primary decoration-2 underline-offset-4",
 				className,
 			)}
 		>
@@ -139,6 +181,7 @@ export function FolderBreadcrumbs({
 						<BreadcrumbPage className={rootClassName}>
 							<DroppableLeafNode
 								folderId={null}
+								folderName={rootLabel}
 								isVirtualRoot={disableRootDrop}
 								className="flex items-center gap-1.5"
 							>
@@ -150,6 +193,7 @@ export function FolderBreadcrumbs({
 						<BreadcrumbLink asChild className="cursor-pointer hover:text-foreground">
 							<DroppableBreadcrumbNode
 								folderId={null}
+								folderName={rootLabel}
 								isVirtualRoot={disableRootDrop}
 								onClick={() => onNavigate(null)}
 							>
@@ -193,7 +237,9 @@ export function FolderBreadcrumbs({
 								<BreadcrumbItem>
 									{index === visibleBreadcrumbs.length - 1 ? (
 										<BreadcrumbPage className={cn("truncate", leafClassName)}>
-											<DroppableLeafNode folderId={crumb.id}>{crumb.name}</DroppableLeafNode>
+											<DroppableLeafNode folderId={crumb.id} folderName={crumb.name}>
+												{crumb.name}
+											</DroppableLeafNode>
 										</BreadcrumbPage>
 									) : (
 										<BreadcrumbLink
@@ -202,6 +248,7 @@ export function FolderBreadcrumbs({
 										>
 											<DroppableBreadcrumbNode
 												folderId={crumb.id}
+												folderName={crumb.name}
 												onClick={() => onNavigate(crumb.id)}
 											>
 												{crumb.name}

@@ -1,6 +1,7 @@
 import { SuloMascot } from "@/components/logo/sulo-mascot";
 import { Button } from "@/components/ui/button";
 import { ItemRepository } from "@/db/repositories/item-repository";
+import { useExternalLinkDrop } from "@/hooks";
 import { notify } from "@/lib/notify";
 import { folderIdParser, searchQueryParser, viewParser } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
@@ -9,7 +10,7 @@ import type { SuloExpression } from "@/stores";
 import { useItemStore, useSettingsStore, useUIStore } from "@/stores";
 import { CornerDownLeftIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { type FormEvent, useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 export function QuickLinkActionBar() {
 	const [url, setUrl] = useState("");
@@ -25,8 +26,19 @@ export function QuickLinkActionBar() {
 		(state) => state.settings.suloSettings.expressionQuickAction,
 	);
 	const inputRef = useRef<HTMLInputElement>(null);
-
 	const urlSchema = itemSchema.shape.url;
+
+	const externalDropTarget = useMemo(() => ({ type: "quick-link" as const }), []);
+
+	const { isExternalOver, dragProps } = useExternalLinkDrop({
+		target: externalDropTarget,
+		onDropLink: (link) => {
+			setUrl(link.url);
+			if (error) setError(null);
+			setIsExpanded(true);
+			setTimeout(() => inputRef.current?.focus(), 50);
+		},
+	});
 
 	useEffect(() => {
 		const handleGlobalPaste = (e: ClipboardEvent) => {
@@ -130,6 +142,7 @@ export function QuickLinkActionBar() {
 		<form
 			onSubmit={handleSubmit}
 			noValidate
+			{...dragProps}
 			tabIndex={!isExpanded ? 0 : undefined}
 			aria-label={!isExpanded ? "Add to your corner" : undefined}
 			onClick={() => {
@@ -147,6 +160,8 @@ export function QuickLinkActionBar() {
 			}}
 			className={cn(
 				"mx-auto flex max-w-md animate-in items-center gap-3 border border-border bg-card/80 text-card-foreground shadow-lg backdrop-blur-md transition-all duration-300 slide-in-from-bottom-10 fade-in",
+				isExternalOver &&
+					"border-primary ring-2 ring-primary/30 ring-offset-2 ring-offset-background",
 				isExpanded
 					? "w-full rounded-full p-1.5 pr-2 corner-squircle focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background supports-[corner-shape:squircle]:rounded-2xl"
 					: "w-13 cursor-pointer rounded-full p-2 corner-squircle hover:scale-105 hover:bg-card/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none supports-[corner-shape:squircle]:rounded-2xl",
