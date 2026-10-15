@@ -81,6 +81,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Co-located feature-level loading Skeletons
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [x] Drag-and-drop organization
+- [x] External link drag-and-drop: Drag links from browser bookmark bars, address bars, or external windows directly into Sulok with nested folder card/breadcrumb drop support, active folder name awareness, undo support, and stuck-overlay prevention
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls
 - [x] Hardware-accelerated animated list sorting (FLIP transitions via Web Animations API with container-relative coordinate tracking)

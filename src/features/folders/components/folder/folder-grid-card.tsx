@@ -2,14 +2,15 @@ import { CustomHeartFilledIcon, FolderIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder } from "@/db/db";
-import { useIsSelectionMode } from "@/hooks";
+import { useExternalLinkDrop, useIsSelectionMode } from "@/hooks";
+import { saveExternalLinkToFolder } from "@/lib/external-link-drag";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useActionDrawerStore, useActiveDragStore, useFolderStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 export const FolderGridCard = memo(
 	function FolderGridCard({
@@ -65,11 +66,29 @@ export const FolderGridCard = memo(
 		);
 		const isEffectivelyDragging = isDragging || isActiveBulk;
 
+		const externalDropTarget = useMemo(
+			() => ({ type: "folder" as const, id: folder.id, name: folder.name }),
+			[folder.id, folder.name],
+		);
+
+		const { isExternalOver, dragProps } = useExternalLinkDrop({
+			target: externalDropTarget,
+			onDropLink: (link) =>
+				saveExternalLinkToFolder({
+					url: link.url,
+					title: link.title,
+					folderId: folder.id,
+					folderName: folder.name,
+				}),
+			disabled: view === "trash",
+		});
+
 		return (
 			<div
 				ref={setNodeRef}
 				{...attributes}
 				{...listeners}
+				{...dragProps}
 				data-flip-id={folder.id}
 				role="button"
 				tabIndex={0}
@@ -107,7 +126,7 @@ export const FolderGridCard = memo(
 						? "border-primary/20 bg-card/50 shadow-sm"
 						: "border-transparent bg-transparent",
 					isEffectivelyDragging && "opacity-50",
-					isOver && "border-primary bg-primary/10 shadow-sm",
+					(isOver || isExternalOver) && "border-primary bg-primary/10 shadow-sm",
 				)}
 			>
 				{/* Checkbox (Top Left) */}

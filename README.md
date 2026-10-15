@@ -25,6 +25,7 @@ Our philosophy is simple: **Your data belongs to you.** Sulok is a true local-fi
 ## ✨ Features
 
 - **📂 Folder Organization**: Keep your links organized in a clean, hierarchical file tree structure with drag-and-drop support and live item counts.
+- **🖱️ External Link Drag & Drop**: Drag links directly from your browser's bookmark bar, address bar, or external windows into Sulok. Drop onto any folder card or breadcrumb to save it directly inside with undo support, or drop into the explorer to open the pre-filled add dialog.
 - **⭐ Favorites**: Mark important folders and links as favorites to quickly access them from a dedicated view.
 - **🗑️ Recycle Bin**: Safely soft-delete items with a 30-day retention and auto-cleanup system, featuring cascade deletion isolation to preserve independently trashed links.
 - **🔍 Smart Filtering & Sorting**: Instantly filter your library by domains or favorites, with smooth hardware-accelerated animated list sorting directly from the toolbar.

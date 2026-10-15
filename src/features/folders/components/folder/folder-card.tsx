@@ -11,14 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Folder } from "@/db/db";
 import { useFolderActions } from "@/features/folders/hooks/use-folder-actions";
-import { useIsSelectionMode } from "@/hooks";
+import { useExternalLinkDrop, useIsSelectionMode } from "@/hooks";
+import { saveExternalLinkToFolder } from "@/lib/external-link-drag";
 import { folderIdParser, viewParser } from "@/lib/search-params";
 import { cn, getTrashRetentionText } from "@/lib/utils";
 import { useActionDrawerStore, useActiveDragStore, useFolderStore, useTimeStore } from "@/stores";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 export const FolderCard = memo(
 	function FolderCard({
@@ -76,11 +77,29 @@ export const FolderCard = memo(
 		);
 		const isEffectivelyDragging = isDragging || isActiveBulk;
 
+		const externalDropTarget = useMemo(
+			() => ({ type: "folder" as const, id: folder.id, name: folder.name }),
+			[folder.id, folder.name],
+		);
+
+		const { isExternalOver, dragProps } = useExternalLinkDrop({
+			target: externalDropTarget,
+			onDropLink: (link) =>
+				saveExternalLinkToFolder({
+					url: link.url,
+					title: link.title,
+					folderId: folder.id,
+					folderName: folder.name,
+				}),
+			disabled: view === "trash",
+		});
+
 		return (
 			<div
 				ref={setNodeRef}
 				{...attributes}
 				{...listeners}
+				{...dragProps}
 				data-flip-id={folder.id}
 				role="button"
 				tabIndex={0}
@@ -88,7 +107,7 @@ export const FolderCard = memo(
 					"group touch-callout-none flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-(--item-padding-x,0.75rem) py-(--item-padding-y,0.75rem) transition-colors select-none corner-squircle hover:border-border hover:bg-card/50 focus-visible:border-ring focus-visible:bg-card/50 focus-visible:outline-none data-[flip-animating=true]:border-border/60 data-[flip-animating=true]:bg-card/95 data-[flip-animating=true]:shadow-md supports-[corner-shape:squircle]:rounded-2xl",
 					isSelected ? "border-border bg-card/50 shadow-sm" : "border-transparent bg-transparent",
 					isEffectivelyDragging && "opacity-50",
-					isOver && "border-primary bg-primary/10 shadow-sm",
+					(isOver || isExternalOver) && "border-primary bg-primary/10 shadow-sm",
 				)}
 				onClick={() => {
 					if (isSelectionMode || view === "trash") {
