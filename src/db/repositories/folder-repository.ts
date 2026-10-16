@@ -12,6 +12,10 @@ export const FolderRepository = {
 			.toArray();
 	},
 
+	async getAllIncludingTrash(): Promise<Folder[]> {
+		return await db.folders.orderBy("order").toArray();
+	},
+
 	async getItemCounts(): Promise<Record<string, number>> {
 		const counts: Record<string, number> = {};
 

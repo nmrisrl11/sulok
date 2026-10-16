@@ -303,6 +303,15 @@
 	z-index: 9999 !important;
 }
 
+.gooey-wrapper {
+	max-width: min(calc(100vw - 2rem), 420px) !important;
+}
+
+.gooey-contentExpanded {
+	min-width: min(280px, calc(100vw - 2rem)) !important;
+	max-width: min(380px, calc(100vw - 2rem)) !important;
+}
+
 .gooey-title,
 .gooey-actionButton {
 	font-weight: 600 !important;
@@ -315,4 +324,7 @@
 
 .gooey-description {
 	text-align: center !important;
+	text-wrap: pretty !important;
+	word-break: break-word !important;
+	max-width: 100% !important;
 }

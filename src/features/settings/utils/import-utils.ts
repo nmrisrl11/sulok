@@ -10,10 +10,12 @@ import {
 
 export type ParsedImportItem = ImportItem & {
 	isDuplicate: boolean;
+	inTrash?: boolean;
 };
 
 export type ParsedImportFolder = ImportFolder & {
 	isDuplicate: boolean;
+	inTrash?: boolean;
 };
 
 export type ParsedImportData = {
@@ -21,32 +23,83 @@ export type ParsedImportData = {
 	validItems: ParsedImportItem[];
 	invalidCount: number;
 	duplicateCount: number;
+	trashCount: number;
 };
 
 export async function processImportPayload(parsedData: {
 	folders: unknown[];
 	items: unknown[];
 }): Promise<ParsedImportData> {
-	const existingItems = await ItemRepository.getAll();
-	const existingUrls = new Set(existingItems.map((item) => normalizeUrl(item.url)));
+	const existingItems = await ItemRepository.getAllIncludingTrash();
+	const existingItemUrlMap = new Map<string, { inTrash: boolean; id: string }>();
 
-	const existingFolders = await FolderRepository.getAll();
-	const existingFolderIdsByParentAndName = new Map<string, Map<string, string>>();
+	for (const item of existingItems) {
+		const norm = normalizeUrl(item.url);
+		const inTrash = !!item.deletedAt;
+		if (!existingItemUrlMap.has(norm)) {
+			existingItemUrlMap.set(norm, { inTrash, id: item.id });
+		} else if (!inTrash) {
+			// Prioritize active record if duplicates exist
+			existingItemUrlMap.set(norm, { inTrash: false, id: item.id });
+		}
+	}
+
+	const existingFolders = await FolderRepository.getAllIncludingTrash();
+	const activeFolderMap = new Map<string, Map<string, string>>();
+	const trashedFolderMap = new Map<string, Map<string, string>>();
 
 	for (const folder of existingFolders) {
 		const parentId = folder.parentId || "root";
-		if (!existingFolderIdsByParentAndName.has(parentId)) {
-			existingFolderIdsByParentAndName.set(parentId, new Map());
+		const nameLower = folder.name.toLowerCase();
+		if (folder.deletedAt) {
+			if (!trashedFolderMap.has(parentId)) {
+				trashedFolderMap.set(parentId, new Map());
+			}
+			trashedFolderMap.get(parentId)!.set(nameLower, folder.id);
+		} else {
+			if (!activeFolderMap.has(parentId)) {
+				activeFolderMap.set(parentId, new Map());
+			}
+			activeFolderMap.get(parentId)!.set(nameLower, folder.id);
 		}
-		existingFolderIdsByParentAndName.get(parentId)!.set(folder.name.toLowerCase(), folder.id);
 	}
 
 	const validFolders: ParsedImportFolder[] = [];
 	const validItems: ParsedImportItem[] = [];
 	let invalidCount = 0;
 	let duplicateCount = 0;
+	let trashCount = 0;
 
 	const importIdToResolvedId = new Map<string, string>();
+
+	// Track which incoming folders contain at least one non-duplicate item
+	const foldersWithNewItems = new Set<string>();
+	for (const item of parsedData.items || []) {
+		const result = importItemSchema.safeParse(item);
+		if (result.success) {
+			const normalizedUrl = normalizeUrl(result.data.url);
+			const isDuplicate = existingItemUrlMap.has(normalizedUrl);
+			if (!isDuplicate && result.data.folderId) {
+				foldersWithNewItems.add(result.data.folderId);
+			}
+		}
+	}
+
+	// Propagate foldersWithNewItems upward to parent folders
+	let propagated = true;
+	while (propagated) {
+		propagated = false;
+		for (const folder of parsedData.folders || []) {
+			if (typeof folder === "object" && folder !== null && "id" in folder && "parentId" in folder) {
+				const fId = String((folder as Record<string, unknown>).id);
+				const pId = String((folder as Record<string, unknown>).parentId || "");
+				if (foldersWithNewItems.has(fId) && pId && !foldersWithNewItems.has(pId)) {
+					foldersWithNewItems.add(pId);
+					propagated = true;
+				}
+			}
+		}
+	}
 
 	for (const folder of parsedData.folders || []) {
 		const result = importFolderSchema.safeParse(folder);
@@ -61,13 +114,37 @@ export async function processImportPayload(parsedData: {
 
 			const folderNameLower = result.data.name.toLowerCase();
 
-			const parentMap = existingFolderIdsByParentAndName.get(checkParentId);
-			const existingFolderId = parentMap ? parentMap.get(folderNameLower) : undefined;
-			const isDuplicate = !!existingFolderId;
+			const activeMatchId = activeFolderMap.get(checkParentId)?.get(folderNameLower);
+			const trashedMatchId = trashedFolderMap.get(checkParentId)?.get(folderNameLower);
+
+			let isDuplicate = false;
+			let inTrash = false;
+			let existingFolderId: string | undefined;
+
+			if (activeMatchId) {
+				isDuplicate = true;
+				inTrash = false;
+				existingFolderId = activeMatchId;
+			} else if (trashedMatchId) {
+				const folderOriginalId = result.data.id || "";
+				const hasNewContent = foldersWithNewItems.has(folderOriginalId);
+
+				if (!hasNewContent) {
+					// No new items to place in this folder; mark as duplicate in trash and skip
+					isDuplicate = true;
+					inTrash = true;
+					existingFolderId = trashedMatchId;
+				} else {
+					// Has new items to import; create a new active folder so items have an active home
+					isDuplicate = false;
+					inTrash = false;
+				}
+			}
 
 			if (isDuplicate) {
 				duplicateCount++;
-				if (result.data.id) {
+				if (inTrash) trashCount++;
+				if (result.data.id && existingFolderId) {
 					importIdToResolvedId.set(result.data.id, existingFolderId);
 					result.data.id = existingFolderId;
 				}
@@ -75,15 +152,16 @@ export async function processImportPayload(parsedData: {
 				if (result.data.id) {
 					importIdToResolvedId.set(result.data.id, result.data.id);
 				}
-				if (!existingFolderIdsByParentAndName.has(checkParentId)) {
-					existingFolderIdsByParentAndName.set(checkParentId, new Map());
+				if (!activeFolderMap.has(checkParentId)) {
+					activeFolderMap.set(checkParentId, new Map());
 				}
-				existingFolderIdsByParentAndName.get(checkParentId)!.set(folderNameLower, result.data.id!);
+				activeFolderMap.get(checkParentId)!.set(folderNameLower, result.data.id!);
 			}
 
 			validFolders.push({
 				...result.data,
 				isDuplicate,
+				inTrash,
 			});
 		} else {
 			invalidCount++;
@@ -100,24 +178,28 @@ export async function processImportPayload(parsedData: {
 			}
 
 			const normalizedUrl = normalizeUrl(result.data.url);
-			const isDuplicate = existingUrls.has(normalizedUrl);
+			const existingMatch = existingItemUrlMap.get(normalizedUrl);
+			const isDuplicate = !!existingMatch;
+			const inTrash = existingMatch?.inTrash ?? false;
 
 			if (isDuplicate) {
 				duplicateCount++;
+				if (inTrash) trashCount++;
 			} else {
-				existingUrls.add(normalizedUrl);
+				existingItemUrlMap.set(normalizedUrl, { inTrash: false, id: result.data.id || "" });
 			}
 
 			validItems.push({
 				...result.data,
 				isDuplicate,
+				inTrash,
 			});
 		} else {
 			invalidCount++;
 		}
 	}
 
-	return { validFolders, validItems, invalidCount, duplicateCount };
+	return { validFolders, validItems, invalidCount, duplicateCount, trashCount };
 }
 
 export async function parseImportFile(file: File): Promise<ParsedImportData> {
@@ -140,7 +222,11 @@ export async function parseImportFile(file: File): Promise<ParsedImportData> {
 					parsedData = parseCSV(content);
 				} else if (file.name.endsWith(".txt") || file.type === "text/plain") {
 					parsedData = parseTXT(content);
-				} else if (file.name.endsWith(".html") || file.type === "text/html") {
+				} else if (
+					file.name.endsWith(".html") ||
+					file.name.endsWith(".htm") ||
+					file.type === "text/html"
+				) {
 					parsedData = parseHTML(content);
 				} else {
 					reject(new Error("Unsupported file format. Please upload JSON, CSV, TXT, or HTML."));
