@@ -17,6 +17,7 @@ import type {
 	ParsedImportItem,
 } from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
+import { cn } from "@/lib/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { AlertCircleIcon, InfoIcon } from "lucide-react";
 import { memo, useDeferredValue, useMemo, useState } from "react";
@@ -97,8 +98,15 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 											</div>
 										</div>
 										{folder.isDuplicate && (
-											<span className="shrink-0 rounded-sm border bg-background/50 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-												Exists
+											<span
+												className={cn(
+													"shrink-0 rounded-sm border px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+													folder.inTrash
+														? "border-destructive/30 bg-destructive/10 text-destructive"
+														: "border-border/60 bg-background/50 text-muted-foreground",
+												)}
+											>
+												{folder.inTrash ? "In Trash" : "Exists"}
 											</span>
 										)}
 									</div>
@@ -158,8 +166,15 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 											</div>
 										</div>
 										{item.isDuplicate && (
-											<span className="shrink-0 rounded-sm border bg-background/50 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-												Exists
+											<span
+												className={cn(
+													"shrink-0 rounded-sm border px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+													item.inTrash
+														? "border-destructive/30 bg-destructive/10 text-destructive"
+														: "border-border/60 bg-background/50 text-muted-foreground",
+												)}
+											>
+												{item.inTrash ? "In Trash" : "Exists"}
 											</span>
 										)}
 									</div>
@@ -343,8 +358,11 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 							{data.duplicateCount > 0 && (
 								<p className="flex items-center gap-1.5">
 									<InfoIcon className="h-4 w-4 shrink-0" />
-									{data.duplicateCount} {data.duplicateCount === 1 ? "entry" : "entries"} already
-									exist in your library and will be skipped.
+									{data.trashCount === data.duplicateCount
+										? `${data.duplicateCount} ${data.duplicateCount === 1 ? "entry is" : "entries are"} in your Recycle Bin and will be skipped.`
+										: data.trashCount && data.trashCount > 0
+											? `${data.duplicateCount} ${data.duplicateCount === 1 ? "entry already exists" : "entries already exist"} (${data.trashCount} in Recycle Bin) and will be skipped.`
+											: `${data.duplicateCount} ${data.duplicateCount === 1 ? "entry already exists" : "entries already exist"} in your library and will be skipped.`}
 								</p>
 							)}
 							{data.invalidCount > 0 && (

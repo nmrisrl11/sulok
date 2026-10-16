@@ -37,12 +37,30 @@ export function isExternalLinkDrag(e: DragEvent | React.DragEvent): boolean {
 	const hasMozUrl = types.includes("text/x-moz-url");
 	const hasPlain = types.includes("text/plain");
 
-	// Ignore if purely files without any URI or HTML bookmark metadata
-	if (hasFiles && !hasUriList && !hasHtml && !hasMozUrl) {
+	// If it contains OS files, it's a file drag, not a bookmark link drag
+	if (hasFiles) {
 		return false;
 	}
 
 	return hasUriList || hasHtml || hasMozUrl || hasPlain;
+}
+
+/**
+ * Checks whether an incoming drag event represents an external file from the OS
+ * (e.g. bookmarks.html, backup.json, data.csv) rather than an internal @dnd-kit drag.
+ */
+export function isExternalFileDrag(e: DragEvent | React.DragEvent): boolean {
+	if (useActiveDragStore.getState().activeData) return false;
+	if (!e.dataTransfer) return false;
+	const types = Array.from(e.dataTransfer.types || []);
+	return types.includes("Files");
+}
+
+export const SUPPORTED_BACKUP_EXTENSIONS = [".html", ".htm", ".json", ".csv", ".txt"] as const;
+
+export function isSupportedBackupFile(file: File): boolean {
+	const name = file.name.toLowerCase();
+	return SUPPORTED_BACKUP_EXTENSIONS.some((ext) => name.endsWith(ext));
 }
 
 /**

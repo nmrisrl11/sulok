@@ -258,6 +258,13 @@ Minimal shadows. Prefer border/background differentiation.
 - **Mutual Exclusion & Visual Clashing Prevention:** To prevent visual clutter and conflicting UI states, hovering over an individual folder card or breadcrumb drop target exclusively activates that child target and immediately hides the outer Explorer dashed border and floating badge.
 - **Responsive Cleanup:** The drop overlay cleanly and immediately dismisses upon drop, on cancellation (`Escape`), or when the drag gesture leaves the browser window.
 
+### Bookmark & Backup File Dropzone
+
+- **Fullscreen Window Dropzone:** Dragging a bookmark file (`.html`, `.htm`) or library backup (`.json`, `.csv`, `.txt`) from the operating system anywhere over the Sulok window activates an ambient, full-viewport drop overlay.
+- **Visual Design:** Features a full-viewport blur backdrop (`z-[100]` with `backdrop-blur-md`), an inset dashed boundary, and a centered squircle card (`border-border/70 bg-card/95 shadow-lg backdrop-blur-xl supports-[corner-shape:squircle]:rounded-[3rem]`) housing a bespoke peeking-folder illustration where the 4 supported format documents (`.HTML` in orange, `.JSON` in yellow, `.CSV` in green, `.TXT` in blue) fan out from inside an authentic 3-layer themed folder (`--folder-color-back`, `--folder-color-front`, `--folder-color-paper`). The folder features an ergonomic center scoop lip, faux text lines, and a soft ambient halo matching `--folder-color-back`.
+- **Interaction & Stacking Isolation:** The full-viewport overlay sits at `z-[100]` to cleanly cover both the Header navbar and bottom Quick Action Bar, blocking underlying hover states and clicks while active. Drag depth is tracked via a window event counter (`dragCounterRef`) to prevent flickering across child elements, with instant dismissal on `Escape`, window departure, or drop.
+- **Import Preview & Recycle Bin Duplicate Badging:** Dropping a supported file triggers the interactive `ImportPreviewDialog` with duplicate detection across both active library and Recycle Bin items. Trashed entries display an `IN TRASH` badge (with destructive/amber accent styling), while the header banner explicitly summarizes skipped entries.
+
 ### Empty States
 
 - Centered text with Fraunces heading.
@@ -270,6 +277,7 @@ Minimal shadows. Prefer border/background differentiation.
 - Use `goey-toast` for all app notifications via `src/lib/notify.ts`.
 - Positioned at the `bottom-center` with no timestamps.
 - Default `goey-toast` styles are overridden in `src/index.css` to match the brand typography (Manrope) and primary colors.
+- Multi-line readability: Notifications automatically split long single-string messages into a concise title and a descriptive secondary body line (`resolveToastContent`). Enforces responsive max-width (`min(calc(100vw - 2rem), 420px)`), `text-wrap: pretty`, and word breaking to prevent toasts from stretching across widescreen displays.
 - Use friendly, branded copywriting (e.g., "Added to your corner", "Changes saved") instead of generic system terms (e.g., "Item saved", "Success").
 - For actionable notifications (like Undo), if the action is asynchronous, await the completion of the action inside the `onClick` handler. Explicitly call `notify.dismiss(originalToastId)` before triggering a new `notify.success` to prevent overlapping toasts and avoid reporting success prematurely.
 

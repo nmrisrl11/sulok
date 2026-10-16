@@ -2,6 +2,7 @@ import { AppearanceProvider } from "@/components/appearance-provider";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { AppLayout } from "@/components/layout/app-layout";
 import { ExtensionManager } from "@/components/managers/extension-manager";
+import { FileDropManager } from "@/components/managers/file-drop-manager";
 import { PwaManager } from "@/components/managers/pwa-manager";
 import { TrashManager } from "@/components/managers/trash-manager";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -63,6 +64,7 @@ function App() {
 					<BrowserRouter>
 						<NuqsAdapter>
 							<ExtensionManager />
+							<FileDropManager />
 							<AppLayout>
 								<ErrorBoundary>
 									<OnboardingProvider>
