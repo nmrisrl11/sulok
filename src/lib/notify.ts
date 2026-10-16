@@ -54,7 +54,7 @@ function resolveToastContent(
 	}
 
 	// Sentence boundary split: look for first period, colon, or exclamation mark followed by a space
-	const sentenceMatch = trimmed.match(/^([^.!?:]+[.!?:]?)\s+(.+)$/);
+	const sentenceMatch = trimmed.match(/^([^.!?:]+[.!?:]+)\s+(.+)$/);
 	if (sentenceMatch) {
 		const firstPart = sentenceMatch[1].trim();
 		const secondPart = sentenceMatch[2].trim();

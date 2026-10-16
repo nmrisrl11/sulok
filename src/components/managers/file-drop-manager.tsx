@@ -139,6 +139,7 @@ export function FileDropManager() {
 	const [parsedData, setParsedData] = useState<ParsedImportData | null>(null);
 
 	const dragCounterRef = useRef(0);
+	const importIdRef = useRef(0);
 	const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const handleCloseDialog = useCallback(() => {
@@ -161,12 +162,20 @@ export function FileDropManager() {
 			return;
 		}
 
+		const currentId = ++importIdRef.current;
+		if (cleanupTimerRef.current) {
+			clearTimeout(cleanupTimerRef.current);
+			cleanupTimerRef.current = null;
+		}
+
 		const readingToastId = `reading-file-${file.name}`;
 		notify.info(`Reading ${file.name}...`, { id: readingToastId });
 
 		try {
 			const result = await parseImportFile(file);
 			notify.dismiss(readingToastId);
+
+			if (currentId !== importIdRef.current) return;
 
 			if (
 				result.validFolders.length === 0 &&
@@ -180,10 +189,17 @@ export function FileDropManager() {
 				return;
 			}
 
+			if (cleanupTimerRef.current) {
+				clearTimeout(cleanupTimerRef.current);
+				cleanupTimerRef.current = null;
+			}
+
 			setParsedData(result);
 			setIsImportPreviewOpen(true);
 		} catch (error) {
 			notify.dismiss(readingToastId);
+			if (currentId !== importIdRef.current) return;
+
 			const message = error instanceof Error ? error.message : "Failed to parse file";
 			notify.error("Import failed", {
 				description: message,
