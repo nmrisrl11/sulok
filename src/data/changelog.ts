@@ -14,6 +14,34 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
 	{
+		version: "1.3.0",
+		date: "Oct 17, 2026",
+		title: "External Link & File Drag-and-Drop, Import Previews, & Trash-Aware Protection",
+		changes: [
+			{
+				category: "Added",
+				items: [
+					"Global Bookmark & Backup File Drag-and-Drop: Bringing your bookmarks and library backups into Sulok is now as simple as a single drag gesture! Drag any browser bookmark file (`.html`) or library backup archive (`.json`, `.csv`, `.txt`) anywhere onto the Sulok window to automatically parse and trigger the interactive Import Preview Dialog. Review folder hierarchies, inspect incoming links, and check duplicate statuses before anything is saved to your corner.",
+					"External Link Dragging & Direct Folder Drops: Saving links from across the web is now faster and more intuitive than ever. Drag links directly from your browser's bookmark bar, address bar, or external windows straight into Sulok. Dropping onto any folder card or breadcrumb saves the link directly inside that folder with instant undo support and automatic metadata fetching, while dropping onto the main Explorer opens the Item Dialog pre-filled for immediate editing.",
+				],
+			},
+			{
+				category: "Changed",
+				items: [
+					"Peeking-Folder Drop Overlay: Redesigned the file drop overlay with a bespoke, animated peeking-folder illustration where supported format cards (`.HTML`, `.JSON`, `.CSV`, `.TXT`) fan out cleanly from inside a folder. The card features softened shadows, enlarged typography, and full-viewport interaction shielding so underlying navigation and buttons won't interfere while dropping files.",
+					"Adaptive Notification Formatting: Enhanced our notification system to automatically format longer alerts into clean, structured two-line toasts (header title + description body). This prevents wide overflowing pills on desktop and guarantees clean, responsive wrapping on mobile screens.",
+				],
+			},
+			{
+				category: "Fixed",
+				items: [
+					"Trash-Aware Duplicate Detection & Protection: Upgraded import analysis to inspect both active links and records sitting in the Recycle Bin. Items and folders in the trash are now clearly marked with an 'IN TRASH' badge and skipped by default, preventing imported files from accidentally resurrecting deleted links or cloning trashed folders.",
+					"Modal Lock & Drop Concurrency Protection: Added rock-solid concurrency guards to file dropping. Dragging or dropping files while an Import Preview Dialog or confirmation modal is open now displays a blocked cursor and a helpful warning toast, preventing accidental drop overlaps, interrupted reviews, or database race conditions.",
+				],
+			},
+		],
+	},
+	{
 		version: "1.2.0",
 		date: "Oct 15, 2026",
 		title: "Folder Item Counts, Animated Sorting, & Navigation Refinements",
