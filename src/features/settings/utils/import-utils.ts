@@ -104,6 +104,9 @@ export async function processImportPayload(parsedData: {
 	for (const folder of parsedData.folders || []) {
 		const result = importFolderSchema.safeParse(folder);
 		if (result.success) {
+			const originalId = result.data.id || crypto.randomUUID();
+			result.data.id = originalId;
+
 			let checkParentId = result.data.parentId || "root";
 
 			// Resolve mapped parent ID if it points to a duplicate or newly mapped folder
@@ -126,8 +129,7 @@ export async function processImportPayload(parsedData: {
 				inTrash = false;
 				existingFolderId = activeMatchId;
 			} else if (trashedMatchId) {
-				const folderOriginalId = result.data.id || "";
-				const hasNewContent = foldersWithNewItems.has(folderOriginalId);
+				const hasNewContent = foldersWithNewItems.has(originalId);
 
 				if (!hasNewContent) {
 					// No new items to place in this folder; mark as duplicate in trash and skip
@@ -144,14 +146,12 @@ export async function processImportPayload(parsedData: {
 			if (isDuplicate) {
 				duplicateCount++;
 				if (inTrash) trashCount++;
-				if (result.data.id && existingFolderId) {
-					importIdToResolvedId.set(result.data.id, existingFolderId);
+				if (existingFolderId) {
+					importIdToResolvedId.set(originalId, existingFolderId);
 					result.data.id = existingFolderId;
 				}
 			} else {
-				if (result.data.id) {
-					importIdToResolvedId.set(result.data.id, result.data.id);
-				}
+				importIdToResolvedId.set(originalId, originalId);
 				if (!activeFolderMap.has(checkParentId)) {
 					activeFolderMap.set(checkParentId, new Map());
 				}
@@ -171,6 +171,9 @@ export async function processImportPayload(parsedData: {
 	for (const item of parsedData.items || []) {
 		const result = importItemSchema.safeParse(item);
 		if (result.success) {
+			const itemId = result.data.id || crypto.randomUUID();
+			result.data.id = itemId;
+
 			let checkFolderId = result.data.folderId || "root";
 			if (importIdToResolvedId.has(checkFolderId)) {
 				checkFolderId = importIdToResolvedId.get(checkFolderId)!;
@@ -186,7 +189,7 @@ export async function processImportPayload(parsedData: {
 				duplicateCount++;
 				if (inTrash) trashCount++;
 			} else {
-				existingItemUrlMap.set(normalizedUrl, { inTrash: false, id: result.data.id || "" });
+				existingItemUrlMap.set(normalizedUrl, { inTrash: false, id: itemId });
 			}
 
 			validItems.push({
