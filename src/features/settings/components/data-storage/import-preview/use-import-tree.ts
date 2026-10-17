@@ -16,14 +16,46 @@ export function useImportTree(data: ParsedImportData): TreeData {
 
 		const importedFolderIds = new Set(data.validFolders?.map((f) => f.id) || []);
 
+		const rawFoldersById = new Map<string, ParsedImportFolder>();
 		for (const folder of data.validFolders || []) {
 			if (folder.id) {
-				foldersById.set(folder.id, folder);
+				rawFoldersById.set(folder.id, folder);
+			}
+		}
+
+		// Detect folders involved in circular parent-child relationships
+		const cycleFolderIds = new Set<string>();
+		for (const folder of data.validFolders || []) {
+			if (!folder.id) continue;
+			const visited = new Set<string>();
+			let curr: string | null =
+				folder.parentId && importedFolderIds.has(folder.parentId) ? folder.parentId : null;
+			while (curr && rawFoldersById.has(curr)) {
+				if (curr === folder.id) {
+					cycleFolderIds.add(folder.id);
+					break;
+				}
+				if (visited.has(curr)) {
+					break;
+				}
+				visited.add(curr);
+				const parent = rawFoldersById.get(curr);
+				curr = parent?.parentId && importedFolderIds.has(parent.parentId) ? parent.parentId : null;
+			}
+		}
+
+		for (const folder of data.validFolders || []) {
+			const isCycle = folder.id ? cycleFolderIds.has(folder.id) : false;
+			const effectiveFolder = isCycle ? { ...folder, parentId: undefined } : folder;
+			if (folder.id) {
+				foldersById.set(folder.id, effectiveFolder);
 			}
 			const pId =
-				folder.parentId && importedFolderIds.has(folder.parentId) ? folder.parentId : "root";
+				!isCycle && folder.parentId && importedFolderIds.has(folder.parentId)
+					? folder.parentId
+					: "root";
 			if (!foldersByParent.has(pId)) foldersByParent.set(pId, []);
-			foldersByParent.get(pId)!.push(folder);
+			foldersByParent.get(pId)!.push(effectiveFolder);
 		}
 
 		for (const item of data.validItems) {
@@ -45,11 +77,16 @@ export function useImportTree(data: ParsedImportData): TreeData {
 
 		const nodes: TreeNode[] = [];
 		let counter = 0;
+		const visitedTraverseFolderIds = new Set<string>();
 		function traverse(parentId: string | null, depth: number) {
 			const folders = foldersByParent.get(parentId || "root") || [];
 			for (const f of folders) {
-				nodes.push({ type: "folder", id: f.id || `temp-f-${counter++}`, depth, data: f });
-				traverse(f.id || null, depth + 1);
+				const folderNodeId = f.id || `temp-f-${counter++}`;
+				nodes.push({ type: "folder", id: folderNodeId, depth, data: f });
+				if (f.id && !visitedTraverseFolderIds.has(f.id)) {
+					visitedTraverseFolderIds.add(f.id);
+					traverse(f.id, depth + 1);
+				}
 			}
 
 			const items = itemsByFolder.get(parentId) || [];
@@ -75,9 +112,16 @@ export function useImportTree(data: ParsedImportData): TreeData {
 		for (const folder of data.validFolders || []) {
 			if (!folder.id) continue;
 			const ancestors: string[] = [];
+			const visited = new Set<string>([folder.id]);
 			let currentParentId =
-				folder.parentId && importedFolderIds.has(folder.parentId) ? folder.parentId : null;
+				folder.parentId && importedFolderIds.has(folder.parentId) && !cycleFolderIds.has(folder.id)
+					? folder.parentId
+					: null;
 			while (currentParentId && foldersById.has(currentParentId)) {
+				if (visited.has(currentParentId)) {
+					break;
+				}
+				visited.add(currentParentId);
 				ancestors.push(currentParentId);
 				const parent = foldersById.get(currentParentId);
 				currentParentId =
@@ -89,9 +133,14 @@ export function useImportTree(data: ParsedImportData): TreeData {
 		for (const item of data.validItems) {
 			if (!item.id) continue;
 			const ancestors: string[] = [];
+			const visited = new Set<string>();
 			let currentParentId =
 				item.folderId && importedFolderIds.has(item.folderId) ? item.folderId : null;
 			while (currentParentId && foldersById.has(currentParentId)) {
+				if (visited.has(currentParentId)) {
+					break;
+				}
+				visited.add(currentParentId);
 				ancestors.push(currentParentId);
 				const parent = foldersById.get(currentParentId);
 				currentParentId =
@@ -103,11 +152,23 @@ export function useImportTree(data: ParsedImportData): TreeData {
 		const folderDescendantEmptyFolderIdsMap = new Map<string, string[]>();
 		const emptyFolderIds = new Set<string>();
 
-		function collectFolderDescendants(folderId: string): {
+		function collectFolderDescendants(
+			folderId: string,
+			visited: Set<string> = new Set(),
+		): {
 			itemIds: string[];
 			folderIds: string[];
 			emptyFolderIdsList: string[];
 		} {
+			if (visited.has(folderId)) {
+				return {
+					itemIds: folderDescendantItemIdsMap.get(folderId) || [],
+					folderIds: folderDescendantFolderIdsMap.get(folderId) || [],
+					emptyFolderIdsList: folderDescendantEmptyFolderIdsMap.get(folderId) || [],
+				};
+			}
+			visited.add(folderId);
+
 			const directItems = itemsByFolder.get(folderId) || [];
 			const directSubfolders = foldersByParent.get(folderId) || [];
 
@@ -128,11 +189,17 @@ export function useImportTree(data: ParsedImportData): TreeData {
 			const descendantEmptyFolderIds: string[] = [];
 
 			for (const sub of directSubfolders) {
-				if (!sub.id) continue;
+				if (!sub.id || visited.has(sub.id)) continue;
 				if (!sub.isDuplicate) {
 					descendantFolderIds.push(sub.id);
 				}
-				const subResult = collectFolderDescendants(sub.id);
+				const subResult = folderDescendantItemIdsMap.has(sub.id)
+					? {
+							itemIds: folderDescendantItemIdsMap.get(sub.id)!,
+							folderIds: folderDescendantFolderIdsMap.get(sub.id)!,
+							emptyFolderIdsList: folderDescendantEmptyFolderIdsMap.get(sub.id)!,
+						}
+					: collectFolderDescendants(sub.id, visited);
 				descendantItemIds.push(...subResult.itemIds);
 				descendantFolderIds.push(...subResult.folderIds);
 				descendantEmptyFolderIds.push(...subResult.emptyFolderIdsList);

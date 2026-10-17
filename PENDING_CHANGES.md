@@ -23,6 +23,8 @@
 ### Fixed
 
 - **Import Preview Folder Hierarchy Selection**: Fixed an issue where parent folders remained indeterminate with lingering entry counts after deselecting all nested subfolders or links.
+- **Circular Folder Hierarchy Resilience**: Prevented infinite recursion loops and frozen browser tabs during import preview by detecting circular folder relationships, breaking loops to root, and guarding ancestor and descendant walks.
+- **Invalid Entry Parent Folder Mapping**: Ensured invalid links and folders correctly retain their parent folder placement even when the parent folder was deduplicated and remapped to an existing library folder.
 
 ### Removed
 

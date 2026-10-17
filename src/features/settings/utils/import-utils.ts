@@ -186,11 +186,16 @@ export async function processImportPayload(parsedData: {
 			const reason =
 				result.error.issues[0]?.message || "Folder name is required and cannot be empty";
 
+			const rawParentId = typeof rawFolder.parentId === "string" ? rawFolder.parentId : undefined;
+			const resolvedFolderId = rawParentId
+				? (importIdToResolvedId.get(rawParentId) ?? rawParentId)
+				: undefined;
+
 			invalidEntries.push({
 				id: typeof rawFolder.id === "string" ? rawFolder.id : crypto.randomUUID(),
 				type: "folder",
 				name: folderName,
-				folderId: typeof rawFolder.parentId === "string" ? rawFolder.parentId : undefined,
+				folderId: resolvedFolderId === "root" ? undefined : resolvedFolderId,
 				reason,
 			});
 		}
@@ -262,12 +267,17 @@ export async function processImportPayload(parsedData: {
 				reason = `Unsupported protocol (${protocol}:)`;
 			}
 
+			const rawItemFolderId = typeof rawItem.folderId === "string" ? rawItem.folderId : undefined;
+			const resolvedFolderId = rawItemFolderId
+				? (importIdToResolvedId.get(rawItemFolderId) ?? rawItemFolderId)
+				: undefined;
+
 			invalidEntries.push({
 				id: typeof rawItem.id === "string" ? rawItem.id : crypto.randomUUID(),
 				type: "item",
 				title: rawTitle,
 				url: rawUrl,
-				folderId: typeof rawItem.folderId === "string" ? rawItem.folderId : undefined,
+				folderId: resolvedFolderId === "root" ? undefined : resolvedFolderId,
 				reason,
 			});
 		}
