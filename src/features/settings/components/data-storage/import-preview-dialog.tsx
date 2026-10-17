@@ -16,6 +16,7 @@ import type {
 	ParsedImportData,
 	ParsedImportFolder,
 	ParsedImportItem,
+	ParsedInvalidEntry,
 } from "@/features/settings/utils/import-utils";
 import { notify } from "@/lib/notify";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,8 @@ interface ImportPreviewDialogProps {
 	onImportingChange?: (isImporting: boolean) => void;
 }
 
+type ImportFilterStatus = "all" | "to-import" | "duplicates" | "trash" | "invalid";
+
 type TreeNode =
 	| {
 			type: "folder";
@@ -42,6 +45,12 @@ type TreeNode =
 			id: string;
 			depth: number;
 			data: ParsedImportItem;
+	  }
+	| {
+			type: "invalid";
+			id: string;
+			depth: number;
+			data: ParsedInvalidEntry;
 	  };
 
 interface TreeData {
@@ -251,6 +260,49 @@ const ImportPreviewItemRow = memo(function ImportPreviewItemRow({
 	);
 });
 
+interface ImportPreviewInvalidRowProps {
+	entry: ParsedInvalidEntry;
+	depth: number;
+}
+
+const ImportPreviewInvalidRow = memo(function ImportPreviewInvalidRow({
+	entry,
+	depth,
+}: ImportPreviewInvalidRowProps) {
+	const depthPadding = depth * 24;
+
+	return (
+		<div style={{ paddingLeft: `${depthPadding}px` }} className="h-full">
+			<div className="flex items-center justify-between gap-3 rounded-md border border-destructive/25 bg-destructive/5 p-2 transition-colors corner-squircle supports-[corner-shape:squircle]:rounded-xl">
+				<div className="flex min-w-0 flex-1 items-center gap-2.5">
+					<div className="flex h-5 w-5 shrink-0 items-center justify-center text-destructive">
+						<AlertCircleIcon className="h-4 w-4" />
+					</div>
+					<div className="min-w-0 flex-1">
+						<p className="truncate text-sm font-medium text-foreground">
+							{entry.title ||
+								entry.name ||
+								(entry.type === "folder" ? "Unnamed Folder" : "Untitled item")}
+						</p>
+						<p
+							className="mt-0.5 truncate font-mono text-[11px] text-muted-foreground"
+							title={entry.url || undefined}
+						>
+							{entry.type === "folder" ? "Folder" : entry.url || "No URL provided"}
+						</p>
+						<p className="mt-0.5 truncate font-mono text-[11px] font-semibold text-destructive">
+							{entry.reason}
+						</p>
+					</div>
+				</div>
+				<span className="shrink-0 rounded-sm border border-destructive/30 bg-destructive/10 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-destructive uppercase">
+					Invalid
+				</span>
+			</div>
+		</div>
+	);
+});
+
 interface ImportPreviewTreeProps {
 	flattenedNodes: TreeNode[];
 	selectedItemIds: Set<string>;
@@ -258,6 +310,7 @@ interface ImportPreviewTreeProps {
 	treeData: TreeData;
 	onToggleItem: (id: string) => void;
 	onToggleFolder: (id: string) => void;
+	onResetFilter?: () => void;
 }
 
 const ImportPreviewTree = memo(function ImportPreviewTree({
@@ -267,6 +320,7 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 	treeData,
 	onToggleItem,
 	onToggleFolder,
+	onResetFilter,
 }: ImportPreviewTreeProps) {
 	const [parentEl, setParentEl] = useState<HTMLDivElement | null>(null);
 
@@ -274,12 +328,31 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 	const rowVirtualizer = useVirtualizer({
 		count: flattenedNodes.length,
 		getScrollElement: () => parentEl,
-		estimateSize: () => 52,
+		estimateSize: (index) => (flattenedNodes[index]?.type === "invalid" ? 74 : 52),
 		overscan: 5,
 	});
 
 	const virtualItems = rowVirtualizer.getVirtualItems();
 	const deferredVirtualItems = useDeferredValue(virtualItems);
+
+	if (flattenedNodes.length === 0) {
+		return (
+			<div className="flex flex-1 flex-col items-center justify-center p-8 text-center text-muted-foreground">
+				<p className="text-sm font-medium text-foreground">No entries found for this filter</p>
+				{onResetFilter && (
+					<p className="mt-1 text-xs">
+						<button
+							type="button"
+							onClick={onResetFilter}
+							className="cursor-pointer font-medium text-primary hover:underline"
+						>
+							Show all entries
+						</button>
+					</p>
+				)}
+			</div>
+		);
+	}
 
 	return (
 		<div ref={setParentEl} className="custom-scrollbar flex-1 overflow-y-auto p-4">
@@ -320,6 +393,21 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 									itemCount={directItemCount}
 									onToggle={onToggleFolder}
 								/>
+							</div>
+						);
+					} else if (node.type === "invalid") {
+						return (
+							<div
+								key={virtualRow.key}
+								data-index={virtualRow.index}
+								ref={rowVirtualizer.measureElement}
+								className="absolute top-0 left-0 w-full pb-1"
+								style={{
+									transform: `translate3d(0, ${virtualRow.start}px, 0)`,
+									willChange: "transform",
+								}}
+							>
+								<ImportPreviewInvalidRow entry={node.data} depth={node.depth} />
 							</div>
 						);
 					} else {
@@ -388,6 +476,14 @@ export function ImportPreviewDialog({
 			itemsByFolder.get(folderId)!.push(item);
 		}
 
+		const invalidByFolder = new Map<string | null, ParsedInvalidEntry[]>();
+		for (const entry of data.invalidEntries || []) {
+			const folderId =
+				entry.folderId && importedFolderIds.has(entry.folderId) ? entry.folderId : null;
+			if (!invalidByFolder.has(folderId)) invalidByFolder.set(folderId, []);
+			invalidByFolder.get(folderId)!.push(entry);
+		}
+
 		const nodes: TreeNode[] = [];
 		let counter = 0;
 		function traverse(parentId: string | null, depth: number) {
@@ -400,6 +496,11 @@ export function ImportPreviewDialog({
 			const items = itemsByFolder.get(parentId) || [];
 			for (const item of items) {
 				nodes.push({ type: "item", id: item.id || `temp-i-${counter++}`, depth, data: item });
+			}
+
+			const invalidItems = invalidByFolder.get(parentId) || [];
+			for (const inv of invalidItems) {
+				nodes.push({ type: "invalid", id: inv.id, depth, data: inv });
 			}
 		}
 
@@ -538,7 +639,9 @@ export function ImportPreviewDialog({
 			folderDirectItemCountMap,
 			folderSelectableDescendantItemCountMap,
 		};
-	}, [data.validFolders, data.validItems]);
+	}, [data.validFolders, data.validItems, data.invalidEntries]);
+
+	const [activeFilter, setActiveFilter] = useState<ImportFilterStatus>("all");
 
 	const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(() => {
 		const set = new Set<string>();
@@ -562,6 +665,7 @@ export function ImportPreviewDialog({
 	const [prevData, setPrevData] = useState(data);
 	if (prevData !== data) {
 		setPrevData(data);
+		setActiveFilter("all");
 		const initialItems = new Set<string>();
 		for (const item of data.validItems) {
 			if (!item.isDuplicate && item.id) initialItems.add(item.id);
@@ -729,6 +833,102 @@ export function ImportPreviewDialog({
 	const isAllSelected = totalSelectable > 0 && totalToImport === totalSelectable;
 	const isSomeSelected = totalToImport > 0 && !isAllSelected;
 
+	const activeDuplicateCount = Math.max(0, data.duplicateCount - data.trashCount);
+	const trashCount = data.trashCount;
+	const invalidCount = data.invalidCount;
+
+	const categorySets = useMemo(() => {
+		const activeDuplicateItemIds = new Set<string>();
+		const activeDuplicateFolderIds = new Set<string>();
+		const trashItemIds = new Set<string>();
+		const trashFolderIds = new Set<string>();
+		const invalidEntryIds = new Set<string>();
+		const invalidFolderIds = new Set<string>();
+
+		for (const item of data.validItems) {
+			if (!item.id) continue;
+			if (item.inTrash) {
+				trashItemIds.add(item.id);
+				const ancestors = treeData.itemAncestorFolderIdsMap.get(item.id) || [];
+				for (const aId of ancestors) trashFolderIds.add(aId);
+			} else if (item.isDuplicate) {
+				activeDuplicateItemIds.add(item.id);
+				const ancestors = treeData.itemAncestorFolderIdsMap.get(item.id) || [];
+				for (const aId of ancestors) activeDuplicateFolderIds.add(aId);
+			}
+		}
+
+		for (const folder of data.validFolders || []) {
+			if (!folder.id) continue;
+			if (folder.inTrash) {
+				trashFolderIds.add(folder.id);
+				const ancestors = treeData.folderAncestorFolderIdsMap.get(folder.id) || [];
+				for (const aId of ancestors) trashFolderIds.add(aId);
+			} else if (folder.isDuplicate) {
+				activeDuplicateFolderIds.add(folder.id);
+				const ancestors = treeData.folderAncestorFolderIdsMap.get(folder.id) || [];
+				for (const aId of ancestors) activeDuplicateFolderIds.add(aId);
+			}
+		}
+
+		for (const entry of data.invalidEntries || []) {
+			invalidEntryIds.add(entry.id);
+			if (entry.folderId) {
+				invalidFolderIds.add(entry.folderId);
+				const ancestors = treeData.folderAncestorFolderIdsMap.get(entry.folderId) || [];
+				for (const aId of ancestors) invalidFolderIds.add(aId);
+			}
+		}
+
+		return {
+			activeDuplicateItemIds,
+			activeDuplicateFolderIds,
+			trashItemIds,
+			trashFolderIds,
+			invalidEntryIds,
+			invalidFolderIds,
+		};
+	}, [data.validItems, data.validFolders, data.invalidEntries, treeData]);
+
+	const filteredNodes = useMemo(() => {
+		if (activeFilter === "all") return treeData.nodes;
+
+		if (activeFilter === "to-import") {
+			const toImportFolderIdSet = new Set(foldersToImport.map((f) => f.id));
+			return treeData.nodes.filter((node) => {
+				if (node.type === "item") return selectedItemIds.has(node.id);
+				if (node.type === "folder") return toImportFolderIdSet.has(node.id);
+				return false;
+			});
+		}
+
+		if (activeFilter === "duplicates") {
+			return treeData.nodes.filter((node) => {
+				if (node.type === "item") return categorySets.activeDuplicateItemIds.has(node.id);
+				if (node.type === "folder") return categorySets.activeDuplicateFolderIds.has(node.id);
+				return false;
+			});
+		}
+
+		if (activeFilter === "trash") {
+			return treeData.nodes.filter((node) => {
+				if (node.type === "item") return categorySets.trashItemIds.has(node.id);
+				if (node.type === "folder") return categorySets.trashFolderIds.has(node.id);
+				return false;
+			});
+		}
+
+		if (activeFilter === "invalid") {
+			return treeData.nodes.filter((node) => {
+				if (node.type === "invalid") return categorySets.invalidEntryIds.has(node.id);
+				if (node.type === "folder") return categorySets.invalidFolderIds.has(node.id);
+				return false;
+			});
+		}
+
+		return treeData.nodes;
+	}, [activeFilter, treeData.nodes, selectedItemIds, foldersToImport, categorySets]);
+
 	const handleToggleSelectAll = useCallback(() => {
 		if (totalSelectable === 0) return;
 
@@ -839,31 +1039,146 @@ export function ImportPreviewDialog({
 						</DialogDescription>
 					</DialogHeader>
 
-					<div className="mt-6 flex items-center gap-6">
-						<div className="flex flex-col">
-							<span className="font-mono text-xl font-semibold text-foreground">
+					<div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3">
+						<button
+							type="button"
+							onClick={() =>
+								setActiveFilter((prev) => (prev === "to-import" ? "all" : "to-import"))
+							}
+							className={cn(
+								"group flex flex-1 cursor-pointer flex-col rounded-lg border p-2.5 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+								activeFilter === "to-import"
+									? "border-primary bg-primary/10 shadow-xs"
+									: "border-border/60 bg-card hover:border-border hover:bg-muted/40",
+							)}
+						>
+							<span
+								className={cn(
+									"font-mono text-xl font-semibold transition-colors",
+									activeFilter === "to-import" ? "text-primary" : "text-foreground",
+								)}
+							>
 								{totalToImport}
 							</span>
-							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+							<span
+								className={cn(
+									"text-[10px] font-semibold tracking-wider uppercase transition-colors",
+									activeFilter === "to-import" ? "font-bold text-primary" : "text-muted-foreground",
+								)}
+							>
 								To Import
 							</span>
-						</div>
-						<div className="flex flex-col">
-							<span className="font-mono text-xl font-medium text-muted-foreground">
-								{data.duplicateCount}
+						</button>
+
+						<button
+							type="button"
+							disabled={activeDuplicateCount === 0}
+							onClick={() =>
+								setActiveFilter((prev) => (prev === "duplicates" ? "all" : "duplicates"))
+							}
+							className={cn(
+								"group flex flex-1 flex-col rounded-lg border p-2.5 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+								activeDuplicateCount === 0 && "cursor-default opacity-40",
+								activeDuplicateCount > 0 && "cursor-pointer",
+								activeFilter === "duplicates"
+									? "border-primary bg-primary/10 shadow-xs"
+									: activeDuplicateCount > 0
+										? "border-border/60 bg-card hover:border-border hover:bg-muted/40"
+										: "border-transparent bg-muted/20",
+							)}
+						>
+							<span
+								className={cn(
+									"font-mono text-xl font-medium transition-colors",
+									activeFilter === "duplicates"
+										? "font-semibold text-primary"
+										: "text-muted-foreground",
+								)}
+							>
+								{activeDuplicateCount}
 							</span>
-							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+							<span
+								className={cn(
+									"text-[10px] font-semibold tracking-wider uppercase transition-colors",
+									activeFilter === "duplicates"
+										? "font-bold text-primary"
+										: "text-muted-foreground",
+								)}
+							>
 								Duplicates
 							</span>
-						</div>
-						<div className="flex flex-col">
-							<span className="font-mono text-xl font-medium text-muted-foreground">
-								{data.invalidCount}
+						</button>
+
+						{trashCount > 0 && (
+							<button
+								type="button"
+								onClick={() => setActiveFilter((prev) => (prev === "trash" ? "all" : "trash"))}
+								className={cn(
+									"group flex flex-1 cursor-pointer flex-col rounded-lg border p-2.5 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+									activeFilter === "trash"
+										? "border-destructive bg-destructive/10 shadow-xs"
+										: "border-border/60 bg-card hover:border-border hover:bg-muted/40",
+								)}
+							>
+								<span
+									className={cn(
+										"font-mono text-xl font-medium transition-colors",
+										activeFilter === "trash"
+											? "font-semibold text-destructive"
+											: "text-muted-foreground",
+									)}
+								>
+									{trashCount}
+								</span>
+								<span
+									className={cn(
+										"text-[10px] font-semibold tracking-wider uppercase transition-colors",
+										activeFilter === "trash"
+											? "font-bold text-destructive"
+											: "text-muted-foreground",
+									)}
+								>
+									In Trash
+								</span>
+							</button>
+						)}
+
+						<button
+							type="button"
+							disabled={invalidCount === 0}
+							onClick={() => setActiveFilter((prev) => (prev === "invalid" ? "all" : "invalid"))}
+							className={cn(
+								"group flex flex-1 flex-col rounded-lg border p-2.5 text-left transition-all corner-squircle focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none supports-[corner-shape:squircle]:rounded-xl",
+								invalidCount === 0 && "cursor-default opacity-40",
+								invalidCount > 0 && "cursor-pointer",
+								activeFilter === "invalid"
+									? "border-destructive bg-destructive/10 shadow-xs"
+									: invalidCount > 0
+										? "border-border/60 bg-card hover:border-border hover:bg-muted/40"
+										: "border-transparent bg-muted/20",
+							)}
+						>
+							<span
+								className={cn(
+									"font-mono text-xl font-medium transition-colors",
+									activeFilter === "invalid"
+										? "font-semibold text-destructive"
+										: "text-muted-foreground",
+								)}
+							>
+								{invalidCount}
 							</span>
-							<span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+							<span
+								className={cn(
+									"text-[10px] font-semibold tracking-wider uppercase transition-colors",
+									activeFilter === "invalid"
+										? "font-bold text-destructive"
+										: "text-muted-foreground",
+								)}
+							>
 								Invalid
 							</span>
-						</div>
+						</button>
 					</div>
 
 					{(data.duplicateCount > 0 || data.invalidCount > 0) && (
@@ -890,37 +1205,108 @@ export function ImportPreviewDialog({
 				</div>
 
 				<div className="flex items-center justify-between border-b bg-muted/20 px-6 py-2.5 text-xs text-muted-foreground">
-					<div className="flex items-center gap-2.5">
-						<Checkbox
-							id="import-select-all"
-							checked={isAllSelected ? true : isSomeSelected ? "indeterminate" : false}
-							disabled={totalSelectable === 0}
-							onCheckedChange={handleToggleSelectAll}
-							aria-label="Select all entries"
-						/>
-						<label
-							htmlFor="import-select-all"
-							className={cn(
-								"font-medium select-none",
-								totalSelectable > 0 ? "cursor-pointer text-foreground" : "text-muted-foreground",
-							)}
-						>
-							Select all
-						</label>
-					</div>
-					<div className="font-mono text-[11px]">
-						<span className="font-semibold text-foreground">{totalToImport}</span>
-						<span className="text-muted-foreground"> of {totalSelectable} selected</span>
-					</div>
+					{activeFilter === "all" || activeFilter === "to-import" ? (
+						<>
+							<div className="flex items-center gap-2.5">
+								<Checkbox
+									id="import-select-all"
+									checked={isAllSelected ? true : isSomeSelected ? "indeterminate" : false}
+									disabled={totalSelectable === 0}
+									onCheckedChange={handleToggleSelectAll}
+									aria-label="Select all entries"
+								/>
+								<label
+									htmlFor="import-select-all"
+									className={cn(
+										"font-medium select-none",
+										totalSelectable > 0
+											? "cursor-pointer text-foreground"
+											: "text-muted-foreground",
+									)}
+								>
+									Select all
+								</label>
+								{activeFilter === "to-import" && (
+									<span className="ml-1.5 inline-flex items-center gap-1 rounded-sm border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+										Filtered: To Import
+										<button
+											type="button"
+											onClick={() => setActiveFilter("all")}
+											className="cursor-pointer hover:opacity-75"
+											aria-label="Clear filter"
+										>
+											×
+										</button>
+									</span>
+								)}
+							</div>
+							<div className="font-mono text-[11px]">
+								<span className="font-semibold text-foreground">{totalToImport}</span>
+								<span className="text-muted-foreground"> of {totalSelectable} selected</span>
+							</div>
+						</>
+					) : activeFilter === "duplicates" ? (
+						<>
+							<div className="flex items-center gap-2 font-medium text-foreground">
+								<InfoIcon className="size-3.5 shrink-0 text-muted-foreground" />
+								<span>
+									Showing {activeDuplicateCount} duplicate{" "}
+									{activeDuplicateCount === 1 ? "entry" : "entries"} (already in library)
+								</span>
+							</div>
+							<button
+								type="button"
+								onClick={() => setActiveFilter("all")}
+								className="cursor-pointer text-[11px] font-medium text-primary hover:underline"
+							>
+								Show all
+							</button>
+						</>
+					) : activeFilter === "trash" ? (
+						<>
+							<div className="flex items-center gap-2 font-medium text-destructive">
+								<InfoIcon className="size-3.5 shrink-0" />
+								<span>
+									Showing {trashCount} {trashCount === 1 ? "entry" : "entries"} in Recycle Bin (will
+									be skipped)
+								</span>
+							</div>
+							<button
+								type="button"
+								onClick={() => setActiveFilter("all")}
+								className="cursor-pointer text-[11px] font-medium text-primary hover:underline"
+							>
+								Show all
+							</button>
+						</>
+					) : (
+						<>
+							<div className="flex items-center gap-2 font-medium text-destructive">
+								<AlertCircleIcon className="size-3.5 shrink-0" />
+								<span>
+									Showing {invalidCount} invalid {invalidCount === 1 ? "entry" : "entries"} (will be
+									skipped)
+								</span>
+							</div>
+							<button
+								type="button"
+								onClick={() => setActiveFilter("all")}
+								className="cursor-pointer text-[11px] font-medium text-primary hover:underline"
+							>
+								Show all
+							</button>
+						</>
+					)}
 				</div>
 
 				<ImportPreviewTree
-					flattenedNodes={treeData.nodes}
+					flattenedNodes={filteredNodes}
 					selectedItemIds={selectedItemIds}
 					getFolderCheckState={getFolderCheckState}
 					treeData={treeData}
 					onToggleItem={handleToggleItem}
 					onToggleFolder={handleToggleFolder}
+					onResetFilter={() => setActiveFilter("all")}
 				/>
 
 				<DialogFooter className="m-0 border-t p-4">

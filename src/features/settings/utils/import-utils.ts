@@ -18,9 +18,20 @@ export type ParsedImportFolder = ImportFolder & {
 	inTrash?: boolean;
 };
 
+export type ParsedInvalidEntry = {
+	id: string;
+	type: "item" | "folder";
+	title?: string;
+	url?: string;
+	name?: string;
+	folderId?: string;
+	reason: string;
+};
+
 export type ParsedImportData = {
 	validFolders: ParsedImportFolder[];
 	validItems: ParsedImportItem[];
+	invalidEntries?: ParsedInvalidEntry[];
 	invalidCount: number;
 	duplicateCount: number;
 	trashCount: number;
@@ -66,6 +77,7 @@ export async function processImportPayload(parsedData: {
 
 	const validFolders: ParsedImportFolder[] = [];
 	const validItems: ParsedImportItem[] = [];
+	const invalidEntries: ParsedInvalidEntry[] = [];
 	let invalidCount = 0;
 	let duplicateCount = 0;
 	let trashCount = 0;
@@ -165,6 +177,22 @@ export async function processImportPayload(parsedData: {
 			});
 		} else {
 			invalidCount++;
+			const rawFolder =
+				typeof folder === "object" && folder !== null ? (folder as Record<string, unknown>) : {};
+			const folderName =
+				typeof rawFolder.name === "string" && rawFolder.name.trim()
+					? rawFolder.name.trim()
+					: "Unnamed Folder";
+			const reason =
+				result.error.issues[0]?.message || "Folder name is required and cannot be empty";
+
+			invalidEntries.push({
+				id: typeof rawFolder.id === "string" ? rawFolder.id : crypto.randomUUID(),
+				type: "folder",
+				name: folderName,
+				folderId: typeof rawFolder.parentId === "string" ? rawFolder.parentId : undefined,
+				reason,
+			});
 		}
 	}
 
@@ -199,10 +227,60 @@ export async function processImportPayload(parsedData: {
 			});
 		} else {
 			invalidCount++;
+			const rawItem =
+				typeof item === "object" && item !== null ? (item as Record<string, unknown>) : {};
+			const rawUrl =
+				typeof rawItem.url === "string"
+					? rawItem.url
+					: typeof rawItem.href === "string"
+						? rawItem.href
+						: "";
+			const rawTitle =
+				typeof rawItem.title === "string" && rawItem.title.trim()
+					? rawItem.title.trim()
+					: typeof rawItem.name === "string" && rawItem.name.trim()
+						? rawItem.name.trim()
+						: rawUrl || "Untitled item";
+
+			const firstIssue = result.error.issues[0];
+			let reason = firstIssue?.message || "Invalid URL or bookmark data";
+			const rawUrlTrimmed = rawUrl.trim();
+			const lowerUrl = rawUrlTrimmed.toLowerCase();
+			if (!rawUrlTrimmed) {
+				reason = "Missing URL";
+			} else if (
+				lowerUrl.startsWith("javascript:") ||
+				lowerUrl.startsWith("data:") ||
+				lowerUrl.startsWith("place:") ||
+				lowerUrl.startsWith("about:") ||
+				lowerUrl.startsWith("chrome:") ||
+				lowerUrl.startsWith("edge:") ||
+				lowerUrl.startsWith("file:") ||
+				lowerUrl.startsWith("ftp:")
+			) {
+				const protocol = rawUrlTrimmed.split(":")[0];
+				reason = `Unsupported protocol (${protocol}:)`;
+			}
+
+			invalidEntries.push({
+				id: typeof rawItem.id === "string" ? rawItem.id : crypto.randomUUID(),
+				type: "item",
+				title: rawTitle,
+				url: rawUrl,
+				folderId: typeof rawItem.folderId === "string" ? rawItem.folderId : undefined,
+				reason,
+			});
 		}
 	}
 
-	return { validFolders, validItems, invalidCount, duplicateCount, trashCount };
+	return {
+		validFolders,
+		validItems,
+		invalidEntries,
+		invalidCount,
+		duplicateCount,
+		trashCount,
+	};
 }
 
 export async function parseImportFile(file: File): Promise<ParsedImportData> {

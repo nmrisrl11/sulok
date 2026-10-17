@@ -3,6 +3,8 @@ import { formatUrl } from "@/lib/utils";
 import { z } from "zod";
 import { folderSchema } from "./folder.schema";
 
+const nullToUndefined = (val: unknown) => (val === null ? undefined : val);
+
 export const importItemSchema = z.object({
 	id: z.string().optional(),
 	url: z
@@ -29,16 +31,13 @@ export const importItemSchema = z.object({
 					{ message: "Invalid domain" },
 				),
 		),
-	title: z.string().optional(),
-	description: z.string().optional(),
-	image: z.string().optional(),
-	logo: z.string().optional(),
-	folderId: z.string().optional(),
-	isFavorite: z.boolean().optional(),
-	note: z.preprocess(
-		(val) => (val === null ? undefined : val),
-		z.string().max(ITEM_NOTE_MAX_LENGTH).optional(),
-	),
+	title: z.preprocess(nullToUndefined, z.string().optional()),
+	description: z.preprocess(nullToUndefined, z.string().optional()),
+	image: z.preprocess(nullToUndefined, z.string().optional()),
+	logo: z.preprocess(nullToUndefined, z.string().optional()),
+	folderId: z.preprocess(nullToUndefined, z.string().optional()),
+	isFavorite: z.preprocess(nullToUndefined, z.boolean().optional()),
+	note: z.preprocess(nullToUndefined, z.string().max(ITEM_NOTE_MAX_LENGTH).optional()),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()
@@ -65,8 +64,8 @@ export const importFolderSchema = z.object({
 	id: z.string().optional(),
 	name: folderSchema.shape.name,
 	parentId: z.string().optional().nullable(),
-	order: z.number().optional(),
-	isFavorite: z.boolean().optional(),
+	order: z.preprocess(nullToUndefined, z.number().optional()),
+	isFavorite: z.preprocess(nullToUndefined, z.boolean().optional()),
 	createdAt: z
 		.union([z.number(), z.string()])
 		.optional()
