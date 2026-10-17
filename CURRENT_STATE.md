@@ -83,7 +83,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Drag-and-drop organization
 - [x] External link drag-and-drop: Drag links from browser bookmark bars, address bars, or external windows directly into Sulok with nested folder card/breadcrumb drop support, active folder name awareness, undo support, and stuck-overlay prevention
 - [x] Global bookmark & backup file drag-and-drop: Drag .html, .json, .csv, or .txt files anywhere onto the window to automatically parse and trigger the interactive Import Preview Dialog with trash-aware duplicate detection and modal lock protection against concurrent drops
-- [x] Interactive Import Selection & Status Filtering: Granular selection control before importing bookmarks or backups. Features interactive status filter cards (`To Import`, `Duplicates`, `In Trash`, `Invalid`), hierarchical folder checkboxes (with tri-state indeterminate feedback), individual link selection, a global select/deselect-all toolbar, live selection counters, clean collapsed layout for existing/trashed duplicates, inline diagnostics for invalid entries (unsupported protocols, missing URLs, empty names), and TanStack Virtual 60 FPS virtualization
+- [x] Interactive Import Selection & Status Filtering: Granular selection control before importing bookmarks or backups. Features interactive status filter cards (`To Import`, `Duplicates`, `In Trash`, `Invalid`), hierarchical folder checkboxes (with tri-state indeterminate feedback), individual link selection, a global select/deselect-all toolbar, live selection counters, clean collapsed layout for existing/trashed duplicates, inline diagnostics for invalid entries (unsupported protocols, missing URLs, empty names) with a consistent 3-level stacked typography layout, a modular sub-package architecture (`import-preview/`), and TanStack Virtual 60 FPS virtualization
 - [x] Trash-Aware Import Protection: Imports analyze both active and Recycle Bin records to flag trashed entries with 'IN TRASH' badges and separate them into their own filter category, skipping them by default to prevent silent resurrection and preserve intentional deletions
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls
@@ -106,7 +106,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Dynamic app versioning driven by changelog data
 - [x] Personal Notes / Annotations (squircle indicator, quick edit shortcut, import preview detection, and browser extension support)
 - [x] Global Settings Page (tabbed layout) with Premium Segmented Controls
-- [x] Modular Settings Architecture (isolated component code-splitting across all sections: Appearance, Sound FX, Sulo Customization, Data & Storage)
+- [x] Modular Settings Architecture (isolated component code-splitting across all sections: Appearance, Sound FX, Sulo Customization, and Data & Storage including the modularized `import-preview/` sub-package)
 - [x] Quick Customize Side Sheet (`Shift + C`) for fast contextual personalization
 - [x] Personalization Settings (Sulo expressions, custom whispers, appearance themes, custom folder colors, layout density, and folder item count toggles)
 - [x] Strict Tooling: Custom oxlint rules actively enforcing absolute imports (`@/`)
