@@ -136,14 +136,28 @@ function PeekingFolderIllustration() {
 export function FileDropManager() {
 	const [isDraggingFile, setIsDraggingFile] = useState(false);
 	const [isImportPreviewOpen, setIsImportPreviewOpen] = useState(false);
+	const [isImporting, setIsImporting] = useState(false);
 	const [parsedData, setParsedData] = useState<ParsedImportData | null>(null);
 
 	const dragCounterRef = useRef(0);
 	const importIdRef = useRef(0);
 	const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const isImportPreviewOpenRef = useRef(false);
+	const isImportingRef = useRef(false);
+
+	useEffect(() => {
+		isImportPreviewOpenRef.current = isImportPreviewOpen;
+	}, [isImportPreviewOpen]);
+
+	useEffect(() => {
+		isImportingRef.current = isImporting;
+	}, [isImporting]);
 
 	const handleCloseDialog = useCallback(() => {
 		setIsImportPreviewOpen(false);
+		setIsImporting(false);
+		isImportPreviewOpenRef.current = false;
+		isImportingRef.current = false;
 		if (cleanupTimerRef.current) {
 			clearTimeout(cleanupTimerRef.current);
 		}
@@ -154,6 +168,10 @@ export function FileDropManager() {
 	}, []);
 
 	const processDroppedFile = useCallback(async (file: File) => {
+		if (isImportPreviewOpenRef.current) {
+			return;
+		}
+
 		if (!isSupportedBackupFile(file)) {
 			notify.warning("Unsupported file format", {
 				description: "Please drop a bookmark or backup file (.html, .json, .csv, or .txt).",
@@ -169,13 +187,13 @@ export function FileDropManager() {
 		}
 
 		const readingToastId = `reading-file-${file.name}`;
-		notify.info(`Reading ${file.name}...`, { id: readingToastId });
+		notify.info(`Reading ${file.name}...`, { id: readingToastId, hideReaction: true });
 
 		try {
 			const result = await parseImportFile(file);
 			notify.dismiss(readingToastId);
 
-			if (currentId !== importIdRef.current) return;
+			if (currentId !== importIdRef.current || isImportPreviewOpenRef.current) return;
 
 			if (
 				result.validFolders.length === 0 &&
@@ -194,6 +212,7 @@ export function FileDropManager() {
 				cleanupTimerRef.current = null;
 			}
 
+			isImportPreviewOpenRef.current = true;
 			setParsedData(result);
 			setIsImportPreviewOpen(true);
 		} catch (error) {
@@ -209,9 +228,21 @@ export function FileDropManager() {
 	}, []);
 
 	useEffect(() => {
+		const isDropBlocked = () => {
+			return (
+				isImportPreviewOpenRef.current ||
+				Boolean(
+					document.querySelector(
+						'[role="dialog"], [role="alertdialog"], [data-slot="dialog-content"]',
+					),
+				)
+			);
+		};
+
 		const handleDragEnter = (e: DragEvent) => {
 			if (!isExternalFileDrag(e)) return;
 			e.preventDefault();
+			if (isDropBlocked()) return;
 			dragCounterRef.current++;
 			if (dragCounterRef.current === 1) {
 				setIsDraggingFile(true);
@@ -221,6 +252,12 @@ export function FileDropManager() {
 		const handleDragOver = (e: DragEvent) => {
 			if (!isExternalFileDrag(e)) return;
 			e.preventDefault();
+			if (isDropBlocked()) {
+				if (e.dataTransfer) {
+					e.dataTransfer.dropEffect = "none";
+				}
+				return;
+			}
 			if (e.dataTransfer) {
 				e.dataTransfer.dropEffect = "copy";
 			}
@@ -229,6 +266,7 @@ export function FileDropManager() {
 		const handleDragLeave = (e: DragEvent) => {
 			if (!isExternalFileDrag(e)) return;
 			e.preventDefault();
+			if (isDropBlocked()) return;
 			dragCounterRef.current--;
 
 			if (
@@ -248,6 +286,34 @@ export function FileDropManager() {
 			e.preventDefault();
 			dragCounterRef.current = 0;
 			setIsDraggingFile(false);
+
+			if (isImportPreviewOpenRef.current) {
+				if (isImportingRef.current) {
+					notify.warning("Import in progress", {
+						description:
+							"Please wait for the current import to finish before importing another file.",
+						id: "import-in-progress-blocked",
+					});
+				} else {
+					notify.warning("Preview already open", {
+						description: "Please import or close the current preview before dropping another file.",
+						id: "import-preview-active-blocked",
+					});
+				}
+				return;
+			}
+
+			if (
+				document.querySelector(
+					'[role="dialog"], [role="alertdialog"], [data-slot="dialog-content"]',
+				)
+			) {
+				notify.warning("Action in progress", {
+					description: "Please close the open dialog before importing a file.",
+					id: "modal-open-drop-blocked",
+				});
+				return;
+			}
 
 			const file = e.dataTransfer?.files?.[0];
 			if (!file) return;
@@ -314,6 +380,7 @@ export function FileDropManager() {
 						isOpen={isImportPreviewOpen}
 						onClose={handleCloseDialog}
 						data={parsedData}
+						onImportingChange={setIsImporting}
 					/>
 				</Suspense>
 			)}

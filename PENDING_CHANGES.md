@@ -21,6 +21,7 @@
 
 - **Recycle Bin Import Duplicate Detection & Preservation:** Enhanced import preview analysis to inspect both active and trashed records. Links and folders sitting in the Recycle Bin are now accurately flagged as duplicates with an explicit 'IN TRASH' badge rather than appearing as fresh entries to import. Prevented imported files from silently restoring trashed links or cloning deleted folders, preserving intentional deletions and keeping the Recycle Bin intact.
 - **File Drop Stacking & Interaction Isolation:** Elevated the global file drop overlay z-index to `z-[100]` and removed pass-through pointer events to cleanly cover the Header navbar and bottom Quick Action Bar, preventing background elements from triggering hover states or intercepting drops.
+- **File Drop Modal Lock & Concurrency Protection:** Prevented dropping additional backup files or triggering the drag overlay while the Import Preview Dialog is open or actively writing to the library database. Dragging over the window when a dialog is open now shows a blocked cursor (`dropEffect: "none"`) and dropping displays a helpful warning toast rather than interrupting the active review or corrupting sequential database imports.
 
 ### Removed
 
