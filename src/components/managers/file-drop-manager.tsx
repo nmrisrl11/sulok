@@ -192,8 +192,13 @@ export function FileDropManager() {
 		try {
 			const result = await parseImportFile(file);
 			notify.dismiss(readingToastId);
-
-			if (currentId !== importIdRef.current || isImportPreviewOpenRef.current) return;
+			const isAnyModalOpen = Boolean(
+				document.querySelector(
+					'[role="dialog"], [role="alertdialog"], [data-slot="dialog-content"]',
+				),
+			);
+			if (currentId !== importIdRef.current || isImportPreviewOpenRef.current || isAnyModalOpen)
+				return;
 
 			if (
 				result.validFolders.length === 0 &&
@@ -242,7 +247,11 @@ export function FileDropManager() {
 		const handleDragEnter = (e: DragEvent) => {
 			if (!isExternalFileDrag(e)) return;
 			e.preventDefault();
-			if (isDropBlocked()) return;
+			if (isDropBlocked()) {
+				dragCounterRef.current = 0;
+				setIsDraggingFile(false);
+				return;
+			}
 			dragCounterRef.current++;
 			if (dragCounterRef.current === 1) {
 				setIsDraggingFile(true);
@@ -253,6 +262,8 @@ export function FileDropManager() {
 			if (!isExternalFileDrag(e)) return;
 			e.preventDefault();
 			if (isDropBlocked()) {
+				dragCounterRef.current = 0;
+				setIsDraggingFile(false);
 				if (e.dataTransfer) {
 					e.dataTransfer.dropEffect = "none";
 				}
