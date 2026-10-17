@@ -26,6 +26,7 @@ interface ImportPreviewDialogProps {
 	isOpen: boolean;
 	onClose: (success?: boolean) => void;
 	data: ParsedImportData;
+	onImportingChange?: (isImporting: boolean) => void;
 }
 
 type TreeNode =
@@ -188,7 +189,12 @@ const ImportPreviewTree = memo(function ImportPreviewTree({
 	);
 });
 
-export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDialogProps) {
+export function ImportPreviewDialog({
+	isOpen,
+	onClose,
+	data,
+	onImportingChange,
+}: ImportPreviewDialogProps) {
 	const [isImporting, setIsImporting] = useState(false);
 
 	const itemsToImport = data.validItems.filter((item) => !item.isDuplicate);
@@ -239,6 +245,7 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 		}
 
 		setIsImporting(true);
+		onImportingChange?.(true);
 		try {
 			// Import folders sequentially to maintain ID mapping
 			const idMap = new Map<string, string>();
@@ -310,6 +317,7 @@ export function ImportPreviewDialog({ isOpen, onClose, data }: ImportPreviewDial
 			notify.error("An error occurred during import.");
 		} finally {
 			setIsImporting(false);
+			onImportingChange?.(false);
 		}
 	};
 

@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — Sulok
 
-> Last updated: 2026-10-16
+> Last updated: 2026-10-17
 
 ## Project Status: 🟢 Development
 
@@ -82,7 +82,7 @@ The project is currently in active development, having recently completed **Phas
 - [x] Route-specific loading architecture (Suspense fallbacks)
 - [x] Drag-and-drop organization
 - [x] External link drag-and-drop: Drag links from browser bookmark bars, address bars, or external windows directly into Sulok with nested folder card/breadcrumb drop support, active folder name awareness, undo support, and stuck-overlay prevention
-- [x] Global bookmark & backup file drag-and-drop: Drag .html, .json, .csv, or .txt files anywhere onto the window to automatically parse and trigger the interactive Import Preview Dialog with trash-aware duplicate detection
+- [x] Global bookmark & backup file drag-and-drop: Drag .html, .json, .csv, or .txt files anywhere onto the window to automatically parse and trigger the interactive Import Preview Dialog with trash-aware duplicate detection and modal lock protection against concurrent drops
 - [x] Trash-Aware Import Protection: Imports analyze both active and Recycle Bin records to flag trashed entries with 'IN TRASH' badges, skipping them by default to prevent silent resurrection and preserve intentional deletions
 - [x] Open / Copy link buttons
 - [x] Search and Sort controls
